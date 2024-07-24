@@ -1,3 +1,4 @@
+"use client"
 import ContainerWeb from "@/components/ContainerWeb";
 import GridContainer from "@/components/GridContainer";
 import GridMain from "@/components/GridMain";
