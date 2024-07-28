@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import emailService from "@/service/register_code/emailService";
+import { validateCode } from "@/service/register_code/validCode";
 
 export async function POST(req: NextRequest) {
   try {
-    const { mail }: { mail: string } = await req.json();
+    const { code, mail } = await req.json();
 
-    const resmail = await emailService.sendMail(mail, "Codigo de registro");
+    const validCode = await validateCode(parseInt(code), mail);
 
     return NextResponse.json(
-      { message: resmail },
+      { message: validCode },
       { status: 200 }
     );
   } catch (error) {
