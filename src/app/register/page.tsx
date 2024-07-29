@@ -4,6 +4,7 @@ import GridContainer from "@/components/GridContainer";
 import GridMain from "@/components/GridMain";
 import GridSecond from "@/components/GridSecond";
 import Header from "@/components/Header";
+import RegisterForm from "@/components/Registre-Form";
 import axios, { AxiosError } from "axios";
 import { useState } from "react";
 
@@ -59,34 +60,18 @@ export default function Register() {
       <ContainerWeb>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <GridMain>
-            <GridContainer>
-              <label className="block mb-2 text-sm font-medium text-gray-900">
-                Correo
-              </label>
-              <input
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                onChange={(e) => setMail(e.target.value)}
-              />
-              <button
-                className="bg-gray-800 text-white text-sm font-medium rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-4"
-                onClick={() => sendMail()}
-              >
-                Enviar codigo
-              </button>
-              <label className="block mb-2 text-sm font-medium text-gray-900">
-                Code
-              </label>
-              <input
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                onChange={(e) => setCode(e.target.value)}
-              />
-              <button
-                className="bg-gray-800 text-white text-sm font-medium rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-4"
-                onClick={() => validateCode()}
-              >
-                Comprobar codigo
-              </button>
-            </GridContainer>
+
+            <RegisterForm
+            inputLabel= { !mail ? "Correo" : 'Codigo'}
+            title="Registro de Usuario"
+            titleButton={!mail ?"Enviar correo" : 'Comprobar codigo'}
+           
+           //TODO: ARREGLAR ESTO
+            setMailFunc={(e) => setMail(e.target.value)}
+            sendMailFunc={sendMail}
+            /> 
+
+
           </GridMain>
           <GridSecond>
             <GridContainer>
