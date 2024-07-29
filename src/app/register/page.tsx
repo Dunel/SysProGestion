@@ -4,12 +4,18 @@ import GridContainer from "@/components/GridContainer";
 import GridMain from "@/components/GridMain";
 import GridSecond from "@/components/GridSecond";
 import Header from "@/components/Header";
+import Step0 from "@/components/register/Step0";
+import Step1 from "@/components/register/Step1";
+import Step2 from "@/components/register/Step2";
 import axios, { AxiosError } from "axios";
 import { useState } from "react";
 
 export default function Register() {
   const [code, setCode] = useState("");
   const [mail, setMail] = useState("");
+  const [step, setStep] = useState(0);
+  const [idCode, setIdCode] = useState("");
+  const [data, setData] = useState({});
   const [count, setCount] = useState(0);
 
   const sendMail = async () => {
@@ -26,10 +32,14 @@ export default function Register() {
       });
       setCount(Date.now() + 300);
       res.data.message && alert(res.data.message);
+      setStep(1);
       console.log(res.data);
     } catch (error) {
-      console.error("Error al enviar el correo:", error);
-      throw new Error("Error al enviar el correo");
+      if (axios.isAxiosError(error)) {
+        return alert(error.response?.data.error);
+      }
+      console.error("Error al validar el código:", error);
+      alert((error as Error).message);
     }
   };
 
@@ -45,13 +55,23 @@ export default function Register() {
       });
 
       res.data.message && alert(res.data.message);
+      setStep(2);
     } catch (error) {
-      if(axios.isAxiosError(error)){
+      if (axios.isAxiosError(error)) {
         return alert(error.response?.data.error);
       }
       console.error("Error al validar el código:", error);
       alert((error as Error).message);
     }
+  };
+
+  const sendRegister = async () => {
+    try {
+      const res = await axios.post("/api/register", {
+        idCode,
+        data,
+      });
+    } catch (error) {}
   };
   return (
     <>
@@ -60,32 +80,13 @@ export default function Register() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <GridMain>
             <GridContainer>
-              <label className="block mb-2 text-sm font-medium text-gray-900">
-                Correo
-              </label>
-              <input
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                onChange={(e) => setMail(e.target.value)}
-              />
-              <button
-                className="bg-gray-800 text-white text-sm font-medium rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-4"
-                onClick={() => sendMail()}
-              >
-                Enviar codigo
-              </button>
-              <label className="block mb-2 text-sm font-medium text-gray-900">
-                Code
-              </label>
-              <input
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                onChange={(e) => setCode(e.target.value)}
-              />
-              <button
-                className="bg-gray-800 text-white text-sm font-medium rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-4"
-                onClick={() => validateCode()}
-              >
-                Comprobar codigo
-              </button>
+              {step === 0 ? (
+                <Step0 setMail={setMail} sendMail={sendMail} />
+              ) : step === 1 ? (
+                <Step1 setCode={setCode} validateCode={validateCode} />
+              ) : step === 2 ? (
+                <Step2 />
+              ) : null}
             </GridContainer>
           </GridMain>
           <GridSecond>

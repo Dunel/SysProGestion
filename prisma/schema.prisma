@@ -14,3 +14,16 @@ model Coderegister {
   mail      String   @unique
   updatedAt DateTime @updatedAt
 }
+
+model User {
+  id        Int      @id @default(autoincrement())
+  cedula    Int      @unique
+  mail      String   @unique
+  password  String
+  names     String
+  lastnames String
+  birthdate DateTime
+  role      Int      @default(1)
+  phone     String
+  updatedAt DateTime @updatedAt
+}
