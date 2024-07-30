@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
-import NavBar from "@/components/NavBar";
+import NavBarRols from "@/components/NavBarRols";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,10 +15,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const navigation = [
+    { name: "Inicio", href: "/inicio", current: false },
+    { name: "Perfil", href: "/perfil", current: false },
+    { name: "Entidades Autorizadas", href: "/autorizaciones", current: false },
+    { name: "Notificaciones", href: "/notificaciones", current: false },
+    { name: "Métricas", href: "/metricas", current: false },
+    { name: "Cerrar Sesión", href: "/logout", current: false },
+  ];
   return (
     <html lang="en">
       <body className={"bg-gray-100"}>
-        <NavBar />
+        <NavBarRols navigation={navigation} />
         {children}
       </body>
     </html>
