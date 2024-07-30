@@ -12,8 +12,8 @@ import { useState } from "react";
 
 export default function Register() {
   const [code, setCode] = useState("");
-  const [mail, setMail] = useState("");
-  const [step, setStep] = useState(0);
+  const [mail, setMail] = useState("dunel.urbe@gmail.com");
+  const [step, setStep] = useState(1);
   const [idCode, setIdCode] = useState("");
   const [data, setData] = useState({});
   const [count, setCount] = useState(0);
@@ -54,12 +54,20 @@ export default function Register() {
         mail,
       });
 
-      setIdCode(res.data.id);
+      if (res.data.step === 0) {
+        setStep(0);
+        return alert(res.data.message);
+      }
+
       res.data.message && alert("Código validado");
+      setIdCode(res.data.id);
       setStep(2);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        return alert(error.response?.data.error);
+        if (error.response?.data.step === 0) {
+          setStep(0);
+        }
+        return alert(error.response?.data.message);
       }
       console.error("Error al validar el código:", error);
       alert((error as Error).message);

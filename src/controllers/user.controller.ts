@@ -1,5 +1,9 @@
 import bcrypt from "bcrypt";
 import prisma from "@/db";
+import { NextRequest, NextResponse } from "next/server";
+import { ZodError } from "zod";
+import { userSchema } from "@/validations/user.schema";
+import { validCodeMail } from "@/service/register_code/validCode";
 
 interface User {
   mail: string;
@@ -10,16 +14,20 @@ interface User {
   telefono: string;
 }
 
-export async function createUser({ data }: { data: User }) {
+export async function createUser(req: NextRequest) {
   try {
+    const { idCode, code, data } = await req.json();
+    const result = userSchema.parse({ ...data, idCode, code });
+    const mail = await validCodeMail(result.code, result.idCode);
+
     const userfound = await prisma.user.findFirst({
       where: {
         OR: [
           {
-            cedula: data.cedula,
+            cedula: result.cedula,
           },
           {
-            mail: data.mail,
+            mail: mail,
           },
         ],
       },
@@ -40,10 +48,21 @@ export async function createUser({ data }: { data: User }) {
         phone: data.telefono,
       },
     });
-    console.log(user);
-    return user;
+
+    //const user = await createUser({data:{ ...result, mail }});
+
+    return NextResponse.json({ user }, { status: 200 });
   } catch (error) {
-    //console.error("Error al crear el usuario:", error);
-    throw new Error((error as Error).message);
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+    //console.error("Error al enviar el correo:", error);
+    return NextResponse.json(
+      { error: (error as Error).message },
+      { status: 500 }
+    );
   }
 }
