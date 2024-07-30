@@ -28,6 +28,7 @@ export default function RootLayout({
       <body className={"bg-gray-100"}>
         <NavBarRols navigation={navigation} />
         {children}
+        <Footer />
       </body>
     </html>
   );

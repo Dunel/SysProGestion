@@ -12,7 +12,9 @@
     "@headlessui/react": "^2.1.2",
     "@heroicons/react": "^2.1.5",
     "@prisma/client": "^5.17.0",
+    "@types/bcryptjs": "^2.4.6",
     "axios": "^1.7.2",
+    "bcrypt": "^5.1.1",
     "fs": "^0.0.1-security",
     "next": "14.2.5",
     "nodemailer": "^6.9.14",
@@ -21,6 +23,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/nodemailer": "^6.4.15",
     "@types/react": "^18",
