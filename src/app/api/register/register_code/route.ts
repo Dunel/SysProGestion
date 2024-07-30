@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
     const validCode = await validateCode(result.data.code, result.data.mail);
 
-    return NextResponse.json({ message: validCode }, { status: 200 });
+    return NextResponse.json({ id: validCode }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(

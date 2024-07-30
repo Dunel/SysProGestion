@@ -22,7 +22,6 @@ model User {
   password  String
   names     String
   lastnames String
-  birthdate DateTime
   role      Int      @default(1)
   phone     String
   updatedAt DateTime @updatedAt

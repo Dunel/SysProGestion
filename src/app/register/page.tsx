@@ -27,7 +27,7 @@ export default function Register() {
       if (!mail) {
         throw new Error("El correo es requerido");
       }
-      const res = await axios.post("/api/mailer", {
+      const res = await axios.post("/api/register/mailer", {
         mail,
       });
       setCount(Date.now() + 300);
@@ -49,12 +49,13 @@ export default function Register() {
         throw new Error("El código es requerido");
       }
 
-      const res = await axios.post("/api/register_code", {
+      const res = await axios.post("/api/register/register_code", {
         code,
         mail,
       });
 
-      res.data.message && alert(res.data.message);
+      setIdCode(res.data.id);
+      res.data.message && alert("Código validado");
       setStep(2);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -67,11 +68,20 @@ export default function Register() {
 
   const sendRegister = async () => {
     try {
-      const res = await axios.post("/api/register", {
+      const res = await axios.post("/api/register/insert", {
         idCode,
+        code,
         data,
       });
-    } catch (error) {}
+      res.data.message && alert(res.data.message);
+      setStep(3);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return alert(error.response?.data.error);
+      }
+      console.error("Error al validar la data:", error);
+      alert((error as Error).message);
+    }
   };
   return (
     <>
@@ -85,20 +95,40 @@ export default function Register() {
               ) : step === 1 ? (
                 <Step1 setCode={setCode} validateCode={validateCode} />
               ) : step === 2 ? (
-                <Step2 />
-              ) : null}
+                <Step2 setData={setData} sendData={sendRegister} />
+              ) : (
+                `Usuario ${mail} registrado con éxito`
+              )}
             </GridContainer>
           </GridMain>
           <GridSecond>
             <GridContainer>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facere
-              rem dolores porro illum, necessitatibus ratione veniam
-              exercitationem excepturi voluptatem totam ipsam eveniet
-              consequatur incidunt quidem repellendus error accusantium nulla ea
-              similique sint dicta quis blanditiis, voluptate vero! Recusandae
-              eaque laudantium ad nulla expedita saepe ex animi doloribus, aut
-              dicta odit tenetur? Maxime magnam maiores aliquid iure laudantium
-              in obcaecati earum.
+              <h2>¡Bienvenido!</h2>
+              <p>
+                Para completar tu registro de forma exitosa, por favor sigue
+                estos pasos:
+              </p>
+              <ol>
+                <li>
+                  <strong>Introduce tus datos correctamente:</strong> Asegúrate
+                  de que todos los campos estén llenos y sean precisos.
+                </li>
+                <li>
+                  <strong>Correo electrónico válido:</strong> Proporciona una
+                  dirección de correo electrónico activa, ya que recibirás un
+                  código de verificación en tu bandeja de entrada.
+                </li>
+                <li>
+                  <strong>Revisa tu correo:</strong> Después de enviar el
+                  formulario, verifica tu correo electrónico. Recibirás un
+                  mensaje con un código de confirmación.
+                </li>
+                <li>
+                  <strong>Introduce el código:</strong> Ingresa el código de
+                  verificación en el campo correspondiente para completar tu
+                  registro.
+                </li>
+              </ol>
             </GridContainer>
           </GridSecond>
         </div>
