@@ -89,10 +89,10 @@ export async function validateCode(req: NextRequest) {
       },
     });
     if (!codeFind) {
-        return NextResponse.json(
-            { message: "Código incorrecto" },
-            { status: 400 }
-          );
+      return NextResponse.json(
+        { message: "Código incorrecto" },
+        { status: 400 }
+      );
     }
 
     const FIVE_MINUTES_IN_MS = 0.1 * 60 * 1000;
@@ -122,3 +122,30 @@ export async function validateCode(req: NextRequest) {
     );
   }
 }
+
+export const validCodeMail = async (code: number, idCode: string) => {
+  try {
+    const codeFind = await prisma.coderegister.findMany({
+      where: {
+        id: idCode,
+        code,
+      },
+    });
+    if (codeFind.length === 0) {
+      throw new Error("Código incorrecto");
+    }
+
+    const SEVEN_MINUTES_IN_MS = 10 * 60 * 1000;
+    if (
+      new Date(codeFind[0].updatedAt).getTime() + SEVEN_MINUTES_IN_MS <
+      Date.now()
+    ) {
+      throw new Error("El código ha expirado");
+    }
+
+    return codeFind[0].mail;
+  } catch (error) {
+    //console.error("Error:", error);
+    throw new Error((error as Error).message);
+  }
+};

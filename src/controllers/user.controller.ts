@@ -3,7 +3,7 @@ import prisma from "@/db";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 import { userSchema } from "@/validations/user.schema";
-import { validCodeMail } from "@/service/register_code/validCode";
+import { validCodeMail } from "@/controllers/code.controller";
 
 interface User {
   mail: string;
