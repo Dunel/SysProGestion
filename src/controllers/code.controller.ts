@@ -15,7 +15,10 @@ export async function createCode(req: NextRequest) {
       },
     });
     if (findMail) {
-      throw new Error("El correo ya está registrado");
+      return NextResponse.json(
+        { error: "El correo se encuentra registrado" },
+        { status: 400 }
+      );
     }
 
     const code = await prisma.coderegister.findFirst({
@@ -69,9 +72,10 @@ export async function createCode(req: NextRequest) {
         { status: 400 }
       );
     }
-    //console.error("Error al enviar el correo:", error);
+    
+    console.error("Error: ", (error as Error).message);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Error en el servidor." },
       { status: 500 }
     );
   }
@@ -89,20 +93,16 @@ export async function validateCode(req: NextRequest) {
       },
     });
     if (!codeFind) {
-      return NextResponse.json(
-        { message: "Código incorrecto" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Código incorrecto" }, { status: 400 });
     }
 
-    const FIVE_MINUTES_IN_MS = 0.1 * 60 * 1000;
+    const FIVE_MINUTES_IN_MS = 5 * 60 * 1000;
     if (
       new Date(codeFind.updatedAt).getTime() + FIVE_MINUTES_IN_MS <
       Date.now()
     ) {
-      console.log("espirado: ");
       return NextResponse.json(
-        { message: "El código ha expirado", step: 0 },
+        { error: "El código ha expirado", step: 0 },
         { status: 400 }
       );
     }
@@ -115,37 +115,10 @@ export async function validateCode(req: NextRequest) {
         { status: 400 }
       );
     }
-    //console.error("Error al enviar el correo:", error);
+    console.error("Error: ", (error as Error).message);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Error en el servidor." },
       { status: 500 }
     );
   }
 }
-
-export const validCodeMail = async (code: number, idCode: string) => {
-  try {
-    const codeFind = await prisma.coderegister.findMany({
-      where: {
-        id: idCode,
-        code,
-      },
-    });
-    if (codeFind.length === 0) {
-      throw new Error("Código incorrecto");
-    }
-
-    const SEVEN_MINUTES_IN_MS = 10 * 60 * 1000;
-    if (
-      new Date(codeFind[0].updatedAt).getTime() + SEVEN_MINUTES_IN_MS <
-      Date.now()
-    ) {
-      throw new Error("El código ha expirado");
-    }
-
-    return codeFind[0].mail;
-  } catch (error) {
-    //console.error("Error:", error);
-    throw new Error((error as Error).message);
-  }
-};

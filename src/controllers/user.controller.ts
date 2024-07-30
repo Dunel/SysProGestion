@@ -3,22 +3,35 @@ import prisma from "@/db";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 import { userSchema } from "@/validations/user.schema";
-import { validCodeMail } from "@/controllers/code.controller";
-
-interface User {
-  mail: string;
-  cedula: number;
-  password: string;
-  nombre: string;
-  apellido: string;
-  telefono: string;
-}
 
 export async function createUser(req: NextRequest) {
   try {
     const { idCode, code, data } = await req.json();
     const result = userSchema.parse({ ...data, idCode, code });
-    const mail = await validCodeMail(result.code, result.idCode);
+    
+    const codeFind = await prisma.coderegister.findFirst({
+      where: {
+        id: result.idCode,
+        code: result.code,
+      },
+    });
+    if (!codeFind) {
+      return NextResponse.json(
+        { error: "Código no valido" },
+        { status: 400 }
+      );
+    }
+
+    const TEN_MINUTES_IN_MS = 10 * 60 * 1000;
+    if (
+      new Date(codeFind.updatedAt).getTime() + TEN_MINUTES_IN_MS <
+      Date.now()
+    ) {
+      return NextResponse.json(
+        { error: "El código ha expirado", step: 0 },
+        { status: 400 }
+      );
+    }
 
     const userfound = await prisma.user.findFirst({
       where: {
@@ -27,29 +40,30 @@ export async function createUser(req: NextRequest) {
             cedula: result.cedula,
           },
           {
-            mail: mail,
+            mail: codeFind.mail,
           },
         ],
       },
     });
     if (userfound) {
-      throw new Error("Usuario ya registrado");
+      return NextResponse.json(
+        { error: "El usuario se encuentra registrado" },
+        { status: 400 }
+      );
     }
 
-    const hashedPassword = await bcrypt.hash(data.password, 10);
+    const hashedPassword = await bcrypt.hash(result.password, 10);
 
     const user = await prisma.user.create({
       data: {
-        mail: data.mail,
-        cedula: data.cedula,
+        mail: codeFind.mail,
+        cedula: result.cedula,
         password: hashedPassword,
-        names: data.nombre,
-        lastnames: data.apellido,
-        phone: data.telefono,
+        names: result.nombre,
+        lastnames: result.apellido,
+        phone: result.telefono,
       },
     });
-
-    //const user = await createUser({data:{ ...result, mail }});
 
     return NextResponse.json({ user }, { status: 200 });
   } catch (error) {
@@ -59,9 +73,10 @@ export async function createUser(req: NextRequest) {
         { status: 400 }
       );
     }
-    //console.error("Error al enviar el correo:", error);
+    
+    console.error("Error: ", (error as Error).message);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: "Error en el servidor." },
       { status: 500 }
     );
   }
