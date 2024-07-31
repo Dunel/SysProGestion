@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
-import { createUser } from "@/controllers/user.controller";
+import { Login } from "@/controllers/login.controller";
 
 export async function POST(req: NextRequest) {
-  return await createUser(req);
+  return await Login(req);
 }

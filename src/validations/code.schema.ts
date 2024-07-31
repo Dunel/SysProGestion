@@ -23,7 +23,11 @@ export const codeSchema = z.object({
       }
       return parsed;
     }),
-  mail: z.string().email({ message: "El correo no es válido" }),
+  mail: z
+    .string({ required_error: "El correo es requerido." })
+    .min(10, { message: "El correo debe tener minimo 10 caracteres." })
+    .max(75, { message: "El correo debe tener maximo 75 caracteres." })
+    .email({ message: "El correo no es válido" }),
 });
 
 export const codeIdSchema = z.object({
