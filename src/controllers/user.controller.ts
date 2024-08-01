@@ -43,7 +43,7 @@ export async function createUser({ data }: { data: User }) {
     console.log(user);
     return user;
   } catch (error) {
-    //console.error("Error al crear el usuario:", error);
+    console.error("Error al crear el usuario:", error);
     throw new Error((error as Error).message);
   }
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NavBarRols from "@/components/NavBarRols";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,9 +19,9 @@ export default function RootLayout({
   const navigation = [
     { name: "Inicio", href: "/inicio", current: false },
     { name: "Perfil", href: "/perfil", current: false },
-    { name: "Entidades Autorizadas", href: "/autorizaciones", current: false },
+    { name: "Mis Aplicaciones", href: "/autorizaciones", current: false },
     { name: "Notificaciones", href: "/notificaciones", current: false },
-    { name: "Métricas", href: "/metricas", current: false },
+
     { name: "Cerrar Sesión", href: "/logout", current: false },
   ];
   return (
