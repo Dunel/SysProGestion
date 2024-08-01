@@ -1,49 +1,83 @@
 import bcrypt from "bcrypt";
 import prisma from "@/db";
+import { NextRequest, NextResponse } from "next/server";
+import { ZodError } from "zod";
+import { userSchema } from "@/validations/user.schema";
 
-interface User {
-  mail: string;
-  cedula: number;
-  password: string;
-  nombre: string;
-  apellido: string;
-  telefono: string;
-}
-
-export async function createUser({ data }: { data: User }) {
+export async function createUser(req: NextRequest) {
   try {
+    const { idCode, code, data } = await req.json();
+    const result = userSchema.parse({ ...data, idCode, code });
+    
+    const codeFind = await prisma.coderegister.findFirst({
+      where: {
+        id: result.idCode,
+        code: result.code,
+      },
+    });
+    if (!codeFind) {
+      return NextResponse.json(
+        { error: "Código no valido" },
+        { status: 400 }
+      );
+    }
+
+    const TEN_MINUTES_IN_MS = 10 * 60 * 1000;
+    if (
+      new Date(codeFind.updatedAt).getTime() + TEN_MINUTES_IN_MS <
+      Date.now()
+    ) {
+      return NextResponse.json(
+        { error: "El código ha expirado", step: 0 },
+        { status: 400 }
+      );
+    }
+
     const userfound = await prisma.user.findFirst({
       where: {
         OR: [
           {
-            cedula: data.cedula,
+            cedula: result.cedula,
           },
           {
-            mail: data.mail,
+            mail: codeFind.mail,
           },
         ],
       },
     });
     if (userfound) {
-      throw new Error("Usuario ya registrado");
+      return NextResponse.json(
+        { error: "El usuario se encuentra registrado" },
+        { status: 400 }
+      );
     }
 
-    const hashedPassword = await bcrypt.hash(data.password, 10);
+    const hashedPassword = await bcrypt.hash(result.password, 10);
 
     const user = await prisma.user.create({
       data: {
-        mail: data.mail,
-        cedula: data.cedula,
+        mail: codeFind.mail,
+        cedula: result.cedula,
         password: hashedPassword,
-        names: data.nombre,
-        lastnames: data.apellido,
-        phone: data.telefono,
+        names: result.nombre,
+        lastnames: result.apellido,
+        phone: result.telefono,
       },
     });
-    console.log(user);
-    return user;
+
+    return NextResponse.json({ user }, { status: 200 });
   } catch (error) {
-    console.error("Error al crear el usuario:", error);
-    throw new Error((error as Error).message);
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+    
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
   }
 }

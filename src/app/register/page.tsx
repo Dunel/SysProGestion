@@ -7,16 +7,27 @@ import Header from "@/components/Header";
 import Step0 from "@/components/register/Step0";
 import Step1 from "@/components/register/Step1";
 import Step2 from "@/components/register/Step2";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+
+type Data = {
+  cedula: string;
+  nombre: string;
+  apellido: string;
+  telefono: string;
+  password: string;
+};
 
 export default function Register() {
   const [code, setCode] = useState("");
   const [mail, setMail] = useState("");
   const [step, setStep] = useState(0);
   const [idCode, setIdCode] = useState("");
-  const [data, setData] = useState({});
+  const [data, setData] = useState({} as Data);
   const [count, setCount] = useState(0);
+  const router = useRouter();
 
   const sendMail = async () => {
     if (count > Date.now()) {
@@ -38,6 +49,7 @@ export default function Register() {
       if (axios.isAxiosError(error)) {
         return alert(error.response?.data.error);
       }
+
       console.error("Error al validar el código:", error);
       alert((error as Error).message);
     }
@@ -54,11 +66,14 @@ export default function Register() {
         mail,
       });
 
-      setIdCode(res.data.id);
       res.data.message && alert("Código validado");
+      setIdCode(res.data.id);
       setStep(2);
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        if (error.response?.data.step === 0) {
+          setStep(0);
+        }
         return alert(error.response?.data.error);
       }
       console.error("Error al validar el código:", error);
@@ -75,8 +90,24 @@ export default function Register() {
       });
       res.data.message && alert(res.data.message);
       setStep(3);
+
+      const login = await signIn("credentials", {
+        email: mail,
+        password: data.password,
+        redirect: false,
+      });
+  
+      if (login?.error) {
+        alert(login.error.split(","));
+        return;
+      }
+  
+      router.push("/dashboard");
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        if (error.response?.data.step === 0) {
+          setStep(0);
+        }
         return alert(error.response?.data.error);
       }
       console.error("Error al validar la data:", error);
