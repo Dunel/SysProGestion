@@ -7,16 +7,27 @@ import Header from "@/components/Header";
 import Step0 from "@/components/register/Step0";
 import Step1 from "@/components/register/Step1";
 import Step2 from "@/components/register/Step2";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+
+type Data = {
+  cedula: string;
+  nombre: string;
+  apellido: string;
+  telefono: string;
+  password: string;
+};
 
 export default function Register() {
   const [code, setCode] = useState("");
   const [mail, setMail] = useState("");
   const [step, setStep] = useState(0);
   const [idCode, setIdCode] = useState("");
-  const [data, setData] = useState({});
+  const [data, setData] = useState({} as Data);
   const [count, setCount] = useState(0);
+  const router = useRouter();
 
   const sendMail = async () => {
     if (count > Date.now()) {
@@ -79,9 +90,22 @@ export default function Register() {
       });
       res.data.message && alert(res.data.message);
       setStep(3);
+
+      const login = await signIn("credentials", {
+        email: mail,
+        password: data.password,
+        redirect: false,
+      });
+  
+      if (login?.error) {
+        alert(login.error.split(","));
+        return;
+      }
+  
+      router.push("/dashboard");
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if(error.response?.data.step === 0) {
+        if (error.response?.data.step === 0) {
           setStep(0);
         }
         return alert(error.response?.data.error);

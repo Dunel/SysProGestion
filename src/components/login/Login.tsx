@@ -5,11 +5,11 @@ import { useState } from "react";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState("");
+  const [errors, setErrors] = useState<string[]>([]);
   const router = useRouter();
 
   const handleSubmit = async () => {
-    setErrors("");
+    setErrors([]);
 
     const login = await signIn("credentials", {
       email,
@@ -18,8 +18,7 @@ export default function Login() {
     });
 
     if (login?.error) {
-      console.error("Errolsote: ", login.error.split(","));
-      setErrors("Correo o contraseña incorrecta");
+      setErrors(login.error.split(","));
       return;
     }
 
@@ -70,7 +69,9 @@ export default function Login() {
         {errors.length > 0 && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4">
             <ul className="mb-0">
-            <li>{errors}</li>
+            {errors.map((error) => (
+              <li key={error}>{error}</li>
+            ))}
             </ul>
           </div>
         )}
