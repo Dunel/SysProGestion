@@ -7,6 +7,8 @@ import Header from "@/components/Header";
 import AnuncioVacantePasantias from "@/components/Estudiante";
 import Link from "next/link";
 
+import FormStepRegister  from "@/components/register/FormStepRegister";
+
 import { ExclamationTriangleIcon as ExclamationIcon } from '@heroicons/react/24/outline'; // Para el ícono de alerta en contorno
 
 
@@ -20,7 +22,7 @@ export default function Register() {
     <>
 
       <Header title={"Carlos Pérez - Universidad Privada Dr. Rafael Belloso Chacín"} />
-    
+   
       <ContainerWeb>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <GridMain>
