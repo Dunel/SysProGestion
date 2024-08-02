@@ -30,11 +30,13 @@ export const userSchema = z.object({
   nombre: z
     .string({ required_error: "El nombre es requerido" })
     .min(3, { message: "El nombre debe tener minimo 3 caracteres" })
-    .max(50, { message: "El nombre debe tener maximo 50 caracteres" }),
+    .max(50, { message: "El nombre debe tener maximo 50 caracteres" })
+    .transform((val) => val.toUpperCase()),
   apellido: z
     .string({ required_error: "El apellido es requerido" })
     .min(3, { message: "El apellido debe tener minimo 3 caracteres" })
-    .max(50, { message: "El apellido debe tener maximo 50 caracteres" }),
+    .max(50, { message: "El apellido debe tener maximo 50 caracteres" })
+    .transform((val) => val.toUpperCase()),
   telefono: z
     .string({ required_error: "El telefono es requerido" })
     .min(10, { message: "El telefono debe tener minimo 10 caracteres" })
@@ -47,11 +49,11 @@ export const userSchema = z.object({
       message:
         "La contraseña debe contener al menos una letra mayúscula, un dígito y uno de los siguientes caracteres especiales: @, #, $, %, &, *, ., /, =,.",
     }),
-    idCode: z
+  idCode: z
     .string()
     .min(20, { message: "El código es incorrecto" })
     .max(36, { message: "El código es incorrecto" }),
-    code: z
+  code: z
     .string()
     .min(6, { message: "El código es incorrecto" })
     .max(6, { message: "El código es incorrecto" })

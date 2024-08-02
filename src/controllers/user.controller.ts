@@ -8,7 +8,7 @@ export async function createUser(req: NextRequest) {
   try {
     const { idCode, code, data } = await req.json();
     const result = userSchema.parse({ ...data, idCode, code });
-    
+
     const codeFind = await prisma.coderegister.findFirst({
       where: {
         id: result.idCode,
@@ -16,10 +16,7 @@ export async function createUser(req: NextRequest) {
       },
     });
     if (!codeFind) {
-      return NextResponse.json(
-        { error: "Código no valido" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Código no valido" }, { status: 400 });
     }
 
     const TEN_MINUTES_IN_MS = 10 * 60 * 1000;
@@ -33,7 +30,7 @@ export async function createUser(req: NextRequest) {
       );
     }
 
-    const userfound = await prisma.user.findFirst({
+    const userFound = await prisma.user.findFirst({
       where: {
         OR: [
           {
@@ -45,7 +42,7 @@ export async function createUser(req: NextRequest) {
         ],
       },
     });
-    if (userfound) {
+    if (userFound) {
       return NextResponse.json(
         { error: "El usuario se encuentra registrado" },
         { status: 400 }
@@ -73,7 +70,7 @@ export async function createUser(req: NextRequest) {
         { status: 400 }
       );
     }
-    
+
     console.error("Error: ", (error as Error).message);
     return NextResponse.json(
       { error: "Error en el servidor." },

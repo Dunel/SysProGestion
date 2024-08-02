@@ -15,9 +15,12 @@ export async function Login(req: NextRequest) {
     const { email, password }: userLogin = await req.json();
     const result = LoginSchema.parse({ email, password });
 
-    const userFound = await prisma.user.findUnique({
+    const userFound = await prisma.user.findFirst({
       where: {
-        mail: result.email,
+        mail: {
+          equals: result.email,
+          mode: "insensitive",
+        },
       },
     });
     if (!userFound) {
@@ -41,6 +44,7 @@ export async function Login(req: NextRequest) {
       {
         id: userFound.id,
         email: userFound.mail,
+        role: userFound.role,
       },
       process.env.JWT_SECRET as string,
       {
