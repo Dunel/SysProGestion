@@ -118,11 +118,11 @@ export default function Register() {
     <>
       <Header title={"Registro"} />
       <ContainerWeb>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <GridMain>
-            <GridContainer>
+      <main className="flex">
+          <div className="w-3/4 mr-4">
+         
               {step === 0 ? (
-                <Step0 setMail={setMail} sendMail={sendMail} />
+                <Step0 setMail={setMail} sendMail={sendMail}  />
               ) : step === 1 ? (
                 <Step1 setCode={setCode} validateCode={validateCode} />
               ) : step === 2 ? (
@@ -130,10 +130,14 @@ export default function Register() {
               ) : (
                 `Usuario ${mail} registrado con éxito`
               )}
-            </GridContainer>
-          </GridMain>
-          <GridSecond>
-            <GridContainer>
+      
+          </div>
+
+
+
+
+       
+            <div className="w-1/4">
               <h2>¡Bienvenido!</h2>
               <p>
                 Para completar tu registro de forma exitosa, por favor sigue
@@ -160,9 +164,8 @@ export default function Register() {
                   registro.
                 </li>
               </ol>
-            </GridContainer>
-          </GridSecond>
-        </div>
+         </div>
+        </main>
       </ContainerWeb>
     </>
   );

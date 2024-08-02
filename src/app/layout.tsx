@@ -1,7 +1,9 @@
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import NavBarRols from "@/components/NavBarRols";
+import Header from "@/components/Header";
+import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import SessionAuthProvider from "@/context/SessionProvider";
 
@@ -17,19 +19,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const navigation = [
-    { name: "Inicio", href: "/inicio", current: false },
-    { name: "Perfil", href: "/perfil", current: false },
-    { name: "Mis Aplicaciones", href: "/autorizaciones", current: false },
-    { name: "Notificaciones", href: "/notificaciones", current: false },
-
-    { name: "Cerrar Sesión", href: "/logout", current: false },
-  ];
   return (
     <html lang="en">
       <body className={"bg-gray-100"}>
-        <NavBarRols navigation={navigation} />
-        {children}
+        <SessionAuthProvider>
+          <NavBar />
+          {children}
+        </SessionAuthProvider>
         <Footer />
       </body>
     </html>
