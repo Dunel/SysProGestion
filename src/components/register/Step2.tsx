@@ -160,6 +160,7 @@ type Step2Props = {
   sendData: Function;
 };
 
+
 export default function Step2({ setData, sendData }: Step2Props) {
   const { register, handleSubmit, formState: { errors, isValid }, watch } = useForm({
     resolver: zodResolver(userSchema),
@@ -183,6 +184,8 @@ export default function Step2({ setData, sendData }: Step2Props) {
     setShouldSendData(true);
   };
 
+
+  
   return (
     <div className="child w-4/5 mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
       <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
