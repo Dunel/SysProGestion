@@ -97,7 +97,7 @@ const numericRegex = /^\d+$/; // Solo números
 export const userSchema = z.object({
   cedula: z
     .string({ required_error: "La cédula es requerida" })
-    .min(6, { message: "La cédula debe tener mínimo 6 caracteres" })
+    .min(7, { message: "La cédula debe tener mínimo 7 caracteres" })
     .max(8, { message: "La cédula debe tener máximo 8 caracteres" })
     .regex(numericRegex, { message: "La cédula debe contener solo números" }), // Validación de solo números
   
