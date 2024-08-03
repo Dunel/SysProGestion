@@ -150,7 +150,7 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { userSchema } from "@/validations/user.schema";
+import { userFormSchema, userSchema } from "@/validations/user.schema";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/components/lib/utils";
@@ -163,7 +163,7 @@ type Step2Props = {
 
 export default function Step2({ setData, sendData }: Step2Props) {
   const { register, handleSubmit, formState: { errors, isValid }, watch } = useForm({
-    resolver: zodResolver(userSchema),
+    resolver: zodResolver(userFormSchema),
     mode: "onChange"
   });
 
