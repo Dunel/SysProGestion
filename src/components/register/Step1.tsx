@@ -22,7 +22,7 @@ export default function Step1({ setCode, validateCode }: Step1Props) {
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
   
         </div>
-        <LabelInputContainer className="mb-4">
+        <LabelInputContainer className="mb-4 relative z-50">
           <Label htmlFor="password">Codigo</Label>
           <Input id="password" type="password" onChange={(e) => setCode(e.target.value)}/>
         </LabelInputContainer>

@@ -176,10 +176,7 @@ export default function Step2({ setData, sendData }: Step2Props) {
     }
   }, [shouldSendData, isValid, sendData]);
 
-  const onSubmit = (data: any) => {
-    alert("Datos enviados correctamente"); //TODO: ESTO NO APARECE EN LA PANTALLA
-    console.log('data', data);
-    
+  const onSubmit = (data: any) => {   
     setData(data);
     setShouldSendData(true);
   };
@@ -197,7 +194,7 @@ export default function Step2({ setData, sendData }: Step2Props) {
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <LabelInputContainer className="mb-4">
+        <LabelInputContainer className="mb-4 relative z-50">
           <Label htmlFor="nombre">Nombre</Label>
           <Input 
             {...register("nombre")}
@@ -218,7 +215,7 @@ export default function Step2({ setData, sendData }: Step2Props) {
           )}
         </LabelInputContainer>
 
-        <LabelInputContainer className="mb-4">
+        <LabelInputContainer className="mb-4 relative z-50">
           <Label htmlFor="apellido">Apellido</Label>
           <Input 
             {...register("apellido")}
@@ -239,7 +236,7 @@ export default function Step2({ setData, sendData }: Step2Props) {
           )}
         </LabelInputContainer>
 
-        <LabelInputContainer className="mb-4">
+        <LabelInputContainer className="mb-4 relative z-50">
           <Label htmlFor="cedula">Cédula de Identidad</Label>
           <Input 
             {...register("cedula")}
@@ -260,7 +257,7 @@ export default function Step2({ setData, sendData }: Step2Props) {
           )}
         </LabelInputContainer>
         
-        <LabelInputContainer className="mb-4">
+        <LabelInputContainer className="mb-4 relative z-50">
           <Label htmlFor="telefono">Número Telefónico</Label>
           <Input 
             {...register("telefono")}
@@ -281,12 +278,12 @@ export default function Step2({ setData, sendData }: Step2Props) {
           )}
         </LabelInputContainer>
 
-        <LabelInputContainer className="mb-4">
+        <LabelInputContainer className="mb-4 relative z-50">
           <Label htmlFor="password">Contraseña</Label>
           <Input 
             {...register("password")}
             id="password" 
-            placeholder="••••••••"  
+       
             type="password"
             className={cn(
               errors.password && "bg-red-100 focus:bg-red-100"
@@ -302,7 +299,7 @@ export default function Step2({ setData, sendData }: Step2Props) {
           )}
         </LabelInputContainer>
 
-        <LabelInputContainer className="mb-4">
+        <LabelInputContainer className="mb-4 relative z-50">
           <Label htmlFor="confirmPassword">Confirmar Contraseña</Label>
           <Input 
             {...register("confirmPassword", {
@@ -313,7 +310,6 @@ export default function Step2({ setData, sendData }: Step2Props) {
               },
             })}
             id="confirmPassword" 
-            placeholder="••••••••"  
             type="password"
             className={cn(
               errors.confirmPassword && "bg-red-100 focus:bg-red-100"

@@ -53,7 +53,7 @@ export default function Step0({ setMail, sendMail }: Step0Props) {
 
       <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4"></div>
 
-      <LabelInputContainer className="mb-4">
+      <LabelInputContainer className="mb-4 relative z-50">
         <Label htmlFor="email">Correo</Label>
         <Input
           id="email"
@@ -62,14 +62,14 @@ export default function Step0({ setMail, sendMail }: Step0Props) {
           value={email}
           onChange={handleEmailChange}
           className={cn(
-            "bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none",
+            " bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none",
             emailError && "bg-red-100"
           )}
         />
         {emailError && <span className="text-red-500 text-sm mt-1">{emailError}</span>}
       </LabelInputContainer>
 
-      <LabelInputContainer className="mb-4">
+      <LabelInputContainer className="mb-4 relative z-50">
         <Label htmlFor="rol">Rol</Label>
         <div className="relative">
           <Input

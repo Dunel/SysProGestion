@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/folderAlcaldia/PerfilAlcaldia.jsxe.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/folderAlcaldia/PerfilAlcaldia.jsxe.jsx", "src/components/BienvnidaDos.jsx"],
   "exclude": ["node_modules"]
 }
