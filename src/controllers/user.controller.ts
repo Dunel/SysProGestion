@@ -53,7 +53,10 @@ export async function createUser(req: NextRequest) {
             cedula: result.cedula,
           },
           {
-            mail: codeFind.mail,
+            mail: {
+              equals: codeFind.mail,
+              mode: "insensitive",
+            },
           },
         ],
       },

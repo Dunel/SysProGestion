@@ -31,7 +31,10 @@ export async function createCode(req: NextRequest) {
 
     const findMail = await prisma.user.findFirst({
       where: {
-        mail: email,
+        mail: {
+          equals: email,
+          mode: "insensitive",
+        },
       },
     });
     if (findMail) {
@@ -43,7 +46,10 @@ export async function createCode(req: NextRequest) {
 
     const code = await prisma.coderegister.findFirst({
       where: {
-        mail: email,
+        mail: {
+          equals: email,
+          mode: "insensitive",
+        },
       },
     });
 
@@ -116,7 +122,10 @@ export async function validateCode(req: NextRequest) {
 
     const codeFind = await prisma.coderegister.findFirst({
       where: {
-        mail: result.mail,
+        mail: {
+          equals: result.mail,
+          mode: "insensitive",
+        },
         code: result.code,
       },
     });
@@ -155,7 +164,7 @@ export async function deleteCode(mail: string) {
   try {
     const deleteCode = await prisma.coderegister.delete({
       where: {
-        mail,
+        mail
       },
     });
 
