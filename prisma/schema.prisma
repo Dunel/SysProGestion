@@ -22,7 +22,21 @@ model User {
   password  String
   names     String
   lastnames String
-  role      Int      @default(1)
+  role      Role     @default(estudiante)
   phone     String
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  alcaldia
+  estudiante
+  dependencia
+}
+
+model PreRegister {
+  id        Int      @id @default(autoincrement())
+  cedula    Int      @unique
+  mail      String   @unique
+  role      Role     @default(estudiante)
   updatedAt DateTime @updatedAt
 }

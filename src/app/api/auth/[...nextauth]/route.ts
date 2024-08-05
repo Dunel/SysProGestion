@@ -1,34 +1,37 @@
-import axios from "axios";
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+import axios from 'axios';
+import NextAuth, { NextAuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
 
-const handler = NextAuth({
+const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: 'Credentials',
       credentials: {
-        email: { label: "email", type: "email", placeholder: "test@test.com" },
-        password: { label: "Password", type: "password" },
+        email: { label: 'Email', type: 'email', placeholder: 'test@test.com' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        const res = await axios
-          .post(`${process.env.NEXTAUTH_URL}/api/auth/login`, {
-            email: credentials?.email,
-            password: credentials?.password,
-          })
-          .catch((err) => {
-            throw new Error(err.response.data.error);
-          });
+        const res = await axios.post(`${process.env.NEXTAUTH_URL}/api/auth/login`, {
+          email: credentials?.email,
+          password: credentials?.password,
+        }).catch((err) => {
+          throw new Error(err.response.data.error);
+        });
+
         return res.data;
       },
     }),
   ],
   callbacks: {
     async jwt({ token, user }) {
-      return { ...token, ...user };
+      if (user) {
+        token.email = user.email;
+        token.role = user.role;
+      }
+      return {...token, ...user};
     },
     async session({ session, token }) {
-      session.user = token as any;
+      session.user.email = token.email as string;
       return session;
     },
     async redirect({ url, baseUrl }) {
@@ -36,8 +39,10 @@ const handler = NextAuth({
     },
   },
   pages: {
-    signIn: "/login",
+    signIn: '/login',
   },
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

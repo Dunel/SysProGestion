@@ -21,8 +21,7 @@ export default function Login() {
       setErrors(login.error.split(","));
       return;
     }
-
-    router.push("/dashboard");
+    router.push("/checking");
   };
   return (
     <div className="flex items-center justify-center bg-gray-100">
@@ -69,9 +68,9 @@ export default function Login() {
         {errors.length > 0 && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4">
             <ul className="mb-0">
-            {errors.map((error) => (
-              <li key={error}>{error}</li>
-            ))}
+              {errors.map((error) => (
+                <li key={error}>{error}</li>
+              ))}
             </ul>
           </div>
         )}
