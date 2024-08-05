@@ -103,7 +103,7 @@ export default function Register() {
         return;
       }
 
-      router.push("/dashboard");
+      router.push("/checking");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.data.step === 0) {
