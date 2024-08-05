@@ -4,7 +4,7 @@ import GridContainer from "@/components/GridContainer";
 import GridMain from "@/components/GridMain";
 import GridSecond from "@/components/GridSecond";
 import Header from "@/components/Header";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 export default function Register() {
   const { data: session } = useSession();

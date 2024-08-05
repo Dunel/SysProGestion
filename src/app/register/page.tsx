@@ -24,9 +24,10 @@ export default function Register() {
   const [code, setCode] = useState("");
   const [mail, setMail] = useState("");
   const [step, setStep] = useState(0);
-  const [idCode, setIdCode] = useState("");
   const [data, setData] = useState({} as Data);
   const [count, setCount] = useState(0);
+  const [token, setToken] = useState("");
+  const [role, setRole] = useState("estudiante");
   const router = useRouter();
 
   const sendMail = async () => {
@@ -40,11 +41,12 @@ export default function Register() {
       }
       const res = await axios.post("/api/register/mailer", {
         mail,
+        role,
       });
       setCount(Date.now() + 300);
       res.data.message && alert(res.data.message);
       setStep(1);
-      console.log(res.data);
+      setToken(res.data.token);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return alert(error.response?.data.error);
@@ -67,7 +69,6 @@ export default function Register() {
       });
 
       res.data.message && alert("Código validado");
-      setIdCode(res.data.id);
       setStep(2);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -84,9 +85,9 @@ export default function Register() {
   const sendRegister = async () => {
     try {
       const res = await axios.post("/api/register/insert", {
-        idCode,
         code,
         data,
+        token,
       });
       res.data.message && alert(res.data.message);
       setStep(3);
@@ -96,12 +97,12 @@ export default function Register() {
         password: data.password,
         redirect: false,
       });
-  
+
       if (login?.error) {
         alert(login.error.split(","));
         return;
       }
-  
+
       router.push("/dashboard");
     } catch (error) {
       if (axios.isAxiosError(error)) {

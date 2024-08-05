@@ -1,17 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
 import emailService from "@/service/nodemailer/emailService";
-import { codeSchema } from "@/validations/code.schema";
+import { codeSchema, roleSchema } from "@/validations/code.schema";
 import { ZodError } from "zod";
 import prisma from "@/db";
+import jwt from "jsonwebtoken";
+
+type generateCode = {
+  mail: string;
+  role: string;
+};
 
 export async function createCode(req: NextRequest) {
   try {
-    const { mail }: { mail: string } = await req.json();
-    const result = codeSchema.shape.mail.parse(mail);
+    const { mail, role }: generateCode = await req.json();
+    const email = codeSchema.shape.mail.parse(mail);
+    const roles = roleSchema.shape.role.parse(role);
+
+    const preRegisterFind = await prisma.preRegister.findFirst({
+      where: {
+        mail: email,
+        role: roles,
+      },
+    });
+    if (!preRegisterFind && role !== "estudiante") {
+      return NextResponse.json(
+        { error: "Este correo no pertenece al rol seleccionado" },
+        { status: 400 }
+      );
+    }
 
     const findMail = await prisma.user.findFirst({
       where: {
-        mail: result,
+        mail: email,
       },
     });
     if (findMail) {
@@ -23,7 +43,7 @@ export async function createCode(req: NextRequest) {
 
     const code = await prisma.coderegister.findFirst({
       where: {
-        mail: result,
+        mail: email,
       },
     });
 
@@ -39,9 +59,9 @@ export async function createCode(req: NextRequest) {
     }
 
     const newCode = Math.floor(100000 + Math.random() * 900000);
-
+    let codeReg;
     if (code) {
-      await prisma.coderegister.update({
+      codeReg = await prisma.coderegister.update({
         where: {
           id: code.id,
         },
@@ -50,21 +70,29 @@ export async function createCode(req: NextRequest) {
         },
       });
     } else {
-      await prisma.coderegister.create({
+      codeReg = await prisma.coderegister.create({
         data: {
-          mail: result,
+          mail: email,
           code: newCode,
         },
       });
     }
 
-    const resmail = await emailService.sendMail(
-      result,
+    /*const resmail = await emailService.sendMail(
+      email,
       `Tu código de registro es: ${newCode}`,
       "Codigo de registro"
+    );*/
+
+    const token = jwt.sign(
+      { mail: email, codeId: codeReg.id, role: "estudiante" },
+      process.env.JWT_SECRET as string,
+      {
+        expiresIn: "10m",
+      }
     );
 
-    return NextResponse.json({ message: resmail }, { status: 200 });
+    return NextResponse.json({ message: "resmail", token }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(
@@ -72,7 +100,7 @@ export async function createCode(req: NextRequest) {
         { status: 400 }
       );
     }
-    
+
     console.error("Error: ", (error as Error).message);
     return NextResponse.json(
       { error: "Error en el servidor." },
@@ -107,7 +135,7 @@ export async function validateCode(req: NextRequest) {
       );
     }
 
-    return NextResponse.json({ id: codeFind.id }, { status: 200 });
+    return NextResponse.json({ message: "Código validado" }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(
@@ -120,5 +148,19 @@ export async function validateCode(req: NextRequest) {
       { error: "Error en el servidor." },
       { status: 500 }
     );
+  }
+}
+
+export async function deleteCode(mail: string) {
+  try {
+    const deleteCode = await prisma.coderegister.delete({
+      where: {
+        mail,
+      },
+    });
+
+    return;
+  } catch (error) {
+    return;
   }
 }

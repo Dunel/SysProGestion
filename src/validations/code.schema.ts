@@ -37,3 +37,7 @@ export const codeIdSchema = z.object({
     .min(20, { message: "El código es incorrecto" })
     .max(36, { message: "El código es incorrecto" }),
 });
+
+export const roleSchema = z.object({
+  role: z.enum(["estudiante", "alcaldia", "dependencia"]),
+});

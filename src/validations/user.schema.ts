@@ -20,7 +20,7 @@ export const userSchema = z.object({
       if (parsed < 600000 || parsed > 99999999) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Los caracteres deben ser un númericos",
+          message: "Número de cedula no valido",
         });
         return z.NEVER;
       }
@@ -49,10 +49,6 @@ export const userSchema = z.object({
       message:
         "La contraseña debe contener al menos una letra mayúscula, un dígito y uno de los siguientes caracteres especiales: @, #, $, %, &, *, ., /, =,.",
     }),
-  idCode: z
-    .string()
-    .min(20, { message: "El código es incorrecto" })
-    .max(36, { message: "El código es incorrecto" }),
   code: z
     .string()
     .min(6, { message: "El código es incorrecto" })
