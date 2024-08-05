@@ -52,7 +52,10 @@ export async function Login(req: NextRequest) {
       }
     );
 
-    return NextResponse.json({ token, email: userFound.mail }, { status: 200 });
+    return NextResponse.json(
+      { token, email: userFound.mail, role: userFound.role },
+      { status: 200 }
+    );
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(

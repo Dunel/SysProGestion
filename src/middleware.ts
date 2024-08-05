@@ -1,93 +1,41 @@
-export { default } from "next-auth/middleware";
-
-export const config = {
-  matcher: ["/dashboard/:path*"],
-};
-
-/*import { getToken } from "next-auth/jwt";
-
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { TypeUser } from "./app/api/auth/[...nextauth]/options";
+import { getToken } from "next-auth/jwt";
 
-// This function can be marked `async` if using `await` inside
-export async function middleware(request: NextRequest) {
-  const { pathname }: { pathname: string } = request.nextUrl;
-  const token = await getToken({ req: request });
-  const user: TypeUser | null = token?.user as TypeUser;
-
-
-  const Redirect = () => {
-    if (user.account_type == "Admin") {
-      return NextResponse.redirect(new URL("/admin/Dashboard", request.url));
-    } else if (user.account_type == "Teacher") {
-      return NextResponse.redirect(new URL("/teacher/Dashboard", request.url));
-    } else if (user.account_type == "Student") {
-      return NextResponse.redirect(new URL("/student/Dashboard", request.url));
-    } else {
-      return NextResponse.redirect(
-        new URL(
-          "/login?error=Please login first to access this route",
-          request.url
-        )
-      );
-    }
-  };
-  const authRoutes = ["/login", "/register", "/forgot-password"];
-
-  if (!!token && authRoutes.includes(pathname)) {
-    return Redirect();
-  }
-  if (
-    (!!token &&      pathname.startsWith("/admin") &&      user.account_type !== "Admin") ||
-    (!!token &&
-      pathname.startsWith("/teacher") &&
-      user.account_type !== "Teacher") ||
-    (!!token &&
-      pathname.startsWith("/student") &&
-      user.account_type !== "Student")
-  ) {
-    return Redirect();
-  }
+export async function middleware(req: NextRequest) {
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
   if (!token) {
-    if (
-      pathname.includes("/api/admin") ||
-      pathname.includes("/api/student") ||
-      pathname.includes("/api/teacher")
-    ) {
-      return Response.json(
-        { success: false, message: "authentication failed" },
-        { status: 401 }
-      );
-    }
-  } else {
-    if (
-      (pathname.startsWith("/api/admin") && user.account_type !== "Admin") ||
-      (pathname.startsWith("/api/teacher") &&
-        user.account_type !== "Teacher") ||
-      (pathname.startsWith("/api/student") && user.account_type !== "Student")
-    ) {
-      console.log(pathname, user.account_type);
-      return Response.json(
-        { success: false, message: "authentication failed" },
-        { status: 401 }
-      );
+    return NextResponse.redirect(new URL("/api/auth/signin", req.url));
+  }
+  const url = req.nextUrl.pathname;
+
+  const urlBasedOnRole = {
+    alcaldia: "/alcaldia",
+    estudiante: "/estudiante",
+    dependencia: "/dependencia",
+  };
+  if (url === "/checking") {
+    const redirectTo = urlBasedOnRole[token.role as "alcaldia" | "estudiante"];
+    if (redirectTo) {
+      return NextResponse.redirect(new URL(redirectTo, req.url));
     }
   }
+
+  if (url.startsWith("/alcaldia") && token.role !== "alcaldia") {
+    return NextResponse.redirect(new URL("/checking", req.url));
+  }
+  if (url.startsWith("/estudiante") && token.role !== "estudiante") {
+    return NextResponse.redirect(new URL("/checking", req.url));
+  }
+  if (url.startsWith("/dependencia") && token.role !== "dependencia") {
+    return NextResponse.redirect(new URL("/checking", req.url));
+  }
+
+
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    "/login",
-    "/register",
-    "/forgot-password",
-    "/admin/:path*",
-    "/teacher/:path*",
-    "/student/:path*",
-    "/api/admin/:function*",
-    "/api/teacher/:function*",
-    "/api/student/:function*",
-  ],
+  matcher: ["/alcaldia/:path*", "/estudiante/:path*", "/checking", "/dependencia/:path*"],
 };
-*/

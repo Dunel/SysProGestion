@@ -41,7 +41,7 @@ export async function createUser(req: NextRequest) {
       Date.now()
     ) {
       return NextResponse.json(
-        { error: "El registro ha expiradox", step: 0 },
+        { error: "El registro ha expirado", step: 0 },
         { status: 400 }
       );
     }

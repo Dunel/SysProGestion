@@ -8,10 +8,11 @@ import { useSession, signOut } from "next-auth/react";
 
 export default function Register() {
   const { data: session } = useSession();
+  console.log(session);
 
   return (
     <>
-      <Header title={"Dashboard"} />
+      <Header title={"Estudiante"} />
       <ContainerWeb>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <GridMain>
