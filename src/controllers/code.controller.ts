@@ -78,11 +78,11 @@ export async function createCode(req: NextRequest) {
       });
     }
 
-    /*const resmail = await emailService.sendMail(
+    const resmail = await emailService.sendMail(
       email,
       `Tu código de registro es: ${newCode}`,
       "Codigo de registro"
-    );*/
+    );
 
     const token = jwt.sign(
       { mail: email, codeId: codeReg.id, role: "estudiante" },
@@ -92,7 +92,7 @@ export async function createCode(req: NextRequest) {
       }
     );
 
-    return NextResponse.json({ message: "resmail", token }, { status: 200 });
+    return NextResponse.json({ message: resmail, token }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(
