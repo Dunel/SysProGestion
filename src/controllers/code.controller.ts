@@ -18,7 +18,10 @@ export async function createCode(req: NextRequest) {
 
     const preRegisterFind = await prisma.preRegister.findFirst({
       where: {
-        mail: email,
+        mail: {
+          equals: email,
+          mode: "insensitive",
+        },
         role: roles,
       },
     });
