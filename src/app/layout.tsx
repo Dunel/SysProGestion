@@ -25,9 +25,9 @@ export default function RootLayout({
       <body className={"bg-gray-100"}>
         <SessionAuthProvider>
           <NavBar />
-          <AuroraBackground>
+          {/* <AuroraBackground> */}
             {children}
-          </AuroraBackground>
+          {/* </AuroraBackground> */}
         </SessionAuthProvider>
         <Footer />
       </body>
