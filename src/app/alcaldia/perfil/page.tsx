@@ -4,9 +4,8 @@ import GridContainer from "@/components/GridContainer";
 import GridMain from "@/components/GridMain";
 import GridSecond from "@/components/GridSecond";
 import Header from "@/components/Header";
-import AlcaldiaProfile from "@/components/folderAlcaldia/AlcaldiaProfile";
-
-import AlcaldiaFormProfile from "@/components/folderAlcaldia/AlcaldiaFormProfile";
+import AlcaldiaProfile from "@/components/perfiles/AlcaldiaProfile";
+import AlcaldiaFormProfile from "@/components/perfiles/AlcaldiaFormProfile";
 
 
 export default function Register() {

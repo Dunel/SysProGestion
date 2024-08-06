@@ -80,9 +80,11 @@ export default function Bienvenida() {
 
             {/* Botón de registro */}
             <div className="flex justify-center mb-4 text-justify">
-              <Link href="/register" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                  Regístrate aquí
-            
+              <Link href="/register" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 m-4 rounded">
+                  Regístrate
+              </Link>
+              <Link href="/login" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 m-4 rounded ">
+                  Inicia Sesión
               </Link>
             
             </div>
