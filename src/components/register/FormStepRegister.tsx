@@ -38,7 +38,7 @@ export default function SignupFormDemo({ setMail, sendMail }: Step0Props) {
         </div>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email">Correo</Label>
-          <Input id="email" placeholder="projectmayhem@fc.com" type="email" onChange={(e) => setMail(e.target.value)}/>
+          <Input id="email" placeholder="example@gmail.com" type="email" onChange={(e) => setMail(e.target.value)}/>
         </LabelInputContainer>
 
 

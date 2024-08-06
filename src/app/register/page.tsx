@@ -20,6 +20,10 @@ type Data = {
   password: string;
 };
 
+type Roles = "alcaldia" | "dependencia" | "estudiante";
+
+
+
 export default function Register() {
   const [code, setCode] = useState("");
   const [mail, setMail] = useState("");
@@ -27,7 +31,7 @@ export default function Register() {
   const [data, setData] = useState({} as Data);
   const [count, setCount] = useState(0);
   const [token, setToken] = useState("");
-  const [role, setRole] = useState("estudiante");
+  const [role, setRole] = useState("" as Roles);
   const router = useRouter();
 
   const sendMail = async () => {
@@ -41,7 +45,7 @@ export default function Register() {
       }
       const res = await axios.post("/api/register/mailer", {
         mail,
-        role,
+        role: role,
       });
       setCount(Date.now() + 300);
       res.data.message && alert(res.data.message);
@@ -123,7 +127,7 @@ export default function Register() {
           <div className="w-3/4 mr-4">
          
               {step === 0 ? (
-                <Step0 setMail={setMail} sendMail={sendMail}  />
+                <Step0 setMail={setMail} sendMail={sendMail} role={role} setRole={setRole} />
               ) : step === 1 ? (
                 <Step1 setCode={setCode} validateCode={validateCode} />
               ) : step === 2 ? (

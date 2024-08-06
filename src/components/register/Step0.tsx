@@ -5,35 +5,48 @@ import { cn } from "@/components/lib/utils";
 import { useState } from "react";
 import { z } from "zod";
 
-
 type Step0Props = {
   setMail: Function;
   sendMail: Function;
+  setRole: Function;
+  role: any;
 };
 
-const emailSchema = z.string().email({ message: "Correo electrónico no válido" });
+type OptionsType = {
+  [key: string]: string;
+};
 
-export default function Step0({ setMail, sendMail }: Step0Props) {
+const emailSchema = z
+  .string()
+  .email({ message: "Correo electrónico no válido" });
+
+export default function Step0({
+  setMail,
+  sendMail,
+  setRole,
+  role,
+}: Step0Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState("");
 
-  const options = ['Alcaldia', 'Dependencia de Alcaldia', 'Estudiante'];
+  const options: OptionsType = {
+    alcaldia: "Alcaldia",
+    dependencia: "Dependencia de Alcaldia",
+    estudiante: "Estudiante",
+  };
 
-  const handleOptionClick = (option: string) => {
-    setSelectedOption(option);
+  const handleOptionClick = (option: keyof OptionsType) => {
+    setRole(option);
     setIsOpen(false);
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setEmail(value);
     setMail(value);
 
     try {
       emailSchema.parse(value);
-      setEmailError('');
+      setEmailError("");
     } catch (err) {
       if (err instanceof z.ZodError) {
         setEmailError(err.errors[0].message);
@@ -47,8 +60,9 @@ export default function Step0({ setMail, sendMail }: Step0Props) {
         ¡Regístrate!
       </h2>
       <p className="child w-full text-neutral-600 text-sm mt-2 dark:text-neutral-300 text-justify">
-        Llena los siguientes datos para registrarte en el sistema. 
-        Por favor, introduce tu información correctamente siguiendo las indicaciones en cada casilla. 
+        Llena los siguientes datos para registrarte en el sistema. Por favor,
+        introduce tu información correctamente siguiendo las indicaciones en
+        cada casilla.
       </p>
 
       <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4"></div>
@@ -57,16 +71,17 @@ export default function Step0({ setMail, sendMail }: Step0Props) {
         <Label htmlFor="email">Correo</Label>
         <Input
           id="email"
-          placeholder="projectmayhem@fc.com"
+          placeholder="example@gmail.com"
           type="email"
-          value={email}
           onChange={handleEmailChange}
           className={cn(
             " bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none",
             emailError && "bg-red-100"
           )}
         />
-        {emailError && <span className="text-red-500 text-sm mt-1">{emailError}</span>}
+        {emailError && (
+          <span className="text-red-500 text-sm mt-1">{emailError}</span>
+        )}
       </LabelInputContainer>
 
       <LabelInputContainer className="mb-4 relative z-50">
@@ -75,7 +90,7 @@ export default function Step0({ setMail, sendMail }: Step0Props) {
           <Input
             id="rol"
             type="text"
-            value={selectedOption}
+            value={role ? options[role] : ""}
             onClick={() => setIsOpen(!isOpen)}
             readOnly
             className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
@@ -83,20 +98,20 @@ export default function Step0({ setMail, sendMail }: Step0Props) {
           />
           {isOpen && (
             <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
-              {options.map((option, index) => (
+              {Object.keys(options).map((key) => (
                 <div
-                  key={index}
-                  onClick={() => handleOptionClick(option)}
-                  className="cursor-pointer hover:bg-blue-100 py-2 px-3"
+                  key={key}
+                  onClick={() => handleOptionClick(key)}
+                  className="p-2 hover:bg-gray-100 cursor-pointer"
                 >
-                  {option}
+                  {options[key]}
                 </div>
               ))}
             </div>
           )}
         </div>
       </LabelInputContainer>
-      
+
       <button
         className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
         onClick={() => sendMail()}
