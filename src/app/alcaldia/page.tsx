@@ -24,7 +24,7 @@ export default function Register() {
   return (
     <>
 
-      <Header title={"Carlos Pérez - Universidad Privada Dr. Rafael Belloso Chacín"} />
+      <Header title={"ALCALDIA DE MARACAIBO"} subtitle={"Mira tis datos de perfil"} />
    
       <ContainerWeb>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
