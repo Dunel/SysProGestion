@@ -34,18 +34,12 @@ export default function EstudianteProfil() {
 
   return (
     <div>
-      <Header title={"Tu Perfil"} />
+      <Header title={"Tu Perfil"} subtitle={"Este es tu perfil, aquí podrás visualizar tu información personal y actualizarla si es necesario."}/>
       <ContainerWeb>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         
         <GridMain>
-            <GridContainer>
-                  <h2 className="text-2xl font-bold">Bienvenido <i>Jose Perez.</i></h2>
-              <div>
-                <p className="text-justify mb-4 p-2" >
-                  Este es tu perfil, aquí podrás visualizar tu información personal y actualizarla si es necesario.
-                </p>
-              </div>
+            <GridContainer>             
               <EstudianteProfile profileData={profileData}/>
             </GridContainer>
           </GridMain>

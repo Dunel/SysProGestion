@@ -26,7 +26,7 @@ export default function RootLayout({
         <SessionAuthProvider>
           <NavBar />
           <AuroraBackground>
-          <div className="min-h-[80vh]">
+          <div className=" w-[100vw] min-h-[80vh]">
             {children}
           </div>
           </AuroraBackground>
