@@ -25,11 +25,11 @@ export default function RootLayout({
       <body className={"bg-gray-100"}>
         <SessionAuthProvider>
           <NavBar />
-          <AuroraBackground>
-          <div className=" w-[100vw] min-h-[80vh]">
+          {/* <section className="m-1"> */}
+        <AuroraBackground>
             {children}
-          </div>
-          </AuroraBackground>
+        </AuroraBackground>
+         {/* </section> */}
         </SessionAuthProvider>
         <Footer />
       </body>

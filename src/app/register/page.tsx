@@ -121,9 +121,9 @@ export default function Register() {
   };
   return (
     <>
-      <Header title={"Registro"} />
+      <Header title={"Registro"} subtitle={"Registro de usuarios"} />
       <ContainerWeb>
-      <main className="flex">
+      <div className="flex">
           <div className="w-3/4 mr-4">
          
               {step === 0 ? (
@@ -170,7 +170,7 @@ export default function Register() {
                 </li>
               </ol>
          </div>
-        </main>
+        </div>
       </ContainerWeb>
     </>
   );

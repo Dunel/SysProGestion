@@ -2,19 +2,16 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { AuroraBackground } from "@/components/ui/aurora-background";
 import { motion } from "framer-motion";
 import TitleH1 from "@/components/Title-h1";
 
 export default function Bienvenida() {
 
   return (
-    <div className='space-y-4'>
+    <div className='space-y-4 m-1'>
 
-     
       <TitleH1 title="Bienvenido a la Gestión de Pasantías y Servicios Comunitarios" />
 
-  
       <motion.div
               initial={{ opacity: 0.0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -29,14 +26,14 @@ export default function Bienvenida() {
 
       <div className='space-y-4 '>
             
-            <p className="text-gray-700 mt-20 text-justify text-2xl md:text-3xl lg:text-3xl p-4 leading-12">
+            <p className="text-gray-700 text-justify text-2xl md:text-3xl lg:text-3xl leading-12 mt-40">
               Esta aplicación web está diseñada para facilitar la gestión de los procesos de pasantías y servicios comunitarios
               en la Gerencia de Asuntos Universitarios de la Alcaldía. Aquí podrás encontrar información sobre las vacantes
               disponibles y cómo aplicar a ellas.
             </p>
       </div>
        
-          <div className="w-full mx-auto p-6 rounded-lg shadow-lg mt-10 child w-4/5 text-xl">
+          <div className="w-full mx-auto p-6 rounded-lg mt-10 child w-4/5 text-xl">
 
             <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center md:text-4xl lg:text-4xl">Roles en la Aplicación</h2>
             
@@ -78,16 +75,25 @@ export default function Bienvenida() {
             </p>
 
 
+          
             {/* Botón de registro */}
-            <div className="flex justify-center mb-4 text-justify">
-              <Link href="/register" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 m-4 rounded">
-                  Regístrate
-              </Link>
-              <Link href="/login" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 m-4 rounded ">
-                  Inicia Sesión
-              </Link>
-            
+            <div className="flex justify-center mb-4 text-center">
+              <div className='w-[50%]'>
+              <label className="block text-sm font-medium text-gray-700 mb-1">¿Ya tienes una cuenta?</label>
+              <button className="relative z-50 w-[50%] bg-gray-950 text-white py-2 px-4 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <Link href="/login">Iniciar sesión</Link>
+              </button>
+              </div>
+
+              <div className='w-[50%]'>
+              <label className="block text-sm font-medium text-gray-700 mb-1">¿No tienes una cuenta?</label>
+              <button className="relative z-50 w-[50%] bg-gray-950 text-white py-2 px-4 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <Link href="/register">Regístrate</Link>
+              </button>
+              </div>
             </div>
+
+
           </div>
       </motion.div>
     </div>
