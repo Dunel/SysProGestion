@@ -5,7 +5,7 @@ export default function TitleH1({title}) {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setTopPosition('5rem'); // Cambia a 5rem después de 3 segundos
+      setTopPosition('8rem'); // Cambia a 5rem después de 3 segundos
     }, 10);
 
     return () => clearTimeout(timer); // Limpia el timer si el componente se desmonta
