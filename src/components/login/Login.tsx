@@ -26,7 +26,7 @@ export default function Login() {
   };
   return (
     <div className="min-h-[65vh] w-full flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-[45vw] h-[40vh]">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-[45vw] h-[50vh]">
         <div className="mb-4">
           <label
             htmlFor="username"

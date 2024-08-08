@@ -8,7 +8,6 @@ import AnuncioVacantePasantias from "@/components/Estudiante";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 
-
 import FormStepRegister  from "@/components/register/FormStepRegister";
 
 import { ExclamationTriangleIcon as ExclamationIcon } from '@heroicons/react/24/outline'; // Para el ícono de alerta en contorno

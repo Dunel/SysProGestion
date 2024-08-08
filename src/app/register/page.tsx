@@ -121,7 +121,7 @@ export default function Register() {
   };
   return (
     <>
-      <Header title={"Registro"} subtitle={"Registro de usuarios"} />
+      <Header title={"Registro"} subtitle={"Para registrarte satisfactoriamente, sigue las indicaciones del panel derecho"} />
       <ContainerWeb>
       <div className="flex">
           <div className="w-3/4 mr-4">
