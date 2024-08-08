@@ -8,7 +8,7 @@ import Header from "@/components/Header";
 export default function Home() {
   return (
     <>
-      <Header title={"Error"} />
+      <Header title={"Error"} subtitle={''}/>
       <ContainerWeb>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <GridMain>
