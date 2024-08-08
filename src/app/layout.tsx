@@ -22,16 +22,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={"bg-gray-100"}>
+      <body className="bg-gray-100">
+       
         <SessionAuthProvider>
           <NavBar />
-          {/* <section className="m-1"> */}
+
+      
         <AuroraBackground>
             {children}
         </AuroraBackground>
-         {/* </section> */}
+       
+     
         </SessionAuthProvider>
         <Footer />
+      
+        
       </body>
     </html>
   );

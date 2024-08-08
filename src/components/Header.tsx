@@ -1,25 +1,3 @@
-// import { ReactNode } from "react";
-
-
-//   export default function Header({ title, subtitle }: { title: ReactNode, subtitle: ReactNode }) {
-    
-//   return (
-//     <header className="shadow w-[100vw] sticky top-0">
-//       <div className="mx-auto px-2 py-2 sm:px-6 lg:px-20 ml-[5%]">
-//         <h1 className="text-3xl font-bold tracking-tight text-gray-900 text-justify">
-//           <i>{title}</i>
-//         <div>
-//           <p className="text-justify text-xl font-normal" >
-//             {subtitle}
-//           </p>
-//         </div>
-//         </h1>
-//       </div>
-//     </header>
-//   );
-// }
-
-
 import { ReactNode, useEffect, useState } from "react";
 
 export default function Header({ title, subtitle }: { title: ReactNode, subtitle: ReactNode }) {
@@ -30,7 +8,7 @@ export default function Header({ title, subtitle }: { title: ReactNode, subtitle
       const header = document.getElementById('sticky-header');
       const sticky = header?.offsetTop || 0;
 
-      if (window.pageYOffset > sticky) {
+      if (window.scrollY >= sticky) {
         setIsSticky(true);
       } else {
         setIsSticky(false);
@@ -47,8 +25,8 @@ export default function Header({ title, subtitle }: { title: ReactNode, subtitle
   return (
     <header 
       id="sticky-header"
-      className={`shadow w-[100vw] sticky top-0 transition-all duration-300 ${
-        isSticky ? 'scale-80 origin-top' : ''
+      className={`p-2 w-full sticky top-0 transition-all duration-300 ${
+        isSticky ? ' shadow scale-80 origin-top bg-white h-auto p-1' : ''
       }`}
     >
       <div className={`mx-auto px-2 py-2 sm:px-6 lg:px-20 ml-[5%] transition-all duration-300 ${

@@ -24,7 +24,7 @@ export default function TitleH1({ title }) {
   }, []);
 
   useEffect(() => {
-    setTopPosition(isMobile ? '-10%' : '50%'); // Actualiza topPosition según el estado isMobile
+    setTopPosition(isMobile ? '0%' : '50%'); // Actualiza topPosition según el estado isMobile
   }, [isMobile]);
 
   return (
