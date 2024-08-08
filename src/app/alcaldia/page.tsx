@@ -8,14 +8,13 @@ import AnuncioVacantePasantias from "@/components/Estudiante";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 
-
 import FormStepRegister  from "@/components/register/FormStepRegister";
 
 import { ExclamationTriangleIcon as ExclamationIcon } from '@heroicons/react/24/outline'; // Para el ícono de alerta en contorno
 
 
 
-export default function Register() {
+export default function Page() {
   
   
   const { data: session } = useSession();
@@ -24,7 +23,7 @@ export default function Register() {
   return (
     <>
 
-      <Header title={"Carlos Pérez - Universidad Privada Dr. Rafael Belloso Chacín"} />
+      <Header title={"ALCALDIA DE MARACAIBO"} subtitle={"Mira tis datos de perfil"} />
    
       <ContainerWeb>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

@@ -119,7 +119,7 @@ export default function Register() {
   };
   return (
     <>
-      <Header title={"Registro"} />
+      <Header title={"Registro"} subtitle={"Registro de usuario"}/>
       <ContainerWeb>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <GridMain>

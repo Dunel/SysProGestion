@@ -1,11 +1,10 @@
-
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import SessionAuthProvider from "@/context/SessionProvider";
-import { AuroraBackground } from "@/components/ui/aurora-background";
+//import { AuroraBackground } from "@/components/ui/aurora-background";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -25,9 +24,11 @@ export default function RootLayout({
       <body className={"bg-gray-100"}>
         <SessionAuthProvider>
           <NavBar />
-          <div className="min-h-[80vh]">
+          {/* <section className="m-1"> */}
+        {/*<AuroraBackground>*/}
             {children}
-          </div>
+        {/*</AuroraBackground>*/}
+         {/* </section> */}
         </SessionAuthProvider>
         <Footer />
       </body>
