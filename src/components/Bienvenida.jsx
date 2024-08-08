@@ -78,16 +78,16 @@ export default function Bienvenida() {
           
             {/* Botón de registro */}
             <div className="flex justify-center mb-4 text-center">
-              <div className='w-[50%]'>
+              <div className='w-auto'>
               <label className="block text-sm font-medium text-gray-700 mb-1">¿Ya tienes una cuenta?</label>
-              <button className="relative z-50 w-[50%] bg-gray-950 text-white py-2 px-4 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <button className="relative z-50 w-auto bg-gray-950 text-white py-2 px-4 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-xl" >
                 <Link href="/login">Iniciar sesión</Link>
               </button>
               </div>
 
               <div className='w-[50%]'>
               <label className="block text-sm font-medium text-gray-700 mb-1">¿No tienes una cuenta?</label>
-              <button className="relative z-50 w-[50%] bg-gray-950 text-white py-2 px-4 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <button className="relative z-50 w-auto bg-gray-950 text-white py-2 px-4 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-xl">
                 <Link href="/register">Regístrate</Link>
               </button>
               </div>
