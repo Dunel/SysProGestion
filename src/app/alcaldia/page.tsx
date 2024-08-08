@@ -15,7 +15,7 @@ import { ExclamationTriangleIcon as ExclamationIcon } from '@heroicons/react/24/
 
 
 
-export default function Register() {
+export default function Page() {
   
   
   const { data: session } = useSession();
