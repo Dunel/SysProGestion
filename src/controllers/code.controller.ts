@@ -94,7 +94,7 @@ export async function createCode(req: NextRequest) {
     );
 
     const token = jwt.sign(
-      { mail: email, codeId: codeReg.id, role: "estudiante" },
+      { mail: email, codeId: codeReg.id, role: preRegisterFind?.role },
       process.env.JWT_SECRET as string,
       {
         expiresIn: "10m",

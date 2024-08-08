@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { LoginSchema } from "@/validations/login.schema";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import prisma from "@/db";
 import { ZodError } from "zod";
 
@@ -40,20 +39,13 @@ export async function Login(req: NextRequest) {
       );
     }
 
-    const token = jwt.sign(
+    return NextResponse.json(
       {
-        id: userFound.id,
+        cedula: userFound.cedula,
         email: userFound.mail,
         role: userFound.role,
+        profile: userFound.profile,
       },
-      process.env.JWT_SECRET as string,
-      {
-        expiresIn: "1h",
-      }
-    );
-
-    return NextResponse.json(
-      { token, email: userFound.mail, role: userFound.role },
       { status: 200 }
     );
   } catch (error) {

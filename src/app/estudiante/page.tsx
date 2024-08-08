@@ -10,7 +10,7 @@ import EstudianteProfile from "@/components/perfiles/EstudianteProfile";
 
 export default function EstudianteProfil() {
   const { data: session } = useSession();
-  console.log(session);
+  console.log(session?.user);
 
   const profileData = {
     nombreEstudiante: 'Jose Perez',
