@@ -32,10 +32,14 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/checking", req.url));
   }
 
-
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/alcaldia/:path*", "/estudiante/:path*", "/checking", "/dependencia/:path*"],
+  matcher: [
+    "/alcaldia/:path*",
+    "/estudiante/:path*",
+    "/checking",
+    "/dependencia/:path*",
+  ],
 };

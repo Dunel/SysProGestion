@@ -1,6 +1,7 @@
 "use client";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -9,9 +10,11 @@ function classNames(...classes: string[]) {
 }
 
 export default function Navbar() {
+  const { data: session } = useSession();
   const navigation = [
     { name: "PRINCIPAL", href: "/", current: false },
     { name: "INFORMACION", href: "/informacion", current: false },
+    { name: "INICIAR SESIÓN", href: "/login", current: false },
   ];
 
   const pathname = usePathname();
@@ -46,21 +49,35 @@ export default function Navbar() {
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
-                    {navigation.map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        className={classNames(
-                          pathname === item.href
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-300 hover:bg-gray-900 hover:text-white",
-                          "rounded-md px-3 py-2 text-sm font-medium"
-                        )}
-                        aria-current={pathname === item.href ? "page" : undefined}
+                    {navigation.map((item) =>
+                      item.name === "INICIAR SESIÓN" && session ? null : (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          className={classNames(
+                            pathname === item.href
+                              ? "bg-gray-900 text-white"
+                              : "text-gray-300 hover:bg-gray-900 hover:text-white",
+                            "rounded-md px-3 py-2 text-sm font-medium"
+                          )}
+                          aria-current={
+                            pathname === item.href ? "page" : undefined
+                          }
+                        >
+                          {item.name}
+                        </Link>
+                      )
+                    )}
+                    {session && (
+                      <button
+                        className={
+                          "text-gray-300 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                        }
+                        onClick={() => signOut()}
                       >
-                        {item.name}
-                      </Link>
-                    ))}
+                        CERRAR SESIÓN
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -85,6 +102,16 @@ export default function Navbar() {
                   {item.name}
                 </Disclosure.Button>
               ))}
+              {session && (
+                <button
+                  className={
+                    "text-gray-300 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                  }
+                  onClick={() => signOut()}
+                >
+                  CERRAR SESIÓN
+                </button>
+              )}
             </div>
           </Disclosure.Panel>
         </>
