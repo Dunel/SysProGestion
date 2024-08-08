@@ -22,8 +22,6 @@ type Data = {
 
 type Roles = "alcaldia" | "dependencia" | "estudiante";
 
-
-
 export default function Register() {
   const [code, setCode] = useState("");
   const [mail, setMail] = useState("");
@@ -123,26 +121,26 @@ export default function Register() {
     <>
       <Header title={"Registro"} />
       <ContainerWeb>
-      <main className="flex">
-          <div className="w-3/4 mr-4">
-         
-              {step === 0 ? (
-                <Step0 setMail={setMail} sendMail={sendMail} role={role} setRole={setRole} />
-              ) : step === 1 ? (
-                <Step1 setCode={setCode} validateCode={validateCode} />
-              ) : step === 2 ? (
-                <Step2 setData={setData} sendData={sendRegister} />
-              ) : (
-                `Usuario ${mail} registrado con éxito`
-              )}
-      
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <GridMain>
+            {step === 0 ? (
+              <Step0
+                setMail={setMail}
+                sendMail={sendMail}
+                role={role}
+                setRole={setRole}
+              />
+            ) : step === 1 ? (
+              <Step1 setCode={setCode} validateCode={validateCode} />
+            ) : step === 2 ? (
+              <Step2 setData={setData} sendData={sendRegister} />
+            ) : (
+              `Usuario ${mail} registrado con éxito`
+            )}
+          </GridMain>
 
-
-
-
-       
-            <div className="w-1/4">
+          <GridSecond>
+            <GridContainer>
               <h2>¡Bienvenido!</h2>
               <p>
                 Para completar tu registro de forma exitosa, por favor sigue
@@ -169,8 +167,9 @@ export default function Register() {
                   registro.
                 </li>
               </ol>
-         </div>
-        </main>
+            </GridContainer>
+          </GridSecond>
+        </div>
       </ContainerWeb>
     </>
   );
