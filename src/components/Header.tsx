@@ -25,7 +25,7 @@ export default function Header({ title, subtitle }: { title: ReactNode, subtitle
   return (
     <header 
       id="sticky-header"
-      className={`shadow w-[100vw] sticky top-0 transition-all duration-300 ${
+      className={`bg-white shadow w-[100vw] sticky top-0 transition-all duration-300 ${
         isSticky ? 'scale-80 origin-top' : ''
       }`}
     >

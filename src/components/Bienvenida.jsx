@@ -33,7 +33,7 @@ export default function Bienvenida() {
             </p>
       </div>
        
-          <div className="w-full mx-auto p-6 rounded-lg mt-10 child w-4/5 text-xl">
+          <div className="w-full mx-auto p-6 rounded-lg mt-10 child text-xl">
 
             <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center md:text-4xl lg:text-4xl">Roles en la Aplicación</h2>
             

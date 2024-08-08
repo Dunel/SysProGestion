@@ -6,7 +6,6 @@ import Footer from "@/components/Footer";
 import SessionAuthProvider from "@/context/SessionProvider";
 //import { AuroraBackground } from "@/components/ui/aurora-background";
 
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -25,12 +24,12 @@ export default function RootLayout({
         <SessionAuthProvider>
           <NavBar />
           {/* <section className="m-1"> */}
-        {/*<AuroraBackground>*/}
+          {/*<AuroraBackground>*/}
             {children}
-        {/*</AuroraBackground>*/}
-         {/* </section> */}
+            {/*</AuroraBackground>*/}
+            {/* </section> */}
+            <Footer />
         </SessionAuthProvider>
-        <Footer />
       </body>
     </html>
   );
