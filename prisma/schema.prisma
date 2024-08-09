@@ -8,29 +8,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  alcaldia
+  estudiante
+  dependencia
+}
+
 model Coderegister {
   id        String   @id @default(cuid())
   code      Int
   mail      String   @unique
   updatedAt DateTime @updatedAt
-}
-
-model User {
-  id        Int      @id @default(autoincrement())
-  cedula    Int      @unique
-  mail      String   @unique
-  password  String
-  names     String
-  lastnames String
-  role      Role     @default(estudiante)
-  phone     String
-  updatedAt DateTime @updatedAt
-}
-
-enum Role {
-  alcaldia
-  estudiante
-  dependencia
 }
 
 model PreRegister {
@@ -39,4 +27,31 @@ model PreRegister {
   mail      String   @unique
   role      Role     @default(estudiante)
   updatedAt DateTime @updatedAt
+}
+
+model User {
+  id        Int            @id @default(autoincrement())
+  cedula    Int            @unique
+  mail      String         @unique
+  password  String
+  names     String
+  lastnames String
+  role      Role           @default(estudiante)
+  phone     String
+  updatedAt DateTime       @updatedAt
+  profile   Boolean        @default(false)
+  esInfo    estudentInfo[]
+}
+
+model estudentInfo {
+  id          Int      @id @default(autoincrement())
+  userCedula  Int      @unique
+  university  String
+  quarter     Int
+  skills      String
+  interests   String
+  description String
+  address     String
+  updatedAt   DateTime @updatedAt
+  User        User     @relation(fields: [userCedula], references: [cedula])
 }
