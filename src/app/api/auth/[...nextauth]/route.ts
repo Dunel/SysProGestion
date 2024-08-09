@@ -37,7 +37,6 @@ const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       session.user.cedula = token.cedula as string;
       session.user.email = token.email as string;
-      session.user.role = token.role as string;
       session.user.profile = token.profile as boolean;
       return session;
     },

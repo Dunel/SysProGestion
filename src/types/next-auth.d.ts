@@ -1,4 +1,5 @@
-import "next-auth";
+import { JWT } from "next-auth";
+import "next-auth"
 
 declare module "next-auth" {
   interface Session {
@@ -6,7 +7,6 @@ declare module "next-auth" {
       cedula: string;
       email: string;
       role: string;
-      token: string;
       profile: boolean;
     };
   }
@@ -17,11 +17,15 @@ declare module "next-auth" {
     role: string;
     profile: boolean;
   }
+}
 
-  interface JWT {
+declare module "next-auth/jwt" {
+  export function getToken(
+    options: JWT
+  ): {
     cedula: string;
     email: string;
     role: string;
     profile: boolean;
-  }
+  };
 }

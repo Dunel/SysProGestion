@@ -6,9 +6,12 @@ import GridSecond from "@/components/GridSecond";
 import Header from "@/components/Header";
 import AlcaldiaProfile from "@/components/perfiles/AlcaldiaProfile";
 import AlcaldiaFormProfile from "@/components/perfiles/AlcaldiaFormProfile";
+import { useSession } from "next-auth/react";
 
 
 export default function Page() {
+  const { data: session,  } = useSession();
+  console.log(session?.user.profile);
   
   const profileData = {
     nombreAlcaldia: 'Alcaldía de Maracaibo',
