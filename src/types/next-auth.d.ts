@@ -20,12 +20,10 @@ declare module "next-auth" {
 }
 
 declare module "next-auth/jwt" {
-  export function getToken(
-    options: JWT
-  ): {
+  interface JWT {
     cedula: string;
     email: string;
     role: string;
     profile: boolean;
-  };
+  }
 }

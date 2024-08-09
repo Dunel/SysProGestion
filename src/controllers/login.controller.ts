@@ -54,7 +54,6 @@ export async function Login(req: NextRequest) {
 
     return NextResponse.json(
       {
-        token,
         cedula: userFound.cedula,
         email: userFound.mail,
         role: userFound.role,

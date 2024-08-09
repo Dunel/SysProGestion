@@ -32,7 +32,7 @@ const authOptions: NextAuthOptions = {
         token.role = user.role;
         token.profile = user.profile;
       }
-      return token;
+      return {...user, ...token};
     },
     async session({ session, token }) {
       session.user.cedula = token.cedula as string;
