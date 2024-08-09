@@ -1,4 +1,3 @@
-
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -27,12 +26,12 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-[70vh] w-full flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg m-4 min-w-[45vw] h-auto">
+    <div className="w-full flex items-center justify-center mt-4">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full md:w-1/3 h-auto m-4">
         <div className="mb-4">
           <label
             htmlFor="username"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-sm font-medium text-gray-700 mb-1"
           >
             Correo
           </label>
@@ -45,10 +44,10 @@ export default function Login() {
             required
           />
         </div>
-        <div className="mb-8">
+        <div className="mb-6">
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-sm font-medium text-gray-700 mb-1"
           >
             Contraseña
           </label>
@@ -68,12 +67,11 @@ export default function Login() {
         >
           Iniciar sesión
         </button>
-        <br/>
-        <br/>
-        
-        
-        <label className="block text-sm font-medium text-gray-700 mb-2"
-        >¿No tienes una cuenta?
+        <br />
+        <br />
+
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          ¿No tienes una cuenta?
         </label>
         <button className="relative z-50 w-full bg-gray-950 text-white py-2 px-4 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
           <Link href="/register">Regístrate</Link>

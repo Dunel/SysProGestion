@@ -55,14 +55,12 @@ export default function Step0({
   };
 
   return (
-    <div className="child w-4/5 mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
-      <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
+    <div className="relative z-20 child w-4/5 mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
+      <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200 text-center mb-4">
         ¡Regístrate!
       </h2>
       <p className="child w-full text-neutral-600 text-sm mt-2 dark:text-neutral-300 text-justify">
-        Llena los siguientes datos para registrarte en el sistema. Por favor,
-        introduce tu información correctamente siguiendo las indicaciones en
-        cada casilla.
+        Llena las siguientes casillas con tus datos, para validad tu identidad. Necesitarás abrir tu correo electrónico para recibir el codigo que validar tu identidad.
       </p>
 
       <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4"></div>

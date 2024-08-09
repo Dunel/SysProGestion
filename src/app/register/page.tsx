@@ -119,7 +119,7 @@ export default function Register() {
   };
   return (
     <>
-      <Header title={"Registro"} subtitle={"Registro de usuario"}/>
+      <Header title={"Registro"} subtitle={" Llena los siguientes datos para registrarte en el sistema. Por favor, introduce tu información correctamente siguiendo las indicaciones en cada casilla. "}/>
       <ContainerWeb>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <GridMain>
