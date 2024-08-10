@@ -109,10 +109,10 @@ export default function Step2({ setData, sendData }: Step2Props) {
           {errors.cedula ? (
             <>
               <p className="text-red-500 text-sm">{errors.cedula.message?.toString()}</p>
-              <span className="text-gray-500 text-xs">La cédula debe tener entre 6 y 8 caracteres numéricos.</span>
+              <span className="text-gray-500 text-xs">La cédula debe tener entre 7 y 8 caracteres numéricos.</span>
             </>
           ) : (
-            <span className="text-gray-500 text-xs">La cédula debe tener entre 6 y 8 caracteres numéricos.</span>
+            <span className="text-gray-500 text-xs">La cédula debe tener entre 7 y 8 caracteres numéricos.</span>
           )}
         </LabelInputContainer>
         
