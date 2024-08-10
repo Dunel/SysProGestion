@@ -3,7 +3,7 @@ import { z } from "zod";
 export const profileSchema = z.object({
   cedula: z
     .string({ required_error: "La cedula es requerida" })
-    .min(6, { message: "La cedula debe tener minimo 6 caracteres" })
+    .min(7, { message: "La cedula debe tener minimo 7 caracteres" })
     .max(8, { message: "La cedula debe tener maximo 8 caracteres" })
     .transform((val, ctx) => {
       const parsed = parseInt(val);
@@ -14,7 +14,7 @@ export const profileSchema = z.object({
         });
         return z.NEVER;
       }
-      if (parsed < 600000 || parsed > 99999999) {
+      if (parsed < 6000000 || parsed > 99999999) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: "Número de cedula no valido",
@@ -80,3 +80,6 @@ export const profileSchema = z.object({
     .min(7, { message: "La descripción debe tener minimo 10 caracteres" })
     .max(100, { message: "La descripción debe tener maximo 100 caracteres" }),
 });
+
+
+

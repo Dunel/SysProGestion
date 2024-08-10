@@ -26,9 +26,9 @@ export default function RootLayout({
           <NavBar />
 
       
-        <AuroraBackground>
+        {/* <AuroraBackground> */}
             {children}
-        </AuroraBackground>
+        {/* </AuroraBackground> */}
        
      
         </SessionAuthProvider>
