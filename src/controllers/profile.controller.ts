@@ -40,7 +40,7 @@ export async function ProfileUpdate(req: NextRequest) {
       where: { userCedula: cedula },
       update: {
         university: result.university,
-        quarter: parseInt(result.quarter),
+        quarter: result.quarter,
         skills: result.skills,
         interests: result.interests,
         description: result.description,
@@ -49,7 +49,7 @@ export async function ProfileUpdate(req: NextRequest) {
       create: {
         userCedula: cedula,
         university: result.university,
-        quarter: parseInt(result.quarter),
+        quarter: result.quarter,
         skills: result.skills,
         interests: result.interests,
         description: result.description,

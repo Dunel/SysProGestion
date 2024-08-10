@@ -78,12 +78,24 @@ export const profileSchema = z.object({
     .string({ required_error: "El trimestre es requerido" })
     .min(1, { message: "El trimestre debe tener minimo 1 caracteres" })
     .max(2, { message: "El trimestre debe tener maximo 2 caracteres" })
-    .refine((val) => {
+    .transform((val, ctx) => {
       const trimestre = parseInt(val);
-      return !isNaN(trimestre) && trimestre >= 1 && trimestre <= 12;
-    }, {
-      message: "El trimestre debe ser un número entre 1 y 12",
-    }),
+      if (isNaN(trimestre)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Los caracteres deben ser un númericos",
+        });
+        return z.NEVER;
+      }
+      if (trimestre < 1 || trimestre > 12) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Trimestre no valido",
+        });
+        return z.NEVER;
+      }
+      return trimestre;
+    }).or(z.number().min(1).max(12)),
   skills: z
     .string({ required_error: "Las habilidades son requeridas" })
     .min(5, { message: "Las habilidades debe tener minimo 5 caracteres" })
