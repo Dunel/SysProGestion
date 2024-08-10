@@ -24,7 +24,6 @@ export async function ProfileUpdate(req: NextRequest) {
       description,
     } = await req.json();
     const result = profileSchema.parse({
-      cedula: token.cedula,
       names,
       lastnames,
       phone,
@@ -35,9 +34,10 @@ export async function ProfileUpdate(req: NextRequest) {
       interests,
       description,
     });
+    const cedula = parseInt(token.cedula);
 
     await prisma.estudentInfo.upsert({
-      where: { userCedula: result.cedula },
+      where: { userCedula: cedula },
       update: {
         university: result.university,
         quarter: result.quarter,
@@ -47,7 +47,7 @@ export async function ProfileUpdate(req: NextRequest) {
         address: result.address,
       },
       create: {
-        userCedula: result.cedula,
+        userCedula: cedula,
         university: result.university,
         quarter: result.quarter,
         skills: result.skills,
@@ -58,14 +58,14 @@ export async function ProfileUpdate(req: NextRequest) {
     });
 
     await prisma.user.update({
-        where: { cedula: result.cedula },
-        data: {
-            names: result.names,
-            lastnames: result.lastnames,
-            phone: result.phone,
-            profile: true,
-        },
-    })
+      where: { cedula },
+      data: {
+        names: result.names,
+        lastnames: result.lastnames,
+        phone: result.phone,
+        profile: true,
+      },
+    });
 
     return NextResponse.json({ message: "Perfil actualizado" });
   } catch (error) {
