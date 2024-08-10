@@ -30,7 +30,7 @@ export const userSchema = z.object({
       }
       return parsed;
     })
-    .or(z.number().min(1).max(999999999)),
+    .or(z.number().min(6000000).max(999999999)),
   nombre: z
     .string({ required_error: "El nombre es requerido" })
     .min(3, { message: "El nombre debe tener minimo 3 caracteres" })

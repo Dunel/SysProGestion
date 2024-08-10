@@ -25,19 +25,23 @@ const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, trigger, user, session }) {
       if (user) {
         token.cedula = user.cedula;
         token.email = user.email;
         token.role = user.role;
         token.profile = user.profile;
       }
-      return {...user, ...token};
+      if (trigger === "update" && session.profile) {
+        console.log("trigger: ", session.profile);
+        token.profile = session.profile;
+      }
+      return token;
     },
-    async session({ session, token }) {
-      session.user.cedula = token.cedula as string;
-      session.user.email = token.email as string;
-      session.user.profile = token.profile as boolean;
+    async session({ session, token}) {
+        session.user.cedula = token.cedula;
+        session.user.email = token.email;
+        session.user.profile = token.profile;
       return session;
     },
     async redirect({ url, baseUrl }) {
