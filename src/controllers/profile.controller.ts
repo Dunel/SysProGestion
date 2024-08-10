@@ -66,9 +66,6 @@ export async function ProfileUpdate(req: NextRequest) {
             profile: true,
         },
     })
-    const session = await getServerSession();
-    if (session)
-    session.user.profile = true;
 
     return NextResponse.json({ message: "Perfil actualizado" });
   } catch (error) {

@@ -34,9 +34,9 @@ export default function Page() {
         interests,
         description,
       });
-      console.log("test: ", { ...session, user: { ...session?.user, profile: true } })
-      if(session)
-      update({ user: { ...session.user, profile: true } });
+      if (session) {
+        await update({ profile: true });
+      }
 
       console.log(res.data);
       return;
