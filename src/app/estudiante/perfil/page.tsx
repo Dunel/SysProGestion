@@ -14,21 +14,6 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/components/lib/utils";
 
-type ProfileData = {
-  address: string;
-  university: string;
-  quarter: string;
-  skills: string;
-  interests: string;
-  description: string;
-  User: {
-    names: string;
-    lastnames: string;
-    phone: string;
-    cedula: number;
-    mail: string;
-  };
-};
 
 export default function Page() {
   const { data: session, update } = useSession();
