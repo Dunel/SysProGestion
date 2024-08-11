@@ -30,3 +30,8 @@ form.form-student-info label {
   color: rgb(65, 65, 66);
   font-style: italic;
 }
+
+header.color-header{
+  background: rgb(255,255,255);
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 7%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 92%, rgba(255,255,255,0) 100%);
+}

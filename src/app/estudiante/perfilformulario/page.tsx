@@ -10,23 +10,13 @@ export default function EstudianteInfoForm() {
         <Header
           title={"Tu Perfil"}
           subtitle={
-            "Este es tu perfil, aquí podrás visualizar tu información personal y actualizarla si es necesario."
+            "Este es tu formulario de perfil. Por favor, sigue las indicaciones de las casillas y completa tu información personal y profesional."
           }
         />
       
-         <div className="grid grid-cols-1 mx-8 lg:grid-cols-[60%_40%] gap-2">
-          
-            <div className="flex justify-center md:bg-white">
-              <EstudianteProfile buttonUpdate={false} />
-            </div>
-          
-            <div className="bg-white mx-4">
+      <div className="w-[80%] m-4 p-4 mx-auto">
               <EstudianteFormProfile />
-            </div>
-
         </div>
-
-      
     </div>
   );
 }

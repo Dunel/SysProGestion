@@ -18,7 +18,7 @@ type ProfileData = {
   }
 };
 
-export default function EstudianteProfile() {
+export default function EstudianteProfile({buttonUpdate}: {buttonUpdate: boolean}) {
   const [dataProfile, setDataProfile] = useState<ProfileData>();
   useEffect(() => {
     const getProfile = async () => {
@@ -38,12 +38,12 @@ export default function EstudianteProfile() {
 
   //!MOSTRANDO ESTE !!!!
   return (
-    <div className="relative z-20 m-4 my-4 p-4 rounded-lg mt-10  bg-white md:shadow">
+    <div className="relative z-20 m-4 my-4 p-4 rounded-lg mt-10  bg-white shadow lg:shadow-none">
       
     <div className="flex flex-col items-center md:flex-row md:space-x-4">
             
         {/* Foto del Estudiante */}
-        <div className="p-1">
+        <div className="m-1 p-1">
           <img
             className="h-60 w-60 rounded-full border-4 border-black-800"
             src={'https://lgbtravel.com/wp-content/uploads/2023/11/paises-hombres-guapos-portada-1024x576.jpg'}
@@ -105,14 +105,17 @@ export default function EstudianteProfile() {
         </div>
       </div>
       <br />
-      <div className="flex justify-center">
-        <button
-            type="submit"
-            className="w-[50%] bg-black hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-            >
-            Actualizar Datos
-          </button>
-      </div>
+      {/* Botón para actualizar los datos */}
+      {buttonUpdate &&
+        <div className="flex justify-center">
+          <button
+              type="submit"
+              className="w-[100%] bg-black hover:bg-blue-600 text-white font-bold py-2 px-4 rounded md:w-[50%]"
+              >
+              Actualizar Datos
+            </button>
+        </div>
+      }
     </div>
   );
 }
