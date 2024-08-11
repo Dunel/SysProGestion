@@ -1,8 +1,4 @@
 "use client";
-import ContainerWeb from "@/components/ContainerWeb";
-import GridContainer from "@/components/GridContainer";
-import GridMain from "@/components/GridMain";
-import GridSecond from "@/components/GridSecond";
 import Header from "@/components/Header";
 import { useSession } from "next-auth/react";
 import EstudianteProfile from "@/components/perfiles/EstudianteProfile";
@@ -42,7 +38,7 @@ export default function Page() {
   };
 
   return (
-    <>
+    <div>
       <Header
         title={"Tu Perfil"}
         subtitle={
@@ -50,19 +46,19 @@ export default function Page() {
         }
       />
     
-        <div className="grid grid-cols-1 mx-8 relative z-20 lg:grid-cols-[60%_40%] gap-2">
+        <div className="grid grid-cols-1 mx-8 lg:grid-cols-[60%_40%] gap-2">
          
 {/* {session?.user.profile ? "true" : "false"} */}
              
            
-          <div className="flex justify-center bg-white  m-4">
-            <EstudianteProfile profileData={profileData} />
+          <div className="flex justify-center md:bg-white">
+            <EstudianteProfile />
           </div>
          
           
-          <div className="bg-white m-4 mx-4">
-          <div className="m-4 my-4 p-4 bg-white rounded-lg shadow-lg mt-10">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4 md:text-4xl lg:text-3xl">
+          <div className="bg-white mx-4">
+          <div className="m-4 my-4 p-4 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4  text-center md:text-4xl lg:text-3xl">
               Completa tu Perfil
             </h2>
 
@@ -248,7 +244,7 @@ export default function Page() {
          
         </div>
      
-    </>
+    </div>
   );
 }
 

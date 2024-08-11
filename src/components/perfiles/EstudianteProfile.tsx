@@ -35,61 +35,65 @@ export default function EstudianteProfile() {
     };
     getProfile();
   }, []);
+
+  //!MOSTRANDO ESTE !!!!
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-10">
-      <div className="flex items-start">
-        {/* Foto del Alcalde */}
-        <div className="flex-shrink-0">
+    <div className="relative z-20 m-4 my-4 p-4 rounded-lg mt-10  bg-white md:shadow">
+      
+    <div className="flex flex-col items-center md:flex-row md:space-x-4">
+            
+        {/* Foto del Estudiante */}
+        <div className="p-1">
           <img
-            className="h-40 w-40 rounded-full border-4 border-blue-500"
+            className="h-60 w-60 rounded-full border-4 border-black-800"
             src={'https://lgbtravel.com/wp-content/uploads/2023/11/paises-hombres-guapos-portada-1024x576.jpg'}
             alt="Foto del estudiante"
           />
         </div>
-        {/* Información del Alcalde */}
-        <div className="ml-4">
-          <h2 className="text-3xl font-bold text-gray-800 pt-5 text-center">
+        {/* Información del Estudiente */}
+        <div className="m-1 p-1 word-wrap overflow-wrap">
+          <h2 className="text-3xl font-bold text-gray-800 text-center md:text-5xl lg:text-4xl">
             {dataProfile?.User.names} {dataProfile?.User.lastnames}
           </h2>
-          <h2 className="text-2xl font-bold text-gray-800 pt-5">
-            {"profileData.carreraEstudiante falta en db"}
+          <h2 className="text-2xl font-bold text-gray-800 pt-5 pb-2 md:text-3xl lg:text-2xl">
+            <i>{"profileData.carreraEstudiante falta en db"}</i>
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 md:text-1x1">
             <strong>Cedula de identidad:</strong> {dataProfile?.User.cedula}
           </p>
-          <p className="text-gray-600">
+          <p className="text-gray-600 md:text-1x1">
             <strong>Teléfono:</strong> {dataProfile?.User.phone}
           </p>
-          <p className="text-gray-600">
+          <p className="text-gray-600 md:text-1x1">
             <strong>Correo:</strong> {dataProfile?.User.mail}
           </p>
-          <p className="text-gray-600">
+          <p className="text-gray-600 md:text-1x1">
             <strong>Domicilio:</strong> {dataProfile?.address}
           </p>
         </div>
       </div>
 
       <div className="mt-6">
-        <h4 className="text-lg font-semibold text-gray-800">
-          Perfil profesional
+        <h4 className="text-2xl font-bold text-gray-800 pt-5 pb-2 text-center md:text-4xl lg:text-3xl">
+          Perfil Profesional
         </h4>
         <div className="mt-2">
-          <p className="text-gray-600">
+          <p className="text-gray-600 md:text-1x1">
             <strong>Universidad:</strong> {dataProfile?.university}
           </p>
-          <p className="text-gray-600">
+          <p className="text-gray-600 md:text-1x1">
             <strong>trimestre:</strong> {dataProfile?.quarter}
           </p>
-          <p className="text-gray-6000">
+          <p className="text-gray-600 md:text-1x1">
             <strong>Habilidades:</strong> {dataProfile?.skills}
           </p>
-          <p className="text-gray-6000">
+          <p className="text-gray-600 md:text-1x1">
             <strong>Intereses:</strong> {dataProfile?.interests}
           </p>
-          <p className="text-gray-600">
+          <p className="text-gray-600 md:text-1x1">
             <strong>Descripción:</strong> {dataProfile?.description}
           </p>
-          <p className="text-gray-6000">
+          <p className="text-gray-600 md:text-1x1">
             <Link
               className="underline text-blue-500 hover:text-blue-700 cursor-pointer"
               href={"profileData.reseumenCurricularEstudiante"}
@@ -101,12 +105,14 @@ export default function EstudianteProfile() {
         </div>
       </div>
       <br />
-      <button
-        type="submit"
-        className="w-full bg-black hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-      >
-        Actualizar Datos
-      </button>
+      <div className="flex justify-center">
+        <button
+            type="submit"
+            className="w-[50%] bg-black hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+            >
+            Actualizar Datos
+          </button>
+      </div>
     </div>
   );
 }
