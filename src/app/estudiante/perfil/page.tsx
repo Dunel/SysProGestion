@@ -16,9 +16,13 @@ import { cn } from "@/components/lib/utils";
 
 export default function Page() {
   const { data: session, update } = useSession();
-  const { register, handleSubmit, formState: { errors } } = useForm<ProfileFormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
-    mode: "onChange"
+    mode: "onChange",
   });
 
   const profileUpdate = async (data: ProfileFormData) => {
@@ -30,28 +34,11 @@ export default function Page() {
       console.log(res.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log('error lanzado:', error.response?.data.error);
+        console.log("error lanzado:", error.response?.data.error);
       } else {
         console.error("error:", error);
       }
     }
-  };
-
-  const profileData = {
-    nombreEstudiante: "Jose Perez",
-    carreraEstudiante: "Ingeniería de Software",
-    cedulaEstudiante: "1234567890",
-    telefonoEstudiante: "0424 7613872",
-    correoEstudiante: "jose_p@gmail.com",
-    domicilioEstudiante: "Calle # 123, Maracaibo, Zulia",
-    universidadEstudiante: "Universidad del Zulia",
-    trimestreEstudiante: "11",
-    habilidadesEstudiante: "Programación, Matemáticas, Inglés",
-    interesesEstudiante: "Programación, Matemáticas, Física",
-    descripcionEstudiante:
-      "Soy un estudiante universitario apasionado por la ciencia. Me gusta la programación y la tecnología. Mis pasatiempos son el deporte y jugar videojuegos.",
-    fotoDelEstudiante:
-      "https://lgbtravel.com/wp-content/uploads/2023/11/paises-hombres-guapos-portada-1024x576.jpg",
   };
 
   return (
@@ -82,128 +69,164 @@ export default function Page() {
               <form onSubmit={handleSubmit(profileUpdate)} className="form-student-info">
                 <LabelInputContainer className="mb-4">
                   <Label htmlFor="names">Nombres</Label>
-                  <Input 
+                  <Input
                     {...register("names")}
-                    id="names" 
-                    placeholder="Nombres" 
+                    id="names"
+                    placeholder="Nombres"
                     type="text"
                     className={cn(
                       errors.names && "bg-red-100 focus:bg-red-100"
                     )}
                   />
-                  {errors.names && <p className="text-red-500 text-sm">{errors.names.message}</p>}
+                  {errors.names && (
+                    <p className="text-red-500 text-sm">
+                      {errors.names.message}
+                    </p>
+                  )}
                 </LabelInputContainer>
 
                 <LabelInputContainer className="mb-4">
                   <Label htmlFor="lastnames">Apellidos</Label>
-                  <Input 
+                  <Input
                     {...register("lastnames")}
-                    id="lastnames" 
-                    placeholder="Apellidos" 
+                    id="lastnames"
+                    placeholder="Apellidos"
                     type="text"
                     className={cn(
                       errors.lastnames && "bg-red-100 focus:bg-red-100"
                     )}
                   />
-                  {errors.lastnames && <p className="text-red-500 text-sm">{errors.lastnames.message}</p>}
+                  {errors.lastnames && (
+                    <p className="text-red-500 text-sm">
+                      {errors.lastnames.message}
+                    </p>
+                  )}
                 </LabelInputContainer>
 
                 <LabelInputContainer className="mb-4">
                   <Label htmlFor="phone">Teléfono</Label>
-                  <Input 
+                  <Input
                     {...register("phone")}
-                    id="phone" 
-                    placeholder="Teléfono" 
+                    id="phone"
+                    placeholder="Teléfono"
                     type="text"
                     className={cn(
                       errors.phone && "bg-red-100 focus:bg-red-100"
                     )}
                   />
-                  {errors.phone && <p className="text-red-500 text-sm">{errors.phone.message}</p>}
+                  {errors.phone && (
+                    <p className="text-red-500 text-sm">
+                      {errors.phone.message}
+                    </p>
+                  )}
                 </LabelInputContainer>
 
                 <LabelInputContainer className="mb-4">
                   <Label htmlFor="address">Dirección</Label>
-                  <Input 
+                  <Input
                     {...register("address")}
-                    id="address" 
-                    placeholder="Dirección" 
+                    id="address"
+                    placeholder="Dirección"
                     type="text"
                     className={cn(
                       errors.address && "bg-red-100 focus:bg-red-100"
                     )}
                   />
-                  {errors.address && <p className="text-red-500 text-sm">{errors.address.message}</p>}
+                  {errors.address && (
+                    <p className="text-red-500 text-sm">
+                      {errors.address.message}
+                    </p>
+                  )}
                 </LabelInputContainer>
 
                 <LabelInputContainer className="mb-4">
                   <Label htmlFor="university">Universidad</Label>
-                  <Input 
+                  <Input
                     {...register("university")}
-                    id="university" 
-                    placeholder="Universidad" 
+                    id="university"
+                    placeholder="Universidad"
                     type="text"
                     className={cn(
                       errors.university && "bg-red-100 focus:bg-red-100"
                     )}
                   />
-                  {errors.university && <p className="text-red-500 text-sm">{errors.university.message}</p>}
+                  {errors.university && (
+                    <p className="text-red-500 text-sm">
+                      {errors.university.message}
+                    </p>
+                  )}
                 </LabelInputContainer>
 
                 <LabelInputContainer className="mb-4">
                   <Label htmlFor="quarter">Trimestre</Label>
-                  <Input 
+                  <Input
                     {...register("quarter")}
-                    id="quarter" 
-                    placeholder="Trimestre" 
+                    id="quarter"
+                    placeholder="Trimestre"
                     type="text"
                     className={cn(
                       errors.quarter && "bg-red-100 focus:bg-red-100"
                     )}
                   />
-                  {errors.quarter && <p className="text-red-500 text-sm">{errors.quarter.message}</p>}
+                  {errors.quarter && (
+                    <p className="text-red-500 text-sm">
+                      {errors.quarter.message}
+                    </p>
+                  )}
                 </LabelInputContainer>
 
                 <LabelInputContainer className="mb-4">
                   <Label htmlFor="skills">Habilidades</Label>
-                  <Input 
+                  <Input
                     {...register("skills")}
-                    id="skills" 
-                    placeholder="Habilidades" 
+                    id="skills"
+                    placeholder="Habilidades"
                     type="text"
                     className={cn(
                       errors.skills && "bg-red-100 focus:bg-red-100"
                     )}
                   />
-                  {errors.skills && <p className="text-red-500 text-sm">{errors.skills.message}</p>}
+                  {errors.skills && (
+                    <p className="text-red-500 text-sm">
+                      {errors.skills.message}
+                    </p>
+                  )}
                 </LabelInputContainer>
 
                 <LabelInputContainer className="mb-4">
                   <Label htmlFor="interests">Intereses</Label>
-                  <Input 
+                  <Input
                     {...register("interests")}
-                    id="interests" 
-                    placeholder="Intereses" 
+                    id="interests"
+                    placeholder="Intereses"
                     type="text"
                     className={cn(
                       errors.interests && "bg-red-100 focus:bg-red-100"
                     )}
                   />
-                  {errors.interests && <p className="text-red-500 text-sm">{errors.interests.message}</p>}
+                  {errors.interests && (
+                    <p className="text-red-500 text-sm">
+                      {errors.interests.message}
+                    </p>
+                  )}
                 </LabelInputContainer>
 
                 <LabelInputContainer className="mb-4">
                   <Label htmlFor="description">Descripción</Label>
-                  <Input 
+                  <Input
                     {...register("description")}
-                    id="description" 
-                    placeholder="Descripción" 
+                    id="description"
+                    placeholder="Descripción"
                     type="text"
                     className={cn(
                       errors.description && "bg-red-100 focus:bg-red-100"
                     )}
                   />
-                  {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
+                  {errors.description && (
+                    <p className="text-red-500 text-sm">
+                      {errors.description.message}
+                    </p>
+                  )}
                 </LabelInputContainer>
 
                

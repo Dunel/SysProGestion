@@ -3,8 +3,6 @@ import prisma from "@/db";
 import { ZodError } from "zod";
 import { profileSchema } from "@/validations/profile.schema";
 import { getToken } from "next-auth/jwt";
-import { getSession } from "next-auth/react";
-import { getServerSession } from "next-auth";
 
 export async function ProfileUpdate(req: NextRequest) {
   try {
@@ -23,6 +21,7 @@ export async function ProfileUpdate(req: NextRequest) {
       interests,
       description,
     } = await req.json();
+
     const result = profileSchema.parse({
       names,
       lastnames,
@@ -34,7 +33,7 @@ export async function ProfileUpdate(req: NextRequest) {
       interests,
       description,
     });
-    const cedula = parseInt(token.cedula);
+    const cedula = token.cedula;
 
     await prisma.estudentInfo.upsert({
       where: { userCedula: cedula },
@@ -67,7 +66,50 @@ export async function ProfileUpdate(req: NextRequest) {
       },
     });
 
-    return NextResponse.json({ message: "Perfil actualizado" });
+    return NextResponse.json({ message: "Perfil actualizado" }, { status: 200 });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function ProfileGet(req: NextRequest) {
+  try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const cedula = token.cedula;
+    const profile = await prisma.estudentInfo.findFirst({
+      where: { userCedula: cedula },
+      select: {
+        university: true,
+        quarter: true,
+        skills: true,
+        interests: true,
+        description: true,
+        address: true,
+        User:{
+          select:{
+            names: true,
+            lastnames: true,
+            phone: true,
+            mail: true,
+            cedula: true,
+          }
+        }
+      },
+    });
+    return NextResponse.json({ profile }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(
