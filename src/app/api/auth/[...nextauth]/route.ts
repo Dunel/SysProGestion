@@ -33,7 +33,6 @@ const authOptions: NextAuthOptions = {
         token.profile = user.profile;
       }
       if (trigger === "update" && session.profile) {
-        console.log("trigger: ", session.profile);
         token.profile = session.profile;
       }
       return token;

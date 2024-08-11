@@ -44,14 +44,25 @@ model User {
 }
 
 model estudentInfo {
-  id          Int      @id @default(autoincrement())
-  userCedula  Int      @unique
+  id          Int           @id @default(autoincrement())
+  userCedula  Int           @unique
   university  String
   quarter     Int
   skills      String
   interests   String
   description String
   address     String
-  updatedAt   DateTime @updatedAt
-  User        User     @relation(fields: [userCedula], references: [cedula])
+  updatedAt   DateTime      @updatedAt
+  User        User          @relation(fields: [userCedula], references: [cedula])
+  apply       application[]
+}
+
+model application {
+  id            Int          @id @default(autoincrement())
+  userCedula    Int          @unique
+  title         String
+  description   String
+  dependenciaId Int
+  updatedAt     DateTime     @updatedAt
+  User          estudentInfo @relation(fields: [userCedula], references: [userCedula])
 }

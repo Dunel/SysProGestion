@@ -36,7 +36,7 @@ export default function EstudianteProfile() {
     getProfile();
   }, []);
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-10">
+    <>
       <div className="flex items-start">
         {/* Foto del Alcalde */}
         <div className="flex-shrink-0">
@@ -107,6 +107,6 @@ export default function EstudianteProfile() {
       >
         Actualizar Datos
       </button>
-    </div>
+      </>
   );
 }
