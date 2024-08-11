@@ -45,11 +45,11 @@ export async function middleware(req: NextRequest) {
 
   if (
     token.profile === false &&
-    url != `${redirectTo}/perfil` &&
+    url != `${redirectTo}/perfilformulario` &&
     url != `/api${redirectTo}/perfil`
   ) {
     if (redirectTo) {
-      return NextResponse.redirect(new URL(redirectTo + "/perfil", req.url));
+      return NextResponse.redirect(new URL(redirectTo + "/perfilformulario", req.url));
     }
   }
 
