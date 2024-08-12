@@ -30,7 +30,7 @@ export async function middleware(req: NextRequest) {
 
   const urlBasedOnRole = {
     alcaldia: "/alcaldia",
-    estudiante: "/estudiante",
+    estudiante: "/estudiante/perfil",
     dependencia: "/dependencia",
   };
 
