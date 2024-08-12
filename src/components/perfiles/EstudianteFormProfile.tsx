@@ -270,6 +270,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/components/lib/utils";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 
   export default function EstudianteProfileForm() {
@@ -282,7 +283,7 @@ import { useState } from "react";
       resolver: zodResolver(profileSchema),
       mode: "onChange",
     });
-  
+    const router = useRouter();
     const profileUpdate = async (data: ProfileFormData) => {
       try {
         const res = await axios.post("/api/estudiante/perfil", data);
@@ -290,6 +291,8 @@ import { useState } from "react";
           await update({ profile: true });
         }
         console.log(res.data);
+        router.push('/estudiante/perfil');
+
       } catch (error) {
         if (axios.isAxiosError(error)) {
           console.log("error lanzado:", error.response?.data.error);

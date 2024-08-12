@@ -2,16 +2,20 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
+import { Oval } from 'react-loader-spinner'; // Importa el loader
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
   const router = useRouter();
+  const [loading, setLoading] = useState(false); // Estado para el loader
+
 
   const handleSubmit = async () => {
     setErrors([]);
-
+    setLoading(true); // Muestra el loader
     const login = await signIn("credentials", {
       email,
       password,
@@ -23,6 +27,7 @@ export default function Login() {
       return;
     }
     router.push("/checking");
+    setLoading(false); // Oculta el loader
   };
 
   return (
@@ -87,6 +92,17 @@ export default function Login() {
           </div>
         )}
       </div>
+      {
+              loading  && // Muestra el loader si está cargando
+                <div className="flex justify-center items-center flex-col mt-10">
+                  <Oval color="#000000"
+                  secondaryColor="#FFFFFF" // Color de fondo blanco
+                  height={50} width={50}  strokeWidth={5} />
+                  <br/>
+                  <span>Espere por favor...</span>
+                </div>
+            
+            }
     </div>
   );
 }
