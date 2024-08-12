@@ -30,7 +30,7 @@ export async function middleware(req: NextRequest) {
 
   const urlBasedOnRole = {
     alcaldia: "/alcaldia",
-    estudiante: "/estudiante/perfil",
+    estudiante: "/estudiante",
     dependencia: "/dependencia",
   };
 
@@ -45,11 +45,11 @@ export async function middleware(req: NextRequest) {
 
   if (
     token.profile === false &&
-    url != `${redirectTo}/perfilformulario` &&
+    url != `${redirectTo}/perfil` &&
     url != `/api${redirectTo}/perfil`
   ) {
     if (redirectTo) {
-      return NextResponse.redirect(new URL(redirectTo + "/perfilformulario", req.url));
+      return NextResponse.redirect(new URL(redirectTo + "/perfil", req.url));
     }
   }
 

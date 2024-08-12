@@ -12,7 +12,7 @@ export default function EstudianteInfoForm() {
   };
 
   return (
-    <div>
+    <>
       <Header
         title={"Tu Perfil"}
         subtitle={
@@ -33,6 +33,6 @@ export default function EstudianteInfoForm() {
         )}
 
       </div>
-    </div>
+    </>
   );
 }
