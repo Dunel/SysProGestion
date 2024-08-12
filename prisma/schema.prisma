@@ -30,48 +30,56 @@ model PreRegister {
 }
 
 model User {
-  id        Int            @id @default(autoincrement())
-  cedula    Int            @unique
-  mail      String         @unique
-  password  String
-  names     String
-  lastnames String
-  role      Role           @default(estudiante)
-  phone     String
-  updatedAt DateTime       @updatedAt
-  profile   Boolean        @default(false)
-  esInfo    estudentInfo[]
-  apply     apply[]
+  id          Int            @id @default(autoincrement())
+  cedula      Int            @unique
+  mail        String         @unique
+  password    String
+  names       String
+  lastnames   String
+  role        Role           @default(estudiante)
+  phone       String
+  updatedAt   DateTime       @updatedAt
+  profile     Boolean        @default(false)
+  esInfo      estudentInfo[]
+  apply       apply[]
+  application application[]
 }
 
 model estudentInfo {
-  id          Int           @id @default(autoincrement())
-  userCedula  Int           @unique
+  id          Int      @id @default(autoincrement())
+  userCedula  Int      @unique
   university  String
   quarter     Int
   skills      String
   interests   String
   description String
   address     String
-  updatedAt   DateTime      @updatedAt
-  User        User          @relation(fields: [userCedula], references: [cedula])
+  updatedAt   DateTime @updatedAt
+  User        User     @relation(fields: [userCedula], references: [cedula])
 }
 
 model application {
-  id            Int          @id @default(autoincrement())
-  userCedula    Int          @unique
-  title         String
-  description   String
-  location      String
-  updatedAt     DateTime     @updatedAt
-  apply         apply[]
+  id          Int      @id @default(autoincrement())
+  userCedula  Int
+  title       String
+  description String
+  location    String
+  status      status   @default(active)
+  updatedAt   DateTime @updatedAt
+  apply       apply[]
+  User        User     @relation(fields: [userCedula], references: [cedula])
+}
+
+enum status {
+  active
+  inactive
 }
 
 model apply {
-  id            Int          @id @default(autoincrement())
+  id            Int         @id @default(autoincrement())
   userCedula    Int
   applicationId Int
-  updatedAt     DateTime     @updatedAt
-  application   application  @relation(fields: [applicationId], references: [id])
-  User          User         @relation(fields: [userCedula], references: [cedula])
+  updatedAt     DateTime    @updatedAt
+  application   application @relation(fields: [applicationId], references: [id])
+  User          User        @relation(fields: [userCedula], references: [cedula])
 }
