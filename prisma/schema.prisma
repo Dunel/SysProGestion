@@ -41,6 +41,7 @@ model User {
   updatedAt DateTime       @updatedAt
   profile   Boolean        @default(false)
   esInfo    estudentInfo[]
+  apply     apply[]
 }
 
 model estudentInfo {
@@ -54,7 +55,6 @@ model estudentInfo {
   address     String
   updatedAt   DateTime      @updatedAt
   User        User          @relation(fields: [userCedula], references: [cedula])
-  apply       application[]
 }
 
 model application {
@@ -62,7 +62,16 @@ model application {
   userCedula    Int          @unique
   title         String
   description   String
-  dependenciaId Int
+  location      String
   updatedAt     DateTime     @updatedAt
-  User          estudentInfo @relation(fields: [userCedula], references: [userCedula])
+  apply         apply[]
+}
+
+model apply {
+  id            Int          @id @default(autoincrement())
+  userCedula    Int
+  applicationId Int
+  updatedAt     DateTime     @updatedAt
+  application   application  @relation(fields: [applicationId], references: [id])
+  User          User         @relation(fields: [userCedula], references: [cedula])
 }
