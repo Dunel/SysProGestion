@@ -30,17 +30,19 @@ model PreRegister {
 }
 
 model User {
-  id        Int            @id @default(autoincrement())
-  cedula    Int            @unique
-  mail      String         @unique
-  password  String
-  names     String
-  lastnames String
-  role      Role           @default(estudiante)
-  phone     String
-  updatedAt DateTime       @updatedAt
-  profile   Boolean        @default(false)
-  esInfo    estudentInfo[]
+  id          Int            @id @default(autoincrement())
+  cedula      Int            @unique
+  mail        String         @unique
+  password    String
+  names       String
+  lastnames   String
+  role        Role           @default(estudiante)
+  phone       String
+  updatedAt   DateTime       @updatedAt
+  profile     Boolean        @default(false)
+  esInfo      estudentInfo[]
+  apply       apply[]
+  application application[]
 }
 
 model estudentInfo {
@@ -54,4 +56,30 @@ model estudentInfo {
   address     String
   updatedAt   DateTime @updatedAt
   User        User     @relation(fields: [userCedula], references: [cedula])
+}
+
+model application {
+  id          Int      @id @default(autoincrement())
+  userCedula  Int
+  title       String
+  description String
+  location    String
+  status      status   @default(active)
+  updatedAt   DateTime @updatedAt
+  apply       apply[]
+  User        User     @relation(fields: [userCedula], references: [cedula])
+}
+
+enum status {
+  active
+  inactive
+}
+
+model apply {
+  id            Int         @id @default(autoincrement())
+  userCedula    Int
+  applicationId Int
+  updatedAt     DateTime    @updatedAt
+  application   application @relation(fields: [applicationId], references: [id])
+  User          User        @relation(fields: [userCedula], references: [cedula])
 }
