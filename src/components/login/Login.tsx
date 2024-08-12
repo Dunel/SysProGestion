@@ -31,7 +31,7 @@ export default function Login() {
   };
 
   return (
-    <div className="w-full flex items-center justify-center mt-4">
+    <div className="w-full flex items-center justify-center flex-col mt-4">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full md:w-1/3 h-auto m-4">
         <div className="mb-4">
           <label

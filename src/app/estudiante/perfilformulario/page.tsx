@@ -1,6 +1,5 @@
 "use client";
 import Header from "@/components/Header";
-import EstudianteProfile from "@/components/perfiles/EstudianteProfileListo";
 import EstudianteFormProfile from "@/components/perfiles/EstudianteFormProfile";
 
 export default function EstudianteInfoForm() {

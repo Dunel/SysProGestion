@@ -18,7 +18,7 @@ type ProfileData = {
   }
 };
 
-export default function EstudianteProfile({buttonUpdate}: {buttonUpdate: boolean}) {
+export default function EstudianteProfile() {
   const [dataProfile, setDataProfile] = useState<ProfileData>();
   useEffect(() => {
     const getProfile = async () => {
@@ -106,7 +106,7 @@ export default function EstudianteProfile({buttonUpdate}: {buttonUpdate: boolean
       </div>
       <br />
       {/* Botón para actualizar los datos */}
-      {buttonUpdate &&
+  
         <div className="flex justify-center">
           <button
               type="submit"
@@ -115,7 +115,7 @@ export default function EstudianteProfile({buttonUpdate}: {buttonUpdate: boolean
               Actualizar Datos
             </button>
         </div>
-      }
+      
     </div>
   );
 }
