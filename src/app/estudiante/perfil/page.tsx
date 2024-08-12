@@ -1,6 +1,6 @@
 "use client";
 import Header from "@/components/Header";
-import EstudianteProfile from "@/components/perfiles/EstudianteProfileListo";
+import EstudianteProfileListo from "@/components/perfiles/EstudianteProfileListo";
 import EstudianteFormProfile from "@/components/perfiles/EstudianteFormProfile";
 
 export default function EstudianteInfoForm() {
@@ -17,7 +17,7 @@ export default function EstudianteInfoForm() {
          <div className="grid grid-cols-1 mx-8 lg:grid-cols-[60%_40%] gap-2">
           
             <div className="flex justify-center md:bg-white">
-              <EstudianteProfile buttonUpdate={false} />
+              <EstudianteProfileListo/>
             </div>
           
             <div className="bg-white mx-4">
