@@ -18,7 +18,13 @@ type ProfileData = {
   }
 };
 
-export default function EstudianteProfile() {
+
+interface EstudianteProfileListoProps {
+  onToggleForm: () => void;
+  isFormVisible: boolean;
+}
+
+export default function EstudianteProfileListo ({ onToggleForm, isFormVisible }: EstudianteProfileListoProps) {
   const [dataProfile, setDataProfile] = useState<ProfileData>();
   useEffect(() => {
     const getProfile = async () => {
@@ -109,10 +115,11 @@ export default function EstudianteProfile() {
   
         <div className="flex justify-center">
           <button
-              type="submit"
+              onClick={onToggleForm}
               className="w-[100%] bg-black hover:bg-blue-600 text-white font-bold py-2 px-4 rounded md:w-[50%]"
               >
-              Actualizar Datos
+             {isFormVisible ? "Descartar la Actualizacion" : "Actualizar Perfil"}
+
             </button>
         </div>
       

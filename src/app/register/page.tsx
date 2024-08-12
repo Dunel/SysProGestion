@@ -202,7 +202,7 @@ import axios from "axios";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Oval } from 'react-loader-spinner'; // Importa el loader
+import { Oval } from 'react-loader-spinner'; 
 
 type Data = {
   cedula: string;
@@ -222,7 +222,7 @@ export default function Register() {
   const [count, setCount] = useState(0);
   const [token, setToken] = useState("");
   const [role, setRole] = useState("" as Roles);
-  const [loading, setLoading] = useState(false); // Estado para el loader
+  const [loading, setLoading] = useState(false);
   
   const router = useRouter();
 
@@ -234,6 +234,7 @@ export default function Register() {
     try {
       setLoading(true); // Muestra el loader
       if (!mail) {
+        setLoading(false); // Oculta el loader
         throw new Error("El correo es requerido");
       }
       
@@ -247,9 +248,11 @@ export default function Register() {
       setToken(res.data.token);
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        setLoading(false); // Oculta el loader
         return alert(error.response?.data.error);
       }
       console.error("Error al validar el código:", error);
+      setLoading(false); // Oculta el loader
       alert((error as Error).message);
     } finally {
       setLoading(false); // Oculta el loader
@@ -260,6 +263,7 @@ export default function Register() {
     try {
       setLoading(true); // Muestra el loader
       if (!code) {
+        setLoading(false); // Oculta el loader
         throw new Error("El código es requerido");
       }
 
@@ -269,15 +273,19 @@ export default function Register() {
       });
 
       res.data.message && alert("Código validado");
+      setLoading(false); // Oculta el loader
+
       setStep(2);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.data.step === 0) {
           setStep(0);
         }
+        setLoading(false); // Oculta el loader
         return alert(error.response?.data.error);
       }
       console.error("Error al validar el código:", error);
+      setLoading(false); // Oculta el loader
       alert((error as Error).message);
     } finally {
       setLoading(false); // Oculta el loader
@@ -302,6 +310,7 @@ export default function Register() {
       });
 
       if (login?.error) {
+        setLoading(false); // Oculta el loader
         alert(login.error.split(","));
         return;
       }
@@ -312,13 +321,16 @@ export default function Register() {
         if (error.response?.data.step === 0) {
           setStep(0);
         }
+        setLoading(false); // Oculta el loader
         return alert(error.response?.data.error);
       }
       console.error("Error al validar la data:", error);
+      setLoading(false); // Oculta el loader
       alert((error as Error).message);
     } finally {
       setLoading(false); // Oculta el loader
     }
+    
   };
 
   return (

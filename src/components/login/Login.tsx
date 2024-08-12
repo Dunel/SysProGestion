@@ -23,6 +23,7 @@ export default function Login() {
     });
 
     if (login?.error) {
+      setLoading(false); // Oculta el loader
       setErrors(login.error.split(","));
       return;
     }
