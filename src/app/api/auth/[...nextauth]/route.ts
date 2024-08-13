@@ -42,6 +42,7 @@ const authOptions: NextAuthOptions = {
         session.user.cedula = token.cedula;
         session.user.email = token.email;
         session.user.profile = token.profile;
+        session.user.role = token.role;
         session.user.dataProfile = token.dataProfile;
       return session;
     },
