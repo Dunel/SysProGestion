@@ -86,7 +86,7 @@ export default function EstudianteProfileForm({
         console.error("error:", error);
       }
     } finally {
-      setLoading(false); // Muestra el loader
+      setLoading(false); // oculta el loader
       onToggleForm;
     }
   };
@@ -225,75 +225,11 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
-          {/* lista clickeable de array de skills 
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="skills">Habilidades</Label>
-            <Input
-              {...register("skills")}
-              id="skills"
-              placeholder="Habilidades"
-              type="text"
-              className={cn(errors.skills && "bg-red-100 focus:bg-red-100")}
-            />
-            {errors.skills && (
-              <p className="text-red-500 text-sm">{errors.skills.message}</p>
-            )}
-          </LabelInputContainer>*/}
-          {skillsOptions.map(({ value: skillKey, label: skillLabel }) => (
-            <div key={skillKey} className="flex items-center">
-              <input
-                type="checkbox"
-                id={skillKey}
-                name={skillKey}
-                checked={selectedSkills.includes(skillKey)}
-                onChange={handleCheckboxChange}
-                className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-              />
-              <label
-                htmlFor={skillKey}
-                className="ml-2 block text-sm text-gray-700"
-              >
-                {skillLabel}
-              </label>
-            </div>
-          ))}
-
-          <div className="mt-4">
-            <h3 className="text-sm font-medium text-gray-700">
-              Habilidades seleccionadas:
-            </h3>
-            <ul className="mt-2 list-disc list-inside text-sm text-gray-500">
-              {selectedSkills.length > 0 ? (
-                selectedSkills.map((skill, index) => (
-                  <li key={index}>
-                    {
-                      skillsOptions.find((option) => option.value === skill)
-                        ?.label
-                    }
-                  </li>
-                ))
-              ) : (
-                <p>No has seleccionado ninguna habilidad.</p>
-              )}
-            </ul>
-          </div>
+     
+          
 
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="interests">Intereses</Label>
-            <Input
-              {...register("interests")}
-              id="interests"
-              placeholder="Intereses"
-              type="text"
-              className={cn(errors.interests && "bg-red-100 focus:bg-red-100")}
-            />
-            {errors.interests && (
-              <p className="text-red-500 text-sm">{errors.interests.message}</p>
-            )}
-          </LabelInputContainer>
-
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="description">Descripción</Label>
+            <Label htmlFor="description">Breve descripción de ti</Label>
             <Input
               {...register("description")}
               id="description"
@@ -328,64 +264,55 @@ export default function EstudianteProfileForm({
           </LabelInputContainer>
 
 
-          <LabelInputContainer className="mb-4">
 
-              <Label>Habilidades</Label>
-              <div className="grid grid-cols-2 grid-rows-7 space-y-2">
-                {[
-                  "Resolución de problemas",
-                  "Trabajo en equipo",
-                  "Adaptabilidad",
-                  "Comunicación efectiva",
-                  "Liderazgo",
-                  "Pensamiento crítico",
-                  "Orientación a resultados",
-                  "Creatividad",
-                  "Gestión del tiempo",
-                  "Aprendizaje continuo",
-                  "Don de gente",
-                  "enseñanza",
-                  "socialble",
-                  "salud",
-                  "deportes",
-                  "logística",
-                  "expresiones artística",
-                  "diseño",
-                  "música",
-                  "Inglés",
-                  "Otros idiomas naturales",
-                  "Lenguajes de programación",
-                ].map((skill) => (
-                  <span key={skill} className="flex items-center">
-                    {/* //! creo q esta div y/o su clase sera innecesaria con border-2 en input */}
-                    <div className="w-auto h-auto bg-red"> 
-                        <Input
-                          type="checkbox"
-                          value={skill}
-                          {...register("skills")}
-                          className={cn(errors.skills && "border-2 mr-2 bg-red-100 focus:bg-red-100")}
 
-                        />
-                    </div>
-                    {skill}
-                  </span>
-                ))}
-              </div>
-              {errors.skills && (
-                <p className="text-red-500 text-sm">{errors.skills.message}</p>
+            
+          <LabelInputContainer>
+          <Label htmlFor="skills">Selecciona las habilidades que poseas</Label>
+
+          {skillsOptions.map(({ value: skillKey, label: skillLabel }) => (
+            <div key={skillKey} className="flex items-center">
+              <Input
+                type="checkbox"
+                id={skillKey}
+                name={skillKey}
+                checked={selectedSkills.includes(skillKey)}
+                onChange={handleCheckboxChange}
+                className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+              />
+              <label
+                htmlFor={skillKey}
+                className="ml-2 block text-sm text-gray-700"
+              >
+                {skillLabel}
+              </label>
+            </div>
+          ))}
+
+          <div className="mt-4">
+            <h3 className="text-sm font-medium text-gray-700 m-2">
+              Habilidades seleccionadas:
+            </h3>
+            <ul className="mt-2 list-disc list-inside text-sm text-gray-500">
+              {selectedSkills.length > 0 ? (
+                selectedSkills.map((skill, index) => (
+                  <li key={index}>
+                    {
+                      skillsOptions.find((option) => option.value === skill)
+                        ?.label
+                    }
+                  </li>
+                ))
+              ) : (
+                <p style={{color:"red"}}>No has seleccionado ninguna habilidad.</p>
               )}
+            </ul>
+            <br/>
+          </div>
 
           </LabelInputContainer>
 
-
-
         
-
-
-
-
-
-
           
 
           {/* //TODO: TEMENOS QUE AGREGAR ESTOS INPUTS A BBDD */}
@@ -393,16 +320,16 @@ export default function EstudianteProfileForm({
           <Label>
             Sube tu foto <mark> -Agr a la BBDD- </mark>{" "}
           </Label>
-          <div className="w-[100%] m-2 dm:w-[50%] sm:w-[50%]">
+          <div className="w-[100%] m-2 dm:w-[50%] sm:w-[50%] ">
             <Input type="file" accept="image/*" onChange={handleImageChange} />
+            </div>
             {imagePreview && (
               <img
                 src={imagePreview}
                 alt="Vista previa"
-                className="mx-auto my-4 w-[40%] h-auto"
+                className="mx-auto my-4 w-[40%] h-auto md:w-[30%]"
               />
             )}
-          </div>
 
           {/* **** Curriculum PDF **** */}
           <Label>

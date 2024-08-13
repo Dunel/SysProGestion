@@ -67,7 +67,6 @@ export default function EstudianteInfoForm() {
           </div>
         )}
 
-      {/* //!ARREGLA ESTO, ES CUANDO NO HAY REGISTRO DEL ESTUDIANTE EN LA TABLA Y SE DEBE ABRIR EL FORMULARIO. */}
       {session?.user.profile === false && (
         <div className="w-[80%] m-4 p-4 mx-auto">
           <EstudianteFormActualizarProfile
