@@ -156,3 +156,49 @@ export async function deleteApply(req: NextRequest) {
     );
   }
 }
+
+export async function getMyApplication(req: NextRequest) {
+  try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const applications = await prisma.application.findMany({
+      where: {
+        apply: {
+          some: {
+            userCedula: token.cedula,
+          }
+        }
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        location: true,
+        status: true,
+        apply: {
+          where: {
+            userCedula: token.cedula,
+          },
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    return NextResponse.json({ applications }, { status: 200 });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}

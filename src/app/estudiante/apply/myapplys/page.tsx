@@ -59,7 +59,8 @@ export default function Page() {
 
   const getApplications = async () => {
     try {
-      const res = await axios.get("/api/estudiante/apply");
+      const res = await axios.get("/api/estudiante/apply/myapply");
+      console.log("data: ", res.data.applications);
       setApplications(res.data.applications);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -75,12 +76,12 @@ export default function Page() {
 
   return (
     <>
-      <Header title={"SOLICITUDES"} subtitle={"aquí solicitas cosas jjj"} />
+      <Header title={"MIS SOLICITUDES"} subtitle={"aquí solicitas cosas jjj"} />
       <ContainerWeb>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <GridMain>
             {/* iteration on applications*/}
-            {applications &&
+            {applications ? (
               applications.map((application) => (
                 <div
                   key={application.id}
@@ -103,12 +104,19 @@ export default function Page() {
                             className="bg-gray-600 text-white font-bold py-2 px-4 rounded"
                             disabled
                           >
-                            {application.status === "inactive"? "Oferta inactiva" : "Solicitud enviada"}
+                            {application.status === "inactive"
+                              ? "Oferta inactiva"
+                              : "Solicitud enviada"}
                           </button>
                           {application.apply.length > 0 && (
                             <button
                               className="bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-                              onClick={() => handleDeleteApply(application.id, application.apply[0].id)}
+                              onClick={() =>
+                                handleDeleteApply(
+                                  application.id,
+                                  application.apply[0].id
+                                )
+                              }
                             >
                               Borrar solicitud
                             </button>
@@ -125,7 +133,12 @@ export default function Page() {
                     </div>
                   </div>
                 </div>
-              ))}
+              ))
+            ) : (
+              <GridContainer>
+                <p>No tienes solicitudes</p>
+              </GridContainer>
+            )}
           </GridMain>
 
           <GridSecond>
