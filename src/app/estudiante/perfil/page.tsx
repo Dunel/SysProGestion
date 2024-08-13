@@ -27,7 +27,7 @@ type ProfileData = {
 export default function EstudianteInfoForm() {
   const [isFormVisible, setIsFormVisible] = useState(false);
   //!ARREGLA ESTO
-  const [dataProfile, setDataProfile] = useState<ProfileData  | [] | null>(null) ; 
+  const [dataProfile, setDataProfile] = useState<ProfileData[] | null | boolean>(false) ; 
 
   const [loading, setLoading] = useState(false);
 
@@ -40,9 +40,8 @@ export default function EstudianteInfoForm() {
     try {
       setLoading(true); // Muestra el loader
       const res = await axios.get("/api/estudiante/perfil");
-      if (res.data.profile) {
+      console.log("res.data.profile: ", res.data.profile);
         setDataProfile(res.data.profile);
-      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);
@@ -69,7 +68,7 @@ export default function EstudianteInfoForm() {
               }
            />
 
-          {dataProfile === null && (
+          {dataProfile === false && (
               loading  && // Muestra el loader si está cargando
               <div className="flex justify-center items-center flex-col mt-10">
                 <Oval color="#000000"
