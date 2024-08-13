@@ -79,8 +79,7 @@ export default function Page() {
       <ContainerWeb>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <GridMain>
-            {/* iteration on applications*/}
-            {applications &&
+          {applications && applications.length > 0 ? (
               applications.map((application) => (
                 <div
                   key={application.id}
@@ -103,12 +102,19 @@ export default function Page() {
                             className="bg-gray-600 text-white font-bold py-2 px-4 rounded"
                             disabled
                           >
-                            {application.status === "inactive"? "Oferta inactiva" : "Solicitud enviada"}
+                            {application.status === "inactive"
+                              ? "Oferta inactiva"
+                              : "Solicitud enviada"}
                           </button>
                           {application.apply.length > 0 && (
                             <button
                               className="bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-                              onClick={() => handleDeleteApply(application.id, application.apply[0].id)}
+                              onClick={() =>
+                                handleDeleteApply(
+                                  application.id,
+                                  application.apply[0].id
+                                )
+                              }
                             >
                               Borrar solicitud
                             </button>
@@ -125,7 +131,12 @@ export default function Page() {
                     </div>
                   </div>
                 </div>
-              ))}
+              ))
+            ) : (
+              <GridContainer>
+                <p>No hay solicitudes disponibles</p>
+              </GridContainer>
+            )}
           </GridMain>
 
           <GridSecond>

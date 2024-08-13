@@ -50,10 +50,10 @@ export async function apply(req: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
     const { id } = await req.json();
-    const result = idApplySchema.parse({ id });
+    const result = idApplySchema.shape.idApplication.parse(id);
     const application = await prisma.application.findFirst({
       where: {
-        id: result.id,
+        id: result,
       },
       select: {
         apply: {
@@ -71,7 +71,7 @@ export async function apply(req: NextRequest) {
     }
     await prisma.application.update({
       where: {
-        id,
+        id: result,
       },
       data: {
         apply: {
@@ -104,17 +104,19 @@ export async function deleteApply(req: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
     const { idAplication, applyId } = await req.json();
-    const applicationId = idApplySchema.parse({ id: idAplication });
-    const idApply = idApplySchema.parse({ id: applyId });
+    const result = idApplySchema.parse({
+      idApplication: idAplication,
+      idApply: applyId,
+    });
 
     const application = await prisma.application.findFirst({
       where: {
-        id: applicationId.id,
+        id: result.idApplication,
       },
       select: {
         apply: {
           where: {
-            id: idApply.id,
+            id: result.idApply,
             userCedula: token.cedula,
           },
         },
@@ -128,12 +130,12 @@ export async function deleteApply(req: NextRequest) {
     }
     await prisma.application.update({
       where: {
-        id: applicationId.id,
+        id: result.idApplication,
       },
       data: {
         apply: {
           delete: {
-            id: idApply.id,
+            id: result.idApply,
           },
         },
       },
@@ -168,8 +170,8 @@ export async function getMyApplication(req: NextRequest) {
         apply: {
           some: {
             userCedula: token.cedula,
-          }
-        }
+          },
+        },
       },
       select: {
         id: true,

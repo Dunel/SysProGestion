@@ -80,8 +80,7 @@ export default function Page() {
       <ContainerWeb>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <GridMain>
-            {/* iteration on applications*/}
-            {applications ? (
+          {applications && applications.length > 0 ? (
               applications.map((application) => (
                 <div
                   key={application.id}
