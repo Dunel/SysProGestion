@@ -50,7 +50,7 @@ export default function EstudianteProfileListo({
 
   //!MOSTRANDO ESTE !!!!
   return (
-    <div className="relative z-20 m-4 my-4 p-4 rounded-lg mt-10  bg-white shadow lg:shadow-none">
+    <div className="relative z-20 m-4 my-4 p-4 rounded-lg mt-1  bg-white shadow lg:shadow-none">
       {session?.user.profile ? (
         <>
           <div className="flex flex-col items-center md:flex-row md:space-x-4">

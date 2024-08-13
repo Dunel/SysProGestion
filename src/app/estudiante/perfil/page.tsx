@@ -64,7 +64,7 @@ export default function EstudianteInfoForm() {
              subtitle={
               !dataProfile 
                 ?"Este es tu formulario de registro. Por favor, sigue las indicaciones de las casillas y completa tu información personal y profesional." 
-                :"Este es tu tu perfil personal, el cual podras actualizar mediante el formulario que se abre al presionar el boton 'Actualizar Perfil'. Es muy facil, solo sigue las indicaciones de las casillas y actualiza tu información personal y profesional que ha cambiado."
+                :"Este es tu perfil personal, el cual podras actualizar mediante el formulario que se abre al presionar el boton 'Actualizar Perfil'. Es muy facil, solo sigue las indicaciones de las casillas y actualiza tu información personal y profesional que ha cambiado."
               }
            />
 
@@ -93,10 +93,12 @@ export default function EstudianteInfoForm() {
       
               <div className={`${isFormVisible ? 'grid grid-cols-1 mx-8 lg:grid-cols-[60%_40%] gap-2' :'flex justify-center w-[80%] mx-auto bg-white'}`}>
                   
+                  <div className="mt-12">
                   <EstudianteProfileListo onToggleForm={toggleFormVisibility} isFormVisible={isFormVisible} />
+                  </div>
             
                   {isFormVisible && (
-                    <div className="bg-white mx-4">
+                    <div className="bg-white mx-4 rounded-lg mt-12">
                     <EstudianteFormActualizarProfile 
                       onToggleForm={toggleFormVisibility}
                       titleForm={'Actualizando tu Perfil!'} />

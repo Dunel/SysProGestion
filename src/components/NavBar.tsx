@@ -13,8 +13,9 @@ export default function Navbar() {
   const { data: session } = useSession();
   const navigation = [
     { name: "PRINCIPAL", href: "/", current: false },
-    { name: "INFORMACION", href: "/informacion", current: false },
-    { name: "INICIAR SESIÓN", href: "/login", current: false },
+    { name: "MI PERFIL", href: "/estudiante/perfil", current: false },
+    { name: "MIS APLICACIONES A VACANTES", href: "/estudiante/apply", current: false },
+    { name: "MIS NOTIFICACIONES", href: "/estudiente/notificaciones", current: false },
   ];
 
   const pathname = usePathname();
@@ -52,11 +53,6 @@ export default function Navbar() {
                 </div>
 
 
-                <div className="flex flex-shrink-0 items-center">
-                  <Link href="/estudiante/perfil">
-                    Mi Perfil
-                  </Link>
-                </div>
                
                
                

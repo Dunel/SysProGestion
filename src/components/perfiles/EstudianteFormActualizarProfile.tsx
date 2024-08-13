@@ -76,8 +76,8 @@ export default function EstudianteProfileForm({
 
   return (
     <>
-      <div className="flex flex-col my-4 p-4 md:space-x-4">
-        <h2 className="text-2xl font-bold text-gray-800 text-center dm:text-4xl lg:text-5xl">
+      <div className="flex flex-col my-4 p-4 rounded-lg md:space-x-4">
+        <h2 className="text-2xl font-bold text-gray-800 text-center dm:text-3xl">
          {titleForm}
         </h2>
       </div>
@@ -191,41 +191,14 @@ export default function EstudianteProfileForm({
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="skills">Habilidades</Label>
-            <Input
-              {...register("skills")}
-              id="skills"
-              placeholder="Habilidades"
-              type="text"
-              className={cn(errors.skills && "bg-red-100 focus:bg-red-100")}
-            />
-            {errors.skills && (
-              <p className="text-red-500 text-sm">{errors.skills.message}</p>
-            )}
-          </LabelInputContainer>
-
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="interests">Intereses</Label>
-            <Input
-              {...register("interests")}
-              id="interests"
-              placeholder="Intereses"
-              type="text"
-              className={cn(errors.interests && "bg-red-100 focus:bg-red-100")}
-            />
-            {errors.interests && (
-              <p className="text-red-500 text-sm">{errors.interests.message}</p>
-            )}
-          </LabelInputContainer>
-
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="description">Descripción</Label>
+            <Label htmlFor="description">Da una breve descripción de ti</Label>
             <Input
               {...register("description")}
               id="description"
-              placeholder="Descripción"
-              type="text"
-              className={cn(
+              placeholder="Soy una persona responsable, hablo ingles fluido y me apasiona la naturaleza..."
+              type="textarea"
+              
+              className={'w-full h-[12vh] verflow-hidden text-ellipsis white-space-nowrap'+cn(
                 errors.description && "bg-red-100 focus:bg-red-100"
               )}
             />
@@ -236,12 +209,88 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
+
+          <LabelInputContainer className="mb-4">
+
+          <Label htmlFor="interests">Cuales son tus intereses</Label>
+            <Input
+              {...register("interests")}
+              id="interests"
+               placeholder="Me interesa encontrar soluciones a problemas reales mediante el uso de tecnología..."
+              type="textarea"
+              className={'w-full h-[12vh] verflow-hidden text-ellipsis white-space-nowrap'+cn(errors.interests && "bg-red-100 focus:bg-red-100")}
+            />
+            {errors.interests && (
+              <p className="text-red-500 text-sm">{errors.interests.message}</p>
+            )} 
+          </LabelInputContainer>
+
+
+          <LabelInputContainer className="mb-4">
+
+              <Label>Habilidades</Label>
+              <div className="grid grid-cols-2 grid-rows-7 space-y-2">
+                {[
+                  "Resolución de problemas",
+                  "Trabajo en equipo",
+                  "Adaptabilidad",
+                  "Comunicación efectiva",
+                  "Liderazgo",
+                  "Pensamiento crítico",
+                  "Orientación a resultados",
+                  "Creatividad",
+                  "Gestión del tiempo",
+                  "Aprendizaje continuo",
+                  "Don de gente",
+                  "socialble",
+                  "salud",
+                  "deportes",
+                  "logística",
+                  "expresiones artística",
+                  "diseño",
+                  "música",
+                  "Inglés",
+                  "Otros idiomas naturales",
+                  "Lenguajes de programación",
+                ].map((skill) => (
+                  <span key={skill} className="flex items-center">
+                    {/* //! creo q esta div y/o su clase sera innecesaria con border-2 en input */}
+                    <div className="w-auto h-auto bg-red"> 
+                        <Input
+                          type="checkbox"
+                          value={skill}
+                          {...register("skills")}
+                          className={cn(errors.skills && "border-2 mr-2 bg-red-100 focus:bg-red-100")}
+
+                        />
+                    </div>
+                    {skill}
+                  </span>
+                ))}
+              </div>
+              {errors.skills && (
+                <p className="text-red-500 text-sm">{errors.skills.message}</p>
+              )}
+
+          </LabelInputContainer>
+
+
+
+        
+
+
+
+
+
+
+          
+
           {/* //TODO: TEMENOS QUE AGREGAR ESTOS INPUTS A BBDD */}
           {/* **** Imagen de Perfil **** */}
           <Label>
             Sube tu foto <mark> -Agr a la BBDD- </mark>{" "}
           </Label>
-          <div className="w-[100%] m-2 dm:w-[50%]">
+          <div className="w-[100%] m-2 dm:w-[50%] sm:w-[50%]">
             <Input type="file" accept="image/*" onChange={handleImageChange} />
             {imagePreview && (
               <img
@@ -256,7 +305,7 @@ export default function EstudianteProfileForm({
           <Label>
             Sube tu currículum (Formato PDF) <mark> -Agr a la BBDD- </mark>{" "}
           </Label>
-          <div className="w-[100%] m-2 dm:w-[50%]">
+          <div className="w-[100%] m-2 dm:w-[50%] sm:w-[50%]">
             <Input
               type="file"
               accept="application/pdf"
