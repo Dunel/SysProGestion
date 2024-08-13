@@ -13,10 +13,12 @@ import { Oval } from "react-loader-spinner";
 
 interface EstudianteFormProfileProps {
   onToggleForm: () => void;
+  titleForm: string;
 }
 
 export default function EstudianteProfileForm({
   onToggleForm,
+  titleForm
 }: EstudianteFormProfileProps) {
   const { data: session, update } = useSession();
   const {
@@ -75,11 +77,11 @@ export default function EstudianteProfileForm({
   return (
     <>
       <div className="flex flex-col my-4 p-4 md:space-x-4">
-        <h2 className="text-3xl font-bold text-gray-800 text-center">
-          Actualizando tu Perfil!
+        <h2 className="text-2xl font-bold text-gray-800 text-center dm:text-4xl lg:text-5xl">
+         {titleForm}
         </h2>
       </div>
-      <div className=" flex lex-col m-4 my-4 p-4 rounded-lg shadow-lg">
+      <div className=" flex flex-col m-4 my-4 p-4 rounded-lg shadow-lg">
         <form
           onSubmit={handleSubmit(profileUpdate)}
           className="form-student-info"
