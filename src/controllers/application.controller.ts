@@ -185,6 +185,7 @@ export async function getMyApplication(req: NextRequest) {
           },
           select: {
             id: true,
+            status: true,
           },
         },
       },

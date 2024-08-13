@@ -79,7 +79,14 @@ model apply {
   id            Int         @id @default(autoincrement())
   userCedula    Int
   applicationId Int
+  status        statusApply      @default(pendiente)
   updatedAt     DateTime    @updatedAt
   application   application @relation(fields: [applicationId], references: [id])
   User          User        @relation(fields: [userCedula], references: [cedula])
+}
+
+enum statusApply {
+  pendiente
+  aceptado
+  rechazado
 }
