@@ -55,7 +55,7 @@ model estudentInfo {
   description String
   address     String
   updatedAt   DateTime @updatedAt
-  User        User     @relation(fields: [userCedula], references: [cedula])
+  User        User     @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
 }
 
 model application {
@@ -79,10 +79,10 @@ model apply {
   id            Int         @id @default(autoincrement())
   userCedula    Int
   applicationId Int
-  status        statusApply      @default(pendiente)
+  status        statusApply @default(pendiente)
   updatedAt     DateTime    @updatedAt
-  application   application @relation(fields: [applicationId], references: [id])
-  User          User        @relation(fields: [userCedula], references: [cedula])
+  application   application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  User          User        @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
 }
 
 enum statusApply {
