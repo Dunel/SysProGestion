@@ -2,16 +2,20 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
+import { Oval } from 'react-loader-spinner'; // Importa el loader
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
   const router = useRouter();
+  const [loading, setLoading] = useState(false); // Estado para el loader
+
 
   const handleSubmit = async () => {
     setErrors([]);
-
+    setLoading(true); // Muestra el loader
     const login = await signIn("credentials", {
       email,
       password,
@@ -19,14 +23,16 @@ export default function Login() {
     });
 
     if (login?.error) {
+      setLoading(false); // Oculta el loader
       setErrors(login.error.split(","));
       return;
     }
     router.push("/checking");
+    setLoading(false); // Oculta el loader
   };
 
   return (
-    <div className="w-full flex items-center justify-center mt-4">
+    <div className="w-full flex items-center justify-center flex-col mt-4">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full md:w-1/3 h-auto m-4">
         <div className="mb-4">
           <label
@@ -87,6 +93,17 @@ export default function Login() {
           </div>
         )}
       </div>
+      {
+              loading  && // Muestra el loader si está cargando
+                <div className="flex justify-center items-center flex-col mt-10">
+                  <Oval color="#000000"
+                  secondaryColor="#FFFFFF" // Color de fondo blanco
+                  height={50} width={50}  strokeWidth={5} />
+                  <br/>
+                  <span>Espere por favor...</span>
+                </div>
+            
+            }
     </div>
   );
 }

@@ -1,253 +1,105 @@
 "use client";
-import ContainerWeb from "@/components/ContainerWeb";
-import GridContainer from "@/components/GridContainer";
-import GridMain from "@/components/GridMain";
-import GridSecond from "@/components/GridSecond";
 import Header from "@/components/Header";
-import { useSession } from "next-auth/react";
-import EstudianteProfile from "@/components/perfiles/EstudianteProfile";
+import EstudianteProfileListo from "@/components/perfiles/EstudianteProfileListo";
+import EstudianteFormActualizarProfile from "@/components/perfiles/EstudianteFormActualizarProfile";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { profileSchema, ProfileFormData } from "@/validations/profile.schema";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/components/lib/utils";
+import { useSession } from "next-auth/react";
+import { Oval } from "react-loader-spinner";
 
-export default function Page() {
+export default function EstudianteInfoForm() {
+  const [isFormVisible, setIsFormVisible] = useState(false);
   const { data: session, update } = useSession();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ProfileFormData>({
-    resolver: zodResolver(profileSchema),
-    mode: "onChange",
-  });
 
-  const profileUpdate = async (data: ProfileFormData) => {
+  const [loading, setLoading] = useState(false);
+  const toggleFormVisibility = () => {
+    setIsFormVisible((prev) => !prev);
+  };
+
+  const getProfile = async () => {
     try {
-      const res = await axios.post("/api/estudiante/perfil", data);
-      if (session) {
-        await update({ profile: true });
+      setLoading(true); // Muestra el loader
+      console.log("session?.user.dataProfile:", session?.user.dataProfile);
+      if (!session?.user.profile || session.user.dataProfile) {
+        setLoading(false);
+        return;
       }
-      console.log(res.data);
+      const res = await axios.get("/api/estudiante/perfil");
+      update({ profile: true, dataProfile: res.data.profile });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);
       } else {
         console.error("error:", error);
       }
+    } finally {
+      setLoading(false); // Oculta el loader
     }
   };
+  useEffect(() => {
+    getProfile();
+  }, [session?.user.profile]);
 
   return (
     <>
       <Header
-        title={"Tu Perfil"}
+        title={
+          !session?.user.dataProfile ? "Registrando tu Perfil" : "Mi Perfil"
+        }
         subtitle={
-          "Este es tu perfil, aquí podrás visualizar tu información personal y actualizarla si es necesario."
+          !session?.user.profile
+            ? "Este es tu formulario de registro. Por favor, sigue las indicaciones de las casillas y completa tu información personal y profesional."
+            : "Este es tu perfil personal, el cual podras actualizar mediante el formulario que se abre al presionar el boton 'Actualizar Perfil'. Es muy facil, solo sigue las indicaciones de las casillas y actualiza tu información personal y profesional que ha cambiado."
         }
       />
-      <ContainerWeb>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <GridMain>
-            <GridContainer>
-              {session?.user.profile ? "true" : "false"}
-              <EstudianteProfile />
-            </GridContainer>
-          </GridMain>
 
-          <GridSecond>
-            <GridContainer>
-              <form onSubmit={handleSubmit(profileUpdate)}>
-                <LabelInputContainer className="mb-4">
-                  <Label htmlFor="names">Nombres</Label>
-                  <Input
-                    {...register("names")}
-                    id="names"
-                    placeholder="Nombres"
-                    type="text"
-                    className={cn(
-                      errors.names && "bg-red-100 focus:bg-red-100"
-                    )}
-                  />
-                  {errors.names && (
-                    <p className="text-red-500 text-sm">
-                      {errors.names.message}
-                    </p>
-                  )}
-                </LabelInputContainer>
+      {!session?.user.dataProfile || loading && ( // Muestra el loader si está cargando
+          <div className="flex justify-center items-center flex-col mt-10">
+            <Oval
+              color="#000000"
+              secondaryColor="#FFFFFF" // Color de fondo blanco
+              height={50}
+              width={50}
+              strokeWidth={5}
+            />
+            <br />
+            <span>Espere por favor, su informacion se esta cargando...</span>
+          </div>
+        )}
 
-                <LabelInputContainer className="mb-4">
-                  <Label htmlFor="lastnames">Apellidos</Label>
-                  <Input
-                    {...register("lastnames")}
-                    id="lastnames"
-                    placeholder="Apellidos"
-                    type="text"
-                    className={cn(
-                      errors.lastnames && "bg-red-100 focus:bg-red-100"
-                    )}
-                  />
-                  {errors.lastnames && (
-                    <p className="text-red-500 text-sm">
-                      {errors.lastnames.message}
-                    </p>
-                  )}
-                </LabelInputContainer>
-
-                <LabelInputContainer className="mb-4">
-                  <Label htmlFor="phone">Teléfono</Label>
-                  <Input
-                    {...register("phone")}
-                    id="phone"
-                    placeholder="Teléfono"
-                    type="text"
-                    className={cn(
-                      errors.phone && "bg-red-100 focus:bg-red-100"
-                    )}
-                  />
-                  {errors.phone && (
-                    <p className="text-red-500 text-sm">
-                      {errors.phone.message}
-                    </p>
-                  )}
-                </LabelInputContainer>
-
-                <LabelInputContainer className="mb-4">
-                  <Label htmlFor="address">Dirección</Label>
-                  <Input
-                    {...register("address")}
-                    id="address"
-                    placeholder="Dirección"
-                    type="text"
-                    className={cn(
-                      errors.address && "bg-red-100 focus:bg-red-100"
-                    )}
-                  />
-                  {errors.address && (
-                    <p className="text-red-500 text-sm">
-                      {errors.address.message}
-                    </p>
-                  )}
-                </LabelInputContainer>
-
-                <LabelInputContainer className="mb-4">
-                  <Label htmlFor="university">Universidad</Label>
-                  <Input
-                    {...register("university")}
-                    id="university"
-                    placeholder="Universidad"
-                    type="text"
-                    className={cn(
-                      errors.university && "bg-red-100 focus:bg-red-100"
-                    )}
-                  />
-                  {errors.university && (
-                    <p className="text-red-500 text-sm">
-                      {errors.university.message}
-                    </p>
-                  )}
-                </LabelInputContainer>
-
-                <LabelInputContainer className="mb-4">
-                  <Label htmlFor="quarter">Trimestre</Label>
-                  <Input
-                    {...register("quarter")}
-                    id="quarter"
-                    placeholder="Trimestre"
-                    type="text"
-                    className={cn(
-                      errors.quarter && "bg-red-100 focus:bg-red-100"
-                    )}
-                  />
-                  {errors.quarter && (
-                    <p className="text-red-500 text-sm">
-                      {errors.quarter.message}
-                    </p>
-                  )}
-                </LabelInputContainer>
-
-                <LabelInputContainer className="mb-4">
-                  <Label htmlFor="skills">Habilidades</Label>
-                  <Input
-                    {...register("skills")}
-                    id="skills"
-                    placeholder="Habilidades"
-                    type="text"
-                    className={cn(
-                      errors.skills && "bg-red-100 focus:bg-red-100"
-                    )}
-                  />
-                  {errors.skills && (
-                    <p className="text-red-500 text-sm">
-                      {errors.skills.message}
-                    </p>
-                  )}
-                </LabelInputContainer>
-
-                <LabelInputContainer className="mb-4">
-                  <Label htmlFor="interests">Intereses</Label>
-                  <Input
-                    {...register("interests")}
-                    id="interests"
-                    placeholder="Intereses"
-                    type="text"
-                    className={cn(
-                      errors.interests && "bg-red-100 focus:bg-red-100"
-                    )}
-                  />
-                  {errors.interests && (
-                    <p className="text-red-500 text-sm">
-                      {errors.interests.message}
-                    </p>
-                  )}
-                </LabelInputContainer>
-
-                <LabelInputContainer className="mb-4">
-                  <Label htmlFor="description">Descripción</Label>
-                  <Input
-                    {...register("description")}
-                    id="description"
-                    placeholder="Descripción"
-                    type="text"
-                    className={cn(
-                      errors.description && "bg-red-100 focus:bg-red-100"
-                    )}
-                  />
-                  {errors.description && (
-                    <p className="text-red-500 text-sm">
-                      {errors.description.message}
-                    </p>
-                  )}
-                </LabelInputContainer>
-
-                <button
-                  type="submit"
-                  className="w-full h-10 px-3 text-base text-white bg-gray-500 rounded-lg focus:shadow-outline"
-                >
-                  Guardar
-                </button>
-              </form>
-            </GridContainer>
-          </GridSecond>
+      {/* //!ARREGLA ESTO, ES CUANDO NO HAY REGISTRO DEL ESTUDIANTE EN LA TABLA Y SE DEBE ABRIR EL FORMULARIO. */}
+      {session?.user.profile === false && (
+        <div className="w-[80%] m-4 p-4 mx-auto">
+          <EstudianteFormActualizarProfile
+            onToggleForm={toggleFormVisibility}
+            titleForm={"Completa los datos de tu Perfil!"}
+          />
         </div>
-      </ContainerWeb>
+      )}
+
+      {session?.user.dataProfile && (
+        <div
+          className={`${
+            isFormVisible
+              ? "grid grid-cols-1 mx-8 lg:grid-cols-[60%_40%] gap-2"
+              : "flex justify-center w-[80%] mx-auto bg-white"
+          }`}
+        >
+          <EstudianteProfileListo
+            onToggleForm={toggleFormVisibility}
+            isFormVisible={isFormVisible}
+          />
+
+          {isFormVisible && (
+            <div className="bg-white mx-4">
+              <EstudianteFormActualizarProfile
+                onToggleForm={toggleFormVisibility}
+                titleForm={"Actualizando tu Perfil!"}
+              />
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 }
-
-const LabelInputContainer = ({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) => {
-  return (
-    <div className={cn("flex flex-col space-y-2 w-full", className)}>
-      {children}
-    </div>
-  );
-};
