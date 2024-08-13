@@ -51,10 +51,39 @@ export const profileSchema = z.object({
         .min(1, { message: "El trimestre debe ser mayor a 0" })
         .max(12, { message: "El trimestre debe ser menor a 13" })
     ),
-  skills: z
-    .string({ required_error: "Las habilidades son requeridas" })
-    .min(5, { message: "Las habilidades debe tener minimo 5 caracteres" })
-    .max(100, { message: "Las habilidades debe tener maximo 100 caracteres" }),
+  skills: z.array(
+    z.enum(
+      [
+        "resoluciondeproblemas",
+        "trabajoenequipo",
+        "adaptabilidad",
+        "comunicacionefectiva",
+        "liderazgo",
+        "pensamientocritico",
+        "orientacionaresultados",
+        "creatividad",
+        "gestiondeltiempo",
+        "aprendizajecontinuo",
+        "dondegente",
+        "ensenanza",
+        "sociable",
+        "salud",
+        "deportes",
+        "logistica",
+        "expresionesartisticas",
+        "diseno",
+        "musica",
+        "ingles",
+        "otrosidiomasnaturales",
+        "lenguajesdeprogramacion"
+      ],
+      {
+        errorMap: (issue, ctx) => {
+          return { message: "Habilidad no valida" };
+        },
+      }
+    )
+  ),
   interests: z
     .string({ required_error: "Los intereses son requeridos" })
     .min(10, { message: "Los intereses debe tener minimo 10 caracteres" })

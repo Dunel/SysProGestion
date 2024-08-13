@@ -45,12 +45,37 @@ model User {
   application application[]
 }
 
+enum Skills {
+  resoluciondeproblemas
+  trabajoenequipo
+  adaptabilidad
+  comunicacionefectiva
+  liderazgo
+  pensamientocritico
+  orientacionaresultados
+  creatividad
+  gestiondeltiempo
+  aprendizajecontinuo
+  dondegente
+  ensenanza
+  sociable
+  salud
+  deportes
+  logistica
+  expresionesartisticas
+  diseno
+  musica
+  ingles
+  otrosidiomasnaturales
+  lenguajesdeprogramacion
+}
+
 model estudentInfo {
   id          Int      @id @default(autoincrement())
   userCedula  Int      @unique
   university  String
   quarter     Int
-  skills      String
+  skills      Skills[]
   interests   String
   description String
   address     String

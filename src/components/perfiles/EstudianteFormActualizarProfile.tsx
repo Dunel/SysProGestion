@@ -33,6 +33,42 @@ export default function EstudianteProfileForm({
   const router = useRouter();
   const [imagePreview, setImagePreview] = useState(null);
   const [pdfFileName, setPdfFileName] = useState("");
+  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+
+  const skillsOptions = [
+    { value: "resoluciondeproblemas", label: "Resolución de Problemas" },
+    { value: "trabajoenequipo", label: "Trabajo en Equipo" },
+    { value: "adaptabilidad", label: "Adaptabilidad" },
+    { value: "comunicacionefectiva", label: "Comunicación Efectiva" },
+    { value: "liderazgo", label: "Liderazgo" },
+    { value: "pensamientocritico", label: "Pensamiento Crítico" },
+    { value: "orientacionaresultados", label: "Orientación a Resultados" },
+    { value: "creatividad", label: "Creatividad" },
+    { value: "gestiondeltiempo", label: "Gestión del Tiempo" },
+    { value: "aprendizajecontinuo", label: "Aprendizaje Continuo" },
+    { value: "dondegente", label: "Don de Gente" },
+    { value: "ensenanza", label: "Enseñanza" },
+    { value: "sociable", label: "Sociable" },
+    { value: "salud", label: "Salud" },
+    { value: "deportes", label: "Deportes" },
+    { value: "logistica", label: "Logística" },
+    { value: "expresionesartisticas", label: "Expresiones Artísticas" },
+    { value: "diseno", label: "Diseño" },
+    { value: "musica", label: "Música" },
+    { value: "ingles", label: "Inglés" },
+    { value: "otrosidiomasnaturales", label: "Otros Idiomas Naturales" },
+    { value: "lenguajesdeprogramacion", label: "Lenguajes de Programación" }
+  ];
+  
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+    setSelectedSkills((prevSelectedSkills) =>
+      checked
+        ? [...prevSelectedSkills, name]
+        : prevSelectedSkills.filter((skill) => skill !== name)
+    );
+  };
 
   const profileUpdate = async (data: ProfileFormData) => {
     try {
@@ -189,6 +225,7 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
+          {/* lista clickeable de array de skills 
           <LabelInputContainer className="mb-4">
             <Label htmlFor="skills">Habilidades</Label>
             <Input
@@ -201,7 +238,45 @@ export default function EstudianteProfileForm({
             {errors.skills && (
               <p className="text-red-500 text-sm">{errors.skills.message}</p>
             )}
-          </LabelInputContainer>
+          </LabelInputContainer>*/}
+          {skillsOptions.map(({ value: skillKey, label: skillLabel }) => (
+            <div key={skillKey} className="flex items-center">
+              <input
+                type="checkbox"
+                id={skillKey}
+                name={skillKey}
+                checked={selectedSkills.includes(skillKey)}
+                onChange={handleCheckboxChange}
+                className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+              />
+              <label
+                htmlFor={skillKey}
+                className="ml-2 block text-sm text-gray-700"
+              >
+                {skillLabel}
+              </label>
+            </div>
+          ))}
+
+          <div className="mt-4">
+            <h3 className="text-sm font-medium text-gray-700">
+              Habilidades seleccionadas:
+            </h3>
+            <ul className="mt-2 list-disc list-inside text-sm text-gray-500">
+              {selectedSkills.length > 0 ? (
+                selectedSkills.map((skill, index) => (
+                  <li key={index}>
+                    {
+                      skillsOptions.find((option) => option.value === skill)
+                        ?.label
+                    }
+                  </li>
+                ))
+              ) : (
+                <p>No has seleccionado ninguna habilidad.</p>
+              )}
+            </ul>
+          </div>
 
           <LabelInputContainer className="mb-4">
             <Label htmlFor="interests">Intereses</Label>
