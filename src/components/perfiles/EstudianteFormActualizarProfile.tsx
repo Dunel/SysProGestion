@@ -242,6 +242,7 @@ export default function EstudianteProfileForm({
                   "Gestión del tiempo",
                   "Aprendizaje continuo",
                   "Don de gente",
+                  "enseñanza",
                   "socialble",
                   "salud",
                   "deportes",
