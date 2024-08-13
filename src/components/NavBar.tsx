@@ -4,6 +4,7 @@ import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -11,12 +12,37 @@ function classNames(...classes: string[]) {
 
 export default function Navbar() {
   const { data: session } = useSession();
-  const navigation = [
+  const [navigation, setNavigation] = useState([
     { name: "PRINCIPAL", href: "/", current: false },
-    { name: "MI PERFIL", href: "/estudiante/perfil", current: false },
-    { name: "MIS APLICACIONES A VACANTES", href: "/estudiante/apply", current: false },
-    { name: "MIS NOTIFICACIONES", href: "/estudiente/notificaciones", current: false },
-  ];
+    { name: "INFORMACION", href: "/informacion", current: false },
+    { name: "INICIAR SESIÓN", href: "/login", current: false },
+  ]);
+
+  const getLinks = () => {
+    if (session?.user.role === "estudiante") {
+      setNavigation([
+        { name: "PRINCIPAL", href: "/estudiante", current: false },
+        { name: "PERFIL", href: "/estudiante/perfil", current: false },
+        { name: "SOLICITUDES", href: "/estudiante/apply", current: false },
+        {
+          name: "MIS SOLICITUDES",
+          href: "/estudiante/apply/myapplys",
+          current: false,
+        },
+        { name: "INICIAR SESIÓN", href: "/login", current: false },
+      ]);
+    } else if (session?.user.role === "alcaldia") {
+      setNavigation([
+        { name: "PRINCIPAL", href: "/alcaldia", current: false },
+        { name: "SOLICITUDES", href: "/alcaldia/apply", current: false },
+        { name: "INICIAR SESIÓN", href: "/login", current: false },
+      ]);
+    }
+  };
+
+  useEffect(() => {
+    getLinks();
+  }, [session?.user.role]);
 
   const pathname = usePathname();
 
@@ -38,9 +64,7 @@ export default function Navbar() {
                   )}
                 </Disclosure.Button>
               </div>
-              
-              
-              
+
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
                   <Link href="/">
@@ -52,11 +76,10 @@ export default function Navbar() {
                   </Link>
                 </div>
 
+                <div className="flex flex-shrink-0 items-center">
+                  <Link href="/estudiante/perfil">Mi Perfil</Link>
+                </div>
 
-               
-               
-               
-               
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
                     {navigation.map((item) =>

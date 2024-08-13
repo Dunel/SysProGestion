@@ -1,23 +1,5 @@
-import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { use, useEffect, useState } from "react";
-
-type ProfileData = {
-  address: string;
-  university: string;
-  quarter: string;
-  skills: string;
-  interests: string;
-  description: string;
-  User: {
-    names: string;
-    lastnames: string;
-    phone: string;
-    cedula: number;
-    mail: string;
-  };
-};
 
 interface EstudianteProfileListoProps {
   onToggleForm: () => void;
@@ -28,25 +10,7 @@ export default function EstudianteProfileListo({
   onToggleForm,
   isFormVisible,
 }: EstudianteProfileListoProps) {
-  const [dataProfile, setDataProfile] = useState<ProfileData | null>(null);
   const { data: session } = useSession();
-  const getProfile = async () => {
-    try {
-      const res = await axios.get("/api/estudiante/perfil");
-      if (res.data.profile) {
-        setDataProfile(res.data.profile);
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log("error lanzado:", error.response?.data.error);
-      } else {
-        console.error("error:", error);
-      }
-    }
-  };
-  useEffect(() => {
-    getProfile();
-  }, [session?.user.profile]);
 
   //!MOSTRANDO ESTE !!!!
   return (
@@ -67,22 +31,22 @@ export default function EstudianteProfileListo({
             {/* Información del Estudiente */}
             <div className="m-1 p-1 word-wrap overflow-wrap">
               <h2 className="text-3xl font-bold text-gray-800 text-center md:text-5xl lg:text-4xl">
-                {dataProfile?.User.names} {dataProfile?.User.lastnames}
+                {session.user.dataProfile.User.names} {session.user.dataProfile.User.lastnames}
               </h2>
               <h2 className="text-2xl font-bold text-gray-800 pt-5 pb-2 md:text-3xl lg:text-2xl">
                 <i>{"profileData.carreraEstudiante falta en db"}</i>
               </h2>
               <p className="text-gray-600 md:text-1x1">
-                <strong>Cedula de identidad:</strong> {dataProfile?.User.cedula}
+                <strong>Cedula de identidad:</strong> {session.user.cedula}
               </p>
               <p className="text-gray-600 md:text-1x1">
-                <strong>Teléfono:</strong> {dataProfile?.User.phone}
+                <strong>Teléfono:</strong> {session.user.dataProfile.User.phone}
               </p>
               <p className="text-gray-600 md:text-1x1">
-                <strong>Correo:</strong> {dataProfile?.User.mail}
+                <strong>Correo:</strong> {session.user.email}
               </p>
               <p className="text-gray-600 md:text-1x1">
-                <strong>Domicilio:</strong> {dataProfile?.address}
+                <strong>Domicilio:</strong> {session.user.dataProfile.address}
               </p>
             </div>
           </div>
@@ -93,19 +57,19 @@ export default function EstudianteProfileListo({
             </h4>
             <div className="mt-2">
               <p className="text-gray-600 md:text-1x1">
-                <strong>Universidad:</strong> {dataProfile?.university}
+                <strong>Universidad:</strong> {session.user.dataProfile.university}
               </p>
               <p className="text-gray-600 md:text-1x1">
-                <strong>trimestre:</strong> {dataProfile?.quarter}
+                <strong>trimestre:</strong> {session.user.dataProfile.quarter}
               </p>
               <p className="text-gray-600 md:text-1x1">
-                <strong>Habilidades:</strong> {dataProfile?.skills}
+                <strong>Habilidades:</strong> {session.user.dataProfile.skills}
               </p>
               <p className="text-gray-600 md:text-1x1">
-                <strong>Intereses:</strong> {dataProfile?.interests}
+                <strong>Intereses:</strong> {session.user.dataProfile.interests}
               </p>
               <p className="text-gray-600 md:text-1x1">
-                <strong>Descripción:</strong> {dataProfile?.description}
+                <strong>Descripción:</strong> {session.user.dataProfile.description}
               </p>
               <p className="text-gray-600 md:text-1x1">
                 <Link

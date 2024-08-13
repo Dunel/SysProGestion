@@ -18,7 +18,7 @@ interface EstudianteFormProfileProps {
 
 export default function EstudianteProfileForm({
   onToggleForm,
-  titleForm
+  titleForm,
 }: EstudianteFormProfileProps) {
   const { data: session, update } = useSession();
   const {
@@ -31,13 +31,51 @@ export default function EstudianteProfileForm({
   });
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [imagePreview, setImagePreview] = useState(null);
+  const [pdfFileName, setPdfFileName] = useState("");
+  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+
+  const skillsOptions = [
+    { value: "resoluciondeproblemas", label: "Resolución de Problemas" },
+    { value: "trabajoenequipo", label: "Trabajo en Equipo" },
+    { value: "adaptabilidad", label: "Adaptabilidad" },
+    { value: "comunicacionefectiva", label: "Comunicación Efectiva" },
+    { value: "liderazgo", label: "Liderazgo" },
+    { value: "pensamientocritico", label: "Pensamiento Crítico" },
+    { value: "orientacionaresultados", label: "Orientación a Resultados" },
+    { value: "creatividad", label: "Creatividad" },
+    { value: "gestiondeltiempo", label: "Gestión del Tiempo" },
+    { value: "aprendizajecontinuo", label: "Aprendizaje Continuo" },
+    { value: "dondegente", label: "Don de Gente" },
+    { value: "ensenanza", label: "Enseñanza" },
+    { value: "sociable", label: "Sociable" },
+    { value: "salud", label: "Salud" },
+    { value: "deportes", label: "Deportes" },
+    { value: "logistica", label: "Logística" },
+    { value: "expresionesartisticas", label: "Expresiones Artísticas" },
+    { value: "diseno", label: "Diseño" },
+    { value: "musica", label: "Música" },
+    { value: "ingles", label: "Inglés" },
+    { value: "otrosidiomasnaturales", label: "Otros Idiomas Naturales" },
+    { value: "lenguajesdeprogramacion", label: "Lenguajes de Programación" }
+  ];
+  
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+    setSelectedSkills((prevSelectedSkills) =>
+      checked
+        ? [...prevSelectedSkills, name]
+        : prevSelectedSkills.filter((skill) => skill !== name)
+    );
+  };
 
   const profileUpdate = async (data: ProfileFormData) => {
     try {
       setLoading(true); // Muestra el loader
       const res = await axios.post("/api/estudiante/perfil", data);
       if (session) {
-        await update({ profile: true });
+        await update({ profile: true, dataProfile: data });
       }
       console.log(res.data);
       router.push("/estudiante/perfil");
@@ -52,9 +90,6 @@ export default function EstudianteProfileForm({
       onToggleForm;
     }
   };
-
-  const [imagePreview, setImagePreview] = useState(null);
-  const [pdfFileName, setPdfFileName] = useState("");
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -76,9 +111,9 @@ export default function EstudianteProfileForm({
 
   return (
     <>
-      <div className="flex flex-col my-4 p-4 rounded-lg md:space-x-4">
-        <h2 className="text-2xl font-bold text-gray-800 text-center dm:text-3xl">
-         {titleForm}
+      <div className="flex flex-col my-4 p-4 md:space-x-4">
+        <h2 className="text-2xl font-bold text-gray-800 text-center dm:text-4xl lg:text-5xl">
+          {titleForm}
         </h2>
       </div>
       <div className=" flex flex-col m-4 my-4 p-4 rounded-lg shadow-lg">
@@ -190,8 +225,75 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
+          {/* lista clickeable de array de skills 
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="description">Da una breve descripción de ti</Label>
+            <Label htmlFor="skills">Habilidades</Label>
+            <Input
+              {...register("skills")}
+              id="skills"
+              placeholder="Habilidades"
+              type="text"
+              className={cn(errors.skills && "bg-red-100 focus:bg-red-100")}
+            />
+            {errors.skills && (
+              <p className="text-red-500 text-sm">{errors.skills.message}</p>
+            )}
+          </LabelInputContainer>*/}
+          {skillsOptions.map(({ value: skillKey, label: skillLabel }) => (
+            <div key={skillKey} className="flex items-center">
+              <input
+                type="checkbox"
+                id={skillKey}
+                name={skillKey}
+                checked={selectedSkills.includes(skillKey)}
+                onChange={handleCheckboxChange}
+                className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+              />
+              <label
+                htmlFor={skillKey}
+                className="ml-2 block text-sm text-gray-700"
+              >
+                {skillLabel}
+              </label>
+            </div>
+          ))}
+
+          <div className="mt-4">
+            <h3 className="text-sm font-medium text-gray-700">
+              Habilidades seleccionadas:
+            </h3>
+            <ul className="mt-2 list-disc list-inside text-sm text-gray-500">
+              {selectedSkills.length > 0 ? (
+                selectedSkills.map((skill, index) => (
+                  <li key={index}>
+                    {
+                      skillsOptions.find((option) => option.value === skill)
+                        ?.label
+                    }
+                  </li>
+                ))
+              ) : (
+                <p>No has seleccionado ninguna habilidad.</p>
+              )}
+            </ul>
+          </div>
+
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="interests">Intereses</Label>
+            <Input
+              {...register("interests")}
+              id="interests"
+              placeholder="Intereses"
+              type="text"
+              className={cn(errors.interests && "bg-red-100 focus:bg-red-100")}
+            />
+            {errors.interests && (
+              <p className="text-red-500 text-sm">{errors.interests.message}</p>
+            )}
+          </LabelInputContainer>
+
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="description">Descripción</Label>
             <Input
               {...register("description")}
               id="description"

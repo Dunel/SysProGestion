@@ -33,6 +33,7 @@ const authOptions: NextAuthOptions = {
         token.profile = user.profile;
       }
       if (trigger === "update" && session.profile) {
+        token.dataProfile = session.dataProfile;
         token.profile = session.profile;
       }
       return token;
@@ -41,6 +42,8 @@ const authOptions: NextAuthOptions = {
         session.user.cedula = token.cedula;
         session.user.email = token.email;
         session.user.profile = token.profile;
+        session.user.role = token.role;
+        session.user.dataProfile = token.dataProfile;
       return session;
     },
     async redirect({ url, baseUrl }) {

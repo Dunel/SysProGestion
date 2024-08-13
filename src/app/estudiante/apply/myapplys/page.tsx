@@ -17,6 +17,7 @@ type Application = {
   apply: [
     {
       id: number;
+      status: string;
     }
   ];
 };
@@ -59,7 +60,8 @@ export default function Page() {
 
   const getApplications = async () => {
     try {
-      const res = await axios.get("/api/estudiante/apply");
+      const res = await axios.get("/api/estudiante/apply/myapply");
+      console.log("data: ", res.data.applications);
       setApplications(res.data.applications);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -75,11 +77,11 @@ export default function Page() {
 
   return (
     <>
-      <Header title={"SOLICITUDES"} subtitle={"aquí solicitas cosas jjj"} />
+      <Header title={"MIS SOLICITUDES"} subtitle={"aquí solicitas cosas jjj"} />
       <ContainerWeb>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <GridMain>
-          {applications && applications.length > 0 ? (
+            {applications && applications.length > 0 ? (
               applications.map((application) => (
                 <div
                   key={application.id}
@@ -92,8 +94,15 @@ export default function Page() {
                     <p className="mt-2 text-gray-600">
                       {application.description}
                     </p>
-                    <p className="mt-2 text-gray-600">{application.location}</p>
-                    <p className="mt-2 text-gray-600">{application.status}</p>
+                    <p className="mt-2 text-gray-600">
+                      Ubicación: {application.location}
+                    </p>
+                    <p className="mt-2 text-gray-600">
+                      Estado de la solicitud: {application.status}
+                    </p>
+                    <p className="mt-2 text-gray-600">
+                      Estado de tu apply: {application.apply[0].status}
+                    </p>
                     <div className="flex justify-between items-start mt-4">
                       {application.status === "inactive" ||
                       application.apply.length > 0 ? (
@@ -134,7 +143,7 @@ export default function Page() {
               ))
             ) : (
               <GridContainer>
-                <p>No hay solicitudes disponibles</p>
+                <p>No tienes solicitudes</p>
               </GridContainer>
             )}
           </GridMain>
