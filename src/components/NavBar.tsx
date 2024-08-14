@@ -11,18 +11,19 @@ function classNames(...classes: string[]) {
 }
 
 export default function Navbar() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [navigation, setNavigation] = useState([
     { name: "PRINCIPAL", href: "/", current: false },
-    { name: "INFORMACION", href: "/informacion", current: false },
     { name: "INICIAR SESIÓN", href: "/login", current: false },
   ]);
 
   const getLinks = () => {
+    if (status !== "authenticated") return;
+
     if (session?.user.role === "estudiante") {
       setNavigation([
         { name: "PRINCIPAL", href: "/estudiante", current: false },
-        { name: "PERFIL", href: "/estudiante/perfil", current: false },
+        { name: "MI PERFIL", href: "/estudiante/perfil", current: false },
         { name: "SOLICITUDES", href: "/estudiante/apply", current: false },
         {
           name: "MIS SOLICITUDES",
@@ -41,10 +42,16 @@ export default function Navbar() {
   };
 
   useEffect(() => {
+    console.log("session", session);
+    console.log("status", status);
     getLinks();
-  }, [session?.user.role]);
+  }, [session?.user.role, status]);
 
   const pathname = usePathname();
+
+  if (status === "loading") {
+    return null; // O puedes mostrar un indicador de carga aquí
+  }
 
   return (
     <Disclosure as="nav" className="bg-gray-950 w-full h-auto min-h-[8vh]">

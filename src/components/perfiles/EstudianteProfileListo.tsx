@@ -74,7 +74,7 @@ export default function EstudianteProfileListo({
               <p className="text-gray-600 md:text-1x1">
                 <Link
                   className="underline text-blue-500 hover:text-blue-700 cursor-pointer"
-                  href={"profileData.reseumenCurricularEstudiante"}
+                  href={"#"}
                 >
                   {" "}
                   Reseumen Curricular{" "}

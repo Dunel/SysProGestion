@@ -32,7 +32,7 @@ const authOptions: NextAuthOptions = {
         token.role = user.role;
         token.profile = user.profile;
       }
-      if (trigger === "update" && session.profile) {
+      if (trigger === "update" && session?.profile) {
         token.dataProfile = session.dataProfile;
         token.profile = session.profile;
       }
@@ -41,8 +41,8 @@ const authOptions: NextAuthOptions = {
     async session({ session, token}) {
         session.user.cedula = token.cedula;
         session.user.email = token.email;
-        session.user.profile = token.profile;
         session.user.role = token.role;
+        session.user.profile = token.profile;
         session.user.dataProfile = token.dataProfile;
       return session;
     },

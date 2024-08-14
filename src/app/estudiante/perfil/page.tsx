@@ -19,7 +19,6 @@ export default function EstudianteInfoForm() {
   const getProfile = async () => {
     try {
       setLoading(true); // Muestra el loader
-      console.log("session?.user.dataProfile:", session?.user.dataProfile);
       if (!session?.user.profile || session.user.dataProfile) {
         setLoading(false);
         return;
