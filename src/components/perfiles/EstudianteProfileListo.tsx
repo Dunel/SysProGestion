@@ -14,7 +14,7 @@ export default function EstudianteProfileListo({
 
   //!MOSTRANDO ESTE !!!!
   return (
-    <div className="relative z-20 m-4 my-4 p-4 rounded-lg mt-10  bg-white shadow lg:shadow-none">
+    <div className="relative z-20 m-4 my-4 p-4 rounded-lg mt-1  bg-white shadow lg:shadow-none">
       {session?.user.profile ? (
         <>
           <div className="flex flex-col items-center md:flex-row md:space-x-4">
@@ -31,7 +31,7 @@ export default function EstudianteProfileListo({
             {/* Información del Estudiente */}
             <div className="m-1 p-1 word-wrap overflow-wrap">
               <h2 className="text-3xl font-bold text-gray-800 text-center md:text-5xl lg:text-4xl">
-                {session.user.dataProfile.User.names} {session.user.dataProfile.User.lastnames}
+                {session.user.dataProfile.names} {session.user.dataProfile.lastnames}
               </h2>
               <h2 className="text-2xl font-bold text-gray-800 pt-5 pb-2 md:text-3xl lg:text-2xl">
                 <i>{"profileData.carreraEstudiante falta en db"}</i>
@@ -40,7 +40,7 @@ export default function EstudianteProfileListo({
                 <strong>Cedula de identidad:</strong> {session.user.cedula}
               </p>
               <p className="text-gray-600 md:text-1x1">
-                <strong>Teléfono:</strong> {session.user.dataProfile.User.phone}
+                <strong>Teléfono:</strong> {session.user.dataProfile.phone}
               </p>
               <p className="text-gray-600 md:text-1x1">
                 <strong>Correo:</strong> {session.user.email}

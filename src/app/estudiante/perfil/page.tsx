@@ -24,7 +24,7 @@ export default function EstudianteInfoForm() {
         return;
       }
       const res = await axios.get("/api/estudiante/perfil");
-      update({ profile: true, dataProfile: res.data.profile });
+      update({ profile: true, dataProfile: res.data.object });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);
@@ -66,7 +66,6 @@ export default function EstudianteInfoForm() {
           </div>
         )}
 
-      {/* //!ARREGLA ESTO, ES CUANDO NO HAY REGISTRO DEL ESTUDIANTE EN LA TABLA Y SE DEBE ABRIR EL FORMULARIO. */}
       {session?.user.profile === false && (
         <div className="w-[80%] m-4 p-4 mx-auto">
           <EstudianteFormActualizarProfile

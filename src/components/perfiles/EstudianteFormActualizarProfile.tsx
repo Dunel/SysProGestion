@@ -1,15 +1,15 @@
 "use client";
-import { useSession } from "next-auth/react";
 import axios from "axios";
-import { profileSchema, ProfileFormData } from "@/validations/profile.schema";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/components/lib/utils";
+import { Oval } from "react-loader-spinner";
+import { profileSchema, ProfileFormData, profileFrontSchema, ProfileFrontFormData } from "@/validations/profile.schema";
+import { useForm } from "react-hook-form";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Oval } from "react-loader-spinner";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface EstudianteFormProfileProps {
   onToggleForm: () => void;
@@ -25,8 +25,8 @@ export default function EstudianteProfileForm({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ProfileFormData>({
-    resolver: zodResolver(profileSchema),
+  } = useForm<ProfileFrontFormData>({
+    resolver: zodResolver(profileFrontSchema),
     mode: "onChange",
   });
   const [loading, setLoading] = useState(false);
@@ -57,16 +57,15 @@ export default function EstudianteProfileForm({
     { value: "musica", label: "Música" },
     { value: "ingles", label: "Inglés" },
     { value: "otrosidiomasnaturales", label: "Otros Idiomas Naturales" },
-    { value: "lenguajesdeprogramacion", label: "Lenguajes de Programación" }
+    { value: "lenguajesdeprogramacion", label: "Lenguajes de Programación" },
   ];
-  
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target;
+    const { value, checked } = e.target;
     setSelectedSkills((prevSelectedSkills) =>
       checked
-        ? [...prevSelectedSkills, name]
-        : prevSelectedSkills.filter((skill) => skill !== name)
+        ? [...prevSelectedSkills, value]
+        : prevSelectedSkills.filter((skill) => skill !== value)
     );
   };
 
@@ -86,9 +85,22 @@ export default function EstudianteProfileForm({
         console.error("error:", error);
       }
     } finally {
-      setLoading(false); // Muestra el loader
+      setLoading(false); // oculta el loader
       onToggleForm;
     }
+  };
+
+  const onSubmit = (data: ProfileFrontFormData) => {
+    const formData = {
+      ...data,
+      skills: selectedSkills,
+    };
+    const validate = profileSchema.safeParse(formData);
+    if (!validate.success) {
+      console.error(validate.error);
+      return;
+    }
+    profileUpdate(formData as ProfileFormData);
   };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,10 +129,7 @@ export default function EstudianteProfileForm({
         </h2>
       </div>
       <div className=" flex flex-col m-4 my-4 p-4 rounded-lg shadow-lg">
-        <form
-          onSubmit={handleSubmit(profileUpdate)}
-          className="form-student-info"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="form-student-info">
           <LabelInputContainer className="mb-4">
             <Label htmlFor="names">Nombres</Label>
             <Input
@@ -225,83 +234,17 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
-          {/* lista clickeable de array de skills 
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="skills">Habilidades</Label>
-            <Input
-              {...register("skills")}
-              id="skills"
-              placeholder="Habilidades"
-              type="text"
-              className={cn(errors.skills && "bg-red-100 focus:bg-red-100")}
-            />
-            {errors.skills && (
-              <p className="text-red-500 text-sm">{errors.skills.message}</p>
-            )}
-          </LabelInputContainer>*/}
-          {skillsOptions.map(({ value: skillKey, label: skillLabel }) => (
-            <div key={skillKey} className="flex items-center">
-              <input
-                type="checkbox"
-                id={skillKey}
-                name={skillKey}
-                checked={selectedSkills.includes(skillKey)}
-                onChange={handleCheckboxChange}
-                className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-              />
-              <label
-                htmlFor={skillKey}
-                className="ml-2 block text-sm text-gray-700"
-              >
-                {skillLabel}
-              </label>
-            </div>
-          ))}
-
-          <div className="mt-4">
-            <h3 className="text-sm font-medium text-gray-700">
-              Habilidades seleccionadas:
-            </h3>
-            <ul className="mt-2 list-disc list-inside text-sm text-gray-500">
-              {selectedSkills.length > 0 ? (
-                selectedSkills.map((skill, index) => (
-                  <li key={index}>
-                    {
-                      skillsOptions.find((option) => option.value === skill)
-                        ?.label
-                    }
-                  </li>
-                ))
-              ) : (
-                <p>No has seleccionado ninguna habilidad.</p>
-              )}
-            </ul>
-          </div>
-
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="interests">Intereses</Label>
-            <Input
-              {...register("interests")}
-              id="interests"
-              placeholder="Intereses"
-              type="text"
-              className={cn(errors.interests && "bg-red-100 focus:bg-red-100")}
-            />
-            {errors.interests && (
-              <p className="text-red-500 text-sm">{errors.interests.message}</p>
-            )}
-          </LabelInputContainer>
-
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="description">Descripción</Label>
+            <Label htmlFor="description">Breve descripción de ti</Label>
             <Input
               {...register("description")}
               id="description"
-              placeholder="Descripción"
-              type="text"
-              className={cn(
-                errors.description && "bg-red-100 focus:bg-red-100"
-              )}
+              placeholder="Soy una persona responsable, hablo ingles fluido y me apasiona la naturaleza..."
+              type="textarea"
+              className={
+                "w-full h-[12vh] verflow-hidden text-ellipsis white-space-nowrap" +
+                cn(errors.description && "bg-red-100 focus:bg-red-100")
+              }
             />
             {errors.description && (
               <p className="text-red-500 text-sm">
@@ -310,27 +253,89 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="interests">Cuales son tus intereses</Label>
+            <Input
+              {...register("interests")}
+              id="interests"
+              placeholder="Me interesa encontrar soluciones a problemas reales mediante el uso de tecnología..."
+              type="textarea"
+              className={
+                "w-full h-[12vh] verflow-hidden text-ellipsis white-space-nowrap" +
+                cn(errors.interests && "bg-red-100 focus:bg-red-100")
+              }
+            />
+            {errors.interests && (
+              <p className="text-red-500 text-sm">{errors.interests.message}</p>
+            )}
+          </LabelInputContainer>
+
+          <LabelInputContainer>
+            <Label htmlFor="skills">
+              Selecciona las habilidades que poseas
+            </Label>
+
+            {skillsOptions.map(({ value, label }) => (
+              <div key={value} className="flex items-center">
+                <input
+                  type="checkbox"
+                  value={value}
+                  onChange={handleCheckboxChange}
+                  className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                />
+                <label
+                  htmlFor={value}
+                  className="ml-2 block text-sm text-gray-700"
+                >
+                  {label}
+                </label>
+              </div>
+            ))}
+
+            <div className="mt-4">
+              <h3 className="text-sm font-medium text-gray-700 m-2">
+                Habilidades seleccionadas:
+              </h3>
+              <ul className="mt-2 list-disc list-inside text-sm text-gray-500">
+                {selectedSkills.length > 0 ? (
+                  selectedSkills.map((skill, index) => (
+                    <li key={index}>
+                      {
+                        skillsOptions.find((option) => option.value === skill)
+                          ?.label
+                      }
+                    </li>
+                  ))
+                ) : (
+                  <p style={{ color: "red" }}>
+                    No has seleccionado ninguna habilidad.
+                  </p>
+                )}
+              </ul>
+            </div>
+          </LabelInputContainer>
+
           {/* //TODO: TEMENOS QUE AGREGAR ESTOS INPUTS A BBDD */}
           {/* **** Imagen de Perfil **** */}
           <Label>
             Sube tu foto <mark> -Agr a la BBDD- </mark>{" "}
           </Label>
-          <div className="w-[100%] m-2 dm:w-[50%]">
+          <div className="w-[100%] m-2 dm:w-[50%] sm:w-[50%] ">
             <Input type="file" accept="image/*" onChange={handleImageChange} />
-            {imagePreview && (
-              <img
-                src={imagePreview}
-                alt="Vista previa"
-                className="mx-auto my-4 w-[40%] h-auto"
-              />
-            )}
           </div>
+          {imagePreview && (
+            <img
+              src={imagePreview}
+              alt="Vista previa"
+              className="mx-auto my-4 w-[40%] h-auto md:w-[30%]"
+            />
+          )}
 
           {/* **** Curriculum PDF **** */}
           <Label>
             Sube tu currículum (Formato PDF) <mark> -Agr a la BBDD- </mark>{" "}
           </Label>
-          <div className="w-[100%] m-2 dm:w-[50%]">
+          <div className="w-[100%] m-2 dm:w-[50%] sm:w-[50%]">
             <Input
               type="file"
               accept="application/pdf"
