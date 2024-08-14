@@ -15,13 +15,9 @@ declare module "next-auth" {
         skills: string;
         interests: string;
         description: string;
-        User: {
-          names: string;
-          lastnames: string;
-          phone: string;
-          cedula: number;
-          mail: string;
-        };
+        names: string;
+        lastnames: string;
+        phone: string;
       };
     };
   }
@@ -38,13 +34,9 @@ declare module "next-auth" {
       skills: string;
       interests: string;
       description: string;
-      User: {
-        names: string;
-        lastnames: string;
-        phone: string;
-        cedula: number;
-        mail: string;
-      };
+      names: string;
+      lastnames: string;
+      phone: string;
     };
   }
 }
@@ -62,13 +54,9 @@ declare module "next-auth/jwt" {
       skills: string;
       interests: string;
       description: string;
-      User: {
-        names: string;
-        lastnames: string;
-        phone: string;
-        cedula: number;
-        mail: string;
-      };
+      names: string;
+      lastnames: string;
+      phone: string;
     };
   }
 }
