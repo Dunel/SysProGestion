@@ -30,28 +30,20 @@ export default function Navbar() {
           href: "/estudiante/apply/myapplys",
           current: false,
         },
-        { name: "INICIAR SESIÓN", href: "/login", current: false },
       ]);
     } else if (session?.user.role === "alcaldia") {
       setNavigation([
         { name: "PRINCIPAL", href: "/alcaldia", current: false },
         { name: "SOLICITUDES", href: "/alcaldia/apply", current: false },
-        { name: "INICIAR SESIÓN", href: "/login", current: false },
       ]);
     }
   };
 
   useEffect(() => {
-    console.log("session", session);
-    console.log("status", status);
     getLinks();
-  }, [session?.user.role, status]);
+  }, [status]);
 
   const pathname = usePathname();
-
-  if (status === "loading") {
-    return null; // O puedes mostrar un indicador de carga aquí
-  }
 
   return (
     <Disclosure as="nav" className="bg-gray-950 w-full h-auto min-h-[8vh]">
@@ -83,14 +75,9 @@ export default function Navbar() {
                   </Link>
                 </div>
 
-                <div className="flex flex-shrink-0 items-center">
-                  <Link href="/estudiante/perfil">Mi Perfil</Link>
-                </div>
-
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
                     {navigation.map((item) =>
-                      item.name === "INICIAR SESIÓN" && session ? null : (
                         <Link
                           key={item.name}
                           href={item.href}
@@ -106,7 +93,6 @@ export default function Navbar() {
                         >
                           {item.name}
                         </Link>
-                      )
                     )}
                     {session && (
                       <button
