@@ -11,7 +11,7 @@ export default function EstudianteInfoForm() {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const { data: session, update } = useSession();
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const toggleFormVisibility = () => {
     setIsFormVisible((prev) => !prev);
   };
@@ -52,7 +52,7 @@ export default function EstudianteInfoForm() {
         }
       />
 
-      {!session?.user.dataProfile || loading && ( // Muestra el loader si está cargando
+      {session?.user.dataProfile === null || loading && ( // Muestra el loader si está cargando
           <div className="flex justify-center items-center flex-col mt-10">
             <Oval
               color="#000000"
