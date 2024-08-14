@@ -103,13 +103,22 @@ export async function ProfileGet(req: NextRequest) {
             names: true,
             lastnames: true,
             phone: true,
-            mail: true,
-            cedula: true,
           }
         }
       },
     });
-    return NextResponse.json({ profile }, { status: 200 });
+    const object = {
+      names: profile?.User.names,
+      lastnames: profile?.User.lastnames,
+      phone: profile?.User.phone,
+      address: profile?.address,
+      university: profile?.university,
+      quarter: profile?.quarter,
+      skills: profile?.skills,
+      interests: profile?.interests,
+      description: profile?.description,
+    };
+    return NextResponse.json({ object }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(

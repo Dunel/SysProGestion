@@ -12,16 +12,12 @@ declare module "next-auth" {
         address: string;
         university: string;
         quarter: string;
-        skills: string;
+        skills: [string];
         interests: string;
         description: string;
-        User: {
-          names: string;
-          lastnames: string;
-          phone: string;
-          cedula: number;
-          mail: string;
-        };
+        names: string;
+        lastnames: string;
+        phone: string;
       };
     };
   }
@@ -35,16 +31,12 @@ declare module "next-auth" {
       address: string;
       university: string;
       quarter: string;
-      skills: string;
+      skills: [string];
       interests: string;
       description: string;
-      User: {
-        names: string;
-        lastnames: string;
-        phone: string;
-        cedula: number;
-        mail: string;
-      };
+      names: string;
+      lastnames: string;
+      phone: string;
     };
   }
 }
@@ -59,16 +51,12 @@ declare module "next-auth/jwt" {
       address: string;
       university: string;
       quarter: string;
-      skills: string;
+      skills: [string];
       interests: string;
       description: string;
-      User: {
-        names: string;
-        lastnames: string;
-        phone: string;
-        cedula: number;
-        mail: string;
-      };
+      names: string;
+      lastnames: string;
+      phone: string;
     };
   }
 }

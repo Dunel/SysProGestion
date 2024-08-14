@@ -19,13 +19,12 @@ export default function EstudianteInfoForm() {
   const getProfile = async () => {
     try {
       setLoading(true); // Muestra el loader
-      //console.log("session?.user.dataProfile:", session?.user.dataProfile);
       if (!session?.user.profile || session.user.dataProfile) {
         setLoading(false);
         return;
       }
       const res = await axios.get("/api/estudiante/perfil");
-      update({ profile: true, dataProfile: res.data.profile });
+      update({ profile: true, dataProfile: res.data.object });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);
