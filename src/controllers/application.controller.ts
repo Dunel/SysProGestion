@@ -14,6 +14,7 @@ export async function getApplication(req: NextRequest) {
       select: {
         id: true,
         title: true,
+        type: true,
         description: true,
         location: true,
         status: true,

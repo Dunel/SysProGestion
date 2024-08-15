@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 type Application = {
   id: number;
   title: string;
+  type: "pasantia" | "servicio" | "proyecto";
   description: string;
   location: string;
   status: string;
@@ -73,13 +74,19 @@ export default function Page() {
     getApplications();
   }, []);
 
+  const typeDesc = {
+    pasantia: "Pasantía",
+    servicio: "Servicio Comunitario",
+    proyecto: "Proyecto",
+  };
+
   return (
     <>
       <Header title={"SOLICITUDES"} subtitle={"aquí solicitas cosas jjj"} />
       <ContainerWeb>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <GridMain>
-          {applications && applications.length > 0 ? (
+            {applications && applications.length > 0 ? (
               applications.map((application) => (
                 <div
                   key={application.id}
@@ -90,10 +97,15 @@ export default function Page() {
                       {application.title}
                     </h2>
                     <p className="mt-2 text-gray-600">
+                      {typeDesc[application.type]}
+                    </p>
+                    <p className="mt-2 text-gray-600">
                       {application.description}
                     </p>
                     <p className="mt-2 text-gray-600">{application.location}</p>
-                    <p className="mt-2 text-gray-600">{application.status}</p>
+                    <p className="mt-2 text-gray-600">
+                      {application.status === "active" ? "Activa" : "Inactiva"}
+                    </p>
                     <div className="flex justify-between items-start mt-4">
                       {application.status === "inactive" ||
                       application.apply.length > 0 ? (

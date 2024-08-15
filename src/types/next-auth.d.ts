@@ -6,7 +6,7 @@ declare module "next-auth" {
     user: {
       cedula: number;
       email: string;
-      role: string;
+      role: "estudiante" | "alcaldia" | "dependencia";
       profile: boolean;
       dataProfile: {
         address: string;
@@ -25,7 +25,7 @@ declare module "next-auth" {
   interface User {
     cedula: number;
     email: string;
-    role: string;
+    role: "estudiante" | "alcaldia" | "dependencia";
     profile: boolean;
     dataProfile: {
       address: string;
@@ -45,7 +45,7 @@ declare module "next-auth/jwt" {
   interface JWT {
     cedula: number;
     email: string;
-    role: string;
+    role: "estudiante" | "alcaldia" | "dependencia";
     profile: boolean;
     dataProfile: {
       address: string;

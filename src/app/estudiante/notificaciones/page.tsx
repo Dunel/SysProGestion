@@ -6,14 +6,14 @@ import GridSecond from "@/components/GridSecond";
 import Header from "@/components/Header";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { useState, useEffect, ReactNode } from "react";
+import { useState, useEffect } from "react";
 
 type Notificaciones = {
-  action: string;
+  action: "apply" | "reject" | "accept" | "proposal" | "delete";
   date: Date;
   application: {
     title: string;
-    type: string;
+    type: "servicio" | "pasantia" | "proyecto";
   };
 };
 
@@ -62,26 +62,11 @@ export default function Page() {
                 notificaciones.map((noti, index) => (
                   <div key={index}>
                     <p>
-                      {
-                        actionDesc[
-                          (noti.action as "apply") ||
-                            "reject" ||
-                            "accept" ||
-                            "proposal" ||
-                            "delete"
-                        ]
-                      }
+                      {actionDesc[noti.action]}
                       <strong>
                         {" "}
-                        {
-                          typeDesc[
-                            (noti.application.type as "servicio") ||
-                              "pasantia" ||
-                              "proyecto"
-                          ]
-                        }
-                      </strong>{" "}
-                      de <strong>{noti.application.title}</strong>
+                        {typeDesc[noti.application.type]}
+                      </strong> de <strong>{noti.application.title}</strong>
                     </p>
                     <p>Fecha: {new Date(noti.date).toLocaleString()}</p>
                   </div>
