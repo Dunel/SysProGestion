@@ -42,7 +42,8 @@ export default function Login() {
             Correo
           </label>
           <input
-            type="text"
+            type="email"
+            placeholder="your email"
             id="username"
             name="username"
             onChange={(e) => setEmail(e.target.value)}
