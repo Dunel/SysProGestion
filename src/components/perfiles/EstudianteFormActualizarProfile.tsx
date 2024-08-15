@@ -62,27 +62,11 @@ export default function EstudianteProfileForm({
   });
 
   useEffect(() => {
-    if (data) {
-      setFormData({
-        names: data.names || "",
-        lastnames: data.lastnames || "",
-        phone: data.phone || "",
-        address: data.address || "",
-        university: data.university || "",
-        quarter: data.quarter || "",
-        description: data.description || "",
-        interests: data.interests || "",
-      });
-      setSelectedSkills(data.skills || []);
-
-      // Actualizar los valores en el formulario
-      Object.entries(data).forEach(([key, value]) => {
-        if (typeof value === 'string' || typeof value === 'number') {
-          setValue(key as keyof ProfileFrontFormData, value);
-        }
-      });
+    if(session && session.user.dataProfile.skills.length > 0){
+      setSelectedSkills(session?.user.dataProfile.skills);
     }
-  }, [data, setValue]);
+  }, [session?.user.dataProfile.skills]);
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
