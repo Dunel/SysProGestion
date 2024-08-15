@@ -15,9 +15,9 @@ export default function EstudianteProfileListo({
 
   //!MOSTRANDO ESTE !!!!
   return (
-    <div className="relative z-20 m-4 my-4 p-4 rounded-lg mt-1 shadow lg:shadow-none">
+    <div className="relative z-20 m-2 mt-6 p-2 pb-0 mb-0 rounded-lg mt-1 shadow lg:shadow-none">
       {session?.user.profile ? (
-        <div className="mt-2 bg-white md:sticky md:top-[15vh]">
+        <div className="my-2 bg-white mb-2 md:sticky md:top-[15vh]">
           <div className="flex flex-col items-center md:flex-row md:space-x-4">
             {/* Foto del Estudiante */}
             <div className="m-1 p-1">
@@ -75,26 +75,29 @@ export default function EstudianteProfileListo({
               </p>
 
               <p className="m-2 text-gray-600 md:text-1x1">
-                <Link
+                
+                {/* <Link
                   className="underline text-blue-500 hover:text-blue-700 cursor-pointer"
                   href={"profileData.reseumenCurricularEstudiante"}
                 >
                   {" "}
                   Reseumen Curricular{" "}
-                </Link>
+                </Link> */}
+                
               </p>
             </div>
           </div>
           
-          <div className="flex justify-center mt-2">
+          <div className="flex justify-center my-2">
             <button
               onClick={onToggleForm}
-              className="w-[100%] bg-black hover:bg-blue-600 text-white font-bold py-2 px-4 rounded md:w-[50%]"
+              className="m-2 w-[100%] bg-black hover:bg-blue-600 text-white font-bold py-2 px-4 rounded md:w-[50%]"
             >
               {isFormVisible
                 ? "Descartar la Actualizacion"
                 : "Actualizar Perfil"}
             </button>
+           
           </div>
         </div>
       ) : (
@@ -104,7 +107,7 @@ export default function EstudianteProfileListo({
           </p>
           <button
             onClick={onToggleForm}
-            className="bg-black hover:bg-blue-600 text-white font-bold py-2 px-4 rounded md:w-[70%]"
+            className="m-2 bg-black hover:bg-blue-600 text-white font-bold py-2 px-4 rounded md:w-[70%]"
           >
             {isFormVisible ? "Descartar la Actualizacion" : "Actualizar Perfil"}
           </button>

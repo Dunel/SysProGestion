@@ -180,7 +180,7 @@ export default function EstudianteProfileForm({
   return (
     <>
       <div className="flex flex-col my-4 p-4 md:space-x-4">
-        <h2 className="text-2xl font-bold text-gray-800 text-center dm:text-4xl lg:text-5xl">
+        <h2 className="text-2xl font-bold text-gray-800 text-center md:text-3xl">
           {titleForm}
         </h2>
       </div>
@@ -309,7 +309,6 @@ export default function EstudianteProfileForm({
             <Label htmlFor="interests">Cuáles son tus intereses</Label>
             <Input
               {...register("interests")}
-              type="textarea"
               defaultValue={formData.interests}
               onChange={handleInputChange}
               id="interests"
@@ -366,6 +365,8 @@ export default function EstudianteProfileForm({
             />
           )}
 
+
+{/* 
           <Label>Sube tu currículum (Formato PDF) <mark> -Agr a la BBDD- </mark> </Label>
           <div className="w-[100%] m-2 dm:w-[50%] sm:w-[50%]">
             <Input
@@ -376,7 +377,7 @@ export default function EstudianteProfileForm({
             {pdfFileName && (
               <p className="my-4 text-center">Archivo seleccionado: {pdfFileName}</p>
             )}
-          </div>
+          </div> */}
 
           <div className="flex justify-center">
             <button

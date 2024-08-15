@@ -76,9 +76,33 @@ export default function EstudianteInfoForm() {
             data={profileData}
           />
         </div>
-      )}
+      )
 
-      {session?.user.dataProfile && (
+    
+    }
+
+    
+
+      {
+          (!session?.user.dataProfile) && (session?.user.profile != false)
+          ? ( // Muestra el loader si está cargando
+            <div className="flex justify-center items-center flex-col mt-10">
+              <Oval
+                color="#000000"
+                secondaryColor="#FFFFFF" // Color de fondo blanco
+                height={50}
+                width={50}
+                strokeWidth={5}
+              />
+              <br />
+              <span>Espere por favor, su informacion se esta cargando...</span>
+            </div>
+          )
+      
+      
+      
+      
+      : (
         <div
           className={`${
             isFormVisible
