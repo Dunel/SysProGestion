@@ -30,11 +30,21 @@ export default function Navbar() {
           href: "/estudiante/apply/myapplys",
           current: false,
         },
+        {
+          name: "NOTIFICACIONES",
+          href: "/estudiante/notificaciones",
+          current: false,
+        },
       ]);
     } else if (session?.user.role === "alcaldia") {
       setNavigation([
         { name: "PRINCIPAL", href: "/alcaldia", current: false },
         { name: "SOLICITUDES", href: "/alcaldia/apply", current: false },
+        {
+          name: "NOTIFICACIONES",
+          href: "/alcaldia/notificaciones",
+          current: false,
+        },
       ]);
     }
   };
@@ -77,23 +87,23 @@ export default function Navbar() {
 
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
-                    {navigation.map((item) =>
-                        <Link
-                          key={item.name}
-                          href={item.href}
-                          className={classNames(
-                            pathname === item.href
-                              ? "bg-gray-900 text-white"
-                              : "text-gray-300 hover:bg-gray-900 hover:text-white",
-                            "rounded-md px-3 py-2 text-sm font-medium"
-                          )}
-                          aria-current={
-                            pathname === item.href ? "page" : undefined
-                          }
-                        >
-                          {item.name}
-                        </Link>
-                    )}
+                    {navigation.map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        className={classNames(
+                          pathname === item.href
+                            ? "bg-gray-900 text-white"
+                            : "text-gray-300 hover:bg-gray-900 hover:text-white",
+                          "rounded-md px-3 py-2 text-sm font-medium"
+                        )}
+                        aria-current={
+                          pathname === item.href ? "page" : undefined
+                        }
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
                     {session && (
                       <button
                         className={

@@ -63,12 +63,13 @@ export async function apply(req: NextRequest) {
         },
       },
     });
-    if (application?.apply.length) {
+    if (application?.apply.length || !application) {
       return NextResponse.json(
-        { error: "Ya has aplicado a esta oferta" },
+        { error: "Ya has aplicado a esta oferta o no existe" },
         { status: 400 }
       );
     }
+
     await prisma.application.update({
       where: {
         id: result,
@@ -77,6 +78,16 @@ export async function apply(req: NextRequest) {
         apply: {
           create: {
             userCedula: token.cedula,
+          },
+        },
+        notification: {
+          createMany: {
+            data: [
+              {
+                userCedula: token.cedula,
+                action: "apply",
+              },
+            ],
           },
         },
       },
@@ -122,7 +133,7 @@ export async function deleteApply(req: NextRequest) {
         },
       },
     });
-    if (!application?.apply.length) {
+    if (!application || !application?.apply.length) {
       return NextResponse.json(
         { error: "No has aplicado a esta oferta" },
         { status: 400 }
@@ -136,6 +147,16 @@ export async function deleteApply(req: NextRequest) {
         apply: {
           delete: {
             id: result.idApply,
+          },
+        },
+        notification: {
+          createMany: {
+            data: [
+              {
+                userCedula: token.cedula,
+                action: "delete"
+              },
+            ],
           },
         },
       },
