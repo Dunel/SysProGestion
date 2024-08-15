@@ -7,33 +7,89 @@ import { Oval } from "react-loader-spinner";
 import { profileSchema, ProfileFormData, profileFrontSchema, ProfileFrontFormData } from "@/validations/profile.schema";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 interface EstudianteFormProfileProps {
   onToggleForm: () => void;
   titleForm: string;
+  data: { 
+    address: string; 
+    university: string; 
+    quarter: string; 
+    skills: string[]; 
+    interests: string; 
+    description: string; 
+    names: string; 
+    lastnames: string; 
+    phone: string; 
+  } | null;
 }
 
 export default function EstudianteProfileForm({
   onToggleForm,
   titleForm,
+  data,
 }: EstudianteFormProfileProps) {
   const { data: session, update } = useSession();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [pdfFileName, setPdfFileName] = useState("");
+  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [formData, setFormData] = useState({
+    names: "",
+    lastnames: "",
+    phone: "",
+    address: "",
+    university: "",
+    quarter: "",
+    description: "",
+    interests: "",
+  });
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<ProfileFrontFormData>({
     resolver: zodResolver(profileFrontSchema),
     mode: "onChange",
   });
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
-  const [imagePreview, setImagePreview] = useState(null);
-  const [pdfFileName, setPdfFileName] = useState("");
-  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      setFormData({
+        names: data.names || "",
+        lastnames: data.lastnames || "",
+        phone: data.phone || "",
+        address: data.address || "",
+        university: data.university || "",
+        quarter: data.quarter || "",
+        description: data.description || "",
+        interests: data.interests || "",
+      });
+      setSelectedSkills(data.skills || []);
+
+      // Actualizar los valores en el formulario
+      Object.entries(data).forEach(([key, value]) => {
+        if (typeof value === 'string' || typeof value === 'number') {
+          setValue(key as keyof ProfileFrontFormData, value);
+        }
+      });
+    }
+  }, [data, setValue]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value,
+    }));
+    setValue(name as keyof ProfileFrontFormData, value);
+  };
 
   const skillsOptions = [
     { value: "resoluciondeproblemas", label: "Resolución de Problemas" },
@@ -71,7 +127,7 @@ export default function EstudianteProfileForm({
 
   const profileUpdate = async (data: ProfileFormData) => {
     try {
-      setLoading(true); // Muestra el loader
+      setLoading(true);
       const res = await axios.post("/api/estudiante/perfil", data);
       if (session) {
         await update({ profile: true, dataProfile: data });
@@ -85,8 +141,8 @@ export default function EstudianteProfileForm({
         console.error("error:", error);
       }
     } finally {
-      setLoading(false); // oculta el loader
-      onToggleForm;
+      setLoading(false);
+      onToggleForm();
     }
   };
 
@@ -108,7 +164,7 @@ export default function EstudianteProfileForm({
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result as any);
+        setImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -128,13 +184,16 @@ export default function EstudianteProfileForm({
           {titleForm}
         </h2>
       </div>
-      <div className=" flex flex-col m-4 my-4 p-4 rounded-lg shadow-lg">
+      <div className="flex flex-col m-4 my-4 p-4 rounded-lg shadow-lg">
         <form onSubmit={handleSubmit(onSubmit)} className="form-student-info">
           <LabelInputContainer className="mb-4">
             <Label htmlFor="names">Nombres</Label>
             <Input
               {...register("names")}
+              defaultValue={formData.names}
+              onChange={handleInputChange}
               id="names"
+              name="names"
               placeholder="Nombres"
               type="text"
               className={cn(errors.names && "bg-red-100 focus:bg-red-100")}
@@ -148,7 +207,10 @@ export default function EstudianteProfileForm({
             <Label htmlFor="lastnames">Apellidos</Label>
             <Input
               {...register("lastnames")}
+              defaultValue={formData.lastnames}
+              onChange={handleInputChange}
               id="lastnames"
+              name="lastnames"
               placeholder="Apellidos"
               type="text"
               className={cn(errors.lastnames && "bg-red-100 focus:bg-red-100")}
@@ -162,7 +224,10 @@ export default function EstudianteProfileForm({
             <Label htmlFor="phone">Teléfono</Label>
             <Input
               {...register("phone")}
+              defaultValue={formData.phone}
+              onChange={handleInputChange}
               id="phone"
+              name="phone"
               placeholder="Teléfono"
               type="text"
               className={cn(errors.phone && "bg-red-100 focus:bg-red-100")}
@@ -176,7 +241,10 @@ export default function EstudianteProfileForm({
             <Label htmlFor="address">Dirección</Label>
             <Input
               {...register("address")}
+              defaultValue={formData.address}
+              onChange={handleInputChange}
               id="address"
+              name="address"
               placeholder="Dirección"
               type="text"
               className={cn(errors.address && "bg-red-100 focus:bg-red-100")}
@@ -187,36 +255,19 @@ export default function EstudianteProfileForm({
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="university">Universidad </Label>
+            <Label htmlFor="university">Universidad</Label>
             <Input
               {...register("university")}
+              defaultValue={formData.university}
+              onChange={handleInputChange}
               id="university"
+              name="university"
               placeholder="Universidad"
               type="text"
               className={cn(errors.university && "bg-red-100 focus:bg-red-100")}
             />
             {errors.university && (
-              <p className="text-red-500 text-sm">
-                {errors.university.message}
-              </p>
-            )}
-          </LabelInputContainer>
-
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="university">
-              Carrera <mark> -Agr a la BBDD- </mark>{" "}
-            </Label>
-            <Input
-              // {...register("carrera")}
-              // id="university"
-              placeholder="Carrera que cursas"
-              type="text"
-              className={cn(errors.university && "bg-red-100 focus:bg-red-100")}
-            />
-            {errors.university && (
-              <p className="text-red-500 text-sm">
-                {errors.university.message}
-              </p>
+              <p className="text-red-500 text-sm">{errors.university.message}</p>
             )}
           </LabelInputContainer>
 
@@ -224,7 +275,10 @@ export default function EstudianteProfileForm({
             <Label htmlFor="quarter">Trimestre</Label>
             <Input
               {...register("quarter")}
+              defaultValue={formData.quarter}
+              onChange={handleInputChange}
               id="quarter"
+              name="quarter"
               placeholder="Trimestre"
               type="text"
               className={cn(errors.quarter && "bg-red-100 focus:bg-red-100")}
@@ -238,32 +292,30 @@ export default function EstudianteProfileForm({
             <Label htmlFor="description">Breve descripción de ti</Label>
             <Input
               {...register("description")}
-              id="description"
-              placeholder="Soy una persona responsable, hablo ingles fluido y me apasiona la naturaleza..."
               type="textarea"
-              className={
-                "w-full h-[12vh] verflow-hidden text-ellipsis white-space-nowrap" +
-                cn(errors.description && "bg-red-100 focus:bg-red-100")
-              }
+              defaultValue={formData.description}
+              onChange={handleInputChange}
+              id="description"
+              name="description"
+              placeholder="Soy una persona responsable, hablo inglés fluido y me apasiona la naturaleza..."
+              className={`w-full h-[12vh] overflow-hidden text-ellipsis white-space-nowrap ${cn(errors.description && "bg-red-100 focus:bg-red-100")}`}
             />
             {errors.description && (
-              <p className="text-red-500 text-sm">
-                {errors.description.message}
-              </p>
+              <p className="text-red-500 text-sm">{errors.description.message}</p>
             )}
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="interests">Cuales son tus intereses</Label>
+            <Label htmlFor="interests">Cuáles son tus intereses</Label>
             <Input
               {...register("interests")}
-              id="interests"
-              placeholder="Me interesa encontrar soluciones a problemas reales mediante el uso de tecnología..."
               type="textarea"
-              className={
-                "w-full h-[12vh] verflow-hidden text-ellipsis white-space-nowrap" +
-                cn(errors.interests && "bg-red-100 focus:bg-red-100")
-              }
+              defaultValue={formData.interests}
+              onChange={handleInputChange}
+              id="interests"
+              name="interests"
+              placeholder="Me interesa encontrar soluciones a problemas reales mediante el uso de tecnología..."
+              className={`w-full h-[12vh] overflow-hidden text-ellipsis white-space-nowrap ${cn(errors.interests && "bg-red-100 focus:bg-red-100")}`}
             />
             {errors.interests && (
               <p className="text-red-500 text-sm">{errors.interests.message}</p>
@@ -271,55 +323,38 @@ export default function EstudianteProfileForm({
           </LabelInputContainer>
 
           <LabelInputContainer>
-            <Label htmlFor="skills">
-              Selecciona las habilidades que poseas
-            </Label>
-
+            <Label htmlFor="skills">Selecciona las habilidades que poseas</Label>
             {skillsOptions.map(({ value, label }) => (
               <div key={value} className="flex items-center">
-                <input
+                <Input
                   type="checkbox"
                   value={value}
+                  checked={selectedSkills.includes(value)}
                   onChange={handleCheckboxChange}
                   className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                 />
-                <label
-                  htmlFor={value}
-                  className="ml-2 block text-sm text-gray-700"
-                >
+                <label htmlFor={value} className="ml-2 block text-sm text-gray-700">
                   {label}
                 </label>
               </div>
             ))}
-
             <div className="mt-4">
-              <h3 className="text-sm font-medium text-gray-700 m-2">
-                Habilidades seleccionadas:
-              </h3>
+              <h3 className="text-sm font-medium text-gray-700 m-2">Habilidades seleccionadas:</h3>
               <ul className="mt-2 list-disc list-inside text-sm text-gray-500">
                 {selectedSkills.length > 0 ? (
                   selectedSkills.map((skill, index) => (
                     <li key={index}>
-                      {
-                        skillsOptions.find((option) => option.value === skill)
-                          ?.label
-                      }
+                      {skillsOptions.find((option) => option.value === skill)?.label}
                     </li>
                   ))
                 ) : (
-                  <p style={{ color: "red" }}>
-                    No has seleccionado ninguna habilidad.
-                  </p>
+                  <p style={{ color: "red" }}>No has seleccionado ninguna habilidad.</p>
                 )}
               </ul>
             </div>
           </LabelInputContainer>
 
-          {/* //TODO: TEMENOS QUE AGREGAR ESTOS INPUTS A BBDD */}
-          {/* **** Imagen de Perfil **** */}
-          <Label>
-            Sube tu foto <mark> -Agr a la BBDD- </mark>{" "}
-          </Label>
+          <Label>Sube tu foto <mark> -Agr a la BBDD- </mark> </Label>
           <div className="w-[100%] m-2 dm:w-[50%] sm:w-[50%] ">
             <Input type="file" accept="image/*" onChange={handleImageChange} />
           </div>
@@ -331,10 +366,7 @@ export default function EstudianteProfileForm({
             />
           )}
 
-          {/* **** Curriculum PDF **** */}
-          <Label>
-            Sube tu currículum (Formato PDF) <mark> -Agr a la BBDD- </mark>{" "}
-          </Label>
+          <Label>Sube tu currículum (Formato PDF) <mark> -Agr a la BBDD- </mark> </Label>
           <div className="w-[100%] m-2 dm:w-[50%] sm:w-[50%]">
             <Input
               type="file"
@@ -342,9 +374,7 @@ export default function EstudianteProfileForm({
               onChange={handlePdfChange}
             />
             {pdfFileName && (
-              <p className="my-4 text-center">
-                Archivo seleccionado: {pdfFileName}
-              </p>
+              <p className="my-4 text-center">Archivo seleccionado: {pdfFileName}</p>
             )}
           </div>
 
@@ -357,6 +387,13 @@ export default function EstudianteProfileForm({
             </button>
           </div>
         </form>
+      
+
+
+
+
+
+
         {loading && ( // Muestra el loader si está cargando
           <div className="flex justify-center items-center flex-col mt-10">
             <Oval

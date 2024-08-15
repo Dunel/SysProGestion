@@ -12,11 +12,12 @@ export default function EstudianteProfileListo({
 }: EstudianteProfileListoProps) {
   const { data: session } = useSession();
 
+
   //!MOSTRANDO ESTE !!!!
   return (
-    <div className="relative z-20 m-4 my-4 p-4 rounded-lg mt-1  bg-white shadow lg:shadow-none">
+    <div className="relative z-20 m-4 my-4 p-4 rounded-lg mt-1 shadow lg:shadow-none">
       {session?.user.profile ? (
-        <>
+        <div className="mt-2 bg-white md:sticky md:top-[15vh]">
           <div className="flex flex-col items-center md:flex-row md:space-x-4">
             {/* Foto del Estudiante */}
             <div className="m-1 p-1">
@@ -52,26 +53,28 @@ export default function EstudianteProfileListo({
           </div>
 
           <div className="mt-6">
-            <h4 className="text-2xl font-bold text-gray-800 pt-5 pb-2 text-center md:text-4xl lg:text-3xl">
+            <h4 className="text-2xl font-bold text-gray-800 m-2 text-center md:text-4xl lg:text-3xl">
               Perfil Profesional
             </h4>
             <div className="mt-2">
-              <p className="text-gray-600 md:text-1x1">
+              <p className=" m-2 text-gray-600 md:text-1x1">
                 <strong>Universidad:</strong> {session.user.dataProfile.university}
               </p>
-              <p className="text-gray-600 md:text-1x1">
+              <p className="m-2 text-gray-600 md:text-1x1">
                 <strong>trimestre:</strong> {session.user.dataProfile.quarter}
               </p>
-              <p className="text-gray-600 md:text-1x1">
-                <strong>Habilidades:</strong> {session.user.dataProfile.skills}
-              </p>
-              <p className="text-gray-600 md:text-1x1">
+            
+              <p className="m-2 text-gray-600 md:text-1x1">
                 <strong>Intereses:</strong> {session.user.dataProfile.interests}
               </p>
-              <p className="text-gray-600 md:text-1x1">
+              <p className="m-2 text-gray-600 md:text-1x1">
                 <strong>Descripción:</strong> {session.user.dataProfile.description}
               </p>
-              <p className="text-gray-600 md:text-1x1">
+              <p className="m-2 text-gray-600 md:text-1x1">
+                <strong>Habilidades:</strong> {formatSkillsToList(session.user.dataProfile.skills)}
+              </p>
+
+              <p className="m-2 text-gray-600 md:text-1x1">
                 <Link
                   className="underline text-blue-500 hover:text-blue-700 cursor-pointer"
                   href={"profileData.reseumenCurricularEstudiante"}
@@ -82,6 +85,7 @@ export default function EstudianteProfileListo({
               </p>
             </div>
           </div>
+          
           <div className="flex justify-center mt-2">
             <button
               onClick={onToggleForm}
@@ -92,7 +96,7 @@ export default function EstudianteProfileListo({
                 : "Actualizar Perfil"}
             </button>
           </div>
-        </>
+        </div>
       ) : (
         <div className="justify-center">
           <p className="text-gray-600 text-center">
@@ -109,3 +113,44 @@ export default function EstudianteProfileListo({
     </div>
   );
 }
+
+
+
+const formatSkillsToList = (skills: string[]): JSX.Element => {
+  // Mapeo de habilidades aglutinadas a su forma formateada
+  const skillMapping: { [key: string]: string } = {
+    "resoluciondeproblemas": "Resolucion de problemas",
+    "trabajoenequipo": "Trabajo en equipo",
+    "adaptabilidad": "Adaptabilidad",
+    "comunicacionefectiva": "Comunicacion efectiva",
+    "liderazgo": "Liderazgo",
+    "pensamientocritico": "Pensamiento crítico",
+    "orientacionaresultados": "Orientacion a resultados",
+    "creatividad": "Creatividad",
+    "gestiondeltiempo": "Gestión del tiempo",
+    "aprendizajecontinuo": "Aprendizaje continuo",
+    "dondegente": "Don de gente",
+    "ensenanza": "Enseñanza",
+    "sociable": "Sociable",
+    "salud": "Salud",
+    "deportes": "Deportes",
+    "logistica": "Logística",
+    "expresionesartisticas": "Expresiones artísticas",
+    "diseno": "Diseño",
+    "musica": "Música",
+    "ingles": "Inglés",
+    "otrosidiomasnaturales": "Otros idiomas naturales",
+    "lenguajesdeprogramacion": "Lenguajes de programación"
+  };
+
+  // Formatear habilidades usando el mapeo
+  const formattedSkills = skills.map(skill => skillMapping[skill] || skill);
+
+  return (
+    <ol className="list-decimal pl-5">
+      {formattedSkills.map((skill, index) => (
+        <li key={index} className="text-gray-600">{skill}</li>
+      ))}
+    </ol>
+  );
+};
