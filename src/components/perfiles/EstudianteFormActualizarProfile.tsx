@@ -62,10 +62,10 @@ export default function EstudianteProfileForm({
   });
 
   useEffect(() => {
-    if(session && session.user.dataProfile.skills.length > 0){
+    if(session && session.user.dataProfile?.skills.length > 0){
       setSelectedSkills(session?.user.dataProfile.skills);
     }
-  }, [session?.user.dataProfile.skills]);
+  }, [session?.user.dataProfile?.skills]);
 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -176,7 +176,7 @@ export default function EstudianteProfileForm({
             <Label htmlFor="names">Nombres</Label>
             <Input
               {...register("names")}
-              defaultValue={session?.user.dataProfile.names}
+              defaultValue={session?.user.dataProfile?.names || ""}
               onChange={handleInputChange}
               id="names"
               name="names"
@@ -195,7 +195,7 @@ export default function EstudianteProfileForm({
             <Label htmlFor="lastnames">Apellidos</Label>
             <Input
               {...register("lastnames")}
-              defaultValue={session?.user.dataProfile.lastnames}
+              defaultValue={session?.user.dataProfile?.lastnames || ""}
               onChange={handleInputChange}
               id="lastnames"
               name="lastnames"
@@ -212,7 +212,7 @@ export default function EstudianteProfileForm({
             <Label htmlFor="phone">Teléfono</Label>
             <Input
               {...register("phone")}
-              defaultValue={session?.user.dataProfile.phone}
+              defaultValue={session?.user.dataProfile?.phone || ""}
               onChange={handleInputChange}
               id="phone"
               name="phone"
@@ -229,7 +229,7 @@ export default function EstudianteProfileForm({
             <Label htmlFor="address">Dirección</Label>
             <Input
               {...register("address")}
-              defaultValue={session?.user.dataProfile.address}
+              defaultValue={session?.user.dataProfile?.address || ""}
               onChange={handleInputChange}
               id="address"
               name="address"
@@ -246,7 +246,7 @@ export default function EstudianteProfileForm({
             <Label htmlFor="university">Universidad</Label>
             <Input
               {...register("university")}
-              defaultValue={session?.user.dataProfile.university}
+              defaultValue={session?.user.dataProfile?.university || ""}
               onChange={handleInputChange}
               id="university"
               name="university"
@@ -265,7 +265,7 @@ export default function EstudianteProfileForm({
             <Label htmlFor="quarter">Trimestre</Label>
             <Input
               {...register("quarter")}
-              defaultValue={session?.user.dataProfile.quarter}
+              defaultValue={session?.user.dataProfile?.quarter || ""}
               onChange={handleInputChange}
               id="quarter"
               name="quarter"
@@ -285,7 +285,7 @@ export default function EstudianteProfileForm({
             <Input
               {...register("description")}
               type="textarea"
-              defaultValue={session?.user.dataProfile.description}
+              defaultValue={session?.user.dataProfile?.description || ""}
               onChange={handleInputChange}
               id="description"
               name="description"
@@ -303,7 +303,7 @@ export default function EstudianteProfileForm({
             <Label htmlFor="interests">Cuáles son tus intereses</Label>
             <Input
               {...register("interests")}
-              defaultValue={session?.user.dataProfile.interests}
+              defaultValue={session?.user.dataProfile?.interests || ""}
               onChange={handleInputChange}
               id="interests"
               name="interests"
