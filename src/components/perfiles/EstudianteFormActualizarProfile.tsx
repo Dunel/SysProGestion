@@ -11,6 +11,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+
+
 interface EstudianteFormProfileProps {
   onToggleForm: () => void;
   titleForm: string;
@@ -31,7 +33,7 @@ export default function EstudianteProfileForm({
   onToggleForm,
   titleForm,
   data,
-}: EstudianteFormProfileProps) {
+}: EstudianteFormProfileProps){
   const { data: session, update } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -190,7 +192,7 @@ export default function EstudianteProfileForm({
             <Label htmlFor="names">Nombres</Label>
             <Input
               {...register("names")}
-              defaultValue={formData.names}
+              defaultValue={session?.user.dataProfile.names}
               onChange={handleInputChange}
               id="names"
               name="names"
@@ -203,11 +205,13 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
+
+
           <LabelInputContainer className="mb-4">
             <Label htmlFor="lastnames">Apellidos</Label>
             <Input
               {...register("lastnames")}
-              defaultValue={formData.lastnames}
+              defaultValue={session?.user.dataProfile.lastnames}
               onChange={handleInputChange}
               id="lastnames"
               name="lastnames"
@@ -224,7 +228,7 @@ export default function EstudianteProfileForm({
             <Label htmlFor="phone">Teléfono</Label>
             <Input
               {...register("phone")}
-              defaultValue={formData.phone}
+              defaultValue={session?.user.dataProfile.phone}
               onChange={handleInputChange}
               id="phone"
               name="phone"
@@ -241,7 +245,7 @@ export default function EstudianteProfileForm({
             <Label htmlFor="address">Dirección</Label>
             <Input
               {...register("address")}
-              defaultValue={formData.address}
+              defaultValue={session?.user.dataProfile.address}
               onChange={handleInputChange}
               id="address"
               name="address"
@@ -258,7 +262,7 @@ export default function EstudianteProfileForm({
             <Label htmlFor="university">Universidad</Label>
             <Input
               {...register("university")}
-              defaultValue={formData.university}
+              defaultValue={session?.user.dataProfile.university}
               onChange={handleInputChange}
               id="university"
               name="university"
@@ -271,11 +275,13 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
+          
+
           <LabelInputContainer className="mb-4">
             <Label htmlFor="quarter">Trimestre</Label>
             <Input
               {...register("quarter")}
-              defaultValue={formData.quarter}
+              defaultValue={session?.user.dataProfile.quarter}
               onChange={handleInputChange}
               id="quarter"
               name="quarter"
@@ -288,12 +294,14 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
+
+
           <LabelInputContainer className="mb-4">
             <Label htmlFor="description">Breve descripción de ti</Label>
             <Input
               {...register("description")}
               type="textarea"
-              defaultValue={formData.description}
+              defaultValue={session?.user.dataProfile.description}
               onChange={handleInputChange}
               id="description"
               name="description"
@@ -305,11 +313,13 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
+
+
           <LabelInputContainer className="mb-4">
             <Label htmlFor="interests">Cuáles son tus intereses</Label>
             <Input
               {...register("interests")}
-              defaultValue={formData.interests}
+              defaultValue={session?.user.dataProfile.interests}
               onChange={handleInputChange}
               id="interests"
               name="interests"
@@ -320,6 +330,9 @@ export default function EstudianteProfileForm({
               <p className="text-red-500 text-sm">{errors.interests.message}</p>
             )}
           </LabelInputContainer>
+
+
+          
 
           <LabelInputContainer>
             <Label htmlFor="skills">Selecciona las habilidades que poseas</Label>

@@ -1,5 +1,4 @@
 import { useSession } from "next-auth/react";
-import Link from "next/link";
 
 interface EstudianteProfileListoProps {
   onToggleForm: () => void;
@@ -83,7 +82,7 @@ export default function EstudianteProfileListo({
                   {" "}
                   Reseumen Curricular{" "}
                 </Link> */}
-                
+
               </p>
             </div>
           </div>

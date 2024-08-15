@@ -41,6 +41,8 @@ export default function EstudianteInfoForm() {
     getProfile();
   }, [session?.user.profile]);
 
+  console.log('la data', profileData);
+  
   return (
     <>
       <Header
