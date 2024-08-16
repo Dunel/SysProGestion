@@ -10,7 +10,6 @@ export async function GET(req: NextRequest) {
                 description: "test3",
                 location: "Calle Wallaby 42, Sidney",
                 status: "active",
-                type: "pasantia",
             },
         })
         return NextResponse.json({ message: prueba }, { status: 200 });
