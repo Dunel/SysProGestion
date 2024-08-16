@@ -22,11 +22,11 @@ export default function Navbar() {
     if (session?.user.role === "estudiante") {
       setNavigation([
         { name: "PRINCIPAL", href: "/estudiante", current: false },
-        { name: "PERFIL", href: "/estudiante/perfil", current: false },
-        { name: "SOLICITUDES", href: "/estudiante/apply", current: false },
+        { name: "MI PERFIL", href: "/estudiante/perfil", current: false },
+        { name: "OFERTAS DE VACANTES", href: "/estudiante/apply", current: false },
         {
-          name: "MIS SOLICITUDES",
-          href: "/estudiante/apply/myapplys",
+          name: "MIS APLICACIONES A OFERTAS",
+          href: "/estudiante/apply/misaplicaciones",
           current: false,
         },
         { name: "INICIAR SESIÓN", href: "/login", current: false },

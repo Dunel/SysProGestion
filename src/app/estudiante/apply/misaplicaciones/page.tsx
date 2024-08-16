@@ -8,6 +8,8 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 
+import InternshipCards from './InternshipCards';
+
 type Application = {
   id: number;
   title: string;
@@ -23,6 +25,23 @@ type Application = {
 };
 
 export default function Page() {
+
+  const internships = [
+    {
+      id: 1,
+      title: "Practicante de Derecho para la defensa de niños y niñas en situcion de vulneravilidad",
+      organization: "Instituto de la Mujer del Sur",
+      location: "Parroquia Casique Mara, Municipio Maracaibo, calle 23 con Av 20", 
+      logoUrl: "https://media.noticiaalminuto.com/wp-content/uploads/2021/01/IMM-Maracaibo.jpg",
+      skills: [
+        { id: 1, name: "Don de Gente" },
+        { id: 2, name: "Trabajo en Equipo" },
+        { id: 3, name: "Resolución de Problemas" },
+      ],
+    },
+    // ... más pasantías
+  ];
+
   const { data: session } = useSession();
   const [applications, setApplications] = useState<Application[]>();
 
@@ -77,8 +96,11 @@ export default function Page() {
 
   return (
     <>
-      <Header title={"MIS SOLICITUDES"} subtitle={"aquí solicitas cosas jjj"} />
-      <ContainerWeb>
+      <Header 
+          title={"MIS APLICACIONES A OFERTAS DE VACANTE"} 
+          subtitle={"Aqui podras visuazar todas las Ofertas de Vacantes de Pasantias y Servicio Comunitario a las que has demostrado interes aplicando."} 
+         />      <ContainerWeb>
+      <InternshipCards internships={internships} />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <GridMain>
             {applications && applications.length > 0 ? (
@@ -156,3 +178,5 @@ export default function Page() {
     </>
   );
 }
+
+

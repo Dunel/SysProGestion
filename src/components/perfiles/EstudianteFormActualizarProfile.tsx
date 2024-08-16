@@ -117,8 +117,8 @@ export default function EstudianteProfileForm({
       const res = await axios.post("/api/estudiante/perfil", data);
       if (session) {
         await update({ profile: true, dataProfile: data });
+       
       }
-      console.log(res.data);
       router.push("/estudiante/perfil");
     } catch (error) {
       if (axios.isAxiosError(error)) {

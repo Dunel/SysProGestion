@@ -121,7 +121,7 @@ export default function Step2({ setData, sendData }: Step2Props) {
           <Input 
             {...register("telefono")}
             id="telefono" 
-            placeholder="1234567890" 
+            placeholder="04246262000" 
             type="tel"
             className={cn(
               errors.telefono && "bg-red-100 focus:bg-red-100"

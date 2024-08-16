@@ -15,7 +15,7 @@ export default function EstudianteProfileListo({
   //!MOSTRANDO ESTE !!!!
   return (
     <div className="relative z-20 m-2 mt-6 p-2 pb-0 mb-0 rounded-lg mt-1 shadow lg:shadow-none">
-      {session?.user.profile ? (
+      {session?.user.profile &&
         <div className="my-2 bg-white mb-2 md:sticky md:top-[15vh]">
           <div className="flex flex-col items-center md:flex-row md:space-x-4">
             {/* Foto del Estudiante */}
@@ -99,19 +99,7 @@ export default function EstudianteProfileListo({
            
           </div>
         </div>
-      ) : (
-        <div className="justify-center">
-          <p className="text-gray-600 text-center">
-            No se ha encontrado información del perfil.
-          </p>
-          <button
-            onClick={onToggleForm}
-            className="m-2 bg-black hover:bg-blue-600 text-white font-bold py-2 px-4 rounded md:w-[70%]"
-          >
-            {isFormVisible ? "Descartar la Actualizacion" : "Actualizar Perfil"}
-          </button>
-        </div>
-      )}
+}
     </div>
   );
 }
