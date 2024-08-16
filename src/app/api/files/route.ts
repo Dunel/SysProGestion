@@ -36,7 +36,10 @@ export async function POST(req: NextRequest) {
     const fileUrl = "/uploads/images/" + customFileName;
     return NextResponse.json({ message: "prueba", fileUrl }, { status: 200 });
   } catch (error) {
-    console.log("Error: ", (error as Error).message);
-    return NextResponse.json({ message: "Error" }, { status: 500 });
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: error },
+      { status: 500 }
+    );
   }
 }
