@@ -38,8 +38,9 @@ model User {
   lastnames    String
   role         Role           @default(estudiante)
   phone        String
-  updatedAt    DateTime       @updatedAt
   profile      Boolean        @default(false)
+  image        String?
+  updatedAt    DateTime       @updatedAt
   esInfo       estudentInfo[]
   apply        apply[]
   application  application[]
