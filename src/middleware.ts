@@ -10,7 +10,6 @@ export async function middleware(req: NextRequest) {
     if (url.startsWith("/api")) {
       return NextResponse.json({ message: "No autorizado" }, { status: 401 });
     } else if (!url.startsWith("/login") && !url.startsWith("/register")) {
-      console.log("redirecting to login", !url.startsWith("/login"));
       return NextResponse.redirect(new URL("/login", req.url));
     } else {
       return NextResponse.next();
