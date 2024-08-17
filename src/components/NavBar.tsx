@@ -24,10 +24,14 @@ export default function Navbar() {
       setNavigation([
         { name: "PRINCIPAL", href: "/estudiante", current: false },
         { name: "MI PERFIL", href: "/estudiante/perfil", current: false },
+<<<<<<< .merge_file_IYDPer
         { name: "SOLICITUDES", href: "/estudiante/apply", current: false },
+=======
+        { name: "OFERTAS DE VACANTES", href: "/estudiante/apply", current: false },
+>>>>>>> .merge_file_gOLhj1
         {
-          name: "MIS SOLICITUDES",
-          href: "/estudiante/apply/myapplys",
+          name: "MIS APLICACIONES A OFERTAS",
+          href: "/estudiante/apply/misaplicaciones",
           current: false,
         },
         {

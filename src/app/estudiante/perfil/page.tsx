@@ -15,16 +15,18 @@ export default function EstudianteInfoForm() {
   const toggleFormVisibility = () => {
     setIsFormVisible((prev) => !prev);
   };
+  const [profileData, setProfileData] = useState<{ address: string; university: string; quarter: string; skills: string[]; interests: string; description: string; names: string; lastnames: string; phone: string; } | null>(null);
 
   const getProfile = async () => {
     try {
       setLoading(true); // Muestra el loader
       if (!session?.user.profile || session.user.dataProfile) {
+        setProfileData(session?.user.dataProfile || null);
         setLoading(false);
         return;
       }
       const res = await axios.get("/api/estudiante/perfil");
-      update({ profile: true, dataProfile: res.data.object });
+      update({ profile: true, dataProfile: res.data.object });      
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);
@@ -39,6 +41,7 @@ export default function EstudianteInfoForm() {
     getProfile();
   }, [session?.user.profile]);
 
+  
   return (
     <>
       <Header
@@ -71,11 +74,36 @@ export default function EstudianteInfoForm() {
           <EstudianteFormActualizarProfile
             onToggleForm={toggleFormVisibility}
             titleForm={"Completa los datos de tu Perfil!"}
+            data={profileData}
           />
         </div>
-      )}
+      )
 
-      {session?.user.dataProfile && (
+    
+    }
+
+    
+
+      {
+          (!session?.user.dataProfile) && (session?.user.profile != false)
+          ? ( // Muestra el loader si está cargando
+            <div className="flex justify-center items-center flex-col mt-10">
+              <Oval
+                color="#000000"
+                secondaryColor="#FFFFFF" // Color de fondo blanco
+                height={50}
+                width={50}
+                strokeWidth={5}
+              />
+              <br />
+              <span>Espere por favor, su informacion se esta cargando...</span>
+            </div>
+          )
+      
+      
+      
+      
+      : (
         <div
           className={`${
             isFormVisible
@@ -83,16 +111,19 @@ export default function EstudianteInfoForm() {
               : "flex justify-center w-[80%] mx-auto bg-white"
           }`}
         >
-          <EstudianteProfileListo
-            onToggleForm={toggleFormVisibility}
-            isFormVisible={isFormVisible}
-          />
+        
+            <EstudianteProfileListo
+              onToggleForm={toggleFormVisibility}
+              isFormVisible={isFormVisible}
+            />
+        
 
           {isFormVisible && (
-            <div className="bg-white mx-4">
+            <div className="bg-white mt-6 mx-4">
               <EstudianteFormActualizarProfile
                 onToggleForm={toggleFormVisibility}
                 titleForm={"Actualizando tu Perfil!"}
+                data={profileData}
               />
             </div>
           )}
