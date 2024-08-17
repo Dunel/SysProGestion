@@ -18,7 +18,7 @@ export default function EstudianteProfileListo({
       {session?.user.profile &&
         <div className="my-2 bg-white mb-2 md:sticky md:top-[15vh]">
           <div className="flex flex-col items-center md:flex-row md:space-x-4">
-            {/* Foto del Estudiante */}
+            {/* //!Foto del Estudiante */}
             <div className="m-1 p-1">
               <img
                 className="h-60 w-60 rounded-full border-4 border-black-800"
@@ -28,7 +28,7 @@ export default function EstudianteProfileListo({
                 alt="Foto del estudiante"
               />
             </div>
-            {/* Información del Estudiente */}
+            {/* //!Información del Estudiente */}
             <div className="m-1 p-1 word-wrap overflow-wrap">
               <h2 className="text-3xl font-bold text-gray-800 text-center md:text-5xl lg:text-4xl">
                 {session.user.dataProfile.names} {session.user.dataProfile.lastnames}

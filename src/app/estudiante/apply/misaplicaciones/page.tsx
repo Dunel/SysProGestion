@@ -1,13 +1,9 @@
 "use client";
-import ContainerWeb from "@/components/ContainerWeb";
 import GridContainer from "@/components/GridContainer";
-import GridMain from "@/components/GridMain";
-import GridSecond from "@/components/GridSecond";
 import Header from "@/components/Header";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-
 import InternshipCards from './InternshipCards';
 
 type Application = {
@@ -29,10 +25,13 @@ export default function Page() {
   const internships = [
     {
       id: 1,
-      title: "Practicante de Derecho para la defensa de niños y niñas en situcion de vulneravilidad",
-      organization: "Instituto de la Mujer del Sur",
+      titleVacante: "Practicante de Derecho para la defensa de niños y niñas en situación de vulnerabilidad",
+      dependencia: "Instituto de la Mujer del Sur",
       location: "Parroquia Casique Mara, Municipio Maracaibo, calle 23 con Av 20", 
-      logoUrl: "https://media.noticiaalminuto.com/wp-content/uploads/2021/01/IMM-Maracaibo.jpg",
+      descriptionVacante: "Se requiere de...", 
+      statusVacante: 'Activa',
+      statusAplication: [{ id: 1, status: "En proceso" }],
+      imgDependencia: "https://media.noticiaalminuto.com/wp-content/uploads/2021/01/IMM-Maracaibo.jpg",
       skills: [
         { id: 1, name: "Don de Gente" },
         { id: 2, name: "Trabajo en Equipo" },
@@ -99,11 +98,17 @@ export default function Page() {
       <Header 
           title={"MIS APLICACIONES A OFERTAS DE VACANTE"} 
           subtitle={"Aqui podras visuazar todas las Ofertas de Vacantes de Pasantias y Servicio Comunitario a las que has demostrado interes aplicando."} 
-         />      <ContainerWeb>
-      <InternshipCards internships={internships} />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <GridMain>
-            {applications && applications.length > 0 ? (
+         />  
+       
+          <InternshipCards internships={internships.map(internship => ({
+           ...internship,
+           statusAplication: [{ id: internship.statusAplication[0].id, status: internship.statusAplication[0].status }]
+          }))} />
+
+    
+
+      <div>
+      {applications && applications.length > 0 ? (
               applications.map((application) => (
                 <div
                   key={application.id}
@@ -125,6 +130,7 @@ export default function Page() {
                     <p className="mt-2 text-gray-600">
                       Estado de tu apply: {application.apply[0].status}
                     </p>
+
                     <div className="flex justify-between items-start mt-4">
                       {application.status === "inactive" ||
                       application.apply.length > 0 ? (
@@ -160,6 +166,8 @@ export default function Page() {
                         </button>
                       )}
                     </div>
+
+                    
                   </div>
                 </div>
               ))
@@ -168,15 +176,11 @@ export default function Page() {
                 <p>No tienes solicitudes</p>
               </GridContainer>
             )}
-          </GridMain>
+      </div>
 
-          <GridSecond>
-            <GridContainer>{session?.user?.email}</GridContainer>
-          </GridSecond>
-        </div>
-      </ContainerWeb>
+
+         
+        
     </>
   );
 }
-
-
