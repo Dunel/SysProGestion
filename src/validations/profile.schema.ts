@@ -23,6 +23,10 @@ export const profileSchema = z.object({
     .string({ required_error: "La universidad es requerida" })
     .min(4, { message: "La universidad debe tener minimo 4 caracteres" })
     .max(50, { message: "La universidad debe tener maximo 50 caracteres" }),
+  career: z
+    .string({ required_error: "La carrera es requerida" })
+    .min(4, { message: "La carrera debe tener minimo 4 caracteres" })
+    .max(50, { message: "La carrera debe tener maximo 50 caracteres" }),
   quarter: z
     .string({ required_error: "El trimestre es requerido" })
     .min(1, { message: "El trimestre debe tener minimo 1 caracteres" })
@@ -51,39 +55,41 @@ export const profileSchema = z.object({
         .min(1, { message: "El trimestre debe ser mayor a 0" })
         .max(12, { message: "El trimestre debe ser menor a 13" })
     ),
-  skills: z.array(
-    z.enum(
-      [
-        "resoluciondeproblemas",
-        "trabajoenequipo",
-        "adaptabilidad",
-        "comunicacionefectiva",
-        "liderazgo",
-        "pensamientocritico",
-        "orientacionaresultados",
-        "creatividad",
-        "gestiondeltiempo",
-        "aprendizajecontinuo",
-        "dondegente",
-        "ensenanza",
-        "sociable",
-        "salud",
-        "deportes",
-        "logistica",
-        "expresionesartisticas",
-        "diseno",
-        "musica",
-        "ingles",
-        "otrosidiomasnaturales",
-        "lenguajesdeprogramacion"
-      ],
-      {
-        errorMap: (issue, ctx) => {
-          return { message: "Habilidad no valida" };
-        },
-      }
+  skills: z
+    .array(
+      z.enum(
+        [
+          "resoluciondeproblemas",
+          "trabajoenequipo",
+          "adaptabilidad",
+          "comunicacionefectiva",
+          "liderazgo",
+          "pensamientocritico",
+          "orientacionaresultados",
+          "creatividad",
+          "gestiondeltiempo",
+          "aprendizajecontinuo",
+          "dondegente",
+          "ensenanza",
+          "sociable",
+          "salud",
+          "deportes",
+          "logistica",
+          "expresionesartisticas",
+          "diseno",
+          "musica",
+          "ingles",
+          "otrosidiomasnaturales",
+          "lenguajesdeprogramacion",
+        ],
+        {
+          errorMap: (issue, ctx) => {
+            return { message: "Habilidad no valida" };
+          },
+        }
+      )
     )
-  ).min(1, { message: "Debe seleccionar al menos una habilidad" }),
+    .min(1, { message: "Debe seleccionar al menos una habilidad" }),
   interests: z
     .string({ required_error: "Los intereses son requeridos" })
     .min(10, { message: "Los intereses debe tener minimo 10 caracteres" })
@@ -117,6 +123,10 @@ export const profileFrontSchema = z.object({
     .string({ required_error: "La universidad es requerida" })
     .min(4, { message: "La universidad debe tener minimo 4 caracteres" })
     .max(50, { message: "La universidad debe tener maximo 50 caracteres" }),
+    career: z
+    .string({ required_error: "La carrera es requerida" })
+    .min(4, { message: "La carrera debe tener minimo 4 caracteres" })
+    .max(50, { message: "La carrera debe tener maximo 50 caracteres" }),
   quarter: z
     .string({ required_error: "El trimestre es requerido" })
     .min(1, { message: "El trimestre debe tener minimo 1 caracteres" })

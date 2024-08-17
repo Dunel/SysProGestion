@@ -11,14 +11,13 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-
-
 interface EstudianteFormProfileProps {
   onToggleForm: () => void;
   titleForm: string;
   data: { 
     address: string; 
-    university: string; 
+    university: string;
+    career: string; 
     quarter: string; 
     skills: string[]; 
     interests: string; 
@@ -37,8 +36,6 @@ export default function EstudianteProfileForm({
   const { data: session, update } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [pdfFileName, setPdfFileName] = useState("");
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     names: "",
@@ -46,6 +43,7 @@ export default function EstudianteProfileForm({
     phone: "",
     address: "",
     university: "",
+    career: "",
     quarter: "",
     description: "",
     interests: "",
@@ -145,24 +143,6 @@ export default function EstudianteProfileForm({
     profileUpdate(formData as ProfileFormData);
   };
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handlePdfChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setPdfFileName(file.name);
-    }
-  };
-
   return (
     <>
       <div className="flex flex-col my-4 p-4 md:space-x-4">
@@ -259,6 +239,23 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="career">Carrera</Label>
+            <Input
+              {...register("career")}
+              defaultValue={session?.user.dataProfile?.career || ""}
+              onChange={handleInputChange}
+              id="career"
+              name="career"
+              placeholder="Carrera"
+              type="text"
+              className={cn(errors.career && "bg-red-100 focus:bg-red-100")}
+            />
+            {errors.career && (
+              <p className="text-red-500 text-sm">{errors.career.message}</p>
+            )}
+          </LabelInputContainer>
+
           
 
           <LabelInputContainer className="mb-4">
@@ -350,36 +347,10 @@ export default function EstudianteProfileForm({
             </div>
           </LabelInputContainer>
 
-          <Label>Sube tu foto <mark> -Agr a la BBDD- </mark> </Label>
-          <div className="w-[100%] m-2 dm:w-[50%] sm:w-[50%] ">
-            <Input type="file" accept="image/*" onChange={handleImageChange} />
-          </div>
-          {imagePreview && (
-            <img
-              src={imagePreview}
-              alt="Vista previa"
-              className="mx-auto my-4 w-[40%] h-auto md:w-[30%]"
-            />
-          )}
-
-
-{/* 
-          <Label>Sube tu currículum (Formato PDF) <mark> -Agr a la BBDD- </mark> </Label>
-          <div className="w-[100%] m-2 dm:w-[50%] sm:w-[50%]">
-            <Input
-              type="file"
-              accept="application/pdf"
-              onChange={handlePdfChange}
-            />
-            {pdfFileName && (
-              <p className="my-4 text-center">Archivo seleccionado: {pdfFileName}</p>
-            )}
-          </div> */}
-
           <div className="flex justify-center">
             <button
               type="submit"
-              className="w-[100%] bg-black hover:bg-blue-600 text-white font-bold py-1 px-1 mt-4 rounded focus:shadow-outline md:w-[80%]"
+              className="w-[100%] bg-black hover:bg-gray-800 text-white font-bold py-1 px-1 mt-4 rounded focus:shadow-outline md:w-[80%]"
             >
               Guardar
             </button>

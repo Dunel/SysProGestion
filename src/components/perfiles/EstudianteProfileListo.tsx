@@ -1,7 +1,10 @@
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useState } from "react";
 import { Oval } from "react-loader-spinner";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
 
 interface EstudianteProfileListoProps {
   onToggleForm: () => void;
@@ -14,6 +17,7 @@ export default function EstudianteProfileListo({
 }: EstudianteProfileListoProps) {
   const { data: session, update } = useSession();
   const [loading, setLoading] = useState(false);
+  const [pdfFile, setPdfFile] = useState(null as File | null);
 
   const handleImageChange = async (imageFile: File) => {
     try {
@@ -37,6 +41,42 @@ export default function EstudianteProfileListo({
         }
         setLoading(false);
         alert(response.data.message);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data.error);
+        setLoading(false);
+      } else {
+        console.error("error:", error as Error);
+        setLoading(false);
+      }
+    }
+  };
+
+  const handlePdfChange = async (pdfFile: File | null) => {
+    try {
+      if (pdfFile) {
+        setLoading(true);
+        const formData = new FormData();
+        formData.append("file", pdfFile);
+
+        const response = await axios.post(
+          "/api/estudiante/upload/UpPdf",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        if (response.data?.fileUrl) {
+          update({ pdfFile: response.data.fileUrl });
+        }
+        setLoading(false);
+        alert(response.data.message);
+      } else {
+        alert("No se ha seleccionado un archivo");
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -97,7 +137,7 @@ export default function EstudianteProfileListo({
                 {session.user.dataProfile.lastnames}
               </h2>
               <h2 className="text-2xl font-bold text-gray-800 pt-5 pb-2 md:text-3xl lg:text-2xl">
-                <i>{"profileData.carreraEstudiante falta en db"}</i>
+                <i>{session.user.dataProfile.career}</i>
               </h2>
               <p className="text-gray-600 md:text-1x1">
                 <strong>Cedula de identidad:</strong> {session.user.cedula}
@@ -150,14 +190,53 @@ export default function EstudianteProfileListo({
               </div>
               <p className="m-2 text-gray-600 md:text-1x1"></p>
             </div>
+            <div className="m-2">
+              {session?.user.dataProfile.curriculum && (
+                <div>
+                  <Link
+                    className="underline text-blue-500 hover:text-blue-700 cursor-pointer"
+                    href={session.user.dataProfile.curriculum}
+                    target="_blank"
+                  >
+                    Resumen Curricular
+                  </Link>
+                </div>
+              )}
+              <>
+                <Label>Sube tu currículum (Formato PDF)</Label>
+                <div className="w-[100%] py-2 dm:w-[50%] sm:w-[50%] flex">
+                  <Input
+                    type="file"
+                    accept="application/pdf"
+                    onChange={(e) => {
+                      if (e.target.files) {
+                        const file = e.target.files[0];
+                        setPdfFile(file);
+                      }
+                    }}
+                  />
+                  <button
+                    className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded md:w-[50%]"
+                    onClick={() => {
+                      handlePdfChange(pdfFile);
+                    }}
+                  >
+                    ENVIAR
+                  </button>
+                </div>
+                {pdfFile && (
+                  <p className="m-2">Archivo seleccionado: {pdfFile?.name}</p>
+                )}
+              </>
+            </div>
           </div>
           <div className="flex justify-center my-2">
             <button
               onClick={onToggleForm}
-              className="m-2 w-[100%] bg-black hover:bg-blue-600 text-white font-bold py-2 px-4 rounded md:w-[50%]"
+              className="m-2 w-[100%] bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded md:w-[50%]"
             >
               {isFormVisible
-                ? "Descartar la Actualizacion"
+                ? "Descartar la Actualización"
                 : "Actualizar Perfil"}
             </button>
           </div>
@@ -172,10 +251,10 @@ const formatSkillsToList = (skills: string[]): JSX.Element => {
     resoluciondeproblemas: "Resolucion de problemas",
     trabajoenequipo: "Trabajo en equipo",
     adaptabilidad: "Adaptabilidad",
-    comunicacionefectiva: "Comunicacion efectiva",
+    comunicacionefectiva: "Comunicación efectiva",
     liderazgo: "Liderazgo",
     pensamientocritico: "Pensamiento crítico",
-    orientacionaresultados: "Orientacion a resultados",
+    orientacionaresultados: "Orientación a resultados",
     creatividad: "Creatividad",
     gestiondeltiempo: "Gestión del tiempo",
     aprendizajecontinuo: "Aprendizaje continuo",

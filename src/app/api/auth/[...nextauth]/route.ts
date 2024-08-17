@@ -40,6 +40,9 @@ const authOptions: NextAuthOptions = {
       if(trigger === "update" && session?.picture) {
         token.picture = session.picture;
       }
+      if(trigger === "update" && session?.pdfFile) {
+        token.dataProfile.curriculum = session.pdfFile;
+      }
       return token;
     },
     async session({ session, token}) {

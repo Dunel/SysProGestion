@@ -12,6 +12,7 @@ declare module "next-auth" {
       dataProfile: {
         address: string;
         university: string;
+        career: string;
         quarter: string;
         skills: [string];
         interests: string;
@@ -19,6 +20,7 @@ declare module "next-auth" {
         names: string;
         lastnames: string;
         phone: string;
+        curriculum: string;
       };
     };
   }
@@ -32,6 +34,7 @@ declare module "next-auth" {
     dataProfile: {
       address: string;
       university: string;
+      career: string;
       quarter: string;
       skills: [string];
       interests: string;
@@ -39,6 +42,7 @@ declare module "next-auth" {
       names: string;
       lastnames: string;
       phone: string;
+      curriculum: string;
     };
   }
 }
@@ -53,6 +57,7 @@ declare module "next-auth/jwt" {
     dataProfile: {
       address: string;
       university: string;
+      career: string;
       quarter: string;
       skills: [string];
       interests: string;
@@ -60,6 +65,7 @@ declare module "next-auth/jwt" {
       names: string;
       lastnames: string;
       phone: string;
+      curriculum: string;
     };
   }
 }
