@@ -8,7 +8,7 @@ export default function EstudianteProfil() {
   
 
   return (
-    <div>
+    <>
       
         <GridMain>
           <div className="h-screen">
@@ -19,6 +19,6 @@ export default function EstudianteProfil() {
 
 
 
-    </div>
+    </>
   );
 }
