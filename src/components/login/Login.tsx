@@ -39,7 +39,7 @@ export default function Login() {
     <>
       <div className="flex flex-col items-center justify-center">
        
-        <div className="relative z-20 w-[80%] h-auto mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black lg:w-[60%]">
+        <div className="relative z-20 w-[90%] h-auto mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black lg:w-[70%]">
           <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200 text-center mb-4">
             Iniciar sesión
           </h2>
