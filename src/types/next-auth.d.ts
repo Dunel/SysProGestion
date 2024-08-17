@@ -6,11 +6,13 @@ declare module "next-auth" {
     user: {
       cedula: number;
       email: string;
-      role: string;
+      role: "estudiante" | "alcaldia" | "dependencia";
       profile: boolean;
+      picture: string;
       dataProfile: {
         address: string;
         university: string;
+        career: string;
         quarter: string;
         skills: [string];
         interests: string;
@@ -18,6 +20,7 @@ declare module "next-auth" {
         names: string;
         lastnames: string;
         phone: string;
+        curriculum: string;
       };
     };
   }
@@ -25,11 +28,13 @@ declare module "next-auth" {
   interface User {
     cedula: number;
     email: string;
-    role: string;
+    role: "estudiante" | "alcaldia" | "dependencia";
     profile: boolean;
+    picture: string;
     dataProfile: {
       address: string;
       university: string;
+      career: string;
       quarter: string;
       skills: [string];
       interests: string;
@@ -37,6 +42,7 @@ declare module "next-auth" {
       names: string;
       lastnames: string;
       phone: string;
+      curriculum: string;
     };
   }
 }
@@ -45,11 +51,13 @@ declare module "next-auth/jwt" {
   interface JWT {
     cedula: number;
     email: string;
-    role: string;
+    role: "estudiante" | "alcaldia" | "dependencia";
     profile: boolean;
+    picture: string;
     dataProfile: {
       address: string;
       university: string;
+      career: string;
       quarter: string;
       skills: [string];
       interests: string;
@@ -57,6 +65,7 @@ declare module "next-auth/jwt" {
       names: string;
       lastnames: string;
       phone: string;
+      curriculum: string;
     };
   }
 }

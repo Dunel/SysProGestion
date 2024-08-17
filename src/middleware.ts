@@ -9,9 +9,15 @@ export async function middleware(req: NextRequest) {
   if (!token) {
     if (url.startsWith("/api")) {
       return NextResponse.json({ message: "No autorizado" }, { status: 401 });
-    } else {
+    } else if (!url.startsWith("/login") && !url.startsWith("/register")) {
       return NextResponse.redirect(new URL("/login", req.url));
+    } else {
+      return NextResponse.next();
     }
+  }
+
+  if (url.startsWith("/login") || (url.startsWith("/register") && token.role)) {
+    return NextResponse.redirect(new URL("/checking", req.url));
   }
 
   const apiRoles: { [key: string]: string } = {
@@ -34,10 +40,9 @@ export async function middleware(req: NextRequest) {
     dependencia: "/dependencia",
   };
 
-  const redirectTo =
-    urlBasedOnRole[token.role as "alcaldia" | "estudiante" | "dependencia"];
+  const redirectTo = urlBasedOnRole[token.role];
 
-  if (url === "/checking") {
+  if (url.startsWith("/checking")) {
     if (redirectTo) {
       return NextResponse.redirect(new URL(redirectTo, req.url));
     }
@@ -45,8 +50,8 @@ export async function middleware(req: NextRequest) {
 
   if (
     token.profile === false &&
-    url != `${redirectTo}/perfil` &&
-    url != `/api${redirectTo}/perfil`
+    url.startsWith(`${redirectTo}/perfil`) &&
+    url.startsWith(`/api${redirectTo}/perfil`)
   ) {
     if (redirectTo) {
       return NextResponse.redirect(new URL(redirectTo + "/perfil", req.url));
@@ -73,5 +78,7 @@ export const config = {
     "/estudiante/:path*",
     "/checking",
     "/dependencia/:path*",
+    "/login",
+    "/register",
   ],
 };

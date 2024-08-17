@@ -11,11 +11,23 @@ export default function EstudianteInfoForm() {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const { data: session, update } = useSession();
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const toggleFormVisibility = () => {
     setIsFormVisible((prev) => !prev);
   };
-  const [profileData, setProfileData] = useState<{ address: string; university: string; quarter: string; skills: string[]; interests: string; description: string; names: string; lastnames: string; phone: string; } | null>(null);
+  const [profileData, setProfileData] = useState<{
+    address: string;
+    university: string;
+    career: string;
+    quarter: string;
+    skills: string[];
+    interests: string;
+    description: string;
+    names: string;
+    lastnames: string;
+    phone: string;
+    curriculum: string;
+  } | null>(null);
 
   const getProfile = async () => {
     try {
@@ -26,7 +38,7 @@ export default function EstudianteInfoForm() {
         return;
       }
       const res = await axios.get("/api/estudiante/perfil");
-      update({ profile: true, dataProfile: res.data.object });      
+      update({ profile: true, dataProfile: res.data.object });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);
@@ -41,7 +53,6 @@ export default function EstudianteInfoForm() {
     getProfile();
   }, [session?.user.profile]);
 
-  
   return (
     <>
       <Header
@@ -55,7 +66,8 @@ export default function EstudianteInfoForm() {
         }
       />
 
-      {!session?.user.dataProfile || loading && ( // Muestra el loader si está cargando
+      {session?.user.dataProfile === null ||
+        (loading && ( // Muestra el loader si está cargando
           <div className="flex justify-center items-center flex-col mt-10">
             <Oval
               color="#000000"
@@ -67,7 +79,7 @@ export default function EstudianteInfoForm() {
             <br />
             <span>Espere por favor, su informacion se esta cargando...</span>
           </div>
-        )}
+        ))}
 
       {session?.user.profile === false && (
         <div className="w-[80%] m-4 p-4 mx-auto">
@@ -77,33 +89,22 @@ export default function EstudianteInfoForm() {
             data={profileData}
           />
         </div>
-      )
+      )}
 
-    
-    }
-
-    
-
-      {
-          (!session?.user.dataProfile) && (session?.user.profile != false)
-          ? ( // Muestra el loader si está cargando
-            <div className="flex justify-center items-center flex-col mt-10">
-              <Oval
-                color="#000000"
-                secondaryColor="#FFFFFF" // Color de fondo blanco
-                height={50}
-                width={50}
-                strokeWidth={5}
-              />
-              <br />
-              <span>Espere por favor, su informacion se esta cargando...</span>
-            </div>
-          )
-      
-      
-      
-      
-      : (
+      {!session?.user.dataProfile && session?.user.profile != false ? (
+        // Muestra el loader si está cargando
+        <div className="flex justify-center items-center flex-col mt-10">
+          <Oval
+            color="#000000"
+            secondaryColor="#FFFFFF" // Color de fondo blanco
+            height={50}
+            width={50}
+            strokeWidth={5}
+          />
+          <br />
+          <span>Espere por favor, su informacion se esta cargando...</span>
+        </div>
+      ) : (
         <div
           className={`${
             isFormVisible
@@ -111,12 +112,10 @@ export default function EstudianteInfoForm() {
               : "flex justify-center w-[80%] mx-auto bg-white"
           }`}
         >
-        
-            <EstudianteProfileListo
-              onToggleForm={toggleFormVisibility}
-              isFormVisible={isFormVisible}
-            />
-        
+          <EstudianteProfileListo
+            onToggleForm={toggleFormVisibility}
+            isFormVisible={isFormVisible}
+          />
 
           {isFormVisible && (
             <div className="bg-white mt-6 mx-4">

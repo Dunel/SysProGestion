@@ -16,6 +16,7 @@ export async function ProfileUpdate(req: NextRequest) {
       phone,
       address,
       university,
+      career,
       quarter,
       skills,
       interests,
@@ -28,6 +29,7 @@ export async function ProfileUpdate(req: NextRequest) {
       phone,
       address,
       university,
+      career,
       quarter,
       skills,
       interests,
@@ -39,6 +41,7 @@ export async function ProfileUpdate(req: NextRequest) {
       where: { userCedula: cedula },
       update: {
         university: result.university,
+        career: result.career,
         quarter: result.quarter,
         skills: result.skills,
         interests: result.interests,
@@ -48,6 +51,7 @@ export async function ProfileUpdate(req: NextRequest) {
       create: {
         userCedula: cedula,
         university: result.university,
+        career: result.career,
         quarter: result.quarter,
         skills: result.skills,
         interests: result.interests,
@@ -93,11 +97,13 @@ export async function ProfileGet(req: NextRequest) {
       where: { userCedula: cedula },
       select: {
         university: true,
+        career: true,
         quarter: true,
         skills: true,
         interests: true,
         description: true,
         address: true,
+        curriculum: true,
         User:{
           select:{
             names: true,
@@ -113,10 +119,12 @@ export async function ProfileGet(req: NextRequest) {
       phone: profile?.User.phone,
       address: profile?.address,
       university: profile?.university,
+      career: profile?.career,
       quarter: profile?.quarter,
       skills: profile?.skills,
       interests: profile?.interests,
       description: profile?.description,
+      curriculum: profile?.curriculum,
     };
     return NextResponse.json({ object }, { status: 200 });
   } catch (error) {

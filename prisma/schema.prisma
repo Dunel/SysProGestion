@@ -30,19 +30,21 @@ model PreRegister {
 }
 
 model User {
-  id          Int            @id @default(autoincrement())
-  cedula      Int            @unique
-  mail        String         @unique
-  password    String
-  names       String
-  lastnames   String
-  role        Role           @default(estudiante)
-  phone       String
-  updatedAt   DateTime       @updatedAt
-  profile     Boolean        @default(false)
-  esInfo      estudentInfo[]
-  apply       apply[]
-  application application[]
+  id           Int            @id @default(autoincrement())
+  cedula       Int            @unique
+  mail         String         @unique
+  password     String
+  names        String
+  lastnames    String
+  role         Role           @default(estudiante)
+  phone        String
+  profile      Boolean        @default(false)
+  image        String?
+  updatedAt    DateTime       @updatedAt
+  esInfo       estudentInfo[]
+  apply        apply[]
+  application  application[]
+  notification notification[]
 }
 
 enum Skills {
@@ -74,25 +76,38 @@ model estudentInfo {
   id          Int      @id @default(autoincrement())
   userCedula  Int      @unique
   university  String
+  career      String?
   quarter     Int
   skills      Skills[]
   interests   String
   description String
   address     String
+  curriculum  String?
   updatedAt   DateTime @updatedAt
   User        User     @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
 }
 
+enum typeApplication {
+  pasantia
+  servicio
+  proyecto
+}
+
 model application {
-  id          Int      @id @default(autoincrement())
-  userCedula  Int
-  title       String
-  description String
-  location    String
-  status      status   @default(active)
-  updatedAt   DateTime @updatedAt
-  apply       apply[]
-  User        User     @relation(fields: [userCedula], references: [cedula])
+  id           Int             @id @default(autoincrement())
+  userCedula   Int
+  title        String
+  description  String?
+  imagen       String?
+  location     String
+  type         typeApplication
+  skills       Skills[]
+  status       status          @default(active)
+  date         DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  apply        apply[]
+  User         User            @relation(fields: [userCedula], references: [cedula])
+  notification notification[]
 }
 
 enum status {
@@ -114,4 +129,22 @@ enum statusApply {
   pendiente
   aceptado
   rechazado
+}
+
+model notification {
+  id          Int         @id @default(autoincrement())
+  userCedula  Int
+  idApplic    Int?
+  action      actionNoti
+  date        DateTime    @default(now())
+  application application? @relation(fields: [idApplic], references: [id], onDelete: Cascade)
+  User        User        @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
+}
+
+enum actionNoti {
+  apply
+  accept
+  delete
+  reject
+  proposal
 }

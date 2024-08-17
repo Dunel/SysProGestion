@@ -3,7 +3,6 @@ import { LoginSchema } from "@/validations/login.schema";
 import bcrypt from "bcrypt";
 import prisma from "@/db";
 import { ZodError } from "zod";
-import jwt from "jsonwebtoken";
 
 type userLogin = {
   email: string;
@@ -40,24 +39,13 @@ export async function Login(req: NextRequest) {
       );
     }
 
-    const token = jwt.sign(
-      {
-        cedula: userFound.cedula,
-        email: userFound.mail,
-        role: userFound.role,
-      },
-      process.env.JWT_SECRET!,
-      {
-        expiresIn: "1h",
-      }
-    );
-
     return NextResponse.json(
       {
         cedula: userFound.cedula,
         email: userFound.mail,
         role: userFound.role,
         profile: userFound.profile,
+        picture: userFound.image,
       },
       { status: 200 }
     );

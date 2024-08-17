@@ -31,19 +31,27 @@ const authOptions: NextAuthOptions = {
         token.email = user.email;
         token.role = user.role;
         token.profile = user.profile;
+        token.picture = user.picture;
       }
-      if (trigger === "update" && session.profile) {
+      if (trigger === "update" && session?.profile) {
         token.dataProfile = session.dataProfile;
         token.profile = session.profile;
+      }
+      if(trigger === "update" && session?.picture) {
+        token.picture = session.picture;
+      }
+      if(trigger === "update" && session?.pdfFile) {
+        token.dataProfile.curriculum = session.pdfFile;
       }
       return token;
     },
     async session({ session, token}) {
         session.user.cedula = token.cedula;
         session.user.email = token.email;
-        session.user.profile = token.profile;
         session.user.role = token.role;
+        session.user.profile = token.profile;
         session.user.dataProfile = token.dataProfile;
+        session.user.picture = token.picture;
       return session;
     },
     async redirect({ url, baseUrl }) {
