@@ -1,110 +1,128 @@
+import { useState} from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoginSchema } from "@/validations/login.schema";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/components/lib/utils";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import Link from "next/link";
-import { Oval } from 'react-loader-spinner'; // Importa el loader
-
+import { Oval } from 'react-loader-spinner';
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState<string[]>([]);
+  const { register, handleSubmit, formState: { errors, isValid }, watch } = useForm({
+    resolver: zodResolver(LoginSchema),
+    mode: "onChange"
+  });
+
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const [loading, setLoading] = useState(false); // Estado para el loader
-
-
-  const handleSubmit = async () => {
-    setErrors([]);
-    setLoading(true); // Muestra el loader
+  
+  const onSubmit = async (data: any) => {
+    setLoading(true);
     const login = await signIn("credentials", {
-      email,
-      password,
+      email: data.email,
+      password: data.password,
       redirect: false,
     });
 
     if (login?.error) {
-      setLoading(false); // Oculta el loader
-      setErrors(login.error.split(","));
-      return;
+      // Manejo de errores de inicio de sesión
+      console.error(login.error);
+    } else {
+      router.push("/checking");
     }
-    router.push("/checking");
-    setLoading(false); // Oculta el loader
+    setLoading(false);
   };
 
   return (
-    <div className="w-full flex items-center justify-center flex-col mt-4">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full md:w-1/3 h-auto m-4">
-        <div className="mb-4">
-          <label
-            htmlFor="username"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Correo
-          </label>
-          <input
-            type="email"
-            placeholder="your email"
-            id="username"
-            name="username"
-            onChange={(e) => setEmail(e.target.value)}
-            className="relative z-50 w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-        <div className="mb-6">
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Contraseña
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            onChange={(e) => setPassword(e.target.value)}
-            className="relative z-50 w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-        <button
-          type="submit"
-          className="relative z-50 w-full bg-gray-950 text-white py-2 px-4 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onClick={handleSubmit}
-        >
-          Iniciar sesión
-        </button>
-        <br />
-        <br />
+    <>
+      <div className="flex flex-col items-center justify-center">
+       
+        <div className="relative z-20 w-[80%] h-auto mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black lg:w-[60%]">
+          <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200 text-center mb-4">
+            Iniciar sesión
+          </h2>
 
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          ¿No tienes una cuenta?
-        </label>
-        <button className="relative z-50 w-full bg-gray-950 text-white py-2 px-4 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <Link href="/register">Regístrate</Link>
-        </button>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <LabelInputContainer className="mb-4">
+              <Label htmlFor="email">Correo Electrónico</Label>
+              <Input 
+                {...register("email")}
+                id="email" 
+                placeholder="tuemail@ejemplo.com" 
+                type="email"
+                className={cn(errors.email && "bg-red-100 focus:bg-red-100")}
+              />
+              {errors.email ? (
+                <>
+                  <p className="text-red-500 text-sm">{errors.email.message?.toString()}</p>
+                  <span className="text-gray-500 text-xs">El correo debe ser válido y tener entre 10 y 75 caracteres.</span>
+                </>
+              ) : (
+                <span className="text-gray-500 text-xs">El correo debe ser válido y tener entre 10 y 75 caracteres.</span>
+              )}
+            </LabelInputContainer>
 
-        {errors.length > 0 && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4">
-            <ul className="mb-0">
-              {errors.map((error) => (
-                <li key={error}>{error}</li>
-              ))}
-            </ul>
-          </div>
-        )}
+            <LabelInputContainer className="mb-4">
+              <Label htmlFor="password">Contraseña</Label>
+              <Input 
+                {...register("password")}
+                id="password" 
+                type="password"
+                className={cn(errors.password && "bg-red-100 focus:bg-red-100")}
+              />
+              {errors.password ? (
+                <>
+                  <p className="text-red-500 text-sm">{errors.password.message?.toString()}</p>
+                  <span className="text-gray-500 text-xs">La contraseña debe tener entre 8 y 26 caracteres, incluyendo una letra mayúscula, un dígito y un carácter especial.</span>
+                </>
+              ) : (
+                <span className="text-gray-500 text-xs">La contraseña debe tener entre 8 y 26 caracteres, incluyendo una letra mayúscula, un dígito y un carácter especial.</span>
+              )}
+            </LabelInputContainer>
+
+            <button
+              type="submit"
+              className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset]"
+            >
+              Iniciar sesión
+              <BottomGradient />
+            </button>
+          </form>
+
+          {loading && (
+            <div className="flex justify-center items-center flex-col mt-10">
+              <Oval color="#000000" secondaryColor="#FFFFFF" height={50} width={50} strokeWidth={5} />
+              <br />
+              <span>Espere por favor...</span>
+            </div>
+          )}
+        </div>
       </div>
-      {
-              loading  && // Muestra el loader si está cargando
-                <div className="flex justify-center items-center flex-col mt-10">
-                  <Oval color="#000000"
-                  secondaryColor="#FFFFFF" // Color de fondo blanco
-                  height={50} width={50}  strokeWidth={5} />
-                  <br/>
-                  <span>Espere por favor...</span>
-                </div>
-            
-            }
-    </div>
+    </>
   );
 }
+
+const BottomGradient = () => {
+  return (
+    <>
+      <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
+      <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
+    </>
+  );
+};
+
+const LabelInputContainer = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  return (
+    <div className={cn("flex flex-col space-y-2 w-full", className)}>
+      {children}
+    </div>
+  );
+};
