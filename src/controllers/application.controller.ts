@@ -16,6 +16,9 @@ export async function getApplication(req: NextRequest) {
         title: true,
         type: true,
         description: true,
+        imagen: true,
+        skills: true,
+        date: true,
         location: true,
         status: true,
         apply: {
@@ -201,6 +204,10 @@ export async function getMyApplication(req: NextRequest) {
         description: true,
         location: true,
         status: true,
+        imagen: true,
+        type: true,
+        skills: true,
+        date: true,
         apply: {
           where: {
             userCedula: token.cedula,

@@ -15,6 +15,10 @@ type Application = {
   title: string;
   description: string;
   location: string;
+  type: "pasantia" | "servicio" | "proyecto";
+  imagen: string;
+  date: Date;
+  skills: string[];
   status: string;
   apply: [
     {

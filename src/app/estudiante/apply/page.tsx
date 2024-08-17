@@ -13,6 +13,9 @@ type Application = {
   title: string;
   type: "pasantia" | "servicio" | "proyecto";
   description: string;
+  imagen: string;
+  skills: string[];
+  date: Date;
   location: string;
   status: string;
   apply: [

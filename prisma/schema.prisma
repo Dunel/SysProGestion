@@ -97,9 +97,11 @@ model application {
   id           Int             @id @default(autoincrement())
   userCedula   Int
   title        String
-  description  String
+  description  String?
+  imagen       String?
   location     String
   type         typeApplication
+  skills       Skills[]
   status       status          @default(active)
   date         DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
