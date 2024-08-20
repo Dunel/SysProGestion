@@ -5,7 +5,7 @@ import EstudianteFormActualizarProfile from "@/components/perfiles/EstudianteFor
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { Oval } from "react-loader-spinner";
+import Loader from "@/components/Loader";
 
 export default function EstudianteInfoForm() {
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -66,20 +66,6 @@ export default function EstudianteInfoForm() {
         }
       />
 
-      {session?.user.dataProfile === null ||
-        (loading && ( // Muestra el loader si está cargando
-          <div className="flex justify-center items-center flex-col mt-10">
-            <Oval
-              color="#000000"
-              secondaryColor="#FFFFFF" // Color de fondo blanco
-              height={50}
-              width={50}
-              strokeWidth={5}
-            />
-            <br />
-            <span>Espere por favor, su informacion se esta cargando...</span>
-          </div>
-        ))}
 
       {session?.user.profile === false && (
         <div className="w-[80%] m-4 p-4 mx-auto">
@@ -91,19 +77,9 @@ export default function EstudianteInfoForm() {
         </div>
       )}
 
-      {!session?.user.dataProfile && session?.user.profile != false ? (
-        // Muestra el loader si está cargando
-        <div className="flex justify-center items-center flex-col mt-10">
-          <Oval
-            color="#000000"
-            secondaryColor="#FFFFFF" // Color de fondo blanco
-            height={50}
-            width={50}
-            strokeWidth={5}
-          />
-          <br />
-          <span>Espere por favor, su informacion se esta cargando...</span>
-        </div>
+      {!session?.user.dataProfile && session?.user.profile != false 
+        ? (
+          <Loader/> //Muestra el loader si está cargando nuetsras no sepa si es null, false o true
       ) : (
         <div
           className={`${

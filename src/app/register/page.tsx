@@ -12,7 +12,7 @@ import axios from "axios";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Oval } from 'react-loader-spinner'; 
+import Loader from '@/components/Loader'; 
 
 type Data = {
   cedula: string;
@@ -168,14 +168,7 @@ export default function Register() {
             )
             }
             {
-              loading  && // Muestra el loader si está cargando
-                <div className="flex justify-center items-center flex-col mt-10">
-                  <Oval color="#000000"
-                  secondaryColor="#FFFFFF" // Color de fondo blanco
-                  height={50} width={50}  strokeWidth={5} />
-                  <br/>
-                  <span>Espere por favor...</span>
-                </div>
+              loading  && <Loader/>
             
             }
           </GridMain>
