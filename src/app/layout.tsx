@@ -20,21 +20,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-gray-100">
+      <body className="min-h-screen bg-gray-100 flex flex-col">
        
         <SessionAuthProvider>
           <NavBar />
-
-      
+          
+          <div className="flex-grow h-[80%]">
         {/* <AuroraBackground> */}
             {children}
         {/* </AuroraBackground> */}
+          </div>
        
      
         </SessionAuthProvider>
       
         <Footer />
-      
         
       </body>
     </html>

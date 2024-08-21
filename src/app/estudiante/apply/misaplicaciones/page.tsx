@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import InternshipCards from './InternshipCards';
 import Loader from '@/components/Loader'; 
 import Modal from '@/components/Modal';
-import  Skeleton  from '@/components/ui/Skeleton'; // Asegúrate de que esta importación sea correcta
+import Skeleton from '@/components/ui/Skeleton';
 
 
 
@@ -32,6 +32,8 @@ export default function Page() {
   const { data: session } = useSession();
   const [applications, setApplications] = useState<Application[]>();
   const [loading, setLoading] = useState(false);
+  const [squeleton, setSqueleton] = useState(true);
+  const [spanRetirar, setSpanRetirar] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const [codeOferta, setCodeOferta] = useState(0);//!ESTO DEBERIA SER EL CODIGO DE LA OFERTA EJ P-2024-1001, para identificarla en el modal al preguntar si la desea retirar
   const [applicationToDelete, setApplicationToDelete] = useState<{ id: number; applyId: number } | null>(null);
@@ -39,6 +41,7 @@ export default function Page() {
   const handleApply = async (id: number) => {
     try {
       setLoading(true);
+      setSqueleton(true);
       const res = await axios.post("/api/estudiante/apply", { id });
       console.log(res.data);
       getApplications();
@@ -50,6 +53,7 @@ export default function Page() {
       }
     } finally {
       setLoading(false);
+      setSqueleton(false)
     }
   };
 
@@ -59,7 +63,10 @@ export default function Page() {
       const { id, applyId } = applicationToDelete;
       //setCodeOferta(id)
       try {
-        setLoading(true);
+        //setLoading(true);
+        //setSqueleton(true);
+        setSpanRetirar(true)
+
         const res = await axios.delete("/api/estudiante/apply", {
           data: { idAplication: id, applyId },
         });
@@ -72,7 +79,9 @@ export default function Page() {
           console.error("error:", error);
         }
       } finally {
-        setLoading(false);
+        //setLoading(false);
+        //setSqueleton(false);
+        setSpanRetirar(false);
         setModalOpen(false); // Cierra el modal después de la eliminación
         setApplicationToDelete(null); // Resetea el estado
       }
@@ -88,6 +97,8 @@ export default function Page() {
   const getApplications = async () => {
     try {
       setLoading(true);
+      setSqueleton(true);
+
       const res = await axios.get("/api/estudiante/apply/myapply");
       console.log("data: ", res.data.applications);
       setApplications(res.data.applications);
@@ -99,6 +110,8 @@ export default function Page() {
       }
     } finally {
       setLoading(false);
+      setSqueleton(false)
+
     }
   };
 
@@ -113,11 +126,20 @@ export default function Page() {
           title={"MIS APLICACIONES A OFERTAS DE VACANTE"} 
           subtitle={"Aquí podrás visualizar todas las Ofertas de Vacantes de Pasantías, Servicio Comunitario y Proyectos de tesis a las que has aplicado exitosamente."} 
           />
-     
-      {applications && applications.length === 0 &&
-      <div className="flex justify-center items-center mx-auto my-auto bg-white w-[50%] h-[50%]">
-          <p>No has aplicado a ninguna Oferta de Vacante.</p>
+        {squeleton &&  
+        <div className="mt-12">
+         <Skeleton/>
+        </div>        
+         }
+         {/* <Loader />     */}
+ 
+       
+      {applications && applications.length === 0 && !squeleton &&
+      <div className="flex justify-center items-center mt-12 mx-auto bg-white w-[60%] min-h-[30vh]">
+          <p className="m-2 p-2 flex text-center">No has aplicado a ninguna Oferta de Vacante.</p>
       </div>
+  
+        
  
       }
       
@@ -137,20 +159,13 @@ export default function Page() {
         />
       }
   
-      {loading && 
-      <div className="flex flex-col justify-center gap-5 items-center mx-auto my-auto w-[90%] h-[90%]" >
-        <Skeleton  /> 
-         <Loader />    
-        </div>
-
-      
-       }
+   
     
      
 
       <Modal
         info={`¿Estás seguro de que deseas retirar su aplicación a la oferta ID: ${codeOferta}`}
-        isLoading={loading}
+        isLoading={spanRetirar}
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
         onConfirm={handleDeleteApply}
