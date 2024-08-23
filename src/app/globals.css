@@ -34,7 +34,7 @@ form.form-student-info label {
 
 header.color-header{
   background: rgb(255,255,255);
-  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 7%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 92%, rgba(255,255,255,0) 100%);
+  background: linear-gradient(90deg, rgba(255,255,255,0) 3%, rgba(255,255,255,1) 10%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 91%, rgba(255,255,255,0) 99%);
 }
 
 @keyframes pulse {
@@ -47,4 +47,14 @@ header.color-header{
   100% {
     background-color: #e0e0e0;
   }
+}
+
+.opacidad {
+  background-color: #0000008e; 
+}
+.opacidadHover:hover {
+  background-color: #0000008f; 
+}
+.ColorNotificacionList {
+  background-color: #c2dded62; 
 }

@@ -1,12 +1,11 @@
 "use client";
-import ContainerWeb from "@/components/ContainerWeb";
 import GridContainer from "@/components/GridContainer";
-import GridMain from "@/components/GridMain";
-import GridSecond from "@/components/GridSecond";
 import Header from "@/components/Header";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
+import NotificationsCard from "./NotificacionsCard";
+import Skeleton from '@/components/ui/SkeletonComponentLines';
 
 type Notificaciones = {
   action: "apply" | "reject" | "accept" | "proposal" | "delete";
@@ -18,21 +17,26 @@ type Notificaciones = {
 };
 
 export default function Page() {
+  const [squeleton, setSqueleton] = useState(true);
   const { data: session } = useSession();
   const [notificaciones, setNotifcaciones] = useState<Notificaciones[]>();
 
   const getNotificaciones = async () => {
     try {
+      setSqueleton(true);
       const res = await axios.get("/api/estudiante/notifications");
-      setNotifcaciones(res.data.notifications);
+      setNotifcaciones(res.data.notifications);      
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);
       } else {
         console.error("error:", error);
-      }
+      
+    }   }finally {
+      setSqueleton(false);
     }
   };
+
   useEffect(() => {
     getNotificaciones();
   }, []);
@@ -54,36 +58,27 @@ export default function Page() {
   return (
     <>
       <Header title={"NOTIFICACIONES"} subtitle={"aquí notifican cosas jjj"} />
-      <ContainerWeb>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <GridMain>
-            <GridContainer>
-              {notificaciones && notificaciones.length > 0 ? (
-                notificaciones.map((noti, index) => (
-                  <div key={index}>
-                    <p>
-                      {actionDesc[noti.action]}
-                      <strong>
-                        {" "}
-                        {typeDesc[noti.application.type]}
-                      </strong> de <strong>{noti.application.title}</strong>
-                    </p>
-                    <p>Fecha: {new Date(noti.date).toLocaleString()}</p>
-                  </div>
+  
+          {squeleton && <Skeleton/>}
+          <div className="flex flex-col items-center bg-white rounded-lg shadow-md m-4 mb-8 p-2 w-[90%] mx-auto my-5"> 
+             
+              
+              {notificaciones && notificaciones.length > 0 
+              ? (
+                notificaciones.map((noti) => (
+                  <NotificationsCard noti={noti} />
                 ))
-              ) : (
+                ) 
+              : (
                 <GridContainer>
                   <p>No hay notificaciones disponibles</p>
                 </GridContainer>
               )}
-            </GridContainer>
-          </GridMain>
+           
 
-          <GridSecond>
-            <GridContainer>{session?.user?.email}</GridContainer>
-          </GridSecond>
+        
         </div>
-      </ContainerWeb>
+
     </>
   );
 }

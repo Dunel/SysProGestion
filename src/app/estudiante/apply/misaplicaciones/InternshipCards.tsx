@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Modal from '@/components/Modal';
 
 interface Skill {
   id: number;
@@ -31,11 +30,15 @@ interface InternshipCardsProps {
 
 const InternshipCard: React.FC<{ internship: Internship }> = ({ internship }) => (
   <div className="flex flex-col justify-center bg-white rounded-lg shadow-md m-4 mb-8 p-2 w-[90%] mx-auto my-5">
-    
-    <div className="flex flex-col items-center md:flex-row md:space-x-4">
+       
+       <div className='flex'>
+            {/* //!ESTE CODE DEBERIA VENIR DE UN CAPO DE LA TABLA "ofertas" CUYA NOMENCLATURA SE CREA DE SEGUN EL TIPO DE OFERTA + ANO + ID   */}
+          <span className='flex  ml-auto p-1 text-red-500'>Codigo de Oferta de Vacante: {'P-2024-000'+internship.id}</span>
         
+        </div>
+    <div className="flex flex-col items-center md:flex-row md:space-x-4">
         {/* //! IMG */}
-        <div className="m-1 p-1 mx-auto h-[40%] md:w-[30%] lg:w-[20%]">
+        <div className="flex m-1 p-1 mx-auto h-[40%] md:w-[30%] lg:w-[20%]">
           <img
             src={internship.imagen}
             alt={`${internship.dependencia} logo`}
@@ -45,7 +48,6 @@ const InternshipCard: React.FC<{ internship: Internship }> = ({ internship }) =>
 
           {/* //! INFO */}
         <div className="m-1 p-1 word-wrap overflow-wrap h-[60%] md:w-[80%]">
-          
           <h3 className="text-xl font-semibold text-gray-800 mb-2">{internship.title}</h3>
           <p className="text-lg text-gray-600 mb-1"> <i>{internship.dependencia}</i></p>
           <p className="text-sm text-gray-500">📍{internship.location}</p>
@@ -60,12 +62,14 @@ const InternshipCard: React.FC<{ internship: Internship }> = ({ internship }) =>
               <p>{internship.apply[0].status}</p>
               </div>
             <div className='w-[33%]'>
-            <span className="text-lg font-medium text-gray-700 mb-2">Tipo de Aplicacion:</span> 
+            <span className="text-lg font-medium text-gray-700 mb-2">Tipo de Oferta:</span> 
+            {/* //! ASI QUE NO DEBERIA SER {internship.type} DADO QUE EL TYPO DEL PROCEDIMIENTO LO DEFINE LA OFERTA NO EL QUE UN ESTUDIANTE APLIQUE A ELLA */}
+            {/* //! PROYECTO DE TESIS DEBERIA ESTAR EN OFERTAS? NO LO CREO */}
               <p>
                 {
                 internship.type === 'pasantia' ? 'Pasantias'
                 : internship.type === 'servicio'? 'Servicio Cominitario'
-                : internship.type === 'proyecto'? 'Proyecto de Tesis' : ''
+                : internship.type === 'proyecto'? 'Proyecto de Tesis' : '' 
                 }
                 </p>
               </div>
@@ -105,11 +109,9 @@ const InternshipCard: React.FC<{ internship: Internship }> = ({ internship }) =>
 
 const InternshipCards: React.FC<InternshipCardsProps> = ({ internships }) => {
 
-
   return (
-
     <>
-    <div className="relative z-20 mx-auto rounded shadow w-[90%]">
+    <div className="relative z-20 mx-auto py-2 rounded shadow w-[90%]">
         {internships.map((internship) => (
           <InternshipCard key={internship.id} internship={internship}/>
         ))}

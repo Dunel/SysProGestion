@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Loader from "@/components/Loader";
+import  Skeleton  from "@/components/ui/SkeletonComponent";
 
 export default function EstudianteInfoForm() {
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -77,9 +78,10 @@ export default function EstudianteInfoForm() {
         </div>
       )}
 
+      {/* //Muestra el loader aun sin saer si la data es null, false o true */}
       {!session?.user.dataProfile && session?.user.profile != false 
         ? (
-          <Loader/> //Muestra el loader si está cargando nuetsras no sepa si es null, false o true
+            <Skeleton/> 
       ) : (
         <div
           className={`${
