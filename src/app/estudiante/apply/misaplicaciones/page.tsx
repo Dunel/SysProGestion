@@ -135,12 +135,6 @@ export default function Page() {
                           ...internship,
                           dependencia: 'Instituto de la Mujer del Sur',
                           handleDeleteApply: confirmDelete, // Pasamos la función confirmDelete
-                          imagen: "https://media.noticiaalminuto.com/wp-content/uploads/2021/01/IMM-Maracaibo.jpg",
-                          skills: [
-                            { id: 1, name: "Don de Gente" },
-                            { id: 2, name: "Trabajo en Equipo" },
-                            { id: 3, name: "Resolución de Problemas" },
-                          ],
                         }))} 
                     />
                     : null
