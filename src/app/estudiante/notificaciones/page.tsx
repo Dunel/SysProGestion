@@ -57,7 +57,7 @@ export default function Page() {
 
   return (
     <>
-      <Header title={"NOTIFICACIONES"} subtitle={"aquí notifican cosas jjj"} />
+      <Header title={"NOTIFICACIONES"} subtitle={"Aqui podras visualizar todas las notificaciones relacionadas con los procesos a los que aplicaste y eres parte interesada. Mantente informado!"} />
   
           {squeleton && <Skeleton/>}
           <div className="flex flex-col items-center bg-white rounded-lg shadow-md m-4 mb-8 p-2 w-[90%] mx-auto my-5"> 
