@@ -1,14 +1,12 @@
 "use client";
-import ContainerWeb from "@/components/ContainerWeb";
-import GridContainer from "@/components/GridContainer";
-import GridMain from "@/components/GridMain";
-import GridSecond from "@/components/GridSecond";
 import Header from "@/components/Header";
 import axios from "axios";
-import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-
 import InternshipCards from './InternshipCards';
+import Modal from '@/components/Modal';
+import Skeleton from '@/components/ui/SkeletonComponent';
+
+
 
 type Application = {
   id: number;
@@ -29,60 +27,71 @@ type Application = {
 };
 
 export default function Page() {
-
-  const internships = [
-    {
-      id: 1,
-      title: "Practicante de Derecho para la defensa de niños y niñas en situcion de vulneravilidad",
-      organization: "Instituto de la Mujer del Sur",
-      location: "Parroquia Casique Mara, Municipio Maracaibo, calle 23 con Av 20", 
-      logoUrl: "https://media.noticiaalminuto.com/wp-content/uploads/2021/01/IMM-Maracaibo.jpg",
-      skills: [
-        { id: 1, name: "Don de Gente" },
-        { id: 2, name: "Trabajo en Equipo" },
-        { id: 3, name: "Resolución de Problemas" },
-      ],
-    },
-    // ... más pasantías
-  ];
-
-  const { data: session } = useSession();
   const [applications, setApplications] = useState<Application[]>();
+  const [loading, setLoading] = useState(false);
+  const [squeleton, setSqueleton] = useState(true);
+  const [spanRetirar, setSpanRetirar] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [codeOferta, setCodeOferta] = useState(0);//!ESTO DEBERIA SER EL CODIGO DE LA OFERTA EJ P-2024-1001, para identificarla en el modal al preguntar si la desea retirar
+  const [applicationToDelete, setApplicationToDelete] = useState<{ id: number; applyId: number } | null>(null);
 
-  const handleApply = async (id: number) => {
-    try {
-      const res = await axios.post("/api/estudiante/apply", { id });
-      console.log(res.data);
-      getApplications();
-      alert("Solicitud enviada");
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log("error lanzado:", error.response?.data.error);
-      } else {
-        console.error("error:", error);
+//!QUE HACE ESTA FUNCION? NO ES UTILIZADA!
+  // const handleApply = async (id: number) => {
+  //   try {
+  //     setLoading(true);
+  //     setSqueleton(true);
+  //     const res = await axios.post("/api/estudiante/apply", { id });
+  //     console.log(res.data);
+  //     getApplications();
+  //   } catch (error) {
+  //     if (axios.isAxiosError(error)) {
+  //       console.log("error lanzado:", error.response?.data.error);
+  //     } else {
+  //       console.error("error:", error);
+  //     }
+  //   } finally {
+  //     setLoading(false);
+  //     setSqueleton(false)
+  //   }
+  // };
+
+  const handleDeleteApply = async () => {
+    if (applicationToDelete) {
+
+      const { id, applyId } = applicationToDelete;
+
+      try {
+        setSpanRetirar(true)
+        const res = await axios.delete("/api/estudiante/apply", {
+          data: { idAplication: id, applyId },
+        });
+        console.log(res.data);
+        getApplications();
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.log("error lanzado:", error.response?.data.error);
+        } else {
+          console.error("error:", error);
+        }
+      } finally {
+        setSpanRetirar(false);
+        setModalOpen(false); // Cierra el modal después de la eliminación
+        setApplicationToDelete(null); // Resetea el estado
       }
     }
   };
 
-  const handleDeleteApply = async (idAplication: number, applyId: number) => {
-    try {
-      const res = await axios.delete("/api/estudiante/apply", {
-        data: { idAplication, applyId },
-      });
-      console.log(res.data);
-      getApplications();
-      alert("Solicitud eliminada");
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log("error lanzado:", error.response?.data.error);
-      } else {
-        console.error("error:", error);
-      }
-    }
+  const confirmDelete = (id: number, applyId: number) => {
+    setApplicationToDelete({ id, applyId });
+    setCodeOferta(id)
+    setModalOpen(true);
   };
 
   const getApplications = async () => {
     try {
+      setLoading(true);
+      setSqueleton(true);
+
       const res = await axios.get("/api/estudiante/apply/myapply");
       console.log("data: ", res.data.applications);
       setApplications(res.data.applications);
@@ -92,93 +101,53 @@ export default function Page() {
       } else {
         console.error("error:", error);
       }
+    } finally {
+      setLoading(false);
+      setSqueleton(false)
+
     }
   };
+
   useEffect(() => {
     getApplications();
   }, []);
 
   return (
     <>
+   
       <Header 
           title={"MIS APLICACIONES A OFERTAS DE VACANTE"} 
-          subtitle={"Aqui podras visuazar todas las Ofertas de Vacantes de Pasantias y Servicio Comunitario a las que has demostrado interes aplicando."} 
-         />      <ContainerWeb>
-      <InternshipCards internships={internships} />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <GridMain>
-            {applications && applications.length > 0 ? (
-              applications.map((application) => (
-                <div
-                  key={application.id}
-                  className="bg-white shadow-md rounded-lg p-8 mb-3"
-                >
-                  <div>
-                    <h2 className="text-gray-800 text-3xl font-semibold">
-                      {application.title}
-                    </h2>
-                    <p className="mt-2 text-gray-600">
-                      {application.description}
-                    </p>
-                    <p className="mt-2 text-gray-600">
-                      Ubicación: {application.location}
-                    </p>
-                    <p className="mt-2 text-gray-600">
-                      Estado de la solicitud: {application.status}
-                    </p>
-                    <p className="mt-2 text-gray-600">
-                      Estado de tu apply: {application.apply[0].status}
-                    </p>
-                    <div className="flex justify-between items-start mt-4">
-                      {application.status === "inactive" ||
-                      application.apply.length > 0 ? (
-                        <>
-                          <button
-                            className="bg-gray-600 text-white font-bold py-2 px-4 rounded"
-                            disabled
-                          >
-                            {application.status === "inactive"
-                              ? "Oferta inactiva"
-                              : "Solicitud enviada"}
-                          </button>
-                          {application.apply.length > 0 && (
-                            <button
-                              className="bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-                              onClick={() =>
-                                handleDeleteApply(
-                                  application.id,
-                                  application.apply[0].id
-                                )
-                              }
-                            >
-                              Borrar solicitud
-                            </button>
-                          )}
-                        </>
-                      ) : (
-                        <button
-                          className="bg-gray-800 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
-                          onClick={() => handleApply(application.id)}
-                        >
-                          Enviar solicitud
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <GridContainer>
-                <p>No tienes solicitudes</p>
-              </GridContainer>
-            )}
-          </GridMain>
+          subtitle={"Aquí podrás visualizar todas las Ofertas de Vacantes de Pasantías, Servicio Comunitario y Proyectos de tesis a las que has aplicado exitosamente."} 
+          />
+ 
+         {squeleton 
+         
+            ? <Skeleton/>
 
-          <GridSecond>
-            <GridContainer>{session?.user?.email}</GridContainer>
-          </GridSecond>
-        </div>
-      </ContainerWeb>
+            : applications && applications.length === 0 
+                ? <div className="flex flex-col justify-center items-center mt-12 mx-auto bg-white w-[60%] min-h-[30vh]">
+                    <p className="m-2 p-2 text-center text-red-500">No tienes aplicaciones a Oferta de Vacante.</p>
+                    <p className="m-2 p-2 text-center">Entra a tu menú de navegación y haz clic en la opción <i>“Oferta de Vacantes”, </i> y ¡Aplica ya!</p>
+                  </div>
+                : applications && applications.length > 0
+                  ? <InternshipCards 
+                        internships={applications.map(internship => ({
+                          ...internship,
+                          dependencia: 'Instituto de la Mujer del Sur',
+                          handleDeleteApply: confirmDelete, // Pasamos la función confirmDelete
+                        }))} 
+                    />
+                    : null
+          }
+
+          <Modal
+              info={`¿Estás seguro de que deseas retirar su aplicación a la oferta ID: ${codeOferta}`}
+              isLoading={spanRetirar}
+              isOpen={isModalOpen}
+              onClose={() => setModalOpen(false)}
+              onConfirm={handleDeleteApply}
+          />
+    
     </>
   );
 }

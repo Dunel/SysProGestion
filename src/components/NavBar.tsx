@@ -56,7 +56,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <Disclosure as="nav" className="bg-gray-950 w-full h-auto min-h-[8vh]">
+    <Disclosure as="nav" className="bg-gray-950 w-full h-auto min-h-[10%]">
       {({ open }) => (
         <>
           <div className="mx-auto  px-2 sm:px-6 lg:px-8">
@@ -155,3 +155,4 @@ export default function Navbar() {
     </Disclosure>
   );
 }
+
