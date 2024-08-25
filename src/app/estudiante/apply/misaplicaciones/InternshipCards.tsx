@@ -7,7 +7,12 @@ interface Skill {
 
 interface Internship {
   handleDeleteApply: Function;
-  dependencia: string;
+  dependencia: {
+    name: string;
+    User: {
+      image: string;
+    };
+  }
   id: number;
   title: string;
   description: string;
@@ -64,7 +69,7 @@ const InternshipCard: React.FC<{ internship: Internship }> = ({
       {/* //! IMG */}
       <div className="flex m-1 p-1 mx-auto h-[40%] md:w-[30%] lg:w-[20%]">
         <img
-          src={internship.imagen}
+          src={internship.dependencia.User.image}
           alt={`${internship.dependencia} logo`}
           className="mx-auto w-60 h-60 object-cover rounded-full border-4 border-black-800 md:w-40 md:h-40"
         />
@@ -77,7 +82,7 @@ const InternshipCard: React.FC<{ internship: Internship }> = ({
         </h3>
         <p className="text-lg text-gray-600 mb-1">
           {" "}
-          <i>{internship.dependencia}</i>
+          <i>{internship.dependencia.name}</i>
         </p>
         <p className="text-sm text-gray-500">📍{internship.location}</p>
 

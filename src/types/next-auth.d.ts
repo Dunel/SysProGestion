@@ -17,6 +17,10 @@ declare module "next-auth" {
         skills: [string];
         interests: string;
         description: string;
+        email: string;
+        social: string;
+        rif: number | null;
+        name: string;
         names: string;
         lastnames: string;
         phone: string;
@@ -39,6 +43,10 @@ declare module "next-auth" {
       skills: [string];
       interests: string;
       description: string;
+      email: string;
+      social: string;
+      rif: number | null;
+      name: string;
       names: string;
       lastnames: string;
       phone: string;
@@ -62,6 +70,10 @@ declare module "next-auth/jwt" {
       skills: [string];
       interests: string;
       description: string;
+      email: string;
+      social: string;
+      rif: number | null;
+      name: string;
       names: string;
       lastnames: string;
       phone: string;

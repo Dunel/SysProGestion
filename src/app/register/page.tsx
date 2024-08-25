@@ -27,7 +27,7 @@ type Roles = "alcaldia" | "dependencia" | "estudiante";
 export default function Register() {
   const [code, setCode] = useState("");
   const [mail, setMail] = useState("");
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(2);
   const [data, setData] = useState({} as Data);
   const [count, setCount] = useState(0);
   const [token, setToken] = useState("");

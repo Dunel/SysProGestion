@@ -24,7 +24,11 @@ export default function Navbar() {
       setNavigation([
         { name: "PRINCIPAL", href: "/estudiante", current: false },
         { name: "MI PERFIL", href: "/estudiante/perfil", current: false },
-        { name: "OFERTAS DE VACANTES", href: "/estudiante/apply", current: false },
+        {
+          name: "OFERTAS DE VACANTES",
+          href: "/estudiante/apply",
+          current: false,
+        },
         {
           name: "MIS APLICACIONES A OFERTAS",
           href: "/estudiante/apply/misaplicaciones",
@@ -39,10 +43,22 @@ export default function Navbar() {
     } else if (session?.user.role === "alcaldia") {
       setNavigation([
         { name: "PRINCIPAL", href: "/alcaldia", current: false },
+        { name: "MI PERFIL", href: "/alcaldia/perfil", current: false },
         { name: "SOLICITUDES", href: "/alcaldia/apply", current: false },
         {
           name: "NOTIFICACIONES",
           href: "/alcaldia/notificaciones",
+          current: false,
+        },
+      ]);
+    } else if (session?.user.role === "dependencia") {
+      setNavigation([
+        { name: "PRINCIPAL", href: "/dependencia", current: false },
+        { name: "MI PERFIL", href: "/dependencia/perfil", current: false },
+        { name: "SOLICITUDES", href: "/dependencia/apply", current: false },
+        {
+          name: "NOTIFICACIONES",
+          href: "/dependencia/notificaciones",
           current: false,
         },
       ]);
@@ -155,4 +171,3 @@ export default function Navbar() {
     </Disclosure>
   );
 }
-
