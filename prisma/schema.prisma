@@ -45,6 +45,7 @@ model User {
   apply        apply[]
   application  application[]
   notification notification[]
+  depInfo      dependenciaInfo[]
 }
 
 enum Skills {
@@ -147,4 +148,15 @@ enum actionNoti {
   delete
   reject
   proposal
+}
+
+model dependenciaInfo {
+  id          Int      @id @default(autoincrement())
+  userCedula  Int      @unique
+  name        String
+  description String?
+  address     String?
+  phone       String?
+  updatedAt   DateTime @updatedAt
+  User        User     @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
 }

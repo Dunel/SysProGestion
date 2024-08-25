@@ -1,7 +1,16 @@
 "use client";
 import { FaClipboardCheck, FaTrashAlt, FaRegSadCry, FaRegLaughSquint } from 'react-icons/fa';
 
-export default function NotificationsCard({noti}: {noti: any}, {index}:{index: any}) {
+type Notificaciones = {
+    action: "apply" | "reject" | "accept" | "proposal" | "delete";
+    date: Date;
+    application: {
+      title: string;
+      type: "servicio" | "pasantia" | "proyecto";
+    };
+  };
+
+export default function NotificationsCard({noti}: {noti: Notificaciones}, {index}:{index: number}) {
     const actionDesc = {
         apply: "Aplicaste a",
         reject: "Rechazaron tú solicitud de",
@@ -42,7 +51,7 @@ export default function NotificationsCard({noti}: {noti: any}, {index}:{index: a
                                             ? <FaTrashAlt style={{ color: 'red' }} size={40}/>
                                             : noti.action === 'apply' 
                                                 ? <FaClipboardCheck style={{ color: 'green' }} size={40}/>
-                                                : noti.action === 'acept' 
+                                                : noti.action === 'accept' 
                                                     ? <FaRegLaughSquint style={{ color: 'green' }} size={40}/> 
                                                     :noti.action === 'reject' 
                                                         ? <FaRegSadCry style={{ color: 'red' }} size={40}/> 

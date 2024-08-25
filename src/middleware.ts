@@ -1,84 +1,47 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { getToken } from "next-auth/jwt";
+import { withAuth } from "next-auth/middleware";
 
-export async function middleware(req: NextRequest) {
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  const url = req.nextUrl.pathname;
+const rolePaths = {
+  alcaldia: ["/alcaldia", "/api/alcaldia"],
+  dependencia: ["/dependencia", "/api/dependencia"],
+  estudiante: ["/estudiante", "/api/estudiante"],
+};
 
-  if (!token) {
-    if (url.startsWith("/api")) {
-      return NextResponse.json({ message: "No autorizado" }, { status: 401 });
-    } else if (!url.startsWith("/login") && !url.startsWith("/register")) {
-      return NextResponse.redirect(new URL("/login", req.url));
-    } else {
-      return NextResponse.next();
+export default withAuth(
+  function middleware(req) {
+    const role = req.nextauth.token?.role;
+
+    if (role) {
+      const redirectUrl = rolePaths[role][0];
+      if (req.nextUrl.pathname === "/login" || req.nextUrl.pathname === "/checking") {
+        return Response.redirect(new URL(redirectUrl, req.url));
+      }
     }
+  },
+  {
+    callbacks: {
+      authorized: ({ token, req }) => {
+        if(req.nextUrl.pathname === "/login") return true;
+        if (!token) return false;
+
+        const { role } = token;
+        const { pathname } = req.nextUrl;
+
+        const allowedPaths = rolePaths[role] || [];
+        return allowedPaths.some(path => pathname.startsWith(path));
+      },
+    },
   }
-
-  if (url.startsWith("/login") || (url.startsWith("/register") && token.role)) {
-    return NextResponse.redirect(new URL("/checking", req.url));
-  }
-
-  const apiRoles: { [key: string]: string } = {
-    "/api/estudiantes": "estudiante",
-    "/api/alcaldia": "alcaldia",
-    "/api/dependencia": "dependencia",
-  };
-  const matchedPath = Object.keys(apiRoles).find((path) =>
-    url.startsWith(path)
-  );
-  const requiredRole = matchedPath ? apiRoles[matchedPath] : undefined;
-
-  if (requiredRole && token.role !== requiredRole) {
-    return NextResponse.json({ message: "Permiso denegado" }, { status: 403 });
-  }
-
-  const urlBasedOnRole = {
-    alcaldia: "/alcaldia",
-    estudiante: "/estudiante",
-    dependencia: "/dependencia",
-  };
-
-  const redirectTo = urlBasedOnRole[token.role];
-
-  if (url.startsWith("/checking")) {
-    if (redirectTo) {
-      return NextResponse.redirect(new URL(redirectTo, req.url));
-    }
-  }
-
-  if (
-    token.profile === false &&
-    url.startsWith(`${redirectTo}/perfil`) &&
-    url.startsWith(`/api${redirectTo}/perfil`)
-  ) {
-    if (redirectTo) {
-      return NextResponse.redirect(new URL(redirectTo + "/perfil", req.url));
-    }
-  }
-
-  if (
-    (url.startsWith("/alcaldia") && token.role !== "alcaldia") ||
-    (url.startsWith("/estudiante") && token.role !== "estudiante") ||
-    (url.startsWith("/dependencia") && token.role !== "dependencia")
-  ) {
-    return NextResponse.redirect(new URL("/checking", req.url));
-  }
-
-  return NextResponse.next();
-}
+);
 
 export const config = {
   matcher: [
+    "/estudiante/:path*",
+    "/alcaldia/:path*",
+    "/dependencia/:path*",
+    "/api/estudiante/:path*",
     "/api/alcaldia/:path*",
     "/api/dependencia/:path*",
-    "/api/estudiante/:path*",
-    "/alcaldia/:path*",
-    "/estudiante/:path*",
-    "/checking",
-    "/dependencia/:path*",
     "/login",
-    "/register",
+    "/checking",
   ],
 };
