@@ -45,7 +45,9 @@ export async function getNoti(req: NextRequest) {
     }
     const notifications = await prisma.application.findMany({
       where: {
-        userCedula: token.cedula,
+        dependencia:{
+          userCedula: token.cedula,
+        },
       },
       select: {
         title: true,
