@@ -43,34 +43,33 @@ export const userSchema = z.object({
     .max(50, { message: "El apellido debe tener maximo 50 caracteres" })
     .transform((val) => val.toUpperCase()),
     birthdate: z
-    .string({ required_error: "La fecha de nacimiento es requerida" })
-    .date()
-    .transform((val, ctx) => {
-      const date = new Date(val);
-      
-      if (isNaN(date.getTime())) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "La fecha de nacimiento no es válida",
-        });
-        return z.NEVER;
-      }
-
-      const today = new Date();
-      const age = today.getFullYear() - date.getFullYear();
-      const month = today.getMonth() - date.getMonth();
-      const day = today.getDate() - date.getDate();
-
-      if (age < 18 || (age === 18 && month < 0) || (age === 18 && month === 0 && day < 0)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Debes tener al menos 18 años",
-        });
-        return z.NEVER;
-      }
-
-      return date;
-    }),
+      .string({ required_error: "La fecha de nacimiento es requerida" })
+      .datetime({ offset: true })
+      .transform((val, ctx) => {
+        const date = new Date(val);
+        if (isNaN(date.getTime())) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "La fecha de nacimiento no es válida",
+          });
+          return z.NEVER;
+        }
+  
+        const today = new Date();
+        const age = today.getFullYear() - date.getFullYear();
+        const month = today.getMonth() - date.getMonth();
+        const day = today.getDate() - date.getDate();
+  
+        if (age < 18 || (age === 18 && month < 0) || (age === 18 && month === 0 && day < 0)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Debes tener al menos 18 años",
+          });
+          return z.NEVER;
+        }
+  
+        return date;
+      }),
   telefono: z
     .string({ required_error: "El telefono es requerido" })
     .min(10, { message: "El telefono debe tener minimo 10 caracteres" })
