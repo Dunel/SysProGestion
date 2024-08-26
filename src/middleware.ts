@@ -8,26 +8,38 @@ const rolePaths = {
 
 export default withAuth(
   function middleware(req) {
-    const role = req.nextauth.token?.role;
+    const token = req.nextauth.token;
+    const url = req.nextUrl.pathname;
 
-    if (role) {
-      const redirectUrl = rolePaths[role][0];
-      if (req.nextUrl.pathname === "/login" || req.nextUrl.pathname === "/checking") {
+    if (token?.role) {
+      const redirectUrl = rolePaths[token.role][0];
+      if (
+        url.startsWith("/login") ||
+        url.startsWith("/register") ||
+        url.startsWith("/checking")
+      ) {
         return Response.redirect(new URL(redirectUrl, req.url));
+      }
+      if (
+        !token.profile &&
+        !url.startsWith(`${redirectUrl}/perfil`) &&
+        !url.startsWith(`/api${redirectUrl}/perfil`)
+      ) {
+        return Response.redirect(new URL(redirectUrl + "/perfil", req.url));
       }
     }
   },
   {
     callbacks: {
       authorized: ({ token, req }) => {
-        if(req.nextUrl.pathname === "/login") return true;
+        if (req.nextUrl.pathname === "/login") return true;
         if (!token) return false;
 
         const { role } = token;
         const { pathname } = req.nextUrl;
 
         const allowedPaths = rolePaths[role] || [];
-        return allowedPaths.some(path => pathname.startsWith(path));
+        return allowedPaths.some((path) => pathname.startsWith(path));
       },
     },
   }

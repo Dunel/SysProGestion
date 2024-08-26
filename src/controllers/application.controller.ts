@@ -208,6 +208,16 @@ export async function getMyApplication(req: NextRequest) {
         type: true,
         skills: true,
         date: true,
+        dependencia:{
+          select:{
+            name: true,
+            User:{
+              select:{
+                image: true,
+              }
+            }
+          }
+        },
         apply: {
           where: {
             userCedula: token.cedula,

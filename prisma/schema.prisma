@@ -30,20 +30,20 @@ model PreRegister {
 }
 
 model User {
-  id           Int            @id @default(autoincrement())
-  cedula       Int            @unique
-  mail         String         @unique
+  id           Int               @id @default(autoincrement())
+  cedula       Int               @unique
+  mail         String            @unique
   password     String
   names        String
   lastnames    String
-  role         Role           @default(estudiante)
+  role         Role              @default(estudiante)
+  birthdate    DateTime
   phone        String
-  profile      Boolean        @default(false)
+  profile      Boolean           @default(false)
   image        String?
-  updatedAt    DateTime       @updatedAt
+  updatedAt    DateTime          @updatedAt
   esInfo       estudentInfo[]
   apply        apply[]
-  application  application[]
   notification notification[]
   depInfo      dependenciaInfo[]
 }
@@ -96,8 +96,8 @@ enum typeApplication {
 
 model application {
   id           Int             @id @default(autoincrement())
-  userCedula   Int
   title        String
+  idDepend     Int
   description  String?
   imagen       String?
   location     String
@@ -106,8 +106,8 @@ model application {
   status       status          @default(active)
   date         DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
+  dependencia  dependenciaInfo @relation(fields: [idDepend], references: [id], onDelete: Cascade)
   apply        apply[]
-  User         User            @relation(fields: [userCedula], references: [cedula])
   notification notification[]
 }
 
@@ -133,13 +133,13 @@ enum statusApply {
 }
 
 model notification {
-  id          Int         @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   userCedula  Int
   idApplic    Int?
   action      actionNoti
-  date        DateTime    @default(now())
+  date        DateTime     @default(now())
   application application? @relation(fields: [idApplic], references: [id], onDelete: Cascade)
-  User        User        @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
+  User        User         @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
 }
 
 enum actionNoti {
@@ -151,12 +151,16 @@ enum actionNoti {
 }
 
 model dependenciaInfo {
-  id          Int      @id @default(autoincrement())
-  userCedula  Int      @unique
+  id          Int           @id @default(autoincrement())
+  userCedula  Int           @unique
   name        String
+  rif         Int?
   description String?
   address     String?
+  email       String?
+  social      String?
   phone       String?
-  updatedAt   DateTime @updatedAt
-  User        User     @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
+  updatedAt   DateTime      @updatedAt
+  User        User          @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
+  application application[]
 }

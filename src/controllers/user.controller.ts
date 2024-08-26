@@ -78,6 +78,7 @@ export async function createUser(req: NextRequest) {
         names: result.nombre,
         lastnames: result.apellido,
         phone: result.telefono,
+        birthdate: result.birthdate,
         role: decoded.role,
       },
     });
