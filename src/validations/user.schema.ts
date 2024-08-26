@@ -107,8 +107,7 @@ export const userSchema = z.object({
     }),
 }); /// no tocar plix
 
-export const userFormSchema = z
-  .object({
+export const userFormSchema = z.object({
     cedula: z
       .string({ required_error: "La cédula es requerida" })
       .min(7, { message: "La cédula debe tener mínimo 7 caracteres" })

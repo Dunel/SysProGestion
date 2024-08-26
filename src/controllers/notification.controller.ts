@@ -43,26 +43,29 @@ export async function getNoti(req: NextRequest) {
     if (!token) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
-    const notifications = await prisma.application.findMany({
+    const notifications = await prisma.notification.findMany({
       where: {
-        dependencia:{
-          userCedula: token.cedula,
-        },
-      },
-      select: {
-        title: true,
-        type: true,
-        notification: {
-          select: {
-            userCedula: true,
-            action: true,
-            date: true,
+        application: {
+          dependencia: {
+            userCedula: token.cedula,
           },
         },
       },
+      select: {
+        userCedula: true,
+        action: true,
+        date: true,
+        application: {
+          select: {
+            title: true,
+            type: true,
+          },
+        },
+      },
+      take: 20,
     });
 
-    return NextResponse.json({ notifications }, { status: 200 });
+    return NextResponse.json( notifications , { status: 200 });
   } catch (error) {
     console.error("Error: ", (error as Error).message);
     return NextResponse.json(

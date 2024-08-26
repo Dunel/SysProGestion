@@ -8,7 +8,7 @@ import DependenciaProfileForm from "@/components/perfiles/DependenciaFormActuali
 import DependenciaProfileListo from "@/components/perfiles/DependenciaProfileListo";
 
 export default function EstudianteInfoForm() {
-  const [isFormVisible, setIsFormVisible] = useState(true);
+  const [isFormVisible, setIsFormVisible] = useState(false);
   const { data: session, update } = useSession();
 
   const toggleFormVisibility = () => {

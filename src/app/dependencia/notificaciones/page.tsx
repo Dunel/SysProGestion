@@ -2,18 +2,15 @@
 import GridContainer from "@/components/GridContainer";
 import Header from "@/components/Header";
 import axios from "axios";
-import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import NotificationsCard from "./NotificacionsCard";
 import Skeleton from "@/components/ui/SkeletonComponentLines";
 
 type Notificaciones = {
-  action: "apply" | "reject" | "accept" | "proposal" | "delete";
+  application: { title: string; type: "servicio" | "pasantia" | "proyecto" };
+  action: string;
   date: Date;
-  application: {
-    title: string;
-    type: "servicio" | "pasantia" | "proyecto";
-  };
+  userCedula: string;
 };
 
 export default function Page() {
@@ -23,8 +20,9 @@ export default function Page() {
   const getNotificaciones = async () => {
     try {
       setSqueleton(true);
-      const res = await axios.get("/api/estudiante/notifications");
-      setNotifcaciones(res.data.notifications);
+      const res = await axios.get("/api/dependencia/notifications");
+      //console.log("res:", res.data);
+      setNotifcaciones(res.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);
@@ -52,7 +50,7 @@ export default function Page() {
       {squeleton && <Skeleton />}
       <div className="flex flex-col items-center bg-white rounded-lg shadow-md m-4 mb-8 p-2 w-[90%] mx-auto my-5">
         {notificaciones && notificaciones.length > 0 ? (
-          notificaciones.map((noti) => <NotificationsCard noti={noti} />)
+          <NotificationsCard notificaciones={notificaciones} />
         ) : (
           <GridContainer>
             <p>No hay notificaciones disponibles</p>

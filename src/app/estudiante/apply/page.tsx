@@ -13,11 +13,16 @@ type Application = {
   title: string;
   type: "pasantia" | "servicio" | "proyecto";
   description: string;
-  imagen: string;
   skills: string[];
   date: Date;
   location: string;
   status: string;
+  dependencia: {
+    name: string;
+    User: {
+      image: string;
+    };
+  };
   apply: [
     {
       id: number;
@@ -64,7 +69,8 @@ export default function Page() {
   const getApplications = async () => {
     try {
       const res = await axios.get("/api/estudiante/apply");
-      setApplications(res.data.applications);
+      console.log(res.data);
+      setApplications(res.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);

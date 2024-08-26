@@ -16,11 +16,20 @@ export async function getApplication(req: NextRequest) {
         title: true,
         type: true,
         description: true,
-        imagen: true,
         skills: true,
         date: true,
         location: true,
         status: true,
+        dependencia: {
+          select: {
+            name: true,
+            User: {
+              select: {
+                image: true,
+              },
+            },
+          },
+        },
         apply: {
           where: {
             userCedula: token.cedula,
@@ -31,7 +40,7 @@ export async function getApplication(req: NextRequest) {
         },
       },
     });
-    return NextResponse.json({ applications }, { status: 200 });
+    return NextResponse.json( applications , { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(
@@ -158,7 +167,7 @@ export async function deleteApply(req: NextRequest) {
             data: [
               {
                 userCedula: token.cedula,
-                action: "delete"
+                action: "delete",
               },
             ],
           },
@@ -208,15 +217,15 @@ export async function getMyApplication(req: NextRequest) {
         type: true,
         skills: true,
         date: true,
-        dependencia:{
-          select:{
+        dependencia: {
+          select: {
             name: true,
-            User:{
-              select:{
+            User: {
+              select: {
                 image: true,
-              }
-            }
-          }
+              },
+            },
+          },
         },
         apply: {
           where: {
