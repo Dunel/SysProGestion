@@ -10,7 +10,7 @@ type Notificaciones = {
     };
   };
 
-export default function NotificationsCard({noti}: {noti: Notificaciones}, {index}:{index: number}) {
+export default function NotificationsCard({noti}: {noti: Notificaciones}) {
     const actionDesc = {
         apply: "Aplicaste a",
         reject: "Rechazaron tú solicitud de",
@@ -25,8 +25,7 @@ export default function NotificationsCard({noti}: {noti: Notificaciones}, {index
         proyecto: "Proyecto",
       };
   return (
-    <>
-                    <div key={index} className="w-full flex flex-col justify-center m-2 p-2 bg-[#c2dded62] shadow-md md:w-[80%]">
+            <>
                         <div className="flex flex-row">
 
                             <div className="flex-col w-[80%]">
@@ -61,13 +60,9 @@ export default function NotificationsCard({noti}: {noti: Notificaciones}, {index
                             </div>
 
                         </div>
-                    </div>
-                   
-                
-
-        {/* </div> */}
+               
 
          
-    </>
+            </>
   );
 }
