@@ -26,6 +26,7 @@ export async function getNotifications(req: NextRequest) {
           },
         },
       },
+      take: 20,
     });
     return NextResponse.json({ notifications }, { status: 200 });
   } catch (error) {
