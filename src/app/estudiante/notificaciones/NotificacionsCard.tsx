@@ -1,14 +1,19 @@
 "use client";
-import { FaClipboardCheck, FaTrashAlt, FaRegSadCry, FaRegLaughSquint } from 'react-icons/fa';
+import {
+  FaClipboardCheck,
+  FaTrashAlt,
+  FaRegSadCry,
+  FaRegLaughSquint,
+} from "react-icons/fa";
 
 type Notificaciones = {
-    action: "apply" | "reject" | "accept" | "proposal" | "delete";
-    date: Date;
-    application: {
-      title: string;
-      type: "servicio" | "pasantia" | "proyecto";
-    };
+  action: "apply" | "reject" | "accept" | "proposal" | "delete";
+  date: Date;
+  application: {
+    title: string;
+    type: "servicio" | "pasantia" | "proyecto";
   };
+};
 
 export default function NotificationsCard({noti}: {noti: Notificaciones}) {
     const actionDesc = {

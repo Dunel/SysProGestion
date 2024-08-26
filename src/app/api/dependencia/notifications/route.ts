@@ -1,7 +1,7 @@
-import { getNotifications } from "@/controllers/notification.controller";
+import { getNoti, getNotifications } from "@/controllers/notification.controller";
 import { NextRequest } from "next/server";
 
 
 export async function GET(req: NextRequest) {
-  return await getNotifications(req);
+  return await getNoti(req);
 }
