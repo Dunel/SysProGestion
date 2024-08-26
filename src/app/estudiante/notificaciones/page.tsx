@@ -56,7 +56,7 @@ export default function Page() {
         ) : (
           <div className="flex flex-col justify-center items-center mt-12 mx-auto bg-white w-[60%] min-h-[30vh]">
               <p className="m-2 p-2 text-center text-red-500">No tienes Notificaciones.</p>
-              <p className="m-2 p-2 text-center">Entra a tu menú de navegación y haz clic en la opción <i>“Oferta de Vacantes”, </i> y sé parte de procesos!</p>
+              <p className="m-2 p-2 text-center">Entra a tu menú de navegación y haz clic en la opción <i>“Oferta de Vacantes”, </i> aplica a las que se ajusten a tus deseos y sé parte de procesos!</p>
           </div>
         )}
       </div>
