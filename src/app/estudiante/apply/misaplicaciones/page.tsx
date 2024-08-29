@@ -32,35 +32,14 @@ type Application = {
 
 export default function Page() {
   const [applications, setApplications] = useState<Application[]>();
-  const [loading, setLoading] = useState(false);
   const [squeleton, setSqueleton] = useState(true);
   const [spanRetirar, setSpanRetirar] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [codeOferta, setCodeOferta] = useState(0); //!ESTO DEBERIA SER EL CODIGO DE LA OFERTA EJ P-2024-1001, para identificarla en el modal al preguntar si la desea retirar
+  const [codeOferta, setCodeOferta] = useState(0);
   const [applicationToDelete, setApplicationToDelete] = useState<{
     id: number;
     applyId: number;
   } | null>(null);
-
-  //!QUE HACE ESTA FUNCION? NO ES UTILIZADA!
-  // const handleApply = async (id: number) => {
-  //   try {
-  //     setLoading(true);
-  //     setSqueleton(true);
-  //     const res = await axios.post("/api/estudiante/apply", { id });
-  //     console.log(res.data);
-  //     getApplications();
-  //   } catch (error) {
-  //     if (axios.isAxiosError(error)) {
-  //       console.log("error lanzado:", error.response?.data.error);
-  //     } else {
-  //       console.error("error:", error);
-  //     }
-  //   } finally {
-  //     setLoading(false);
-  //     setSqueleton(false)
-  //   }
-  // };
 
   const handleDeleteApply = async () => {
     if (applicationToDelete) {
@@ -95,7 +74,6 @@ export default function Page() {
 
   const getApplications = async () => {
     try {
-      setLoading(true);
       setSqueleton(true);
 
       const res = await axios.get("/api/estudiante/apply/myapply");
@@ -108,7 +86,6 @@ export default function Page() {
         console.error("error:", error);
       }
     } finally {
-      setLoading(false);
       setSqueleton(false);
     }
   };

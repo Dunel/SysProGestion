@@ -5,6 +5,8 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import NotificationsCard from "./NotificacionsCard";
 import Skeleton from "@/components/ui/SkeletonComponentLines";
+import ContainerWeb from "@/components/ContainerWeb";
+import GridMain from "@/components/GridMain";
 
 type Notificaciones = {
   application: { title: string; type: "servicio" | "pasantia" | "proyecto" };
@@ -46,17 +48,18 @@ export default function Page() {
           "Aqui podras visualizar todas las notificaciones relacionadas con los procesos a los que aplicaste y eres parte interesada. Mantente informado!"
         }
       />
-
-      {squeleton && <Skeleton />}
-      <div className="flex flex-col items-center bg-white rounded-lg shadow-md m-4 mb-8 p-2 w-[90%] mx-auto my-5">
-        {notificaciones && notificaciones.length > 0 ? (
-          <NotificationsCard notificaciones={notificaciones} />
-        ) : (
+      <ContainerWeb>
+        <GridMain>
           <GridContainer>
-            <p>No hay notificaciones disponibles</p>
+            {squeleton && <Skeleton />}
+            {notificaciones && notificaciones.length > 0 ? (
+              <NotificationsCard notificaciones={notificaciones} />
+            ) : (
+              !squeleton && <p>No hay notificaciones disponibles</p>
+            )}
           </GridContainer>
-        )}
-      </div>
+        </GridMain>
+      </ContainerWeb>
     </>
   );
 }

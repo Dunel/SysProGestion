@@ -56,7 +56,6 @@ export default function EstudianteInfoForm() {
         </div>
       )}
 
-      {/* //Muestra el loader aun sin saer si la data es null, false o true */}
       {!session?.user.dataProfile && session?.user.profile != false ? (
         <Skeleton />
       ) : (
