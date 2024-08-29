@@ -14,6 +14,7 @@ import {
 } from "@/validations/application.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 
 type Application = {
   id: number;
@@ -40,6 +41,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -69,6 +71,7 @@ export default function Page({ params }: { params: { id: string } }) {
       } else {
         console.error("error:", error);
       }
+      router.push("/dependencia/misofertas");
     } finally {
       setSqueleton(false);
     }
@@ -139,7 +142,8 @@ export default function Page({ params }: { params: { id: string } }) {
         ...data,
         id: params.id,
       });
-      console.log("data: ", res.data);
+      //console.log("data: ", res.data);
+      router.push("/dependencia/misofertas");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data);

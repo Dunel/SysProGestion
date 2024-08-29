@@ -268,6 +268,9 @@ export async function getMyApplicationDepend(req: NextRequest) {
           },
         },
       },
+      orderBy: {
+        date: "desc",
+      },
       select: {
         id: true,
         title: true,
