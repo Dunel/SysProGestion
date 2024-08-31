@@ -1,5 +1,11 @@
 import prisma from "@/db";
-import { applyCreateSchema, applyUpdateSchema, idApplySchema } from "@/validations/application.schema";
+import {
+  applyCreateSchema,
+  applyUpdateSchema,
+  idApplySchema,
+} from "@/validations/application.schema";
+import { userSchema } from "@/validations/user.schema";
+import { connect } from "http2";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
@@ -94,13 +100,9 @@ export async function apply(req: NextRequest) {
           },
         },
         notification: {
-          createMany: {
-            data: [
-              {
-                userCedula: token.cedula,
-                action: "apply",
-              },
-            ],
+          create: {
+            userCedula: token.cedula,
+            action: "apply",
           },
         },
       },
@@ -402,7 +404,7 @@ export async function getApplicationById(req: NextRequest) {
   }
 }
 
-export async function updateApplicationById(req: NextRequest){
+export async function updateApplicationById(req: NextRequest) {
   try {
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
     if (!token) {
@@ -437,7 +439,10 @@ export async function updateApplicationById(req: NextRequest){
         status,
       },
     });
-    return NextResponse.json({ message: "Oferta actualizada" }, { status: 200 });
+    return NextResponse.json(
+      { message: "Oferta actualizada" },
+      { status: 200 }
+    );
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(
@@ -453,7 +458,7 @@ export async function updateApplicationById(req: NextRequest){
   }
 }
 
-export async function createAppDepend(req: NextRequest){
+export async function createAppDepend(req: NextRequest) {
   try {
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
     if (!token) {
@@ -477,6 +482,161 @@ export async function createAppDepend(req: NextRequest){
       },
     });
     return NextResponse.json({ message: "Oferta creada" }, { status: 200 });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function getApplicationDepend(req: NextRequest) {
+  try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const result = idApplySchema.shape.idApplication.parse(
+      req.nextUrl.searchParams.get("id")
+    );
+    const applications = await prisma.application.findFirst({
+      where: {
+        id: result,
+        dependencia: {
+          userCedula: token.cedula,
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        location: true,
+        status: true,
+        type: true,
+        skills: true,
+        date: true,
+        dependencia: {
+          select: {
+            name: true,
+            User: {
+              select: {
+                image: true,
+              },
+            },
+          },
+        },
+        apply: {
+          select: {
+            id: true,
+            status: true,
+            User: {
+              select: {
+                cedula: true,
+                names: true,
+                lastnames: true,
+                mail: true,
+                birthdate: true,
+                phone: true,
+                image: true,
+                esInfo: {
+                  select: {
+                    university: true,
+                    career: true,
+                    quarter: true,
+                    address: true,
+                    skills: true,
+                    interests: true,
+                    description: true,
+                    curriculum: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+    return NextResponse.json(applications, { status: 200 });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function updateApplyDepend(req: NextRequest) {
+  try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const { id, status, idapp } = await req.json();
+    const idApply = idApplySchema.shape.idApply.parse(id);
+    const statusApply = idApplySchema.shape.status.parse(status);
+    const idApp = idApplySchema.shape.idApplication.parse(idapp);
+
+    if (statusApply === "rechazado") {
+      await prisma.apply.update({
+        where: {
+          id: idApply,
+          application: {
+            dependencia: {
+              userCedula: token.cedula,
+            },
+          },
+        },
+        data: {
+          status: statusApply,
+        },
+      });
+    } else {
+      await prisma.apply.update({
+        where: {
+          id: idApply,
+          application: {
+            dependencia: {
+              userCedula: token.cedula,
+            },
+          },
+        },
+        data: {
+          status: statusApply,
+          User: {
+            update: {
+              esInfo: {
+                update: {
+                  applicationApproved: {
+                    create: {
+                      applicationId: idApp,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+
+    return NextResponse.json(
+      { message: "Postulacion actualizada" },
+      { status: 200 }
+    );
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(
