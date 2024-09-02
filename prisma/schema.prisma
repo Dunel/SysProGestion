@@ -132,6 +132,8 @@ enum statusApply {
   pendiente
   aceptado
   rechazado
+  declinado
+  aprobado
 }
 
 model notification {
@@ -147,6 +149,7 @@ model notification {
 enum actionNoti {
   apply
   accept
+  approve
   delete
   reject
   proposal
@@ -171,8 +174,14 @@ model applicationApproved {
   id            Int          @id @default(autoincrement())
   userCedula    Int
   applicationId Int
+  status        statusAproved  @default(enproceso)
   date          DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
   application   application  @relation(fields: [applicationId], references: [id], onDelete: Cascade)
   esInfo        estudentInfo @relation(fields: [userCedula], references: [userCedula], onDelete: Cascade)
+}
+
+enum statusAproved {
+  completada
+  enproceso
 }

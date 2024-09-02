@@ -90,10 +90,8 @@ export default function InternShipCardReceived({
     try {
       const res = await axios.post(`/api/dependencia/apply/myapply/received`, {
         id,
-        idapp: internship?.id,
         status,
       });
-      console.log(res.data);
       getApplication();
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -277,7 +275,7 @@ export default function InternShipCardReceived({
                     <>
                       <button
                         className="bg-blue-600 hover:bg-blue-900 text-white p-2 rounded-lg"
-                        onClick={() => updateStatus("aceptado", apply.id)}
+                        onClick={() => updateStatus("aprobado", apply.id)}
                       >
                         Aceptar Solicitud
                       </button>

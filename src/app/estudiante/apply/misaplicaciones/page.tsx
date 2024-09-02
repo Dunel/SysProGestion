@@ -41,14 +41,15 @@ export default function Page() {
     applyId: number;
   } | null>(null);
 
-  const handleDeleteApply = async () => {
+  const handleDeclineApply = async () => {
     if (applicationToDelete) {
       const { id, applyId } = applicationToDelete;
 
       try {
         setSpanRetirar(true);
-        const res = await axios.delete("/api/estudiante/apply", {
-          data: { idAplication: id, applyId },
+        const res = await axios.put("/api/estudiante/apply/myapply", {
+          idAplication: id,
+          applyId,
         });
         console.log(res.data);
         getApplications();
@@ -77,7 +78,7 @@ export default function Page() {
       setSqueleton(true);
 
       const res = await axios.get("/api/estudiante/apply/myapply");
-      console.log("data: ", res.data.applications);
+      //console.log("data: ", res.data.applications);
       setApplications(res.data.applications);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -89,6 +90,20 @@ export default function Page() {
       setSqueleton(false);
     }
   };
+
+  const acceptOffer = async (idApp: number, applyId: number) => {
+    try {
+      const res = await axios.post("/api/estudiante/apply/myapply", { idApp, applyId });
+      console.log(res.data);
+      getApplications();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error lanzado:", error.response?.data.error);
+      } else {
+        console.error("error:", error);
+      }
+    }
+  }
 
   useEffect(() => {
     getApplications();
@@ -120,6 +135,7 @@ export default function Page() {
           internships={applications.map((internship) => ({
             ...internship,
             handleDeleteApply: confirmDelete, // Pasamos la función confirmDelete
+            handleAcceptApply: acceptOffer,
           }))}
         />
       ) : null}
@@ -129,7 +145,7 @@ export default function Page() {
         isLoading={spanRetirar}
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
-        onConfirm={handleDeleteApply}
+        onConfirm={handleDeclineApply}
       />
     </>
   );

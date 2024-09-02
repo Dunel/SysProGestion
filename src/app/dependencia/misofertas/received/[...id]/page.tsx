@@ -75,43 +75,6 @@ export default function Page({ params }: { params: { id: string } }) {
     }
   };
 
-  const skillsOptions = [
-    { value: "resoluciondeproblemas", label: "Resolución de Problemas" },
-    { value: "trabajoenequipo", label: "Trabajo en Equipo" },
-    { value: "adaptabilidad", label: "Adaptabilidad" },
-    { value: "comunicacionefectiva", label: "Comunicación Efectiva" },
-    { value: "liderazgo", label: "Liderazgo" },
-    { value: "pensamientocritico", label: "Pensamiento Crítico" },
-    { value: "orientacionaresultados", label: "Orientación a Resultados" },
-    { value: "creatividad", label: "Creatividad" },
-    { value: "gestiondeltiempo", label: "Gestión del Tiempo" },
-    { value: "aprendizajecontinuo", label: "Aprendizaje Continuo" },
-    { value: "dondegente", label: "Don de Gente" },
-    { value: "ensenanza", label: "Enseñanza" },
-    { value: "sociable", label: "Sociable" },
-    { value: "salud", label: "Salud" },
-    { value: "deportes", label: "Deportes" },
-    { value: "logistica", label: "Logística" },
-    { value: "expresionesartisticas", label: "Expresiones Artísticas" },
-    { value: "diseno", label: "Diseño" },
-    { value: "musica", label: "Música" },
-    { value: "ingles", label: "Inglés" },
-    { value: "otrosidiomasnaturales", label: "Otros Idiomas Naturales" },
-    { value: "lenguajesdeprogramacion", label: "Lenguajes de Programación" },
-  ];
-
-  const ofertsType = [
-    { key: "pasantia", name: "Pasantía" },
-    { key: "servicio", name: "Servicio Comunitario" },
-  ];
-
-  const ofertsStatus = [
-    { key: "active", name: "Activa" },
-    { key: "inactive", name: "Inactiva" },
-  ];
-
-  const updateOfert = async () => {};
-
   useEffect(() => {
     getApplication();
   }, []);

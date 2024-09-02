@@ -4,8 +4,6 @@ import {
   applyUpdateSchema,
   idApplySchema,
 } from "@/validations/application.schema";
-import { userSchema } from "@/validations/user.schema";
-import { connect } from "http2";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
@@ -123,27 +121,33 @@ export async function apply(req: NextRequest) {
   }
 }
 
-export async function deleteApply(req: NextRequest) {
+export async function declineApply(req: NextRequest) {
   try {
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
     if (!token) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
     const { idAplication, applyId } = await req.json();
-    const result = idApplySchema.parse({
-      idApplication: idAplication,
-      idApply: applyId,
-    });
+    const idapp = idApplySchema.shape.idApplication.parse(idAplication);
+    const idApply = idApplySchema.shape.idApply.parse(applyId);
 
     const application = await prisma.application.findFirst({
       where: {
-        id: result.idApplication,
+        id: idapp,
       },
       select: {
         apply: {
           where: {
-            id: result.idApply,
+            id: idApply,
             userCedula: token.cedula,
+            OR: [
+              {
+                status: "pendiente",
+              },
+              {
+                status: "aprobado",
+              },
+            ],
           },
         },
       },
@@ -156,12 +160,17 @@ export async function deleteApply(req: NextRequest) {
     }
     await prisma.application.update({
       where: {
-        id: result.idApplication,
+        id: idapp,
       },
       data: {
         apply: {
-          delete: {
-            id: result.idApply,
+          update: {
+            where: {
+              id: idApply,
+            },
+            data: {
+              status: "declinado",
+            },
           },
         },
         notification: {
@@ -265,9 +274,7 @@ export async function getMyApplicationDepend(req: NextRequest) {
     const applications = await prisma.application.findMany({
       where: {
         dependencia: {
-          userCedula: {
-            equals: token.cedula,
-          },
+          userCedula: token.cedula,
         },
       },
       orderBy: {
@@ -585,56 +592,164 @@ export async function updateApplyDepend(req: NextRequest) {
     if (!token) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
-    const { id, status, idapp } = await req.json();
+    const { id, status } = await req.json();
     const idApply = idApplySchema.shape.idApply.parse(id);
     const statusApply = idApplySchema.shape.status.parse(status);
-    const idApp = idApplySchema.shape.idApplication.parse(idapp);
+    const apply = await prisma.apply.findFirst({
+      where: {
+        id: idApply,
+        status: "pendiente",
+        application: {
+          dependencia: {
+            userCedula: token.cedula,
+          },
+        },
+      },
+    });
+    if (!apply) {
+      return NextResponse.json(
+        { error: "No se encontró la postulación" },
+        { status: 404 }
+      );
+    }
 
-    if (statusApply === "rechazado") {
-      await prisma.apply.update({
-        where: {
-          id: idApply,
-          application: {
-            dependencia: {
-              userCedula: token.cedula,
-            },
+    await prisma.apply.update({
+      where: {
+        id: idApply,
+        application: {
+          dependencia: {
+            userCedula: token.cedula,
           },
         },
-        data: {
-          status: statusApply,
-        },
-      });
-    } else {
-      await prisma.apply.update({
-        where: {
-          id: idApply,
-          application: {
-            dependencia: {
-              userCedula: token.cedula,
-            },
-          },
-        },
-        data: {
-          status: statusApply,
-          User: {
-            update: {
-              esInfo: {
-                update: {
-                  applicationApproved: {
-                    create: {
-                      applicationId: idApp,
-                    },
+      },
+      data: {
+        status: statusApply,
+        User: {
+          update: {
+            notification: {
+              create: {
+                action: statusApply === "aprobado" ? "approve" : "reject",
+                application: {
+                  connect: {
+                    id: apply.applicationId,
                   },
                 },
               },
             },
           },
         },
-      });
-    }
+      },
+    });
 
     return NextResponse.json(
       { message: "Postulacion actualizada" },
+      { status: 200 }
+    );
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function acceptApplyStudent(req: NextRequest) {
+  try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const { idApp, applyId } = await req.json();
+    const idApply = idApplySchema.shape.idApply.parse(applyId);
+    const idApplication = idApplySchema.shape.idApplication.parse(idApp);
+    const apply = await prisma.apply.findFirst({
+      where: {
+        id: idApply,
+        userCedula: token.cedula,
+        status: "aprobado",
+        application: {
+          id: idApplication,
+        },
+      },
+    });
+    if (!apply) {
+      return NextResponse.json(
+        { error: "No se encontró la postulación" },
+        { status: 404 }
+      );
+    }
+
+    await prisma.apply.updateMany({
+      where: {
+        AND: [
+          {
+            userCedula: token.cedula,
+          },
+          {
+            NOT: {
+              id: idApply,
+            },
+          },
+          {
+            NOT: {
+              status: "rechazado",
+            },
+          },
+        ],
+      },
+      data: {
+        status: "declinado",
+      },
+    });
+
+    await prisma.apply.update({
+      where: {
+        id: idApply,
+        status: "aprobado",
+      },
+      data: {
+        status: "aceptado",
+        application: {
+          update: {
+            notification: {
+              create: {
+                action: "accept",
+                User: {
+                  connect: {
+                    cedula: token.cedula,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    await prisma.applicationApproved.create({
+      data: {
+        application: {
+          connect: {
+            id: idApplication,
+          },
+        },
+        esInfo: {
+          connect: {
+            userCedula: token.cedula,
+          },
+        },
+      },
+    });
+
+    return NextResponse.json(
+      { message: "Postulacion aceptada" },
       { status: 200 }
     );
   } catch (error) {

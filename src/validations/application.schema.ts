@@ -45,7 +45,7 @@ export const idApplySchema = z.object({
         .min(1, { message: "El id debe ser mayor a 0" })
         .max(1000000000, { message: "El id debe ser menor a 1000000000" })
     ),
-  status: z.enum(["aceptado", "rechazado"], {
+  status: z.enum(["aprobado", "rechazado"], {
     message: "El estado de la aplicacion no es valido",
   }),
 });

@@ -1,4 +1,4 @@
-import { apply, deleteApply, getApplication } from "@/controllers/application.controller";
+import { apply, getApplication } from "@/controllers/application.controller";
 import { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -7,8 +7,4 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   return await getApplication(req);
-}
-
-export async function DELETE(req: NextRequest) {
-  return await deleteApply(req);
 }
