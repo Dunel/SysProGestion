@@ -43,24 +43,24 @@ export default function Page() {
   } | null>(null);
 
   //!QUE HACE ESTA FUNCION? NO ES UTILIZADA!
-  // const handleApply = async (id: number) => {
-  //   try {
-  //     setLoading(true);
-  //     setSqueleton(true);
-  //     const res = await axios.post("/api/estudiante/apply", { id });
-  //     console.log(res.data);
-  //     getApplications();
-  //   } catch (error) {
-  //     if (axios.isAxiosError(error)) {
-  //       console.log("error lanzado:", error.response?.data.error);
-  //     } else {
-  //       console.error("error:", error);
-  //     }
-  //   } finally {
-  //     setLoading(false);
-  //     setSqueleton(false)
-  //   }
-  // };
+  const handleApply = async (id: number) => {
+    try {
+      setLoading(true);
+      setSqueleton(true);
+      const res = await axios.post("/api/estudiante/apply", { id });
+      console.log(res.data);
+      getApplications();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error lanzado:", error.response?.data.error);
+      } else {
+        console.error("error:", error);
+      }
+    } finally {
+      setLoading(false);
+      setSqueleton(false)
+    }
+  };
 
   const handleDeleteApply = async () => {
     if (applicationToDelete) {
@@ -140,9 +140,11 @@ export default function Page() {
         </div>
       ) : applications && applications.length > 0 ? (
         <InternshipCards
-          internships={applications.map((internship) => ({
-            ...internship,
-            handleDeleteApply: confirmDelete, // Pasamos la función confirmDelete
+        internships={applications.map((internship) => ({
+          ...internship,
+            handleDeleteApply:confirmDelete, // Pasamos la función confirmDelete
+            handleApply:handleApply,
+            flagOffer:false //Funcion de vista Oferta
           }))}
         />
       ) : null}

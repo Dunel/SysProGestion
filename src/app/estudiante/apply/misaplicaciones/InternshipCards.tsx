@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+const flagOffer: boolean = false;
+
 interface Skill {
   id: number;
   name: string;
@@ -7,6 +9,8 @@ interface Skill {
 
 interface Internship {
   handleDeleteApply: Function;
+  handleApply: Function;
+  flagOffer:boolean;
   dependencia: {
     name: string;
     User: {
@@ -55,6 +59,18 @@ const skillFormated : { [key: string]: string } = {
     lenguajesdeprogramacion: "Lenguajes de programación",
 }
 
+const getType = (type: string) => {
+  switch (type) {
+    case "pasantia":
+      return "Pasantía";
+    case "servicio":
+      return "Servicio";
+    case "proyecto":
+      return "Proyecto de Tesis";
+    default:
+      return "Indefinido";
+  }
+}
 const InternshipCard: React.FC<{ internship: Internship }> = ({
   internship,
 }) => (
@@ -62,7 +78,7 @@ const InternshipCard: React.FC<{ internship: Internship }> = ({
     <div className="flex">
       {/* //!ESTE CODE DEBERIA VENIR DE UN CAPO DE LA TABLA "ofertas" CUYA NOMENCLATURA SE CREA DE SEGUN EL TIPO DE OFERTA + ANO + ID   */}
       <span className="flex  ml-auto p-1 text-red-500">
-        Codigo de Oferta de Vacante: {"P-2024-000" + internship.id}
+        Codigo de Oferta de Vacante: {`PA-2024-000` + internship.id}
       </span>
     </div>
     <div className="flex flex-col items-center md:flex-row md:space-x-4">
@@ -94,10 +110,17 @@ const InternshipCard: React.FC<{ internship: Internship }> = ({
             <p>{internship.status}</p>
           </div>
           <div className="w-[33%]">
-            <span className="text-lg font-medium text-gray-700 mb-2">
-              Estado de tu Aplicacion:
-            </span>
-            <p>{internship.apply[0].status}</p>
+            {
+            internship.apply[0].status 
+              ? <>
+                <span className="text-lg font-medium text-gray-700 mb-2">
+                  Estado de tu Aplicacion:
+                </span>
+                <p>{internship.apply[0].status}</p>
+              </>
+                : null
+             
+            }
           </div>
           <div className="w-[33%]">
             <span className="text-lg font-medium text-gray-700 mb-2">
@@ -106,13 +129,8 @@ const InternshipCard: React.FC<{ internship: Internship }> = ({
             {/* //! ASI QUE NO DEBERIA SER {internship.type} DADO QUE EL TYPO DEL PROCEDIMIENTO LO DEFINE LA OFERTA NO EL QUE UN ESTUDIANTE APLIQUE A ELLA */}
             {/* //! PROYECTO DE TESIS DEBERIA ESTAR EN OFERTAS? NO LO CREO */}
             <p>
-              {internship.type === "pasantia"
-                ? "Pasantias"
-                : internship.type === "servicio"
-                ? "Servicio Cominitario"
-                : internship.type === "proyecto"
-                ? "Proyecto de Tesis"
-                : ""}
+              {getType(internship.type)
+              }
             </p>
           </div>
         </div>
@@ -142,6 +160,47 @@ const InternshipCard: React.FC<{ internship: Internship }> = ({
     </div>
 
     <div className="flex justify-center">
+
+    {flagOffer &&
+    <div className="flex justify-between items-start mt-4">
+                      {internship.status === "inactive" ||
+                      internship.apply.length > 0 ? (
+                        <>
+                          <button
+                            className="bg-gray-600 text-white font-bold py-2 px-4 rounded"
+                            disabled
+                          >
+                            {internship.status === "inactive"
+                              ? "Oferta inactiva"
+                              : "Solicitud enviada"}
+                          </button>
+                          {internship.apply.length > 0 && (
+                            <button
+                              className="bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+                              onClick={() =>
+                                internship.handleDeleteApply(
+                                  internship.id,
+                                  internship.apply[0].id
+                                )
+                              }
+                            >
+                              Borrar solicitud
+                            </button>
+                          )}
+                        </>
+                      ) : (
+                        <button
+                          className="bg-gray-800 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+                          onClick={() => internship.handleApply(internship.id)}
+                        >
+                          Enviar solicitud
+                        </button>
+                      )}
+                    </div>
+
+                    }
+
+
       <button
         onClick={() =>
           internship.handleDeleteApply(internship.id, internship.apply[0].id)

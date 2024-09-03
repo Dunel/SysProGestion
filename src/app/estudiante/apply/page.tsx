@@ -91,7 +91,7 @@ export default function Page() {
 
   return (
     <>
-      <Header title={"SOLICITUDES"} subtitle={"aquí solicitas cosas jjj"} />
+      <Header title={"SOLICITUDES"} subtitle={"Aquí podras "} />
       <ContainerWeb>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <GridMain>
@@ -115,6 +115,10 @@ export default function Page() {
                     <p className="mt-2 text-gray-600">
                       {application.status === "active" ? "Activa" : "Inactiva"}
                     </p>
+                    
+                    
+                    
+                    
                     <div className="flex justify-between items-start mt-4">
                       {application.status === "inactive" ||
                       application.apply.length > 0 ? (
@@ -150,6 +154,10 @@ export default function Page() {
                         </button>
                       )}
                     </div>
+
+
+
+                    
                   </div>
                 </div>
               ))

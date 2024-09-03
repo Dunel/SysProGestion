@@ -1,10 +1,98 @@
+// "use client";
+// import Header from "@/components/Header";
+// import axios from "axios";
+// import { useSession } from "next-auth/react";
+// import { useState, useEffect } from "react";
+// import Skeleton from '@/components/ui/SkeletonComponentLines';
+// import OffertCards from '@/app/estudiante/ofertas/OffertCards'
+
+
+// type Application = {
+//   id: number;
+//   title: string;
+//   type: "pasantia" | "servicio" | "proyecto";
+//   description: string;
+//   imagen: string;
+//   skills: string[];
+//   date: Date;
+//   location: string;
+//   status: string;
+//   apply: [
+//     {
+//       id: number;
+//     }
+//   ];
+// };
+
+// export default function Page() {
+//   const { data: session } = useSession();
+//   const [applications, setApplications] = useState<Application[]>();
+//   const [squeleton, setSqueleton] = useState(true);
+
+
+//   const handleApply = async (id: number) => {
+//     try {
+//       const res = await axios.post("/api/estudiante/apply", { id });
+//       console.log(res.data);
+//       getApplications();
+//       alert("Solicitud enviada");
+//     } catch (error) {
+//       if (axios.isAxiosError(error)) {
+//         console.log("error lanzado:", error.response?.data.error);
+//       } else {
+//         console.error("error:", error);
+//       }
+//     }
+//   };
+
+//   const handleDeleteApply = async (idAplication: number, applyId: number) => {
+//     try {
+//       const res = await axios.delete("/api/estudiante/apply", {
+//         data: { idAplication, applyId },
+//       });
+//       console.log(res.data);
+//       getApplications();
+//       alert("Solicitud eliminada");
+//     } catch (error) {
+//       if (axios.isAxiosError(error)) {
+//         console.log("error lanzado:", error.response?.data.error);
+//       } else {
+//         console.error("error:", error);
+//       }
+//     }
+//   };
+
+//   const getApplications = async () => {
+//     try {
+//       const res = await axios.get("/api/estudiante/apply");
+//       setApplications(res.data.applications);
+//     } catch (error) {
+//       if (axios.isAxiosError(error)) {
+//         console.log("error lanzado:", error.response?.data.error);
+//       } else {
+//         console.error("error:", error);
+//       }
+//     }
+//   };
+//   useEffect(() => {
+//     getApplications();
+//   }, []);
+
+//   const typeDesc = {
+//     pasantia: "Pasantía",
+//     servicio: "Servicio Comunitario",
+//     proyecto: "Proyecto",
+//   };
+
+//   console.log('Application', applications);
+ 
 "use client";
 import Header from "@/components/Header";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import Skeleton from '@/components/ui/SkeletonComponentLines';
-import OffertCards from '@/app/estudiante/ofertas/OffertCards'
+import InternshipCards from "./OffertCards";
 
 
 type Application = {
@@ -12,11 +100,16 @@ type Application = {
   title: string;
   type: "pasantia" | "servicio" | "proyecto";
   description: string;
-  imagen: string;
   skills: string[];
   date: Date;
   location: string;
   status: string;
+  dependencia: {
+    name: string;
+    User: {
+      image: string;
+    };
+  };
   apply: [
     {
       id: number;
@@ -28,7 +121,6 @@ export default function Page() {
   const { data: session } = useSession();
   const [applications, setApplications] = useState<Application[]>();
   const [squeleton, setSqueleton] = useState(true);
-
 
   const handleApply = async (id: number) => {
     try {
@@ -65,7 +157,8 @@ export default function Page() {
   const getApplications = async () => {
     try {
       const res = await axios.get("/api/estudiante/apply");
-      setApplications(res.data.applications);
+      console.log(res.data);
+      setApplications(res.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);
@@ -83,9 +176,6 @@ export default function Page() {
     servicio: "Servicio Comunitario",
     proyecto: "Proyecto",
   };
-
-  console.log('Application', applications);
-  
   return (
     <>
       <Header title={"OFERTAS DE VACANTES"} subtitle={"Aquí podras ver todas las ofertas de Vacante de Pasantias y Servicio Comunitarios que las Dependencias han publicado"} />
@@ -95,8 +185,18 @@ export default function Page() {
             {applications && applications.length > 0 
               ? (
                 applications.map((noti) => (
-                  // <OffertCards noti={noti} />
-                  <div />
+
+                      //           <InternshipCards
+                      //             internships={applications.map((internship) => ({
+                      //             ...internship,
+                      //             handleDeleteApply:confirmDelete, // Pasamos la función confirmDelete
+                      //             handleApply:handleApply,
+                      //             flagOffer:true //Funcion de vista Oferta
+                      //   }))}
+                      // />
+                            
+                    <>hola</>
+
                 ))
                 ) 
               : (

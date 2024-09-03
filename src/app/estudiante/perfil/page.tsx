@@ -11,11 +11,11 @@ import  Skeleton  from "@/components/ui/SkeletonComponent";
 export default function EstudianteInfoForm() {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const { data: session, update } = useSession();
-
   const [loading, setLoading] = useState(true);
   const toggleFormVisibility = () => {
     setIsFormVisible((prev) => !prev);
   };
+
   const [profileData, setProfileData] = useState<{
     address: string;
     university: string;
@@ -58,15 +58,13 @@ export default function EstudianteInfoForm() {
     <>
       <Header
         title={
-          !session?.user.dataProfile ? "Registrando tu Perfil" : "Mi Perfil"
-        }
+          !session?.user.dataProfile ? "Registrando tu Perfil" : "Mi Perfil" }
         subtitle={
           !session?.user.profile
             ? "Este es tu formulario de registro. Por favor, sigue las indicaciones de las casillas y completa tu información personal y profesional."
             : "Este es tu perfil personal, el cual podras actualizar mediante el formulario que se abre al presionar el boton 'Actualizar Perfil'. Es muy facil, solo sigue las indicaciones de las casillas y actualiza tu información personal y profesional que ha cambiado."
         }
       />
-
 
       {session?.user.profile === false && (
         <div className="w-[80%] m-4 p-4 mx-auto">
