@@ -42,6 +42,11 @@ export async function getApplication(req: NextRequest) {
             id: true,
           },
         },
+        _count:{
+          select:{
+            apply: true
+          }
+        }
       },
     });
     return NextResponse.json(applications, { status: 200 });

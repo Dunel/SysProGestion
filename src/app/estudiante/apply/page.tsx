@@ -28,6 +28,9 @@ type Application = {
       id: number;
     }
   ];
+  _count: {
+    apply: number;
+  };
 };
 
 export default function Page() {
@@ -99,10 +102,9 @@ export default function Page() {
                     <p className="mt-2 text-gray-600">
                       {application.status === "active" ? "Activa" : "Inactiva"}
                     </p>
-                    
-                    
-                    
-                    
+                    <p className="mt-2 text-gray-600">
+                      HAN APLICADO: {application._count.apply} ESTUDIANTES
+                    </p>
                     <div className="flex justify-between items-start mt-4">
                       {application.status === "inactive" ||
                       application.apply.length > 0 ? (
