@@ -49,27 +49,10 @@ export default function Page() {
     }
   };
 
-  const handleDeleteApply = async (idAplication: number, applyId: number) => {
-    try {
-      const res = await axios.delete("/api/estudiante/apply", {
-        data: { idAplication, applyId },
-      });
-      console.log(res.data);
-      getApplications();
-      alert("Solicitud eliminada");
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log("error lanzado:", error.response?.data.error);
-      } else {
-        console.error("error:", error);
-      }
-    }
-  };
-
   const getApplications = async () => {
     try {
       const res = await axios.get("/api/estudiante/apply");
-      console.log(res.data);
+      //console.log(res.data);
       setApplications(res.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -131,19 +114,6 @@ export default function Page() {
                               ? "Oferta inactiva"
                               : "Solicitud enviada"}
                           </button>
-                          {application.apply.length > 0 && (
-                            <button
-                              className="bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-                              onClick={() =>
-                                handleDeleteApply(
-                                  application.id,
-                                  application.apply[0].id
-                                )
-                              }
-                            >
-                              Borrar solicitud
-                            </button>
-                          )}
                         </>
                       ) : (
                         <button

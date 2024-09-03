@@ -30,22 +30,22 @@ model PreRegister {
 }
 
 model User {
-  id           Int               @id @default(autoincrement())
-  cedula       Int               @unique
-  mail         String            @unique
+  id           Int              @id @default(autoincrement())
+  cedula       Int              @unique
+  mail         String           @unique
   password     String
   names        String
   lastnames    String
-  role         Role              @default(estudiante)
+  role         Role             @default(estudiante)
   birthdate    DateTime
   phone        String
-  profile      Boolean           @default(false)
+  profile      Boolean          @default(false)
   image        String?
-  updatedAt    DateTime          @updatedAt
-  esInfo       estudentInfo[]
+  updatedAt    DateTime         @updatedAt
+  esInfo       estudentInfo?
   apply        apply[]
   notification notification[]
-  depInfo      dependenciaInfo[]
+  depInfo      dependenciaInfo?
 }
 
 enum Skills {
@@ -74,18 +74,19 @@ enum Skills {
 }
 
 model estudentInfo {
-  id          Int      @id @default(autoincrement())
-  userCedula  Int      @unique
-  university  String
-  career      String?
-  quarter     Int
-  skills      Skills[]
-  interests   String
-  description String
-  address     String
-  curriculum  String?
-  updatedAt   DateTime @updatedAt
-  User        User     @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
+  id                  Int                   @id @default(autoincrement())
+  userCedula          Int                   @unique
+  university          String
+  career              String?
+  quarter             Int
+  skills              Skills[]
+  interests           String
+  description         String
+  address             String
+  curriculum          String?
+  updatedAt           DateTime              @updatedAt
+  User                User                  @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
+  applicationApproved applicationApproved[]
 }
 
 enum typeApplication {
@@ -95,20 +96,21 @@ enum typeApplication {
 }
 
 model application {
-  id           Int             @id @default(autoincrement())
-  title        String
-  idDepend     Int
-  description  String?
-  imagen       String?
-  location     String
-  type         typeApplication
-  skills       Skills[]
-  status       status          @default(active)
-  date         DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt
-  dependencia  dependenciaInfo @relation(fields: [idDepend], references: [id], onDelete: Cascade)
-  apply        apply[]
-  notification notification[]
+  id                  Int                   @id @default(autoincrement())
+  title               String
+  idDepend            Int
+  description         String?
+  imagen              String?
+  location            String
+  type                typeApplication
+  skills              Skills[]
+  status              status                @default(active)
+  date                DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  dependencia         dependenciaInfo       @relation(fields: [idDepend], references: [id], onDelete: Cascade)
+  apply               apply[]
+  notification        notification[]
+  applicationApproved applicationApproved[]
 }
 
 enum status {
@@ -130,6 +132,8 @@ enum statusApply {
   pendiente
   aceptado
   rechazado
+  declinado
+  aprobado
 }
 
 model notification {
@@ -145,6 +149,7 @@ model notification {
 enum actionNoti {
   apply
   accept
+  approve
   delete
   reject
   proposal
@@ -163,4 +168,20 @@ model dependenciaInfo {
   updatedAt   DateTime      @updatedAt
   User        User          @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
   application application[]
+}
+
+model applicationApproved {
+  id            Int          @id @default(autoincrement())
+  userCedula    Int
+  applicationId Int
+  status        statusAproved  @default(enproceso)
+  date          DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  application   application  @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  esInfo        estudentInfo @relation(fields: [userCedula], references: [userCedula], onDelete: Cascade)
+}
+
+enum statusAproved {
+  completada
+  enproceso
 }

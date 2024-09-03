@@ -32,44 +32,24 @@ type Application = {
 
 export default function Page() {
   const [applications, setApplications] = useState<Application[]>();
-  const [loading, setLoading] = useState(false);
   const [squeleton, setSqueleton] = useState(true);
   const [spanRetirar, setSpanRetirar] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [codeOferta, setCodeOferta] = useState(0); //!ESTO DEBERIA SER EL CODIGO DE LA OFERTA EJ P-2024-1001, para identificarla en el modal al preguntar si la desea retirar
+  const [codeOferta, setCodeOferta] = useState(0);
   const [applicationToDelete, setApplicationToDelete] = useState<{
     id: number;
     applyId: number;
   } | null>(null);
 
-  //!QUE HACE ESTA FUNCION? NO ES UTILIZADA!
-  const handleApply = async (id: number) => {
-    try {
-      setLoading(true);
-      setSqueleton(true);
-      const res = await axios.post("/api/estudiante/apply", { id });
-      console.log(res.data);
-      getApplications();
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log("error lanzado:", error.response?.data.error);
-      } else {
-        console.error("error:", error);
-      }
-    } finally {
-      setLoading(false);
-      setSqueleton(false)
-    }
-  };
-
-  const handleDeleteApply = async () => {
+  const handleDeclineApply = async () => {
     if (applicationToDelete) {
       const { id, applyId } = applicationToDelete;
 
       try {
         setSpanRetirar(true);
-        const res = await axios.delete("/api/estudiante/apply", {
-          data: { idAplication: id, applyId },
+        const res = await axios.put("/api/estudiante/apply/myapply", {
+          idAplication: id,
+          applyId,
         });
         console.log(res.data);
         getApplications();
@@ -95,11 +75,10 @@ export default function Page() {
 
   const getApplications = async () => {
     try {
-      setLoading(true);
       setSqueleton(true);
 
       const res = await axios.get("/api/estudiante/apply/myapply");
-      console.log("data: ", res.data.applications);
+      //console.log("data: ", res.data.applications);
       setApplications(res.data.applications);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -108,10 +87,23 @@ export default function Page() {
         console.error("error:", error);
       }
     } finally {
-      setLoading(false);
       setSqueleton(false);
     }
   };
+
+  const acceptOffer = async (idApp: number, applyId: number) => {
+    try {
+      const res = await axios.post("/api/estudiante/apply/myapply", { idApp, applyId });
+      console.log(res.data);
+      getApplications();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error lanzado:", error.response?.data.error);
+      } else {
+        console.error("error:", error);
+      }
+    }
+  }
 
   useEffect(() => {
     getApplications();
@@ -140,11 +132,10 @@ export default function Page() {
         </div>
       ) : applications && applications.length > 0 ? (
         <InternshipCards
-        internships={applications.map((internship) => ({
-          ...internship,
-            handleDeleteApply:confirmDelete, // Pasamos la función confirmDelete
-            handleApply:handleApply,
-            flagOffer:false //Funcion de vista Oferta
+          internships={applications.map((internship) => ({
+            ...internship,
+            handleDeleteApply: confirmDelete, // Pasamos la función confirmDelete
+            handleAcceptApply: acceptOffer,
           }))}
         />
       ) : null}
@@ -154,7 +145,7 @@ export default function Page() {
         isLoading={spanRetirar}
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
-        onConfirm={handleDeleteApply}
+        onConfirm={handleDeclineApply}
       />
     </>
   );

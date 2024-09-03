@@ -55,7 +55,8 @@ export default function Navbar() {
       setNavigation([
         { name: "PRINCIPAL", href: "/dependencia", current: false },
         { name: "MI PERFIL", href: "/dependencia/perfil", current: false },
-        { name: "SOLICITUDES", href: "/dependencia/apply", current: false },
+        { name: "MIS OFERTAS", href: "/dependencia/misofertas", current: false },
+        {name: "CREAR OFERTA", href: "/dependencia/misofertas/crearoferta", current: false},
         {
           name: "NOTIFICACIONES",
           href: "/dependencia/notificaciones",
