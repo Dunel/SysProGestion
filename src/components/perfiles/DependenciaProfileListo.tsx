@@ -1,9 +1,6 @@
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
 import { useState } from "react";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
 import Loader from "../Loader";
 
 interface DependenciaProfileListoProps {
