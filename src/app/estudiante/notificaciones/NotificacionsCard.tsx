@@ -22,9 +22,10 @@ export default function NotificationsCard(
   const actionDesc = {
     apply: "Aplicaste a",
     reject: "Rechazaron tú solicitud de",
-    accept: "Aceptaron tú solicitud de",
+    accept: "Aprobaron tú solicitud de",
+    approve: "Aprobaron tú solicitud de",
     proposal: "Aplicaste a la propuesta de proyecto de",
-    delete: "Eliminaste tú solicitud de",
+    delete: "declinaste tú solicitud de",
   };
 
   const typeDesc = {

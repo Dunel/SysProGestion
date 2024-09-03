@@ -21,9 +21,10 @@ export default function NotificationsCard({
   const actionDesc: { [key: string]: string } = {
     apply: "Aplicó a",
     reject: "Rechazaste la solicitud de",
-    accept: "Aceptaste la solicitud de",
+    accept: "Aceptó la solicitud de",
+    approve: "Aprobaste la solicitud de",
     proposal: "propuesta de proyecto de",
-    delete: "Eliminó la solicitud de",
+    delete: "declinó la solicitud de",
   };
 
   const typeDesc: { [key: string]: string } = {
@@ -42,8 +43,13 @@ export default function NotificationsCard({
             <div className="flex-col w-[80%]">
               <div className="flex flex-col">
                 <p className="text-lg text-gray-600 mb-1">
-                  <strong>El estudiante V{noti.userCedula}</strong>{" "}
+                  {noti.action !== "reject" && noti.action !== "approve" ? (
+                    <strong>El estudiante V{noti.userCedula} </strong>
+                  ) : null}
                   {actionDesc[noti.action]}{" "}
+                  {noti.action === "reject" || noti.action === "approve" ? (
+                    <strong>El estudiante V{noti.userCedula} a </strong>
+                  ) : null}
                   <strong>{typeDesc[noti.application.type]}</strong>{" "}
                   <i>{noti.application.title}</i>
                 </p>

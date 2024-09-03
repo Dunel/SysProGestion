@@ -76,6 +76,7 @@ const ofertsStatus = [
   { key: "inactive", name: "Inactiva" },
   { key: "aceptado", name: "Aceptada" },
   { key: "pendiente", name: "Pendiente" },
+  { key: "aprobado", name: "Aprobada"},
   { key: "rechazado", name: "Rechazada" },
 ];
 

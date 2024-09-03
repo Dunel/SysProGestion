@@ -63,6 +63,9 @@ export async function getNoti(req: NextRequest) {
           },
         },
       },
+      orderBy:{
+        date: "desc"
+      },
       take: 20,
     });
 

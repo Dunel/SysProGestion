@@ -40,6 +40,7 @@ export async function getApplication(req: NextRequest) {
           },
           select: {
             id: true,
+            status: true,
           },
         },
         _count:{

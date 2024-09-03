@@ -5,14 +5,12 @@ import EstudianteFormActualizarProfile from "@/components/perfiles/EstudianteFor
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import Loader from "@/components/Loader";
 import  Skeleton  from "@/components/ui/SkeletonComponent";
 
 export default function EstudianteInfoForm() {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const { data: session, update } = useSession();
 
-  const [loading, setLoading] = useState(true);
   const toggleFormVisibility = () => {
     setIsFormVisible((prev) => !prev);
   };
@@ -32,10 +30,8 @@ export default function EstudianteInfoForm() {
 
   const getProfile = async () => {
     try {
-      setLoading(true); // Muestra el loader
       if (!session?.user.profile || session.user.dataProfile) {
         setProfileData(session?.user.dataProfile || null);
-        setLoading(false);
         return;
       }
       const res = await axios.get("/api/estudiante/perfil");
@@ -46,8 +42,6 @@ export default function EstudianteInfoForm() {
       } else {
         console.error("error:", error);
       }
-    } finally {
-      setLoading(false); // Oculta el loader
     }
   };
   useEffect(() => {
