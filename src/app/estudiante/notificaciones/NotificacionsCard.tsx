@@ -15,20 +15,24 @@ type Notificaciones = {
   };
 };
 
-export default function NotificationsCard({noti}: {noti: Notificaciones}) {
-    const actionDesc = {
-        apply: "Aplicaste a",
-        reject: "Rechazaron tú solicitud de",
-        accept: "Aceptaron tú solicitud de",
-        proposal: "Aplicaste a la propuesta de proyecto de",
-        delete: "Eliminaste tú solicitud de",
-      };
-    
-      const typeDesc = {
-        servicio: "Servicio Comunitario",
-        pasantia: "Pasantía",
-        proyecto: "Proyecto",
-      };
+export default function NotificationsCard(
+  { noti }: { noti: Notificaciones },
+  { index }: { index: number }
+) {
+  const actionDesc = {
+    apply: "Aplicaste a",
+    reject: "Rechazaron tú solicitud de",
+    accept: "Aprobaron tú solicitud de",
+    approve: "Aprobaron tú solicitud de",
+    proposal: "Aplicaste a la propuesta de proyecto de",
+    delete: "declinaste tú solicitud de",
+  };
+
+  const typeDesc = {
+    servicio: "Servicio Comunitario",
+    pasantia: "Pasantía",
+    proyecto: "Proyecto",
+  };
   return (
             <>
                         <div className="flex flex-row">
