@@ -19,7 +19,7 @@ type Internship = {
   apply: [
     {
       id: number;
-      
+      status: string;
     }
   ];
   _count: {
@@ -94,7 +94,8 @@ export default function InternshipCards({
        
         <span className="flex ml-2 p-1"> 
           <i>
-            {internship.apply.length > 0 ?'YA HAS APLICADO A ESTA OFERTA':null}
+            {internship.apply.length > 0 ? 'YA HAS APLICADO A ESTA OFERTA': null}
+            {internship.apply[0].status === 'decline' ? 'HAS DECLINADO ESTA OFERTA': null}
           </i> 
        </span>
 

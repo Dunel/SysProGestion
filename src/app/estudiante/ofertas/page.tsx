@@ -23,6 +23,7 @@ type Application = {
   apply: [
     {
       id: number;
+      status: string;
     }
   ];
   _count: {
