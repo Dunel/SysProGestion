@@ -1,30 +1,31 @@
 import React, { useState } from "react";
 
-interface Internship {
-  handleDeleteApply: Function;
-  handleAcceptApply: Function;
+type Internship = {
+  handleApply:Function,
+  id: number;
+  title: string;
+  type: "pasantia" | "servicio" | "proyecto";
+  description: string;
+  skills: string[];
+  date: Date;
+  location: string;
+  status: string;
   dependencia: {
     name: string;
     User: {
       image: string;
     };
   };
-  id: number;
-  title: string;
-  description: string;
-  location: string;
-  type: "pasantia" | "servicio" | "proyecto";
-  imagen: string;
-  date: Date;
-  skills: string[];
-  status: string;
   apply: [
     {
       id: number;
-      status: string;
+      
     }
   ];
-}
+  _count: {
+    apply: number;
+  };
+};
 
 const skillFormated: { [key: string]: string } = {
   resoluciondeproblemas: "Resolucion de problemas",
@@ -59,6 +60,26 @@ const statusFormated: { [key: string]: string } = {
   aprobado: "Aprobado",
 };
 
+const colorStatys = (status:string) => {
+
+    let colorText =  status === "inactive" 
+                      ? 'text-yellow-500'
+                      : status === "active"
+                          ? 'text-green-500'
+                          : status === "close" ? 'inactive: "text-red-500': '';
+
+  return colorText;
+}
+function formatearFechaYHora(fecha:Date) {
+  const date = new Date(fecha);
+  
+  const año = date.getFullYear();
+  const mes = String(date.getMonth() + 1).padStart(2, '0'); // Los meses son 0-indexados
+  const dia = String(date.getDate()).padStart(2, '0');
+  
+  return `${año}/${mes}/${dia}`;
+}
+
 export default function InternshipCards({
   internships,
 }: {
@@ -70,10 +91,24 @@ export default function InternshipCards({
     <div className="flex flex-col justify-center bg-white rounded-lg shadow-md m-4 mb-8 p-2 w-[90%] mx-auto my-5">
       <div className="flex">
         {/* //!ESTE CODE DEBERIA VENIR DE UN CAPO DE LA TABLA "ofertas" CUYA NOMENCLATURA SE CREA DE SEGUN EL TIPO DE OFERTA + ANO + ID   */}
+       
+        <span className="flex ml-2 p-1"> 
+          <i>
+            {internship.apply.length > 0 ?'YA HAS APLICADO A ESTA OFERTA':null}
+          </i> 
+       </span>
+
         <span className="flex  ml-auto p-1 text-red-500">
           Codigo de Oferta de Vacante: {"P-2024-000" + internship.id}
         </span>
       </div>
+      
+      <div className="flex mr-2">
+        <span className="flex ml-auto p-1 text-red-500">
+        Han aplicado: {internship._count.apply} estudiantes a esta Oferta de {internship.type}
+        </span> 
+      </div>
+
       <div className="flex flex-col items-center md:flex-row md:space-x-4">
         {/* //! IMG */}
         <div className="flex m-1 p-1 mx-auto h-[40%] md:w-[30%] lg:w-[20%]">
@@ -97,18 +132,19 @@ export default function InternshipCards({
 
           <div className="flex my-2 gap-2">
             <div className="w-[33%]">
-              <span className="text-lg font-medium text-gray-700 mb-2">
-                Estado de la Solicitud:
-              </span>
-              <p>{internship.status}</p>
+                <span className="text-lg font-medium text-gray-700 mb-2">
+                  Fecha de la Oferta:
+                </span>
+                <p>{ formatearFechaYHora(internship.date)}</p>
             </div>
+
             <div className="w-[33%]">
               <span className="text-lg font-medium text-gray-700 mb-2">
-                Estudiantes que han aplicado:
+                Estado de la Oferta:
               </span>
-               <p>{internship.status}</p>
-              <p>AQUI EL ESTADO</p>
+              <p className={colorStatys(internship.status)} > <b> {internship.status}</b></p>
             </div>
+            
             <div className="w-[33%]">
               <span className="text-lg font-medium text-gray-700 mb-2">
                 Tipo de Oferta:
@@ -150,36 +186,22 @@ export default function InternshipCards({
           </div>
         </div>
       </div>
-      <div className="flex justify-center">
-        {/* {internship.apply[0].status === "aprobado" && (
-          <button
-            onClick={() =>
-              internship.handleAcceptApply(
-                internship.id,
-                internship.apply[0].id
-              )
-            }
-            className="w-[100%] p-1 m-1 bg-green-500 hover:bg-green-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
-          >
-            Aceptar Oferta
-          </button>
-        )} */}
-
-        {/* {internship.apply[0].status === "aprobado" ||
-        internship.apply[0].status === "pendiente" ? (
-          <button
-            onClick={() =>
-              internship.handleDeleteApply(
-                internship.id,
-                internship.apply[0].id
-              )
-            }
-            className="w-[100%] p-1 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
-          >
-            Retirar aplicación
-          </button>
-        ) : null} */}
-      </div>
+      <div className="flex justify-center mt-4 w-[100%]">  
+                      {internship.apply.length > 0 
+                        ? null
+                        : internship.status !== "inactive" && (
+                     
+                            <button
+                              className="w-full bg-green-500 hover:bg-green-800 text-white  font-bold py-2 px-4 rounded md:w-[50%]"
+                              onClick={() => internship.handleApply(internship.id)}
+                              >   
+                            Aplica a esta Oferta !!
+                            </button>
+                      
+                          )
+                                                
+                        }
+          </div>
     </div>
   );
   return (

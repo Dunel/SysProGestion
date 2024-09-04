@@ -8,12 +8,11 @@ import Skeleton from "@/components/ui/SkeletonComponent";
 type Application = {
   id: number;
   title: string;
-  description: string;
-  location: string;
   type: "pasantia" | "servicio" | "proyecto";
-  imagen: string;
-  date: Date;
+  description: string;
   skills: string[];
+  date: Date;
+  location: string;
   status: string;
   dependencia: {
     name: string;
@@ -24,9 +23,11 @@ type Application = {
   apply: [
     {
       id: number;
-      status: string;
     }
   ];
+  _count: {
+    apply: number;
+  };
 };
 
 export default function Page() {
@@ -104,8 +105,7 @@ export default function Page() {
         <OffertCards
           internships={applications.map((internship) => ({
             ...internship,
-            handleDeleteApply: ()=>{}, // Pasamos la función confirmDelete
-            handleAcceptApply: handleApply,
+            handleApply: handleApply,
            
           }))}
         />
