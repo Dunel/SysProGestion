@@ -57,6 +57,8 @@ const statusFormated: { [key: string]: string } = {
   rechazado: "Rechazado",
   declinado: "Declinado",
   aprobado: "Aprobado",
+  active: "Activo",
+  inactive: "Inactivo",
 };
 
 export default function InternshipCards({
