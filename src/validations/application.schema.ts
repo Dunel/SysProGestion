@@ -81,8 +81,8 @@ export const applyUpdateSchema = z.object({
     .string({ required_error: "La descripcion es requerida" })
     .min(1, { message: "La descripcion debe tener minimo 1 caracteres" })
     .max(2000, { message: "La descripcion debe tener maximo 2000 caracteres" }),
-    pay: z 
-    .boolean(),
+  pay: z 
+    .boolean().optional(),
   location: z
     .string({ required_error: "La ubicacion es requerida" })
     .min(1, { message: "La ubicacion debe tener minimo 1 caracteres" })
@@ -197,8 +197,8 @@ export const applyUpdateFormSchema = z.object({
     .string({ required_error: "La descripcion es requerida" })
     .min(1, { message: "La descripcion debe tener minimo 1 caracteres" })
     .max(2000, { message: "La descripcion debe tener maximo 2000 caracteres" }),
-    pay: z 
-    .boolean(),
+  pay: z 
+    .boolean().optional(),
   location: z
     .string({ required_error: "La ubicacion es requerida" })
     .min(1, { message: "La ubicacion debe tener minimo 1 caracteres" })

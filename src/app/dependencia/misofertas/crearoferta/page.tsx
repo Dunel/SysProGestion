@@ -82,6 +82,7 @@ export default function Page() {
     const formData = {
       ...data,
       skills: selectedSkills,
+
     };
     const validate = applyCreateSchema.safeParse(formData);
     if (!validate.success) {
@@ -107,6 +108,7 @@ export default function Page() {
     }
   };
   
+
 
   return (
     <>
@@ -207,23 +209,71 @@ export default function Page() {
                     <Label>Tipo de Incentivo</Label>
                     <div className="flex items-center">
                         <Input
+                            {...register("pay")}
+                            id="pay"
+                            name="pay"
                             type="radio"
                             value="true"
-                            {...register("pay", { setValueAs: v => v === 'true' })}
+                        
                             className="mr-2"
                         />
                         <Label>Con Incentivo</Label>
             
                         <Input
                             type="radio"
+                            id="pay"
+                            {...register("pay")}
                             value="false"
-                            {...register("pay", { setValueAs: v => v === 'false' })}
+                     
                             className="mr-2"
                         />
                         <Label>Sin Insentivo</Label>
                     </div>
+                    {errors.pay && (
+                    <p className="text-red-500 text-sm">
+                        {errors.pay.message}
+                    </p>
+                  )}
                 </div>
-                  } 
+          }
+                  
+
+
+          {/* {selectedType === 'pasantia' && (
+            <div className="mt-2">
+            <label>Tipo de Incentivo</label>
+            <div className="flex items-center">
+              <input
+                  {...register("pay")}
+                  id="payTrue"
+                  name="pay"
+                  type="radio"
+                  value="true"
+                  onChange={handleRadioChange} // Maneja el cambio
+                  className="mr-2"
+              />
+              <label htmlFor="payTrue" className="mr-4">Con Incentivo</label>
+
+              <input
+                  {...register("pay")}
+                  id="payFalse"
+                  name="pay"
+                  type="radio"
+                  value="false"
+                  onChange={handleRadioChange} // Maneja el cambio
+                  className="mr-2"
+              />
+              <label htmlFor="payFalse">Sin Incentivo</label>
+              </div>
+              {errors.pay && (
+                  <p className="text-red-500 text-sm">
+                      {errors.pay.message}
+                  </p>
+              )}
+          </div>
+        )} */}
+
+              
 
                   
 
