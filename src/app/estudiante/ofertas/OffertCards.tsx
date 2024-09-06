@@ -6,8 +6,6 @@ import {
   FaRegThumbsDown,
   FaMoneyCheckAlt 
 } from "react-icons/fa";
-import { Input } from "@/components/ui/input";
-
 
 type Internship = {
   handleApply:Function,
@@ -77,7 +75,6 @@ function formatearFechaYHora(fecha:Date) {
   const año = date.getFullYear();
   const mes = String(date.getMonth() + 1).padStart(2, '0'); // Los meses son 0-indexados
   const dia = String(date.getDate()).padStart(2, '0');
-  
   return `${año}/${mes}/${dia}`;
 }
 
@@ -97,11 +94,14 @@ export default function InternshipCards({
             Codigo de Oferta de Vacante: {(internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id}
             </i> 
           </span>   
-        
-        <span className="flex gap-2 mr-2 font-bold text-green-500 lg:ml-auto">
-          Esta vacante ofrece incentivos
-          <FaMoneyCheckAlt  style={{ color: 'green' }} size={30}/>  
-        </span>
+        { //!internship.pay
+          true &&
+            <span className="flex gap-2 mr-2 font-bold text-green-500 lg:ml-auto">
+            Esta vacante ofrece incentivos
+            <FaMoneyCheckAlt  style={{ color: 'green' }} size={30}/>  
+          </span>
+        }
+       
       </div>
 
       <div className="flex ">

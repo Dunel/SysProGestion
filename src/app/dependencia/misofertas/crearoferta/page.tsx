@@ -82,6 +82,7 @@ export default function Page() {
     const formData = {
       ...data,
       skills: selectedSkills,
+      pay: data.type === 'pasantia' ? data.pay : undefined 
 
     };
     const validate = applyCreateSchema.safeParse(formData);
@@ -239,41 +240,6 @@ export default function Page() {
                   
 
 
-          {/* {selectedType === 'pasantia' && (
-            <div className="mt-2">
-            <label>Tipo de Incentivo</label>
-            <div className="flex items-center">
-              <input
-                  {...register("pay")}
-                  id="payTrue"
-                  name="pay"
-                  type="radio"
-                  value="true"
-                  onChange={handleRadioChange} // Maneja el cambio
-                  className="mr-2"
-              />
-              <label htmlFor="payTrue" className="mr-4">Con Incentivo</label>
-
-              <input
-                  {...register("pay")}
-                  id="payFalse"
-                  name="pay"
-                  type="radio"
-                  value="false"
-                  onChange={handleRadioChange} // Maneja el cambio
-                  className="mr-2"
-              />
-              <label htmlFor="payFalse">Sin Incentivo</label>
-              </div>
-              {errors.pay && (
-                  <p className="text-red-500 text-sm">
-                      {errors.pay.message}
-                  </p>
-              )}
-          </div>
-        )} */}
-
-              
 
                   
 

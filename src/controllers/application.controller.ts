@@ -22,6 +22,7 @@ export async function getApplication(req: NextRequest) {
         description: true,
         skills: true,
         date: true,
+        pay: true,
         location: true,
         status: true,
         dependencia: {
@@ -390,6 +391,7 @@ export async function getApplicationById(req: NextRequest) {
         id: true,
         title: true,
         description: true,
+        pay: true,
         location: true,
         status: true,
         type: true,
@@ -426,7 +428,7 @@ export async function updateApplicationById(req: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
     const result = applyUpdateSchema.parse(await req.json());
-    const { id, title, description, location, type, skills, status } = result;
+    const { id, title, description, pay, location, type, skills, status } = result;
     const application = await prisma.application.findFirst({
       where: {
         id,
@@ -448,6 +450,7 @@ export async function updateApplicationById(req: NextRequest) {
       data: {
         title,
         description,
+        pay,
         location,
         type,
         skills,
@@ -533,6 +536,7 @@ export async function getApplicationDepend(req: NextRequest) {
         id: true,
         title: true,
         description: true,
+        pay: true,
         location: true,
         status: true,
         type: true,

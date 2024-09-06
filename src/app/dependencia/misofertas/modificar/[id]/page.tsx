@@ -258,6 +258,45 @@ export default function Page({ params }: { params: { id: string } }) {
                       </p>
                     )}
                   </div>
+
+                  {selectedType === 'pasantia' &&
+                    <div>
+                    <Label>Tipo de Incentivo</Label>
+                    <div className="flex items-center">
+                        <Input
+                            {...register("pay")}
+                            id="pay"
+                            name="pay"
+                            type="radio"
+                            value="true"
+                        
+                            className="mr-2"
+                        />
+                        <Label>Con Incentivo</Label>
+            
+                        <Input
+                            type="radio"
+                            id="pay"
+                            {...register("pay")}
+                            value="false"
+                     
+                            className="mr-2"
+                        />
+                        <Label>Sin Insentivo</Label>
+                    </div>
+                    {errors.pay && (
+                    <p className="text-red-500 text-sm">
+                        {errors.pay.message}
+                    </p>
+                  )}
+                </div>
+          }
+
+
+
+
+
+
                   <div className="mt-2">
                     <Label>Habilidades Necesarias</Label>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
