@@ -480,7 +480,7 @@ export async function createAppDepend(req: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
     const result = applyCreateSchema.parse(await req.json());
-    const { title, description, location, type, skills, status } = result;
+    const { title, description, location, type, skills, status, pay } = result;
     await prisma.application.create({
       data: {
         title,
@@ -489,6 +489,7 @@ export async function createAppDepend(req: NextRequest) {
         type,
         skills,
         status,
+        pay,
         dependencia: {
           connect: {
             userCedula: token.cedula,
