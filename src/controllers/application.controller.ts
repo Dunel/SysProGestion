@@ -43,11 +43,11 @@ export async function getApplication(req: NextRequest) {
             status: true,
           },
         },
-        _count:{
-          select:{
-            apply: true
-          }
-        }
+        _count: {
+          select: {
+            apply: true,
+          },
+        },
       },
     });
     return NextResponse.json(applications, { status: 200 });
@@ -86,7 +86,7 @@ export async function apply(req: NextRequest) {
         },
       },
     });
-    if (application?.apply.length || !application) {
+    if (!application || application?.apply?.length > 0) {
       return NextResponse.json(
         { error: "Ya has aplicado a esta oferta o no existe" },
         { status: 400 }

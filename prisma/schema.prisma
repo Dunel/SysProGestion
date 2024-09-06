@@ -126,6 +126,7 @@ model apply {
   updatedAt     DateTime    @updatedAt
   application   application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
   User          User        @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
+  @@unique([userCedula, applicationId])
 }
 
 enum statusApply {
