@@ -160,7 +160,7 @@ export default function EstudianteProfileForm({
               onChange={handleInputChange}
               id="names"
               name="names"
-              placeholder="Nombres"
+              placeholder="Jose Manuel"
               type="text"
               className={cn(errors.names && "bg-red-100 focus:bg-red-100")}
             />

@@ -106,6 +106,7 @@ export default function Page() {
       }
     }
   };
+  
 
   return (
     <>
@@ -119,13 +120,13 @@ export default function Page() {
                 className="form-student-info"
               >
                 <div className="mt-2">
-                  <Label>Titulo</Label>
+                  <Label>Titulo descriptivo de la oferta de vacante</Label>
                   <Input
                     {...register("title")}
                     id="title"
                     name="title"
                     type="text"
-                    placeholder="Nombre de la oferta"
+                    placeholder="Creación de un sistema informatico para consulta y lectura virtual de archivos"
                   />
                   {errors.title && (
                     <p className="text-red-500 text-sm">
@@ -134,13 +135,13 @@ export default function Page() {
                   )}
                 </div>
                 <div className="mt-2">
-                  <Label>Descripción</Label>
+                  <Label>Descripción de la oferta:</Label>
                   <Input
                     {...register("description")}
                     id="description"
                     name="description"
                     type="text"
-                    placeholder="Descripcion de la oferta"
+                    placeholder="Se requiere de un estudiante de Ing en Informatica para la creación de...  "
                   />
                   {errors.description && (
                     <p className="text-red-500 text-sm">
@@ -149,13 +150,13 @@ export default function Page() {
                   )}
                 </div>
                 <div className="mt-2">
-                  <Label>Ubicación</Label>
+                  <Label>Ubicación de la institución a realizar la pasantia o Servicio Comunitario</Label>
                   <Input
                     {...register("location")}
                     id="location"
                     name="location"
                     type="text"
-                    placeholder="Ubicación de la oferta"
+                    placeholder="Municipio Maracaibo, Casco Central. calle Paseo Ciencia"
                   />
                   {errors.location && (
                     <p className="text-red-500 text-sm">
@@ -163,6 +164,7 @@ export default function Page() {
                     </p>
                   )}
                 </div>
+
                 <div className="mt-2">
                   <Label>Tipo de Oferta</Label>
                   <Input
@@ -174,7 +176,7 @@ export default function Page() {
                     onClick={() => setIsOpen(!isOpen)}
                     readOnly
                     className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
-                    placeholder="Selecciona una opción"
+                    placeholder="Haz clic y selecciona una opción"
                   />
                   {isOpen && (
                     <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
@@ -199,8 +201,34 @@ export default function Page() {
                     </p>
                   )}
                 </div>
+
+                   {selectedType === 'pasantia' &&
+                    <div>
+                    <Label>Tipo de Incentivo</Label>
+                    <div className="flex items-center">
+                        <Input
+                            type="radio"
+                            value="true"
+                            {...register("pay", { setValueAs: v => v === 'true' })}
+                            className="mr-2"
+                        />
+                        <Label>Con Incentivo</Label>
+            
+                        <Input
+                            type="radio"
+                            value="false"
+                            {...register("pay", { setValueAs: v => v === 'false' })}
+                            className="mr-2"
+                        />
+                        <Label>Sin Insentivo</Label>
+                    </div>
+                </div>
+                  } 
+
+                  
+
                 <div className="mt-2">
-                  <Label>Habilidades Necesarias</Label>
+                  <Label>Habilidades deseadas en el estudiente</Label>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
                     {skillsOptions.map(({ value, label }) => (
                       <div key={value} className="flex items-center">
@@ -260,7 +288,7 @@ export default function Page() {
                     onClick={() => setIsOpen2(!isOpen2)}
                     readOnly
                     className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
-                    placeholder="Selecciona una opción"
+                    placeholder="Haz clic y selecciona una opción"
                   />
                   {isOpen2 && (
                     <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">

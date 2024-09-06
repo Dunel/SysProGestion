@@ -101,6 +101,7 @@ model application {
   idDepend            Int
   description         String?
   imagen              String?
+  pay                 Boolean?
   location            String
   type                typeApplication
   skills              Skills[]

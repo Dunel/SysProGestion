@@ -3,8 +3,11 @@ import {
   FaExclamation,
   FaFire,
   FaRegThumbsUp,
-  FaRegThumbsDown 
+  FaRegThumbsDown,
+  FaMoneyCheckAlt 
 } from "react-icons/fa";
+import { Input } from "@/components/ui/input";
+
 
 type Internship = {
   handleApply:Function,
@@ -87,15 +90,23 @@ export default function InternshipCards({
     internship,
   }) => (
     <div className="flex flex-col justify-center bg-white rounded-lg shadow-md m-4 mb-8 p-2 w-[90%] mx-auto my-5">
-      <div className="flex flex-col lg:gap-2 lg:flex-row">    
-        <i>
-          <span className="flex ml-2 p-1 text-red-500">
-            Codigo de Oferta de Vacante: {(internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" + internship.id}
+      
+      <div className="flex flex-col lg:flex-row lg:gap-2">    
+          <span className="flex mr-2 text-red-500">
+             <i>
+            Codigo de Oferta de Vacante: {(internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id}
+            </i> 
           </span>   
-        </i> 
         
-      <span className="flex ml-2 p-1 text-red-500 lg:ml-auto">
-        Han aplicado: {internship._count.apply} estudiantes a esta Oferta de {internship.type === "pasantia"
+        <span className="flex gap-2 mr-2 font-bold text-green-500 lg:ml-auto">
+          Esta vacante ofrece incentivos
+          <FaMoneyCheckAlt  style={{ color: 'green' }} size={30}/>  
+        </span>
+      </div>
+
+      <div className="flex ">
+        <span className="flex mr-2 text-gray-500 lg:ml-auto">
+        Han aplicado {internship._count.apply} 🧑🏽‍🎓 a esta Oferta de {internship.type === "pasantia"
                   ? "Pasantias"
                   : internship.type === "servicio"
                   ? "Servicio Comunitario"
@@ -104,7 +115,6 @@ export default function InternshipCards({
                   : ""}
         </span> 
       </div>
-      
 
       <div className="flex flex-col items-center md:flex-row md:space-x-4">
         {/* //! IMG */}
@@ -183,7 +193,7 @@ export default function InternshipCards({
           </div>
         </div>
       </div>
-      <div className="flex justify-center mt-4 w-[100%]">  
+      <div className="flex justify-center p-2 mt-4 w-[100%]">  
                       
                       {internship.apply.length > 0 
                         ? <button
@@ -211,18 +221,19 @@ export default function InternshipCards({
                           </button>
                         : internship.status !== "inactive" 
                         ? (
-                     
                             <button
-                              className="w-full bg-green-500 hover:bg-green-800 text-white  font-bold py-2 px-4 rounded md:w-[50%]"
+                              className="bg-green-400 relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] lg:w-[50%]"
                               onClick={() => internship.handleApply(internship.id)}
                               >   
+                            
                                 <div className="flex gap-2 justify-center">
                                   <span>APLICA A ESTA OFERTA!!</span>
                                   <FaFire style={{ color: 'white' }} size={30}/>  
                                 </div>
-                           
+                    
+                                <BottomGradient />
                             </button>
-                      
+              
                           )
                           :  internship.status === "inactive" && (
                      
@@ -252,3 +263,15 @@ export default function InternshipCards({
     </>
   );
 }
+
+const BottomGradient = () => {
+  return (
+    <>
+      <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
+      <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
+    </>
+  );
+};
+
+
+// w-full bg-green-500 hover:bg-green-800 text-white font-bold py-2 px-4 rounded md:w-[50%]

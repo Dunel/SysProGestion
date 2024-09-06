@@ -4,6 +4,7 @@ import {
   FaTrashAlt,
   FaRegSadCry,
   FaRegLaughSquint,
+  FaRegLaugh,
 } from "react-icons/fa";
 
 type Notificaciones = {
@@ -22,8 +23,8 @@ export default function NotificationsCard(
   const actionDesc = {
     apply: "Aplicaste a",
     reject: "Rechazaron tú solicitud de",
-    accept: "Aprobaron tú solicitud de",
-    approve: "Aprobaron tú solicitud de",
+    accept: "Tu has Aceptado la solicitud de",
+    approve: "Dependencia a Aprobaron tú solicitud de",
     proposal: "Aplicaste a la propuesta de proyecto de",
     delete: "declinaste tú solicitud de",
   };
@@ -33,6 +34,7 @@ export default function NotificationsCard(
     pasantia: "Pasantía",
     proyecto: "Proyecto",
   };
+  
   return (
             <>
                         <div className="flex flex-row">
@@ -60,10 +62,10 @@ export default function NotificationsCard(
                                             : noti.action === 'apply' 
                                                 ? <FaClipboardCheck style={{ color: 'green' }} size={40}/>
                                                 : noti.action === 'accept' 
-                                                    ? <FaRegLaughSquint style={{ color: 'green' }} size={40}/> 
+                                                ? <FaRegLaughSquint style={{ color: 'green' }} size={40}/>
                                                     :noti.action === 'reject' 
                                                         ? <FaRegSadCry style={{ color: 'red' }} size={40}/> 
-                                                        :''
+                                                        : <FaRegLaugh style={{ color: 'yellow' }} size={40}/> //approve
                                         }
                                 </button>
                             </div>

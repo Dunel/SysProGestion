@@ -48,24 +48,28 @@ export default function Page() {
         }
       />
 
-      {squeleton && <Skeleton />}
-      <div className="flex flex-col items-center bg-white rounded-lg shadow-md m-4 mb-8 p-2 w-[90%] mx-auto my-5">
+      {squeleton
+      ? <Skeleton />
+      
+      : <div className="flex flex-col items-center bg-white rounded-lg shadow-md m-4 mb-8 p-2 w-[90%] mx-auto my-5">
         {notificaciones && notificaciones.length > 0 
-        
-        ? (
-          notificaciones.map((noti, i) => 
-            <div key={i} className="w-full flex flex-col justify-center m-2 p-2 bg-[#c2dded62] shadow-md md:w-[80%]">
-              <NotificationsCard noti={noti}/>
+          ? (
+              notificaciones.map((noti, i) => 
+              <div key={i} className="w-full flex flex-col justify-center m-2 p-2 bg-[#c2dded62] shadow-md md:w-[80%]">
+                <NotificationsCard noti={noti}/>
+                </div>
+                )
+            ) 
+          : (
+              <div className="flex flex-col justify-center items-center mt-12 mx-auto bg-white w-[60%] min-h-[30vh]">
+                  <p className="m-2 p-2 text-center text-red-500">No tienes Notificaciones.</p>
+                  <p className="m-2 p-2 text-center">Entra a tu menú de navegación y haz clic en la opción <i>“Oferta de Vacantes”, </i> aplica a las que se ajusten a tus deseos y sé parte de procesos!</p>
               </div>
-              )
-          ) 
-        : (
-          <div className="flex flex-col justify-center items-center mt-12 mx-auto bg-white w-[60%] min-h-[30vh]">
-              <p className="m-2 p-2 text-center text-red-500">No tienes Notificaciones.</p>
-              <p className="m-2 p-2 text-center">Entra a tu menú de navegación y haz clic en la opción <i>“Oferta de Vacantes”, </i> aplica a las que se ajusten a tus deseos y sé parte de procesos!</p>
-          </div>
-        )}
-      </div>
+            )
+          }
+    </div>
+      
+}
     </>
   );
 }
