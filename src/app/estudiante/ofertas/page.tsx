@@ -86,7 +86,7 @@ export default function Page() {
       <Header
         title={"TODAS LAS OFERTAS DE VACANTES"}
         subtitle={
-          "... Vacantes de Pasantías, Servicio Comunitario y Proyectos de tesis a las que has aplicado exitosamente."
+          "Aqui podras encontrar todas las Vacantes de Pasantías, Servicio Comunitario y Proyectos de tesis que han sido publicadas por las dependencias de la alcaldia. Aplica a las que tengas interes."
         }
       />
 

@@ -1,4 +1,13 @@
 import React, { useState } from "react";
+import {
+  FaExclamation,
+  FaFire,
+  FaRegThumbsUp,
+  FaRegThumbsDown,
+  FaMoneyCheckAlt 
+} from "react-icons/fa";
+import { Input } from "@/components/ui/input";
+
 
 type Internship = {
   handleApply:Function,
@@ -52,13 +61,6 @@ const skillFormated: { [key: string]: string } = {
   lenguajesdeprogramacion: "Lenguajes de programación",
 };
 
-const statusFormated: { [key: string]: string } = {
-  pendiente: "Pendiente",
-  aceptado: "Aceptado",
-  rechazado: "Rechazado",
-  declinado: "Declinado",
-  aprobado: "Aprobado",
-};
 
 const colorStatys = (status:string) => {
 
@@ -72,7 +74,6 @@ const colorStatys = (status:string) => {
 }
 function formatearFechaYHora(fecha:Date) {
   const date = new Date(fecha);
-  
   const año = date.getFullYear();
   const mes = String(date.getMonth() + 1).padStart(2, '0'); // Los meses son 0-indexados
   const dia = String(date.getDate()).padStart(2, '0');
@@ -89,24 +90,29 @@ export default function InternshipCards({
     internship,
   }) => (
     <div className="flex flex-col justify-center bg-white rounded-lg shadow-md m-4 mb-8 p-2 w-[90%] mx-auto my-5">
-      <div className="flex">
-        {/* //!ESTE CODE DEBERIA VENIR DE UN CAPO DE LA TABLA "ofertas" CUYA NOMENCLATURA SE CREA DE SEGUN EL TIPO DE OFERTA + ANO + ID   */}
-       
-        <span className="flex ml-2 p-1"> 
-          <i>
-            {internship.apply.length > 0 ? 'YA HAS APLICADO A ESTA OFERTA': null}
-            {internship.apply[0].status === 'decline' ? 'HAS DECLINADO ESTA OFERTA': null}
-          </i> 
-       </span>
-
-        <span className="flex  ml-auto p-1 text-red-500">
-          Codigo de Oferta de Vacante: {"P-2024-000" + internship.id}
+      
+      <div className="flex flex-col lg:flex-row lg:gap-2">    
+          <span className="flex mr-2 text-red-500">
+             <i>
+            Codigo de Oferta de Vacante: {(internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id}
+            </i> 
+          </span>   
+        
+        <span className="flex gap-2 mr-2 font-bold text-green-500 lg:ml-auto">
+          Esta vacante ofrece incentivos
+          <FaMoneyCheckAlt  style={{ color: 'green' }} size={30}/>  
         </span>
       </div>
-      
-      <div className="flex mr-2">
-        <span className="flex ml-auto p-1 text-red-500">
-        Han aplicado: {internship._count.apply} estudiantes a esta Oferta de {internship.type}
+
+      <div className="flex ">
+        <span className="flex mr-2 text-gray-500 lg:ml-auto">
+        Han aplicado {internship._count.apply} 🧑🏽‍🎓 a esta Oferta de {internship.type === "pasantia"
+                  ? "Pasantias"
+                  : internship.type === "servicio"
+                  ? "Servicio Comunitario"
+                  : internship.type === "proyecto"
+                  ? "Proyecto de Tesis"
+                  : ""}
         </span> 
       </div>
 
@@ -156,7 +162,7 @@ export default function InternshipCards({
                 {internship.type === "pasantia"
                   ? "Pasantias"
                   : internship.type === "servicio"
-                  ? "Servicio Cominitario"
+                  ? "Servicio Comunitario"
                   : internship.type === "proyecto"
                   ? "Proyecto de Tesis"
                   : ""}
@@ -187,20 +193,62 @@ export default function InternshipCards({
           </div>
         </div>
       </div>
-      <div className="flex justify-center mt-4 w-[100%]">  
+      <div className="flex justify-center p-2 mt-4 w-[100%]">  
+                      
                       {internship.apply.length > 0 
-                        ? null
-                        : internship.status !== "inactive" && (
-                     
+                        ? <button
+                        className="w-full bg-gray-500 text-white font-bold py-2 px-4 rounded  md:w-[50%]"
+                        disabled>  
+                          { internship.status === "inactive" 
+                          ? <div className="flex gap-2 justify-center">
+                          <span>OFERTA INACTIVA</span>
+                          <FaExclamation  style={{ color: 'white' }} size={30}/>  
+                        </div> 
+                           : internship.apply.length > 0 && internship.apply[0]?.status != 'declinado'  
+                                      ?  <div className="flex gap-2 justify-center">
+                                      <span>YA HAS APLICADO A ESTA OFERTA</span>
+                                      <FaRegThumbsUp style={{ color: 'white' }} size={30}/>  
+                                    </div>
+                                      :internship.apply[0]?.status === 'declinado' 
+                                        ?   <div className="flex gap-2 justify-center">
+                                              <span>HAS DECLINADO ESTA OFERTA</span>
+                                              <FaRegThumbsDown style={{ color: 'white' }} size={30}/>  
+                                            </div>
+                                        :null                       
+                            } 
+                          
+                         
+                          </button>
+                        : internship.status !== "inactive" 
+                        ? (
                             <button
-                              className="w-full bg-green-500 hover:bg-green-800 text-white  font-bold py-2 px-4 rounded md:w-[50%]"
+                              className="bg-green-400 relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] lg:w-[50%]"
                               onClick={() => internship.handleApply(internship.id)}
                               >   
-                            Aplica a esta Oferta !!
+                            
+                                <div className="flex gap-2 justify-center">
+                                  <span>APLICA A ESTA OFERTA!!</span>
+                                  <FaFire style={{ color: 'white' }} size={30}/>  
+                                </div>
+                    
+                                <BottomGradient />
+                            </button>
+              
+                          )
+                          :  internship.status === "inactive" && (
+                     
+                            <button
+                              className="w-full bg-gray-500 text-white font-bold py-2 px-4 rounded md:w-[50%]"
+                              disabled
+                              >   
+                                <div className="flex gap-2 justify-center">
+                                  <span>OFERTA INACTIVA</span>
+                                  <FaExclamation  style={{ color: 'white' }} size={30}/>  
+                                </div>
+                             
                             </button>
                       
                           )
-                                                
                         }
           </div>
     </div>
@@ -215,3 +263,15 @@ export default function InternshipCards({
     </>
   );
 }
+
+const BottomGradient = () => {
+  return (
+    <>
+      <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
+      <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
+    </>
+  );
+};
+
+
+// w-full bg-green-500 hover:bg-green-800 text-white font-bold py-2 px-4 rounded md:w-[50%]

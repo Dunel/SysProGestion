@@ -26,12 +26,12 @@ export default function Navbar() {
         { name: "MI PERFIL", href: "/estudiante/perfil", current: false },
         {
           name: "OFERTAS DE VACANTES",
-          href: "/estudiante/apply",
+          href: "/estudiante/ofertas",
           current: false,
         },
         {
           name: "MIS APLICACIONES A OFERTAS",
-          href: "/estudiante/apply/misaplicaciones",
+          href: "/estudiante/misaplicaciones",
           current: false,
         },
         {

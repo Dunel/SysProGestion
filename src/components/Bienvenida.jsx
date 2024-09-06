@@ -81,14 +81,14 @@ export default function Bienvenida() {
 
             <div className="flex flex-col items-stretch my-4 text-center md:flex-row">
               <div className='w-full md:mr-4'>
-                <label className="block text-sm font-medium text-gray-700 mb-1">¿Ya tienes una cuenta?</label>
+                <label className="block text-3xl text-gray-700 mb-1 md:text-4xl">¿Ya tienes una cuenta?</label>
                 <button className="relative z-50 w-full bg-gray-950 text-white py-2 px-4 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-xl">
                   <Link href="/login">Iniciar sesión</Link>
                 </button>
               </div>
 
               <div className='w-full md:ml-4 mt-4 md:mt-0'>
-                <label className="block text-sm font-medium text-gray-700 mb-1">¿No tienes una cuenta?</label>
+                <label className="block text-3xl  text-gray-700 mb-1 md:text-4xl">¿No tienes una cuenta?</label>
                 <button className="relative z-50 w-full bg-gray-950 text-white py-2 px-4 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-xl">
                   <Link href="/register">Regístrate</Link>
                 </button>

@@ -2,6 +2,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import Loader from "../Loader";
+import { Link } from "@mui/material";
 
 interface DependenciaProfileListoProps {
   onToggleForm: () => void;
@@ -88,11 +89,11 @@ export default function DependenciaProfileListo({
             {/* !Información de la dependencia */}
             <div className="m-1 p-1 word-wrap overflow-wrap">
               <h2 className="text-3xl font-bold text-gray-800 text-center md:text-5xl lg:text-4xl">
-                {session.user.dataProfile.names}{" "}
-                {session.user.dataProfile.lastnames}
+                <i>{session.user.dataProfile.name}</i>
               </h2>
               <h2 className="text-2xl font-bold text-gray-800 pt-5 pb-2 md:text-3xl lg:text-2xl">
-                <i>{session.user.dataProfile.name}</i>
+                {session.user.dataProfile.names}{" "}
+                {session.user.dataProfile.lastnames}
               </h2>
               <p className="text-gray-600 md:text-1x1">
                 <strong>🪪 Cedula de identidad:</strong> {session.user.cedula}
@@ -108,7 +109,7 @@ export default function DependenciaProfileListo({
               </p>
               <p className="text-gray-600 md:text-1x1">
                 <strong>🔗 Red Social: </strong>
-                {session.user.dataProfile.social}
+                <Link href={session.user.dataProfile.social}>{session.user.dataProfile.social}</Link> 
               </p>
               <p className="text-gray-600 md:text-1x1">
                 <strong>📍 Domicilio: </strong>
@@ -117,20 +118,18 @@ export default function DependenciaProfileListo({
             </div>
           </div>
 
-          {/* //!caja de PERFIL PROFESIONAL hasta CV */}
+        
           <div className="m-6">
-            <h4 className="text-2xl font-bold text-gray-800 m-2 text-center md:text-4xl lg:text-3xl">
-              Perfil Profesional
-            </h4>
+           
 
             {/* Habilidades y descripcion */}
             <div className="flex flex-col items-start gap-2 md:flex-row">
               <div className="flex flex-col justify-center w-full md:w-[70%]">
                 <div className="m-2 p-1 w-full md:w-[100%]">
                   <p className="text-gray-600 font-bold md:text-1x1">
-                    🧑🏽‍🦱 Descripción:
+                    🏦 Descripción u objeto social de la Dependencia:
                   </p>
-                  <p>{session.user.dataProfile.description}</p>
+                  <p className="text-justify">{session.user.dataProfile.description}</p>
                 </div>
               </div>
             </div>

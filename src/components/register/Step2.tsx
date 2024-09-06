@@ -126,7 +126,7 @@ export default function Step2({ setData, sendData }: Step2Props) {
             id="birthdate"
             type="text"
             className={cn(errors.birthdate && "bg-red-100 focus:bg-red-100")}
-            placeholder="yyyy/mm/dd"
+            placeholder="1999-12-24"
           />
           {errors.birthdate ? (
             <>
@@ -134,12 +134,12 @@ export default function Step2({ setData, sendData }: Step2Props) {
                 {errors.birthdate.message?.toString()}
               </p>
               <span className="text-gray-500 text-xs">
-                La fecha de nacimiento debe tener el formato yyyy/mm/dd.
+                La fecha de nacimiento debe tener el formato yyyy-mm-dd.
               </span>
             </>
           ) : (
             <span className="text-gray-500 text-xs">
-              La fecha de nacimiento debe tener el formato yyyy/mm/dd.
+              La fecha de nacimiento debe tener el formato yyyy-mm-dd.
             </span>
           )}
         </LabelInputContainer>
@@ -150,7 +150,7 @@ export default function Step2({ setData, sendData }: Step2Props) {
             {...register("telefono")}
             id="telefono"
             placeholder="04246262000"
-            type="tel"
+            type="phone"
             className={cn(errors.telefono && "bg-red-100 focus:bg-red-100")}
           />
           {errors.telefono ? (

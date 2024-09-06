@@ -52,11 +52,13 @@ const skillFormated: { [key: string]: string } = {
 };
 
 const statusFormated: { [key: string]: string } = {
-  pendiente: "Pendiente",
-  aceptado: "Aceptado",
-  rechazado: "Rechazado",
-  declinado: "Declinado",
-  aprobado: "Aprobado",
+  pendiente: "Pendiente por Dependencia⌚",
+  aceptado: "Has sido Aceptado! Puedes empeza!🎉",
+  rechazado: "Rechazado! Intenta con otra oferta!🤓",
+  declinado: "Tu has Declinado⛔",
+  aprobado: "Fuiste Aprobado! ahora acepta!➡️",
+  active: "Activo✅",
+  inactive: "Inactivo⚠️",
 };
 
 export default function InternshipCards({
@@ -71,7 +73,8 @@ export default function InternshipCards({
       <div className="flex">
         {/* //!ESTE CODE DEBERIA VENIR DE UN CAPO DE LA TABLA "ofertas" CUYA NOMENCLATURA SE CREA DE SEGUN EL TIPO DE OFERTA + ANO + ID   */}
         <span className="flex  ml-auto p-1 text-red-500">
-          Codigo de Oferta de Vacante: {"P-2024-000" + internship.id}
+        Codigo de Oferta de Vacante: {(internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id}
+
         </span>
       </div>
       <div className="flex flex-col items-center md:flex-row md:space-x-4">
