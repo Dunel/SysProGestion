@@ -26,7 +26,66 @@ export const profileSchema = z.object({
     .string({ required_error: "La universidad es requerida" })
     .min(4, { message: "La universidad debe tener minimo 4 caracteres" })
     .max(50, { message: "La universidad debe tener maximo 50 caracteres" }),
-  career: z
+  
+
+  datestart: z
+  .string({ required_error: "La fecha de nacimiento es requerida" })
+  .refine((val) => {
+      const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
+      return regex.test(val);
+    }, {
+      message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
+    })
+    .transform((val, ctx) => {
+      const [year, month, day] = val.split('-').map(Number); // Separar año, mes y día
+      const date = new Date(year, month - 1, day); // Crear el objeto Date con los valores extraídos
+  
+      if (isNaN(date.getTime()) || date.getDate() !== day || date.getMonth() !== (month - 1) || date.getFullYear() !== year) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "La fecha de nacimiento no es válida",
+        });
+        return z.NEVER;
+      }
+      const today = new Date();
+      const age = today.getFullYear() - date.getFullYear();
+      const monthDiff = today.getMonth() - date.getMonth();
+      const dayDiff = today.getDate() - date.getDate();
+       return date;
+    }),
+
+
+  datefinish: z
+    .string({ required_error: "La fecha de nacimiento es requerida" })
+    .refine((val) => {
+        const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
+        return regex.test(val);
+      }, {
+        message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
+      })
+      .transform((val, ctx) => {
+        const [year, month, day] = val.split('-').map(Number); // Separar año, mes y día
+        const date = new Date(year, month - 1, day); // Crear el objeto Date con los valores extraídos
+    
+        if (isNaN(date.getTime()) || date.getDate() !== day || date.getMonth() !== (month - 1) || date.getFullYear() !== year) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "La fecha de nacimiento no es válida",
+          });
+          return z.NEVER;
+        }
+        const today = new Date();
+        const age = today.getFullYear() - date.getFullYear();
+        const monthDiff = today.getMonth() - date.getMonth();
+        const dayDiff = today.getDate() - date.getDate();
+         return date;
+      }),
+
+  
+  
+  
+  
+    career: z
     .string({ required_error: "La carrera es requerida" })
     .min(4, { message: "La carrera debe tener minimo 4 caracteres" })
     .max(50, { message: "La carrera debe tener maximo 50 caracteres" }),
@@ -126,6 +185,64 @@ export const profileFrontSchema = z.object({
     .string({ required_error: "La universidad es requerida" })
     .min(4, { message: "La universidad debe tener minimo 4 caracteres" })
     .max(50, { message: "La universidad debe tener maximo 50 caracteres" }),
+
+
+  
+    datestart: z
+    .string({ required_error: "La fecha de nacimiento es requerida" })
+    .refine((val) => {
+        const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
+        return regex.test(val);
+      }, {
+        message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
+      })
+      .transform((val, ctx) => {
+        const [year, month, day] = val.split('-').map(Number); // Separar año, mes y día
+        const date = new Date(year, month - 1, day); // Crear el objeto Date con los valores extraídos
+    
+        if (isNaN(date.getTime()) || date.getDate() !== day || date.getMonth() !== (month - 1) || date.getFullYear() !== year) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "La fecha de nacimiento no es válida",
+          });
+          return z.NEVER;
+        }
+        const today = new Date();
+        const age = today.getFullYear() - date.getFullYear();
+        const monthDiff = today.getMonth() - date.getMonth();
+        const dayDiff = today.getDate() - date.getDate();
+         return date;
+      }),
+  
+  
+    datefinish: z
+      .string({ required_error: "La fecha de nacimiento es requerida" })
+      .refine((val) => {
+          const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
+          return regex.test(val);
+        }, {
+          message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
+        })
+        .transform((val, ctx) => {
+          const [year, month, day] = val.split('-').map(Number); // Separar año, mes y día
+          const date = new Date(year, month - 1, day); // Crear el objeto Date con los valores extraídos
+      
+          if (isNaN(date.getTime()) || date.getDate() !== day || date.getMonth() !== (month - 1) || date.getFullYear() !== year) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: "La fecha de nacimiento no es válida",
+            });
+            return z.NEVER;
+          }
+          const today = new Date();
+          const age = today.getFullYear() - date.getFullYear();
+          const monthDiff = today.getMonth() - date.getMonth();
+          const dayDiff = today.getDate() - date.getDate();
+           return date;
+        }),
+  
+
+
   career: z
     .string({ required_error: "La carrera es requerida" })
     .min(4, { message: "La carrera debe tener minimo 4 caracteres" })

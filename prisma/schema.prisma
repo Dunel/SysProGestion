@@ -77,11 +77,13 @@ model estudentInfo {
   id                  Int                   @id @default(autoincrement())
   userCedula          Int                   @unique
   university          String
-  career              String?
-  quarter             Int
+  datefinish          DateTime
+  datestart           DateTime
+  career              String
+  quarter             Int?
   skills              Skills[]
-  interests           String
-  description         String
+  interests           String?
+  description         String?
   address             String
   curriculum          String?
   updatedAt           DateTime              @updatedAt

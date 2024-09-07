@@ -60,13 +60,7 @@ export const userSchema = z.object({
         const month = today.getMonth() - date.getMonth();
         const day = today.getDate() - date.getDate();
   
-        if (age < 18 || (age === 18 && month < 0) || (age === 18 && month === 0 && day < 0)) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Debes tener al menos 18 años",
-          });
-          return z.NEVER;
-        }
+       
   
         return date;
       }),
@@ -137,40 +131,36 @@ export const userFormSchema = z.object({
         message: "El teléfono debe contener solo números",
       }), // Validación de solo números
 
-      birthdate: z
+    birthdate: z
       .string({ required_error: "La fecha de nacimiento es requerida" })
       .refine((val) => {
-        const regex = /^\d{4}-\d{2}-\d{2}$/;
+        const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
         return regex.test(val);
       }, {
         message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
       })
       .transform((val, ctx) => {
-        const date = new Date(val);
-        if (isNaN(date.getTime())) {
+        const [year, month, day] = val.split('-').map(Number); // Separar año, mes y día
+        const date = new Date(year, month - 1, day); // Crear el objeto Date con los valores extraídos
+    
+        if (isNaN(date.getTime()) || date.getDate() !== day || date.getMonth() !== (month - 1) || date.getFullYear() !== year) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: "La fecha de nacimiento no es válida",
           });
           return z.NEVER;
         }
-  
+    
         const today = new Date();
         const age = today.getFullYear() - date.getFullYear();
-        const month = today.getMonth() - date.getMonth();
-        const day = today.getDate() - date.getDate();
+        const monthDiff = today.getMonth() - date.getMonth();
+        const dayDiff = today.getDate() - date.getDate();
   
-        if (age < 18 || (age === 18 && month < 0) || (age === 18 && month === 0 && day < 0)) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Debes tener al menos 18 años",
-          });
-          return z.NEVER;
-        }
-  
-        return date;
+    
+         return date;
       }),
-
+    
+    
     password: z
       .string({ required_error: "La contraseña es requerida" })
       .min(8, { message: "La contraseña debe tener mínimo 8 caracteres" })

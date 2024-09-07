@@ -127,6 +127,7 @@ export default function Page({ params }: { params: { id: string } }) {
     const formData = {
       ...data,
       skills: selectedSkills,
+      // pay: data.type === 'pasantia' ? data.pay : "undefined" 
     };
     const validate = applyUpdateFormSchema.safeParse(formData);
     if (!validate.success) {

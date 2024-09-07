@@ -149,9 +149,9 @@ export default function Register() {
   return (
     <>
       <Header title={"Registro"} subtitle={" Llena los siguientes datos para registrarte en el sistema. Por favor, introduce tu información correctamente siguiendo las indicaciones en cada casilla."} />
-      <ContainerWeb>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <GridMain>
+
+        <div className="flex w-[80%] mx-auto mt-4">
+      
             {  step === 0 ? (
               <Step0
                 setMail={setMail}
@@ -167,44 +167,12 @@ export default function Register() {
               `Usuario ${mail} registrado con éxito`
             )
             }
+       
+        </div>
             {
               loading  && <Loader/>
-            
             }
-          </GridMain>
 
-          <GridSecond>
-            <GridContainer>
-              <h2>¡Bienvenido!</h2>
-              <p>
-                Para completar tu registro de forma exitosa, por favor sigue
-                estos pasos:
-              </p>
-              <ol>
-                <li>
-                  <strong>Introduce tus datos correctamente:</strong> Asegúrate
-                  de que todos los campos estén llenos y sean precisos.
-                </li>
-                <li>
-                  <strong>Correo electrónico válido:</strong> Proporciona una
-                  dirección de correo electrónico activa, ya que recibirás un
-                  código de verificación en tu bandeja de entrada.
-                </li>
-                <li>
-                  <strong>Revisa tu correo:</strong> Después de enviar el
-                  formulario, verifica tu correo electrónico. Recibirás un
-                  mensaje con un código de confirmación.
-                </li>
-                <li>
-                  <strong>Introduce el código:</strong> Ingresa el código de
-                  verificación en el campo correspondiente para completar tu
-                  registro.
-                </li>
-              </ol>
-            </GridContainer>
-          </GridSecond>
-        </div>
-      </ContainerWeb>
     </>
   );
 }

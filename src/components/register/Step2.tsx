@@ -45,11 +45,11 @@ export default function Step2({ setData, sendData }: Step2Props) {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <LabelInputContainer className="mb-4">
-          <Label htmlFor="nombre">Nombre</Label>
+          <Label htmlFor="nombre">Nombres del estudiante</Label>
           <Input
             {...register("nombre")}
             id="nombre"
-            placeholder="Jose"
+            placeholder="José Manuel"
             type="text"
             className={cn(errors.nombre && "bg-red-100 focus:bg-red-100")}
           />
@@ -69,12 +69,14 @@ export default function Step2({ setData, sendData }: Step2Props) {
           )}
         </LabelInputContainer>
 
+       
+       
         <LabelInputContainer className="mb-4">
-          <Label htmlFor="apellido">Apellido</Label>
+          <Label htmlFor="apellido">Apellidos del estudiante</Label>
           <Input
             {...register("apellido")}
             id="apellido"
-            placeholder="Cardenas"
+            placeholder="Cardenas Mora"
             type="text"
             className={cn(errors.apellido && "bg-red-100 focus:bg-red-100")}
           />
@@ -95,7 +97,7 @@ export default function Step2({ setData, sendData }: Step2Props) {
         </LabelInputContainer>
 
         <LabelInputContainer className="mb-4">
-          <Label htmlFor="cedula">Cédula de Identidad</Label>
+          <Label htmlFor="cedula">Cédula de Identidad del estudiante</Label>
           <Input
             {...register("cedula")}
             id="cedula"
@@ -119,14 +121,14 @@ export default function Step2({ setData, sendData }: Step2Props) {
           )}
         </LabelInputContainer>
 
+
         <LabelInputContainer className="mb-4">
-          <Label htmlFor="birthdate">Fecha de Nacimiento</Label>
+          <Label htmlFor="birthdate">Fecha de Nacimiento del estudiante</Label>
           <Input
             {...register("birthdate")}
             id="birthdate"
-            type="text"
+            type="date" // Mantener tipo "date"
             className={cn(errors.birthdate && "bg-red-100 focus:bg-red-100")}
-            placeholder="1999-12-24"
           />
           {errors.birthdate ? (
             <>
@@ -143,6 +145,7 @@ export default function Step2({ setData, sendData }: Step2Props) {
             </span>
           )}
         </LabelInputContainer>
+
 
         <LabelInputContainer className="mb-4">
           <Label htmlFor="telefono">Número Telefónico</Label>

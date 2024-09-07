@@ -82,7 +82,6 @@ export default function Page() {
     const formData = {
       ...data,
       skills: selectedSkills,
-      pay: data.type === 'pasantia' ? data.pay : undefined 
 
     };
     const validate = applyCreateSchema.safeParse(formData);
