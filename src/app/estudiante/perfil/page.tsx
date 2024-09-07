@@ -61,10 +61,10 @@ export default function EstudianteInfoForm() {
       />
 
       {session?.user.profile === false && (
-        <div className="w-[80%] m-4 p-4 mx-auto">
+        <div className="w-[90%] m-2 mx-auto">
           <EstudianteFormActualizarProfile
             onToggleForm={toggleFormVisibility}
-            titleForm={"Completa los datos de tu Perfil!"}
+            titleForm={"DATOS DEL PERFIL DEL ESTUDIANTEANTE"}
             data={profileData}
           />
         </div>

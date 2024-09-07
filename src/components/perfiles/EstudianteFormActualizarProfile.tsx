@@ -11,6 +11,18 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+
+const universitys = [
+  'Universidad Del Zulia', 'Universidad Jose Gregorio Hernandez', 
+  'universidad Dr. Bellozo Chacing', 'U.E Fe y Alegria'
+]
+
+const careers = [
+  'Ingeniería en Informática', 'Ingeniería en Sistemas', 'Licenciatura en Administración',
+  'Licenciatura en Economía', 'Licenciatura en Contaduría', 'Licenciatura en Derecho',
+  'Licenciatura en Matemáticas', 'Licenciatura en Química', 'Licenciatura en Biología',
+]
+
 interface EstudianteFormProfileProps {
   onToggleForm: () => void;
   titleForm: string;
@@ -48,6 +60,9 @@ export default function EstudianteProfileForm({
     description: "",
     interests: "",
   });
+
+  const [isUniversityOpen, setUniversityOpen] = useState(false);
+  const [isCareerOpen, setCareerOpen] = useState(false);
 
   const {
     register,
@@ -100,6 +115,14 @@ export default function EstudianteProfileForm({
     { value: "lenguajesdeprogramacion", label: "Lenguajes de Programación" },
   ];
 
+  const handleSelectChange = (field: "university" | "career", value: string) => {
+    setFormData(prevData => ({
+      ...prevData,
+      [field]: value,
+    }));
+    setValue(field as keyof ProfileFrontFormData, value);
+  };
+
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
     setSelectedSkills((prevSelectedSkills) =>
@@ -145,16 +168,15 @@ export default function EstudianteProfileForm({
 
   return (
     <>
-      <div className="flex flex-col my-4 p-4 md:space-x-4">
+      <div className="flex flex-col my-2 md:space-x-4">
         <h2 className="text-2xl font-bold text-gray-800 text-center md:text-3xl">
           {titleForm}
         </h2>
       </div>
-      <div className="flex flex-col m-4 my-4 p-4 rounded-lg shadow-lg">
-        <form onSubmit={handleSubmit(onSubmit)} className="form-student-info">
-          
-          
-          <LabelInputContainer className="mb-4">
+      <div className="flex flex-col m-2 my-2 p-2 rounded-lg shadow-lg">
+        <form onSubmit={handleSubmit(onSubmit)} className="mb-8 form-student-info">
+      
+          <LabelInputContainer className="mb-8">
             <Label htmlFor="names">Nombres del estudiante *</Label>
             <Input
               {...register("names")}
@@ -173,7 +195,7 @@ export default function EstudianteProfileForm({
 
 
 
-          <LabelInputContainer className="mb-4">
+          <LabelInputContainer className="mb-8">
             <Label htmlFor="lastnames">Apellidos del estudiante *</Label>
             <Input
               {...register("lastnames")}
@@ -192,7 +214,7 @@ export default function EstudianteProfileForm({
 
 
 
-          <LabelInputContainer className="mb-4">
+          <LabelInputContainer className="mb-8">
             <Label htmlFor="phone">Teléfono del estudiante *</Label>
             <Input
               {...register("phone")}
@@ -210,8 +232,8 @@ export default function EstudianteProfileForm({
           </LabelInputContainer>
 
 
-      <h2><mark>SECTORIZACION POR PARROKIA </mark></h2>
-          <LabelInputContainer className="mb-4">
+          <h2><mark>SECTORIZACION POR PARROKIA </mark></h2>
+          <LabelInputContainer className="mb-8">
             <Label htmlFor="address">Dirección del estudiante *</Label>
             <Input
               {...register("address")}
@@ -228,51 +250,86 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
-          
-          <h2><mark>ALIMENTADA POR UNA TABLA CON CURD DE ALCALDIA</mark></h2>
-          <LabelInputContainer className="mb-4">
+    
+
+
+          <h2><mark>PREPARAR BDD</mark></h2>
+        <LabelInputContainer className="mb-8">
             <Label htmlFor="university">Institución Educativa del estudiante *</Label>
-            <Input
-              {...register("university")}
-              defaultValue={session?.user.dataProfile?.university || ""}
-              onChange={handleInputChange}
-              id="university"
-              name="university"
-              placeholder="Universidad"
-              type="text"
-              className={cn(errors.university && "bg-red-100 focus:bg-red-100")}
-            />
+            <div className="relative">
+              <Input
+                id="university"
+                type="text"
+                value={formData.university}
+                onClick={() => setUniversityOpen(!isUniversityOpen)}
+                readOnly
+                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                placeholder="Selecciona una institución"
+              />
+              {isUniversityOpen && (
+                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
+                  {universitys.map((university) => (
+                    <div
+                      key={university}
+                      onClick={() => {
+                        handleSelectChange("university", university);
+                        setUniversityOpen(false);
+                      }}
+                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {university}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
             {errors.university && (
               <p className="text-red-500 text-sm">{errors.university.message}</p>
             )}
           </LabelInputContainer>
 
-          
-          <h2><mark>HACERLA SELECT</mark></h2>
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="career">Especialización ó carrera del estudiante *</Label>
-            <Input
-              {...register("career")}
-              defaultValue={session?.user.dataProfile?.career || ""}
-              onChange={handleInputChange}
-              id="career"
-              name="career"
-              placeholder="Carrera"
-              type="text"
-              className={cn(errors.career && "bg-red-100 focus:bg-red-100")}
-            />
+
+          <h2><mark>PREPARAR BDD</mark></h2>
+          <LabelInputContainer className="mb-8">
+            <Label htmlFor="career">Especialización o carrera del estudiante *</Label>
+            <div className="relative">
+              <Input
+                id="career"
+                type="text"
+                value={formData.career}
+                onClick={() => setCareerOpen(!isCareerOpen)}
+                readOnly
+                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                placeholder="Selecciona una carrera"
+              />
+              {isCareerOpen && (
+                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
+                  {careers.map((career) => (
+                    <div
+                      key={career}
+                      onClick={() => {
+                        handleSelectChange("career", career);
+                        setCareerOpen(false);
+                      }}
+                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {career}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
             {errors.career && (
               <p className="text-red-500 text-sm">{errors.career.message}</p>
             )}
           </LabelInputContainer>
 
-          
-          <h2><mark>ADD FECHA INCIIO Y FIN DEL PROCESO DE PAS O SERV</mark></h2>
         
-          <div className="flex flex-col gap-[5%] justify-start md:flex-row">
-              
+
+          <h2><mark>PREPARAR BDD</mark></h2>
+          <div className="flex flex-col gap-[5%] mb-8 justify-start md:flex-row">
               <LabelInputContainer className=" flex m-2 md:w-[40%]">
-              <Label htmlFor="birthdate">Fecha de inicio del proceso *</Label>
+              <Label htmlFor="datestart">Fecha de inicio del proceso *</Label>
               <Input
                  {...register("datestart")}
                 id="datestart"
@@ -285,51 +342,47 @@ export default function EstudianteProfileForm({
                      {errors.datestart.message?.toString()}
                   </p>
                   <span className="text-gray-500 text-xs">
-                    La fecha debe tener el formato yyyy-mm-dd.
+                    La fecha debe tener el formato dd/mm/yyyy.
                   </span>
                 </>
               ) : (
                 <span className="text-gray-500 text-xs">
-                  La fecha debe tener el formato yyyy-mm-dd.
+                  La fecha debe tener el formato dd/mm/yyyy.
                 </span>
               )
             }
             </LabelInputContainer>
 
             <LabelInputContainer className=" flex m-2 mr-20 md:w-[40%]">
-          <Label htmlFor="datefinish">Fecha de terminacion del proceso *</Label>
-          <Input
-             {...register("datefinish")}
-            id="datefinish"
-            type="date" // Mantener tipo "date"
-             className={cn(errors.datefinish && "bg-red-100 focus:bg-red-100")}
-          />
-           {errors.datefinish 
-            ? (
-              <>
-                <p className="text-red-500 text-sm">
-                   {errors.datefinish.message?.toString()} 
-                </p>
-                <span className="text-gray-500 text-xs">
-                  La fecha debe tener el formato yyyy-mm-dd.
-                </span>
-              </>
-            ) : (
-              <span className="text-gray-500 text-xs">
-                La fecha debe tener el formato yyyy-mm-dd.
-              </span>
-            )
-          }
-        </LabelInputContainer>
-
+              <Label htmlFor="datefinish">Fecha de terminacion del proceso *</Label>
+              <Input
+                {...register("datefinish")}
+                id="datefinish"
+                type="date" // Mantener tipo "date"
+                className={cn(errors.datefinish && "bg-red-100 focus:bg-red-100")}
+              />
+              {errors.datefinish 
+                ? (
+                  <>
+                    <p className="text-red-500 text-sm">
+                      {errors.datefinish.message?.toString()} 
+                    </p>
+                    <span className="text-gray-500 text-xs">
+                      La fecha debe tener el formato dd/mm/yyyy.
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-gray-500 text-xs">
+                    La fecha debe tener el formato dd/mm/yyyy.
+                  </span>
+                )
+              }
+            </LabelInputContainer>
       </div>
 
 
-
-
-
           <h2><mark>ELIMINAR DE LA BBDD</mark></h2>
-          <LabelInputContainer className="mb-4">
+          <LabelInputContainer className="mb-8">
             <Label htmlFor="quarter">Trimestre</Label>
             <Input
               {...register("quarter")}
@@ -347,8 +400,8 @@ export default function EstudianteProfileForm({
           </LabelInputContainer>
 
 
-
-          <LabelInputContainer className="mb-4">
+          <h2><mark> QUE SEA NO REQUERIDO EN LA BBDD </mark></h2>
+          <LabelInputContainer className="mb-8">
             <Label htmlFor="description">Breve descripción del estudiante.</Label>
             <Input
               {...register("description")}
@@ -366,11 +419,12 @@ export default function EstudianteProfileForm({
           </LabelInputContainer>
 
 
-
-          <LabelInputContainer className="mb-4">
+          <h2><mark> QUE SEA NO REQUERIDO EN LA BBDD </mark></h2>
+          <LabelInputContainer className="mb-8">
             <Label htmlFor="interests">Intereses del estudiante</Label>
             <Input
               {...register("interests")}
+              type="textarea"
               defaultValue={session?.user.dataProfile?.interests || ""}
               onChange={handleInputChange}
               id="interests"
@@ -385,8 +439,8 @@ export default function EstudianteProfileForm({
 
 
           
-
-          <LabelInputContainer>
+          <h2><mark> QUE SEA NO REQUERIDO EN LA BBDD </mark></h2>
+          <LabelInputContainer className="mb-8">
             <Label htmlFor="skills">Habilidades del estudiante</Label>
             {skillsOptions.map(({ value, label }) => (
               <div key={value} className="flex items-center">
@@ -418,12 +472,13 @@ export default function EstudianteProfileForm({
             </div>
           </LabelInputContainer>
 
-          <div className="flex justify-center">
+          
+          <div className="flex justify-center mb-8">
             <button
               type="submit"
-              className="w-[100%] bg-black hover:bg-gray-800 text-white font-bold py-1 px-1 mt-4 rounded focus:shadow-outline md:w-[80%]"
+              className="w-[100%] bg-black hover:bg-gray-800 text-white font-bold py-3 px-3 mt-4 rounded focus:shadow-outline md:w-[80%]"
             >
-              Guardar
+              GUARDAR DATOS
             </button>
           </div>
         </form>

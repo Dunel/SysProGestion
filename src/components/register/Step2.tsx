@@ -136,12 +136,12 @@ export default function Step2({ setData, sendData }: Step2Props) {
                 {errors.birthdate.message?.toString()}
               </p>
               <span className="text-gray-500 text-xs">
-                La fecha de nacimiento debe tener el formato yyyy-mm-dd.
+                La fecha de nacimiento debe tener el formato dd/mm/yyyy.
               </span>
             </>
           ) : (
             <span className="text-gray-500 text-xs">
-              La fecha de nacimiento debe tener el formato yyyy-mm-dd.
+              La fecha de nacimiento debe tener el formato dd/mm/yyyy.
             </span>
           )}
         </LabelInputContainer>

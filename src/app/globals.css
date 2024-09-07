@@ -22,12 +22,15 @@ body {
     grid-template-rows: auto 1fr auto; */
 }
 
-form.form-student-info input[type="text"] {
-  font-size: 14px;
+form.form-student-info input[type="text"], 
+input[type="textarea"],
+input[type="date"]
+{
+  font-size: 18px;
   padding: 5px;
 }
 form.form-student-info label {
-  font-size: 16px;
+  font-size: 22px;
   color: rgb(65, 65, 66);
   font-style: italic;
 }
