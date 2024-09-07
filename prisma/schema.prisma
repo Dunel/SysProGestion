@@ -42,10 +42,16 @@ model User {
   profile      Boolean          @default(false)
   image        String?
   updatedAt    DateTime         @updatedAt
+  estadoId     Int?
+  municipioId  Int?
+  parroquiaId  Int?
   esInfo       estudentInfo?
   apply        apply[]
   notification notification[]
   depInfo      dependenciaInfo?
+  estado       estado?           @relation(fields: [estadoId], references: [id])
+  municipio    municipio?        @relation(fields: [municipioId], references: [id])
+  parroquia    parroquia?        @relation(fields: [parroquiaId], references: [id])
 }
 
 enum Skills {
@@ -78,7 +84,7 @@ model estudentInfo {
   userCedula          Int                   @unique
   university          String
   career              String?
-  quarter             Int
+  quarter             Int?
   skills              Skills[]
   interests           String
   description         String
@@ -101,6 +107,7 @@ model application {
   idDepend            Int
   description         String?
   imagen              String?
+  pay                 Boolean?
   location            String
   type                typeApplication
   skills              Skills[]
@@ -126,6 +133,8 @@ model apply {
   updatedAt     DateTime    @updatedAt
   application   application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
   User          User        @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
+
+  @@unique([userCedula, applicationId])
 }
 
 enum statusApply {
@@ -171,17 +180,41 @@ model dependenciaInfo {
 }
 
 model applicationApproved {
-  id            Int          @id @default(autoincrement())
+  id            Int           @id @default(autoincrement())
   userCedula    Int
   applicationId Int
-  status        statusAproved  @default(enproceso)
-  date          DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  application   application  @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  esInfo        estudentInfo @relation(fields: [userCedula], references: [userCedula], onDelete: Cascade)
+  status        statusAproved @default(enproceso)
+  date          DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  application   application   @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  esInfo        estudentInfo  @relation(fields: [userCedula], references: [userCedula], onDelete: Cascade)
 }
 
 enum statusAproved {
   completada
   enproceso
+}
+
+model estado {
+  id         Int         @id @default(autoincrement())
+  estado     String
+  municipios municipio[]
+  User       User[]
+}
+
+model municipio {
+  id         Int         @id @default(autoincrement())
+  estadoId   Int
+  municipio  String
+  parroquias parroquia[]
+  User       User[]
+  estado     estado      @relation(fields: [estadoId], references: [id])
+}
+
+model parroquia {
+  id          Int       @id @default(autoincrement())
+  municipioId Int
+  parroquia   String
+  User        User[]
+  municipio   municipio @relation(fields: [municipioId], references: [id])
 }
