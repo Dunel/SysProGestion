@@ -184,7 +184,7 @@ export default function EstudianteProfileForm({
               onChange={handleInputChange}
               id="names"
               name="names"
-              placeholder="Jose Manuel"
+              placeholder='José Manuel'
               type="text"
               className={cn(errors.names && "bg-red-100 focus:bg-red-100")}
             />
@@ -203,7 +203,7 @@ export default function EstudianteProfileForm({
               onChange={handleInputChange}
               id="lastnames"
               name="lastnames"
-              placeholder="Apellidos"
+              placeholder="Di´martino Han-gun"
               type="text"
               className={cn(errors.lastnames && "bg-red-100 focus:bg-red-100")}
             />
@@ -222,7 +222,7 @@ export default function EstudianteProfileForm({
               onChange={handleInputChange}
               id="phone"
               name="phone"
-              placeholder="Teléfono"
+              placeholder="04246558941"
               type="text"
               className={cn(errors.phone && "bg-red-100 focus:bg-red-100")}
             />

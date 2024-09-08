@@ -44,6 +44,8 @@ export default function EstudianteInfoForm() {
       }
     }
   };
+
+  
   useEffect(() => {
     getProfile();
   }, [session?.user.profile]);

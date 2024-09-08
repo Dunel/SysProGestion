@@ -1,6 +1,6 @@
 import { z } from "zod";
 // Expresiones regulares para validar los campos
-const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; // Solo letras y espacios (incluyendo caracteres acentuados)
+const nameRegex = /^[A-Za-zÀ-ÿ\s' -]+$/; // Solo letras (incluyendo caracteres acentuados), espacios, apostrofe y guiones
 const numericRegex = /^\d+$/; // Solo números
 
 export const profileSchema = z.object({
@@ -8,11 +8,17 @@ export const profileSchema = z.object({
     .string({ required_error: "El nombre es requerido" })
     .min(3, { message: "El nombre debe tener minimo 3 caracteres" })
     .max(50, { message: "El nombre debe tener maximo 50 caracteres" })
+    .regex(nameRegex, {
+      message: "El nombre no debe contener números ni signos de puntuación",
+    })
     .transform((val) => val.toUpperCase()),
   lastnames: z
     .string({ required_error: "El apellido es requerido" })
     .min(3, { message: "El apellido debe tener minimo 3 caracteres" })
     .max(50, { message: "El apellido debe tener maximo 50 caracteres" })
+    .regex(nameRegex, {
+      message: "El nombre no debe contener números ni signos de puntuación",
+    })
     .transform((val) => val.toUpperCase()),
   phone: z
     .string({ required_error: "El telefono es requerido" })
@@ -82,10 +88,8 @@ export const profileSchema = z.object({
       }),
 
   
-  
-  
-  
-    career: z
+
+  career: z
     .string({ required_error: "La carrera es requerida" })
     .min(4, { message: "La carrera debe tener minimo 4 caracteres" })
     .max(50, { message: "La carrera debe tener maximo 50 caracteres" }),
@@ -167,11 +171,17 @@ export const profileFrontSchema = z.object({
     .string({ required_error: "El nombre es requerido" })
     .min(3, { message: "El nombre debe tener minimo 3 caracteres" })
     .max(50, { message: "El nombre debe tener maximo 50 caracteres" })
+    .regex(nameRegex, {
+      message: "El nombre no debe contener números ni signos de puntuación",
+    })
     .transform((val) => val.toUpperCase()),
   lastnames: z
     .string({ required_error: "El apellido es requerido" })
     .min(3, { message: "El apellido debe tener minimo 3 caracteres" })
     .max(50, { message: "El apellido debe tener maximo 50 caracteres" })
+    .regex(nameRegex, {
+      message: "El nombre no debe contener números ni signos de puntuación",
+    })
     .transform((val) => val.toUpperCase()),
   phone: z
     .string({ required_error: "El telefono es requerido" })

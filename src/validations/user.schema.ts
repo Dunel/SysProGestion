@@ -4,7 +4,7 @@ const passwordRegex =
   /^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%&*./=])[A-Za-z\d@#$%&*./=]{8,26}$/;
 
 // Expresiones regulares para validar los campos
-const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; // Solo letras y espacios (incluyendo caracteres acentuados)
+const nameRegex = /^[A-Za-zÀ-ÿ\s' -]+$/; // Solo letras (incluyendo caracteres acentuados), espacios, apostrofe y guiones
 const numericRegex = /^\d+$/; // Solo números
 
 //validacionbackend no tocar plox
@@ -36,12 +36,19 @@ export const userSchema = z.object({
     .string({ required_error: "El nombre es requerido" })
     .min(3, { message: "El nombre debe tener minimo 3 caracteres" })
     .max(50, { message: "El nombre debe tener maximo 50 caracteres" })
+    .regex(nameRegex, {
+      message: "El nombre no debe contener números ni signos de puntuación",
+    })
     .transform((val) => val.toUpperCase()),
   apellido: z
     .string({ required_error: "El apellido es requerido" })
     .min(3, { message: "El apellido debe tener minimo 3 caracteres" })
     .max(50, { message: "El apellido debe tener maximo 50 caracteres" })
+    .regex(nameRegex, {
+      message: "El apellido no debe contener números ni signos de puntuación",
+    })
     .transform((val) => val.toUpperCase()),
+     // Validación de solo letras
     birthdate: z
       .string({ required_error: "La fecha de nacimiento es requerida" })
       .datetime({ offset: true })
@@ -174,6 +181,8 @@ export const userFormSchema = z.object({
       required_error: "La confirmación de contraseña es requerida.",
     }),
   })
+
+  
   .refine((data) => data.password === data.confirmPassword, {
     message: "Las contraseñas no coinciden",
     path: ["confirmPassword"],

@@ -189,3 +189,11 @@ enum statusAproved {
   completada
   enproceso
 }
+
+model institucionesEdu {
+  id                   Int          @id @default(autoincrement())
+  codigoInstitucion    String           @unique
+  nombreInstitucion    String
+  parroquiaInstitucion String
+  date                 DateTime     @default(now())
+}

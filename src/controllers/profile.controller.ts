@@ -57,6 +57,8 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
         interests: result.interests,
         description: result.description,
         address: result.address,
+        datefinish: new Date(),
+        datestart: new Date(),
       },
     });
 
