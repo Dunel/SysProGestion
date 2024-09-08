@@ -296,6 +296,8 @@ export default function EstudianteProfileForm({
       setParroquiaSelected(session.user.dataProfile.parroquiaId);
       setValue("institutionId", session.user.dataProfile.institution.id);
       setValue("careerId", session.user.dataProfile.career.id);
+      setValue("dateStart", session.user.dataProfile.dateStart);
+      setValue("dateEnd", session.user.dataProfile.dateEnd);
     }
   }, []);
 
@@ -605,7 +607,7 @@ export default function EstudianteProfileForm({
               <Label htmlFor="datestart">Fecha de inicio del proceso *</Label>
               <Input
                 {...register("dateStart")}
-                defaultValue={session?.user && new Date(session.user.dataProfile.dateStart).toDateString()}
+                defaultValue={new Date(watch("dateStart")).toDateString() || ""}
                 id="datestart"
                 type="date" // Mantener tipo "date"
                 className={cn(
@@ -634,7 +636,7 @@ export default function EstudianteProfileForm({
               </Label>
               <Input
                 {...register("dateEnd")}
-                defaultValue={session?.user && new Date(session.user.dataProfile.dateEnd).toString()}
+                defaultValue={new Date(watch("dateEnd")).toDateString() || ""}
                 id="dateEnd"
                 type="date"
                 className={cn(errors.dateEnd && "bg-red-100 focus:bg-red-100")}
