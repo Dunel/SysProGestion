@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { FaTimes, FaHome, FaAddressCard, FaClipboardList, FaClipboardCheck, FaMailBulk, FaExpeditedssl } from 'react-icons/fa';
 import Link from 'next/link';
 import { useNavBar } from '@/context/NavBarContext';
+import { signOut, useSession } from "next-auth/react";
+
 
 const NavBarEmergente: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -41,10 +43,17 @@ const NavBarEmergente: React.FC = () => {
         <ul className="space-y-4">
           <NavItem icon={<FaHome size={20} />} text="Principal" href="/estudiante" isHovered={isHovered} />
           <NavItem icon={<FaAddressCard size={20} />} text="Perfil" href="/estudiante/perfil" isHovered={isHovered} />
-          <NavItem icon={<FaClipboardList size={20} />} text="Ofertas de Vacante" href="/estudiante/apply" isHovered={isHovered} />
-          <NavItem icon={<FaClipboardCheck size={20} />} text="Mis Aplicaciones" href="/estudiante/apply/misaplicaciones" isHovered={isHovered} />
+          <NavItem icon={<FaClipboardList size={20} />} text="Ofertas de Vacante" href="/estudiante/ofertas" isHovered={isHovered} />
+          <NavItem icon={<FaClipboardCheck size={20} />} text="Mis Aplicaciones" href="/estudiante/misaplicaciones" isHovered={isHovered} />
           <NavItem icon={<FaMailBulk  size={20} />} text="Notificaciones" href="/estudiante/notificaciones" isHovered={isHovered} />
-          <NavItem icon={<FaExpeditedssl size={20} />} text="cerrar sesión" href="/estudiante/apply/misaplicaciones" isHovered={isHovered} />
+          <button 
+            className='hover:opacity-100 hover:w-[100%]'
+            onClick={() => signOut()}
+          >
+          <NavItem icon={<FaExpeditedssl size={20} />} text="cerrar sesión"  href="/" isHovered={isHovered} />
+          </button>
+          
+         
         </ul>
       </nav>
     </div>

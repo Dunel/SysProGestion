@@ -1,4 +1,7 @@
 import { z } from "zod";
+// Expresiones regulares para validar los campos
+const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; // Solo letras y espacios (incluyendo caracteres acentuados)
+const numericRegex = /^\d+$/; // Solo números
 
 export const profileSchema = z.object({
   names: z
@@ -23,38 +26,60 @@ export const profileSchema = z.object({
     .string({ required_error: "La universidad es requerida" })
     .min(4, { message: "La universidad debe tener minimo 4 caracteres" })
     .max(50, { message: "La universidad debe tener maximo 50 caracteres" }),
-  career: z
+  dateStart: z
+  .string({ required_error: "La fecha de nacimiento es requerida" })
+  .refine((val) => {
+      const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
+      return regex.test(val);
+    }, {
+      message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
+    })
+    .transform((val, ctx) => {
+      const [year, month, day] = val.split('-').map(Number); // Separar año, mes y día
+      const date = new Date(year, month - 1, day); // Crear el objeto Date con los valores extraídos
+  
+      if (isNaN(date.getTime()) || date.getDate() !== day || date.getMonth() !== (month - 1) || date.getFullYear() !== year) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "La fecha de nacimiento no es válida",
+        });
+        return z.NEVER;
+      }
+      const today = new Date();
+      const age = today.getFullYear() - date.getFullYear();
+      const monthDiff = today.getMonth() - date.getMonth();
+      const dayDiff = today.getDate() - date.getDate();
+       return date;
+    }),
+  dateEnd: z
+    .string({ required_error: "La fecha de nacimiento es requerida" })
+    .refine((val) => {
+        const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
+        return regex.test(val);
+      }, {
+        message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
+      })
+      .transform((val, ctx) => {
+        const [year, month, day] = val.split('-').map(Number); // Separar año, mes y día
+        const date = new Date(year, month - 1, day); // Crear el objeto Date con los valores extraídos
+    
+        if (isNaN(date.getTime()) || date.getDate() !== day || date.getMonth() !== (month - 1) || date.getFullYear() !== year) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "La fecha de nacimiento no es válida",
+          });
+          return z.NEVER;
+        }
+        const today = new Date();
+        const age = today.getFullYear() - date.getFullYear();
+        const monthDiff = today.getMonth() - date.getMonth();
+        const dayDiff = today.getDate() - date.getDate();
+         return date;
+      }),  
+    career: z
     .string({ required_error: "La carrera es requerida" })
     .min(4, { message: "La carrera debe tener minimo 4 caracteres" })
     .max(50, { message: "La carrera debe tener maximo 50 caracteres" }),
-  quarter: z
-    .string({ required_error: "El trimestre es requerido" })
-    .min(1, { message: "El trimestre debe tener minimo 1 caracteres" })
-    .max(2, { message: "El trimestre debe tener maximo 2 caracteres" })
-    .transform((val, ctx) => {
-      const trimestre = parseInt(val);
-      if (isNaN(trimestre)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Los caracteres deben ser un númericos",
-        });
-        return z.NEVER;
-      }
-      if (trimestre < 1 || trimestre > 12) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Trimestre no valido",
-        });
-        return z.NEVER;
-      }
-      return trimestre;
-    })
-    .or(
-      z
-        .number()
-        .min(1, { message: "El trimestre debe ser mayor a 0" })
-        .max(12, { message: "El trimestre debe ser menor a 13" })
-    ),
   skills: z
     .array(
       z.enum(
@@ -123,38 +148,68 @@ export const profileFrontSchema = z.object({
     .string({ required_error: "La universidad es requerida" })
     .min(4, { message: "La universidad debe tener minimo 4 caracteres" })
     .max(50, { message: "La universidad debe tener maximo 50 caracteres" }),
+
+
+  
+    dateStart: z
+    .string({ required_error: "La fecha de nacimiento es requerida" })
+    .refine((val) => {
+        const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
+        return regex.test(val);
+      }, {
+        message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
+      })
+      .transform((val, ctx) => {
+        const [year, month, day] = val.split('-').map(Number); // Separar año, mes y día
+        const date = new Date(year, month - 1, day); // Crear el objeto Date con los valores extraídos
+    
+        if (isNaN(date.getTime()) || date.getDate() !== day || date.getMonth() !== (month - 1) || date.getFullYear() !== year) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "La fecha de nacimiento no es válida",
+          });
+          return z.NEVER;
+        }
+        const today = new Date();
+        const age = today.getFullYear() - date.getFullYear();
+        const monthDiff = today.getMonth() - date.getMonth();
+        const dayDiff = today.getDate() - date.getDate();
+         return date;
+      }),
+  
+  
+    dateEnd: z
+      .string({ required_error: "La fecha de nacimiento es requerida" })
+      .refine((val) => {
+          const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
+          return regex.test(val);
+        }, {
+          message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
+        })
+        .transform((val, ctx) => {
+          const [year, month, day] = val.split('-').map(Number); // Separar año, mes y día
+          const date = new Date(year, month - 1, day); // Crear el objeto Date con los valores extraídos
+      
+          if (isNaN(date.getTime()) || date.getDate() !== day || date.getMonth() !== (month - 1) || date.getFullYear() !== year) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: "La fecha de nacimiento no es válida",
+            });
+            return z.NEVER;
+          }
+          const today = new Date();
+          const age = today.getFullYear() - date.getFullYear();
+          const monthDiff = today.getMonth() - date.getMonth();
+          const dayDiff = today.getDate() - date.getDate();
+           return date;
+        }),
+  
+
+
   career: z
     .string({ required_error: "La carrera es requerida" })
     .min(4, { message: "La carrera debe tener minimo 4 caracteres" })
     .max(50, { message: "La carrera debe tener maximo 50 caracteres" }),
-  quarter: z
-    .string({ required_error: "El trimestre es requerido" })
-    .min(1, { message: "El trimestre debe tener minimo 1 caracteres" })
-    .max(2, { message: "El trimestre debe tener maximo 2 caracteres" })
-    .transform((val, ctx) => {
-      const trimestre = parseInt(val);
-      if (isNaN(trimestre)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Los caracteres deben ser un númericos",
-        });
-        return z.NEVER;
-      }
-      if (trimestre < 1 || trimestre > 12) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Trimestre no valido",
-        });
-        return z.NEVER;
-      }
-      return trimestre;
-    })
-    .or(
-      z
-        .number()
-        .min(1, { message: "El trimestre debe ser mayor a 0" })
-        .max(12, { message: "El trimestre debe ser menor a 13" })
-    ),
   interests: z
     .string({ required_error: "Los intereses son requeridos" })
     .min(10, { message: "Los intereses debe tener minimo 10 caracteres" })
@@ -170,16 +225,27 @@ export const profileDepenSchema = z.object({
     .string({ required_error: "El nombre es requerido" })
     .min(3, { message: "El nombre debe tener minimo 3 caracteres" })
     .max(50, { message: "El nombre debe tener maximo 50 caracteres" })
-    .transform((val) => val.toUpperCase()),
+    .regex(nameRegex, {
+      message: "El nombre no debe contener números ni signos de puntuación",
+    })
+    .transform((val) => val.toUpperCase())
+    , // Validación de solo letras
+
   names: z
     .string({ required_error: "El nombre es requerido" })
     .min(3, { message: "El nombre debe tener minimo 3 caracteres" })
     .max(50, { message: "El nombre debe tener maximo 50 caracteres" })
+    .regex(nameRegex, {
+      message: "El nombre no debe contener números ni signos de puntuación",
+    })
     .transform((val) => val.toUpperCase()),
   lastnames: z
     .string({ required_error: "El apellido es requerido" })
     .min(3, { message: "El apellido debe tener minimo 3 caracteres" })
     .max(50, { message: "El apellido debe tener maximo 50 caracteres" })
+    .regex(nameRegex, {
+      message: "El nombre no debe contener números ni signos de puntuación",
+    })
     .transform((val) => val.toUpperCase()),
   phone: z
     .string({ required_error: "El telefono es requerido" })

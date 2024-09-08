@@ -1,7 +1,7 @@
-import fs, { promises as fsPromises } from "fs";
-import path from "path";
+import { footerContent } from "@/service/footer";
+import crypto from "crypto";
 
-export const fileService = async (
+/*export const fileService = async (
   file: File,
   customFileName: string,
   dirName: string
@@ -28,4 +28,9 @@ export const fileService = async (
     console.error("Error: ", (error as Error).message);
     throw new Error("Error en el servidor.");
   }
-};
+};*/
+
+export function generateFooterHash(): string {
+  const footerString = `© ${footerContent.year} SysProGestion - ${footerContent.names.join(", ")}`;
+  return crypto.createHash("sha256").update(footerString).digest("hex");
+}

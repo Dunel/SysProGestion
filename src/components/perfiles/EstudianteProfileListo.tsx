@@ -17,6 +17,7 @@ export default function EstudianteProfileListo({
 }: EstudianteProfileListoProps) {
   const { data: session, update } = useSession();
   const [loading, setLoading] = useState(false);
+  const [loadingPDF, setLoadingPDF] = useState(false);
   const [pdfFile, setPdfFile] = useState(null as File | null);
 
   const handleImageChange = async (imageFile: File) => {
@@ -58,7 +59,7 @@ export default function EstudianteProfileListo({
       
       if (!pdfFile) return;
       if (pdfFile) {
-        setLoading(true);
+        setLoadingPDF(true);
         const formData = new FormData();
         formData.append("file", pdfFile);
 
@@ -75,7 +76,7 @@ export default function EstudianteProfileListo({
         if (response.data?.fileUrl) {
           update({ pdfFile: response.data.fileUrl });
         }
-        setLoading(false);
+        setLoadingPDF(false);
         alert(response.data.message);
       } else {
         alert("No se ha seleccionado un archivo");
@@ -88,6 +89,8 @@ export default function EstudianteProfileListo({
         console.error("error:", error as Error);
         setLoading(false);
       }
+    }finally{
+      setLoadingPDF(false);
     }
   };
 
@@ -238,6 +241,12 @@ export default function EstudianteProfileListo({
                     ENVIAR
                   </button>
                 </div>
+
+                {loadingPDF && 
+                <div className="flex gap-1 w-full">
+                  <Loader/>
+                </div>
+                }
 
                 {pdfFile && (
                   <p className="m-2">Archivo seleccionado: {pdfFile?.name}</p>

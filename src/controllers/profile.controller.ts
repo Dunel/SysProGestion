@@ -17,10 +17,11 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
       address,
       university,
       career,
-      quarter,
       skills,
       interests,
       description,
+      dateStart,
+      dateEnd,
     } = await req.json();
 
     const result = profileSchema.parse({
@@ -30,10 +31,11 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
       address,
       university,
       career,
-      quarter,
       skills,
       interests,
       description,
+      dateStart,
+      dateEnd,
     });
     const cedula = token.cedula;
 
@@ -42,7 +44,6 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
       update: {
         university: result.university,
         career: result.career,
-        quarter: result.quarter,
         skills: result.skills,
         interests: result.interests,
         description: result.description,
@@ -52,7 +53,6 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
         userCedula: cedula,
         university: result.university,
         career: result.career,
-        quarter: result.quarter,
         skills: result.skills,
         interests: result.interests,
         description: result.description,
@@ -177,9 +177,10 @@ export async function ProfileEstudentGet(req: NextRequest) {
       select: {
         university: true,
         career: true,
-        quarter: true,
         skills: true,
         interests: true,
+        dateStart: true,
+        dateEnd: true,
         description: true,
         address: true,
         curriculum: true,
@@ -188,6 +189,9 @@ export async function ProfileEstudentGet(req: NextRequest) {
             names: true,
             lastnames: true,
             phone: true,
+            estadoId: true,
+            municipioId: true,
+            parroquiaId: true,
           }
         }
       },
@@ -199,11 +203,13 @@ export async function ProfileEstudentGet(req: NextRequest) {
       address: profile?.address,
       university: profile?.university,
       career: profile?.career,
-      quarter: profile?.quarter,
       skills: profile?.skills,
       interests: profile?.interests,
       description: profile?.description,
       curriculum: profile?.curriculum,
+      estadoId: profile?.User.estadoId,
+      municipioId: profile?.User.municipioId,
+      parroquiaId: profile?.User.parroquiaId
     };
     return NextResponse.json({ object }, { status: 200 });
   } catch (error) {

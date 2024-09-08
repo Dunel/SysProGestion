@@ -22,6 +22,7 @@ export async function getApplication(req: NextRequest) {
         description: true,
         skills: true,
         date: true,
+        pay: true,
         location: true,
         status: true,
         dependencia: {
@@ -43,11 +44,11 @@ export async function getApplication(req: NextRequest) {
             status: true,
           },
         },
-        _count:{
-          select:{
-            apply: true
-          }
-        }
+        _count: {
+          select: {
+            apply: true,
+          },
+        },
       },
     });
     return NextResponse.json(applications, { status: 200 });
@@ -86,7 +87,7 @@ export async function apply(req: NextRequest) {
         },
       },
     });
-    if (application?.apply.length || !application) {
+    if (!application || application?.apply?.length > 0) {
       return NextResponse.json(
         { error: "Ya has aplicado a esta oferta o no existe" },
         { status: 400 }
@@ -228,6 +229,7 @@ export async function getMyApplication(req: NextRequest) {
         id: true,
         title: true,
         description: true,
+        pay: true,
         location: true,
         status: true,
         imagen: true,
@@ -290,6 +292,7 @@ export async function getMyApplicationDepend(req: NextRequest) {
         id: true,
         title: true,
         description: true,
+        pay: true,
         location: true,
         status: true,
         imagen: true,
@@ -388,6 +391,7 @@ export async function getApplicationById(req: NextRequest) {
         id: true,
         title: true,
         description: true,
+        pay: true,
         location: true,
         status: true,
         type: true,
@@ -424,7 +428,7 @@ export async function updateApplicationById(req: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
     const result = applyUpdateSchema.parse(await req.json());
-    const { id, title, description, location, type, skills, status } = result;
+    const { id, title, description, pay, location, type, skills, status } = result;
     const application = await prisma.application.findFirst({
       where: {
         id,
@@ -446,6 +450,7 @@ export async function updateApplicationById(req: NextRequest) {
       data: {
         title,
         description,
+        pay,
         location,
         type,
         skills,
@@ -478,7 +483,7 @@ export async function createAppDepend(req: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
     const result = applyCreateSchema.parse(await req.json());
-    const { title, description, location, type, skills, status } = result;
+    const { title, description, location, type, skills, status, pay } = result;
     await prisma.application.create({
       data: {
         title,
@@ -487,6 +492,7 @@ export async function createAppDepend(req: NextRequest) {
         type,
         skills,
         status,
+        pay,
         dependencia: {
           connect: {
             userCedula: token.cedula,
@@ -530,6 +536,7 @@ export async function getApplicationDepend(req: NextRequest) {
         id: true,
         title: true,
         description: true,
+        pay: true,
         location: true,
         status: true,
         type: true,
@@ -562,7 +569,6 @@ export async function getApplicationDepend(req: NextRequest) {
                   select: {
                     university: true,
                     career: true,
-                    quarter: true,
                     address: true,
                     skills: true,
                     interests: true,

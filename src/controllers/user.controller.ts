@@ -14,10 +14,10 @@ interface DecodedToken {
 export async function createUser(req: NextRequest) {
   try {
     const { code, data, token } = await req.json();
+    console.log(data);
     const result = userSchema.parse({ ...data, code });
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
-    console.log(decoded);
     if (!decoded) {
       return NextResponse.json(
         { error: "Acceso no autorizado", step: 0 },

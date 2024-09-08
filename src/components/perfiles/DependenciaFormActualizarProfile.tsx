@@ -6,7 +6,7 @@ import { cn } from "@/components/lib/utils";
 import { Oval } from "react-loader-spinner";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -85,15 +85,16 @@ export default function DependenciaProfileForm({
       </div>
       <div className="flex flex-col m-4 my-4 p-4 rounded-lg shadow-lg">
         <form onSubmit={handleSubmit(onSubmit)} className="form-student-info">
+          
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="names">Nombres</Label>
+            <Label htmlFor="names">Nombres del Representante de la Dependencia</Label>
             <Input
               {...register("names")}
               defaultValue={session?.user.dataProfile?.names || ""}
               onChange={handleInputChange}
               id="names"
               name="names"
-              placeholder="Nombres"
+              placeholder="Jose Manuel"
               type="text"
               className={cn(errors.names && "bg-red-100 focus:bg-red-100")}
             />
@@ -102,15 +103,17 @@ export default function DependenciaProfileForm({
             )}
           </LabelInputContainer>
 
+
+
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="lastnames">Apellidos</Label>
+            <Label htmlFor="lastnames">Apellidos del Representante de la Dependencia</Label>
             <Input
               {...register("lastnames")}
               defaultValue={session?.user.dataProfile?.lastnames || ""}
               onChange={handleInputChange}
               id="lastnames"
               name="lastnames"
-              placeholder="Apellidos"
+              placeholder="Oropeza Mora"
               type="text"
               className={cn(errors.lastnames && "bg-red-100 focus:bg-red-100")}
             />
@@ -120,14 +123,14 @@ export default function DependenciaProfileForm({
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="name">Nombre de la dependencia</Label>
+            <Label htmlFor="name">Nombre de la Dependencia</Label>
             <Input
               {...register("name")}
               defaultValue={session?.user.dataProfile?.name || ""}
               onChange={handleInputChange}
               id="name"
               name="name"
-              placeholder="Nombre de la dependencia"
+              placeholder="Concejo Municipal de Maracaibo"
               type="text"
               className={cn(errors.name && "bg-red-100 focus:bg-red-100")}
             />
@@ -137,15 +140,15 @@ export default function DependenciaProfileForm({
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="phone">Teléfono de la dependencia</Label>
+            <Label htmlFor="phone">Teléfono de la Dependencia</Label>
             <Input
               {...register("phone")}
               defaultValue={session?.user.dataProfile?.phone || ""}
               onChange={handleInputChange}
               id="phone"
               name="phone"
-              placeholder="Teléfono"
-              type="text"
+              placeholder="04240000001"
+              type="phone"
               className={cn(errors.phone && "bg-red-100 focus:bg-red-100")}
             />
             {errors.phone && (
@@ -154,14 +157,14 @@ export default function DependenciaProfileForm({
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="address">Dirección de la dependencia</Label>
+            <Label htmlFor="address">Dirección de la Dependencia</Label>
             <Input
               {...register("address")}
               defaultValue={session?.user.dataProfile?.address || ""}
               onChange={handleInputChange}
               id="address"
               name="address"
-              placeholder="Dirección"
+              placeholder="Municipio Maracaibo Av. 10 con calle..."
               type="text"
               className={cn(errors.address && "bg-red-100 focus:bg-red-100")}
             />
@@ -171,14 +174,14 @@ export default function DependenciaProfileForm({
           </LabelInputContainer>
 
             <LabelInputContainer className="mb-4">
-                <Label htmlFor="email">Correo de la dependencia</Label>
+                <Label htmlFor="email">Correo de la Dependencia</Label>
                 <Input
                 {...register("email")}
                 defaultValue={session?.user.dataProfile?.email || ""}
                 onChange={handleInputChange}
                 id="email"
                 name="email"
-                placeholder="Correo"
+                placeholder="concejomunimaracaibo@gmail.com"
                 type="email"
                 className={cn(errors.email && "bg-red-100 focus:bg-red-100")}
                 />
@@ -188,14 +191,14 @@ export default function DependenciaProfileForm({
             </LabelInputContainer>
 
             <LabelInputContainer className="mb-4">
-                <Label htmlFor="rif">RIF de la dependencia</Label>
+                <Label htmlFor="rif">Numero de RIF de la Dependencia</Label>
                 <Input
                 {...register("rif")}
                 defaultValue={session?.user.dataProfile?.rif || ""}
                 onChange={handleInputChange}
                 id="rif"
                 name="rif"
-                placeholder="RIF"
+                placeholder="808021441"
                 type="text"
                 className={cn(errors.rif && "bg-red-100 focus:bg-red-100")}
                 />
@@ -205,14 +208,14 @@ export default function DependenciaProfileForm({
             </LabelInputContainer>
 
             <LabelInputContainer className="mb-4">
-                <Label htmlFor="social">Red social de la dependencia</Label>
+                <Label htmlFor="social">Link de la Red Social de la Dependencia</Label>
                 <Input
                 {...register("social")}
                 defaultValue={session?.user.dataProfile?.social || ""}
                 onChange={handleInputChange}
                 id="social"
                 name="social"
-                placeholder="Red social"
+                placeholder="Link de la Red social"
                 type="text"
                 className={cn(errors.social && "bg-red-100 focus:bg-red-100")}
                 />
@@ -222,7 +225,7 @@ export default function DependenciaProfileForm({
             </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="description">Breve descripción de la dependencia</Label>
+            <Label htmlFor="description">Breve Descripción de la Dependencia</Label>
             <Input
               {...register("description")}
               type="textarea"
@@ -230,7 +233,7 @@ export default function DependenciaProfileForm({
               onChange={handleInputChange}
               id="description"
               name="description"
-              placeholder="Soy una persona responsable, hablo inglés fluido y me apasiona la naturaleza..."
+              placeholder="El Concejo crea leyes municipales y..."
               className={`w-full h-[12vh] overflow-hidden text-ellipsis white-space-nowrap ${cn(
                 errors.description && "bg-red-100 focus:bg-red-100"
               )}`}

@@ -18,12 +18,13 @@ interface EstudianteFormProfileProps {
     address: string; 
     university: string;
     career: string; 
-    quarter: string; 
     skills: string[]; 
     interests: string; 
     description: string; 
     names: string; 
-    lastnames: string; 
+    lastnames: string;
+    dateStart : Date;
+    dateEnd : Date;
     phone: string; 
   } | null;
 }
@@ -44,7 +45,6 @@ export default function EstudianteProfileForm({
     address: "",
     university: "",
     career: "",
-    quarter: "",
     description: "",
     interests: "",
   });
@@ -152,15 +152,17 @@ export default function EstudianteProfileForm({
       </div>
       <div className="flex flex-col m-4 my-4 p-4 rounded-lg shadow-lg">
         <form onSubmit={handleSubmit(onSubmit)} className="form-student-info">
+          
+          
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="names">Nombres</Label>
+            <Label htmlFor="names">Nombres del estudiante *</Label>
             <Input
               {...register("names")}
               defaultValue={session?.user.dataProfile?.names || ""}
               onChange={handleInputChange}
               id="names"
               name="names"
-              placeholder="Nombres"
+              placeholder="Jose Manuel"
               type="text"
               className={cn(errors.names && "bg-red-100 focus:bg-red-100")}
             />
@@ -172,7 +174,7 @@ export default function EstudianteProfileForm({
 
 
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="lastnames">Apellidos</Label>
+            <Label htmlFor="lastnames">Apellidos del estudiante *</Label>
             <Input
               {...register("lastnames")}
               defaultValue={session?.user.dataProfile?.lastnames || ""}
@@ -188,8 +190,10 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
+
+
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="phone">Teléfono</Label>
+            <Label htmlFor="phone">Teléfono del estudiante *</Label>
             <Input
               {...register("phone")}
               defaultValue={session?.user.dataProfile?.phone || ""}
@@ -205,8 +209,10 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
+
+      <h2><mark>SECTORIZACION POR PARROKIA </mark></h2>
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="address">Dirección</Label>
+            <Label htmlFor="address">Dirección del estudiante *</Label>
             <Input
               {...register("address")}
               defaultValue={session?.user.dataProfile?.address || ""}
@@ -222,8 +228,10 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
+          
+          <h2><mark>ALIMENTADA POR UNA TABLA CON CURD DE ALCALDIA</mark></h2>
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="university">Universidad</Label>
+            <Label htmlFor="university">Institución Educativa del estudiante *</Label>
             <Input
               {...register("university")}
               defaultValue={session?.user.dataProfile?.university || ""}
@@ -239,8 +247,10 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
+          
+          <h2><mark>HACERLA SELECT</mark></h2>
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="career">Carrera</Label>
+            <Label htmlFor="career">Especialización ó carrera del estudiante *</Label>
             <Input
               {...register("career")}
               defaultValue={session?.user.dataProfile?.career || ""}
@@ -257,28 +267,83 @@ export default function EstudianteProfileForm({
           </LabelInputContainer>
 
           
+          <h2><mark>ADD FECHA INCIIO Y FIN DEL PROCESO DE PAS O SERV</mark></h2>
+        
+          <div className="flex flex-col gap-[5%] justify-start md:flex-row">
+              
+              <LabelInputContainer className=" flex m-2 md:w-[40%]">
+              <Label htmlFor="birthdate">Fecha de inicio del proceso *</Label>
+              <Input
+                 {...register("dateStart")}
+                id="datestart"
+                type="date" // Mantener tipo "date"
+                className={cn(errors.dateStart && "bg-red-100 focus:bg-red-100")}
+              />
+               {errors.dateStart ? ( 
+                <>
+                  <p className="text-red-500 text-sm">
+                     {errors.dateStart.message?.toString()}
+                  </p>
+                  <span className="text-gray-500 text-xs">
+                    La fecha debe tener el formato yyyy-mm-dd.
+                  </span>
+                </>
+              ) : (
+                <span className="text-gray-500 text-xs">
+                  La fecha debe tener el formato yyyy-mm-dd.
+                </span>
+              )
+            }
+            </LabelInputContainer>
 
+            <LabelInputContainer className=" flex m-2 mr-20 md:w-[40%]">
+          <Label htmlFor="datefinish">Fecha de terminacion del proceso *</Label>
+          <Input
+             {...register("dateEnd")}
+            id="datefinish"
+            type="date" // Mantener tipo "date"
+             className={cn(errors.dateEnd && "bg-red-100 focus:bg-red-100")}
+          />
+           {errors.dateEnd 
+            ? (
+              <>
+                <p className="text-red-500 text-sm">
+                   {errors.dateEnd.message?.toString()} 
+                </p>
+                <span className="text-gray-500 text-xs">
+                  La fecha debe tener el formato yyyy-mm-dd.
+                </span>
+              </>
+            ) : (
+              <span className="text-gray-500 text-xs">
+                La fecha debe tener el formato yyyy-mm-dd.
+              </span>
+            )
+          }
+        </LabelInputContainer>
+
+      </div>
+
+
+
+
+
+          <h2><mark>ELIMINAR DE LA BBDD</mark></h2>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="quarter">Trimestre</Label>
             <Input
-              {...register("quarter")}
-              defaultValue={session?.user.dataProfile?.quarter || ""}
               onChange={handleInputChange}
               id="quarter"
               name="quarter"
               placeholder="Trimestre"
               type="text"
-              className={cn(errors.quarter && "bg-red-100 focus:bg-red-100")}
             />
-            {errors.quarter && (
-              <p className="text-red-500 text-sm">{errors.quarter.message}</p>
-            )}
           </LabelInputContainer>
 
 
 
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="description">Breve descripción de ti</Label>
+            <Label htmlFor="description">Breve descripción del estudiante.</Label>
             <Input
               {...register("description")}
               type="textarea"
@@ -297,7 +362,7 @@ export default function EstudianteProfileForm({
 
 
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="interests">Cuáles son tus intereses</Label>
+            <Label htmlFor="interests">Intereses del estudiante</Label>
             <Input
               {...register("interests")}
               defaultValue={session?.user.dataProfile?.interests || ""}
@@ -316,7 +381,7 @@ export default function EstudianteProfileForm({
           
 
           <LabelInputContainer>
-            <Label htmlFor="skills">Selecciona las habilidades que poseas</Label>
+            <Label htmlFor="skills">Habilidades del estudiante</Label>
             {skillsOptions.map(({ value, label }) => (
               <div key={value} className="flex items-center">
                 <Input

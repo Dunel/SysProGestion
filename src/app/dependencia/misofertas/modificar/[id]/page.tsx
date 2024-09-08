@@ -127,6 +127,7 @@ export default function Page({ params }: { params: { id: string } }) {
     const formData = {
       ...data,
       skills: selectedSkills,
+      // pay: data.type === 'pasantia' ? data.pay : "undefined" 
     };
     const validate = applyUpdateFormSchema.safeParse(formData);
     if (!validate.success) {
@@ -159,7 +160,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <Header title={"MODIFICAR OFERTA"} subtitle={""} />
+      <Header title={"MODIFICAR OFERTA"} subtitle={"Aqui podrás modificar las ofertas del Pasantias y Servicio Comunitario que hayas publicado."} />
       <ContainerWeb>
         <GridMain>
           <GridContainer>
@@ -172,7 +173,7 @@ export default function Page({ params }: { params: { id: string } }) {
                   className="form-student-info"
                 >
                   <div className="mt-2">
-                    <Label>Titulo</Label>
+                    <Label>Titulo descritivo de la oferta de vacante</Label>
                     <Input
                       {...register("title")}
                       id="title"
@@ -188,7 +189,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     )}
                   </div>
                   <div className="mt-2">
-                    <Label>Descripción</Label>
+                    <Label>Descripción del perfil del estudiante y de la oferta</Label>
                     <Input
                       {...register("description")}
                       id="description"
@@ -204,7 +205,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     )}
                   </div>
                   <div className="mt-2">
-                    <Label>Ubicación</Label>
+                    <Label>Dirección del lugar de se realizará la Pasantia ó Servicio Comunitario</Label>
                     <Input
                       {...register("location")}
                       id="location"
@@ -258,6 +259,45 @@ export default function Page({ params }: { params: { id: string } }) {
                       </p>
                     )}
                   </div>
+
+                  {selectedType === 'pasantia' &&
+                    <div>
+                    <Label>Tipo de Incentivo</Label>
+                    <div className="flex items-center">
+                        <Input
+                            {...register("pay")}
+                            id="pay"
+                            name="pay"
+                            type="radio"
+                            value="true"
+                        
+                            className="mr-2"
+                        />
+                        <Label>Con Incentivo</Label>
+            
+                        <Input
+                            type="radio"
+                            id="pay"
+                            {...register("pay")}
+                            value="false"
+                     
+                            className="mr-2"
+                        />
+                        <Label>Sin Insentivo</Label>
+                    </div>
+                    {errors.pay && (
+                    <p className="text-red-500 text-sm">
+                        {errors.pay.message}
+                    </p>
+                  )}
+                </div>
+          }
+
+
+
+
+
+
                   <div className="mt-2">
                     <Label>Habilidades Necesarias</Label>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
