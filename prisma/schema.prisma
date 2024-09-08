@@ -33,7 +33,7 @@ model User {
   id           Int              @id @default(autoincrement())
   cedula       Int              @unique
   mail         String           @unique
-  password     String
+  password     String           @default("defaultpasswordunregistereduser")
   names        String
   lastnames    String
   role         Role             @default(estudiante)
@@ -42,10 +42,16 @@ model User {
   profile      Boolean          @default(false)
   image        String?
   updatedAt    DateTime         @updatedAt
+  estadoId     Int?
+  municipioId  Int?
+  parroquiaId  Int?
   esInfo       estudentInfo?
   apply        apply[]
   notification notification[]
   depInfo      dependenciaInfo?
+  estado       estado?          @relation(fields: [estadoId], references: [id])
+  municipio    municipio?       @relation(fields: [municipioId], references: [id])
+  parroquia    parroquia?       @relation(fields: [parroquiaId], references: [id])
 }
 
 enum Skills {
@@ -76,11 +82,10 @@ enum Skills {
 model estudentInfo {
   id                  Int                   @id @default(autoincrement())
   userCedula          Int                   @unique
-  university          String
-  datefinish          DateTime
-  datestart           DateTime
-  career              String
-  quarter             Int?
+  careerId            Int?
+  institutionId       Int?
+  dateStart           DateTime?
+  dateEnd             DateTime?
   skills              Skills[]
   interests           String?
   description         String?
@@ -89,6 +94,8 @@ model estudentInfo {
   updatedAt           DateTime              @updatedAt
   User                User                  @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
   applicationApproved applicationApproved[]
+  institution         institution?          @relation(fields: [institutionId], references: [id])
+  career              career?               @relation(fields: [careerId], references: [id])
 }
 
 enum typeApplication {
@@ -129,6 +136,7 @@ model apply {
   updatedAt     DateTime    @updatedAt
   application   application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
   User          User        @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
+
   @@unique([userCedula, applicationId])
 }
 
@@ -175,14 +183,14 @@ model dependenciaInfo {
 }
 
 model applicationApproved {
-  id            Int          @id @default(autoincrement())
+  id            Int           @id @default(autoincrement())
   userCedula    Int
   applicationId Int
-  status        statusAproved  @default(enproceso)
-  date          DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  application   application  @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  esInfo        estudentInfo @relation(fields: [userCedula], references: [userCedula], onDelete: Cascade)
+  status        statusAproved @default(enproceso)
+  date          DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  application   application   @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  esInfo        estudentInfo  @relation(fields: [userCedula], references: [userCedula], onDelete: Cascade)
 }
 
 enum statusAproved {
@@ -190,10 +198,43 @@ enum statusAproved {
   enproceso
 }
 
-model institucionesEdu {
-  id                   Int          @id @default(autoincrement())
-  codigoInstitucion    String           @unique
-  nombreInstitucion    String
-  parroquiaInstitucion String
-  date                 DateTime     @default(now())
+model estado {
+  id         Int         @id @default(autoincrement())
+  estado     String
+  municipios municipio[]
+  User       User[]
+}
+
+model municipio {
+  id         Int         @id @default(autoincrement())
+  estadoId   Int
+  municipio  String
+  parroquias parroquia[]
+  User       User[]
+  estado     estado      @relation(fields: [estadoId], references: [id])
+}
+
+model parroquia {
+  id            Int           @id @default(autoincrement())
+  municipioId   Int
+  parroquia     String
+  User          User[]
+  municipio     municipio     @relation(fields: [municipioId], references: [id])
+  instituciones institution[]
+}
+
+model institution {
+  id              Int            @id @default(autoincrement())
+  institutionCode String
+  name            String
+  parroquiaId     Int
+  parroquia       parroquia      @relation(fields: [parroquiaId], references: [id])
+  estudentInfo    estudentInfo[]
+}
+
+model career {
+  id         Int            @id @default(autoincrement())
+  careerCode String
+  name       String
+  esInfo     estudentInfo[]
 }

@@ -567,9 +567,14 @@ export async function getApplicationDepend(req: NextRequest) {
                 image: true,
                 esInfo: {
                   select: {
-                    university: true,
+                    institution:  {
+                      select:{
+                        id: true,
+                        institutionCode: true,
+                        name: true,
+                      }
+                    },
                     career: true,
-                    quarter: true,
                     address: true,
                     skills: true,
                     interests: true,

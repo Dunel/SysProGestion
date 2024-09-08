@@ -28,28 +28,37 @@ export const profileSchema = z.object({
     .string({ required_error: "La dirección es requerida" })
     .min(10, { message: "La dirección debe tener minimo 10 caracteres" })
     .max(100, { message: "La dirección debe tener maximo 100 caracteres" }),
-  university: z
-    .string({ required_error: "La universidad es requerida" })
-    .min(4, { message: "La universidad debe tener minimo 4 caracteres" })
-    .max(50, { message: "La universidad debe tener maximo 50 caracteres" }),
-  
-
-  datestart: z
-  .string({ required_error: "La fecha de nacimiento es requerida" })
-  .refine((val) => {
-      const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
-      return regex.test(val);
-    }, {
-      message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
-    })
+  institutionId: z
+    .string({ required_error: "institucion es requerida" })
+    .min(1)
+    .max(4)
     .transform((val, ctx) => {
-      const [year, month, day] = val.split('-').map(Number); // Separar año, mes y día
-      const date = new Date(year, month - 1, day); // Crear el objeto Date con los valores extraídos
-  
-      if (isNaN(date.getTime()) || date.getDate() !== day || date.getMonth() !== (month - 1) || date.getFullYear() !== year) {
+      const parsed = parseInt(val);
+      if (isNaN(parsed)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "La fecha de nacimiento no es válida",
+          message: "Solo se permiten números.",
+        });
+        return z.NEVER;
+      }
+      if (parsed < 1 || parsed > 9999) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "instituto no valido.",
+        });
+        return z.NEVER;
+      }
+      return parsed;
+    })
+    .or(z.number().min(1).max(9999)),
+  dateStart: z
+    .string()
+    .transform((val, ctx) => {
+      const date = new Date(val);
+      if (isNaN(date.getTime())) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "La fecha no es válida",
         });
         return z.NEVER;
       }
@@ -57,70 +66,129 @@ export const profileSchema = z.object({
       const age = today.getFullYear() - date.getFullYear();
       const monthDiff = today.getMonth() - date.getMonth();
       const dayDiff = today.getDate() - date.getDate();
-       return date;
-    }),
-
-
-  datefinish: z
-    .string({ required_error: "La fecha de nacimiento es requerida" })
-    .refine((val) => {
-        const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
-        return regex.test(val);
-      }, {
-        message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
-      })
-      .transform((val, ctx) => {
-        const [year, month, day] = val.split('-').map(Number); // Separar año, mes y día
-        const date = new Date(year, month - 1, day); // Crear el objeto Date con los valores extraídos
-    
-        if (isNaN(date.getTime()) || date.getDate() !== day || date.getMonth() !== (month - 1) || date.getFullYear() !== year) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "La fecha de nacimiento no es válida",
-          });
-          return z.NEVER;
-        }
-        const today = new Date();
-        const age = today.getFullYear() - date.getFullYear();
-        const monthDiff = today.getMonth() - date.getMonth();
-        const dayDiff = today.getDate() - date.getDate();
-         return date;
-      }),
-
-  
-
-  career: z
-    .string({ required_error: "La carrera es requerida" })
-    .min(4, { message: "La carrera debe tener minimo 4 caracteres" })
-    .max(50, { message: "La carrera debe tener maximo 50 caracteres" }),
-  quarter: z
-    .string({ required_error: "El trimestre es requerido" })
-    .min(1, { message: "El trimestre debe tener minimo 1 caracteres" })
-    .max(2, { message: "El trimestre debe tener maximo 2 caracteres" })
-    .transform((val, ctx) => {
-      const trimestre = parseInt(val);
-      if (isNaN(trimestre)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Los caracteres deben ser un númericos",
-        });
-        return z.NEVER;
-      }
-      if (trimestre < 1 || trimestre > 12) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Trimestre no valido",
-        });
-        return z.NEVER;
-      }
-      return trimestre;
+      return date;
     })
     .or(
-      z
-        .number()
-        .min(1, { message: "El trimestre debe ser mayor a 0" })
-        .max(12, { message: "El trimestre debe ser menor a 13" })
+      z.date({
+        required_error: "Please select a date and time",
+        invalid_type_error: "That's not a date!",
+      })
     ),
+  dateEnd: z
+    .string()
+    .transform((val, ctx) => {
+      const date = new Date(val);
+      if (isNaN(date.getTime())) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "La fecha no es válida",
+        });
+        return z.NEVER;
+      }
+      const today = new Date();
+      const age = today.getFullYear() - date.getFullYear();
+      const monthDiff = today.getMonth() - date.getMonth();
+      const dayDiff = today.getDate() - date.getDate();
+      return date;
+    })
+    .or(
+      z.date({
+        required_error: "Please select a date and time",
+        invalid_type_error: "That's not a date!",
+      })
+    ),
+  estadoId: z
+    .string()
+    .min(1)
+    .max(2)
+    .transform((val, ctx) => {
+      const parsed = parseInt(val);
+      if (isNaN(parsed)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Solo se permiten números en el estado.",
+        });
+        return z.NEVER;
+      }
+      if (parsed < 1 || parsed > 24) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Estado no valido.",
+        });
+        return z.NEVER;
+      }
+      return parsed;
+    })
+    .or(z.number().min(1).max(24)),
+  municipioId: z
+    .string()
+    .min(1)
+    .max(3)
+    .transform((val, ctx) => {
+      const parsed = parseInt(val);
+      if (isNaN(parsed)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Solo se permiten números.",
+        });
+        return z.NEVER;
+      }
+      if (parsed < 1 || parsed > 462) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Municipio no valida.",
+        });
+        return z.NEVER;
+      }
+      return parsed;
+    })
+    .or(z.number().min(1).max(1150)),
+  parroquiaId: z
+    .string()
+    .min(1)
+    .max(4)
+    .transform((val, ctx) => {
+      const parsed = parseInt(val);
+      if (isNaN(parsed)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Solo se permiten números.",
+        });
+        return z.NEVER;
+      }
+      if (parsed < 1 || parsed > 1150) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Parroquia no valida.",
+        });
+        return z.NEVER;
+      }
+      return parsed;
+    })
+    .or(z.number().min(1).max(1150)),
+  careerId: z
+    .string({ required_error: "La carrera es requerida" })
+    .min(1)
+    .max(4)
+    .transform((val, ctx) => {
+      const parsed = parseInt(val);
+      if (isNaN(parsed)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Solo se permiten números.",
+        });
+        return z.NEVER;
+      }
+      if (parsed < 1 || parsed > 9999) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "instituto no valido.",
+        });
+        return z.NEVER;
+      }
+      return parsed;
+    })
+    .or(z.number().min(1).max(9999)),
   skills: z
     .array(
       z.enum(
@@ -191,100 +259,190 @@ export const profileFrontSchema = z.object({
     .string({ required_error: "La dirección es requerida" })
     .min(10, { message: "La dirección debe tener minimo 10 caracteres" })
     .max(100, { message: "La dirección debe tener maximo 100 caracteres" }),
-  university: z
+  institutionId: z
     .string({ required_error: "La universidad es requerida" })
-    .min(4, { message: "La universidad debe tener minimo 4 caracteres" })
-    .max(50, { message: "La universidad debe tener maximo 50 caracteres" }),
+    .min(1)
+    .max(4)
+    .transform((val, ctx) => {
+      const parsed = parseInt(val);
+      if (isNaN(parsed)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Solo se permiten números.",
+        });
+        return z.NEVER;
+      }
+      if (parsed < 1 || parsed > 9999) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "instituto no valido.",
+        });
+        return z.NEVER;
+      }
+      return parsed;
+    })
+    .or(z.number().min(1).max(9999)),
 
-
-  
-    datestart: z
+  dateStart: z
     .string({ required_error: "La fecha de nacimiento es requerida" })
-    .refine((val) => {
+    .refine(
+      (val) => {
         const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
         return regex.test(val);
-      }, {
+      },
+      {
         message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
-      })
-      .transform((val, ctx) => {
-        const [year, month, day] = val.split('-').map(Number); // Separar año, mes y día
-        const date = new Date(year, month - 1, day); // Crear el objeto Date con los valores extraídos
-    
-        if (isNaN(date.getTime()) || date.getDate() !== day || date.getMonth() !== (month - 1) || date.getFullYear() !== year) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "La fecha de nacimiento no es válida",
-          });
-          return z.NEVER;
-        }
-        const today = new Date();
-        const age = today.getFullYear() - date.getFullYear();
-        const monthDiff = today.getMonth() - date.getMonth();
-        const dayDiff = today.getDate() - date.getDate();
-         return date;
-      }),
-  
-  
-    datefinish: z
-      .string({ required_error: "La fecha de nacimiento es requerida" })
-      .refine((val) => {
-          const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
-          return regex.test(val);
-        }, {
-          message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
-        })
-        .transform((val, ctx) => {
-          const [year, month, day] = val.split('-').map(Number); // Separar año, mes y día
-          const date = new Date(year, month - 1, day); // Crear el objeto Date con los valores extraídos
-      
-          if (isNaN(date.getTime()) || date.getDate() !== day || date.getMonth() !== (month - 1) || date.getFullYear() !== year) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: "La fecha de nacimiento no es válida",
-            });
-            return z.NEVER;
-          }
-          const today = new Date();
-          const age = today.getFullYear() - date.getFullYear();
-          const monthDiff = today.getMonth() - date.getMonth();
-          const dayDiff = today.getDate() - date.getDate();
-           return date;
-        }),
-  
-
-
-  career: z
-    .string({ required_error: "La carrera es requerida" })
-    .min(4, { message: "La carrera debe tener minimo 4 caracteres" })
-    .max(50, { message: "La carrera debe tener maximo 50 caracteres" }),
-  quarter: z
-    .string({ required_error: "El trimestre es requerido" })
-    .min(1, { message: "El trimestre debe tener minimo 1 caracteres" })
-    .max(2, { message: "El trimestre debe tener maximo 2 caracteres" })
+      }
+    )
     .transform((val, ctx) => {
-      const trimestre = parseInt(val);
-      if (isNaN(trimestre)) {
+      const [year, month, day] = val.split("-").map(Number); // Separar año, mes y día
+      const date = new Date(year, month - 1, day); // Crear el objeto Date con los valores extraídos
+
+      if (
+        isNaN(date.getTime()) ||
+        date.getDate() !== day ||
+        date.getMonth() !== month - 1 ||
+        date.getFullYear() !== year
+      ) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Los caracteres deben ser un númericos",
+          message: "La fecha de nacimiento no es válida",
         });
         return z.NEVER;
       }
-      if (trimestre < 1 || trimestre > 12) {
+      const today = new Date();
+      const age = today.getFullYear() - date.getFullYear();
+      const monthDiff = today.getMonth() - date.getMonth();
+      const dayDiff = today.getDate() - date.getDate();
+      return date;
+    }),
+
+  dateEnd: z
+    .string({ required_error: "La fecha de nacimiento es requerida" })
+    .refine(
+      (val) => {
+        const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
+        return regex.test(val);
+      },
+      {
+        message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
+      }
+    )
+    .transform((val, ctx) => {
+      const [year, month, day] = val.split("-").map(Number); // Separar año, mes y día
+      const date = new Date(year, month - 1, day); // Crear el objeto Date con los valores extraídos
+
+      if (
+        isNaN(date.getTime()) ||
+        date.getDate() !== day ||
+        date.getMonth() !== month - 1 ||
+        date.getFullYear() !== year
+      ) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Trimestre no valido",
+          message: "La fecha de nacimiento no es válida",
         });
         return z.NEVER;
       }
-      return trimestre;
+      const today = new Date();
+      const age = today.getFullYear() - date.getFullYear();
+      const monthDiff = today.getMonth() - date.getMonth();
+      const dayDiff = today.getDate() - date.getDate();
+      return date;
+    }),
+
+  estadoId: z
+    .string()
+    .min(1)
+    .max(2)
+    .transform((val, ctx) => {
+      const parsed = parseInt(val);
+      if (isNaN(parsed)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Solo se permiten números en el estado.",
+        });
+        return z.NEVER;
+      }
+      if (parsed < 1 || parsed > 24) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Estado no valido.",
+        });
+        return z.NEVER;
+      }
+      return parsed;
     })
-    .or(
-      z
-        .number()
-        .min(1, { message: "El trimestre debe ser mayor a 0" })
-        .max(12, { message: "El trimestre debe ser menor a 13" })
-    ),
+    .or(z.number().min(1).max(24)),
+  municipioId: z
+    .string()
+    .min(1)
+    .max(3)
+    .transform((val, ctx) => {
+      const parsed = parseInt(val);
+      if (isNaN(parsed)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Solo se permiten números.",
+        });
+        return z.NEVER;
+      }
+      if (parsed < 1 || parsed > 462) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Municipio no valida.",
+        });
+        return z.NEVER;
+      }
+      return parsed;
+    })
+    .or(z.number().min(1).max(1150)),
+  parroquiaId: z
+    .string()
+    .min(1)
+    .max(4)
+    .transform((val, ctx) => {
+      const parsed = parseInt(val);
+      if (isNaN(parsed)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Solo se permiten números.",
+        });
+        return z.NEVER;
+      }
+      if (parsed < 1 || parsed > 1150) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Parroquia no valida.",
+        });
+        return z.NEVER;
+      }
+      return parsed;
+    })
+    .or(z.number().min(1).max(1150)),
+  careerId: z
+    .string({ required_error: "La carrera es requerida" })
+    .min(1)
+    .max(4)
+    .transform((val, ctx) => {
+      const parsed = parseInt(val);
+      if (isNaN(parsed)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Solo se permiten números.",
+        });
+        return z.NEVER;
+      }
+      if (parsed < 1 || parsed > 9999) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "instituto no valido.",
+        });
+        return z.NEVER;
+      }
+      return parsed;
+    })
+    .or(z.number().min(1).max(9999)),
   interests: z
     .string({ required_error: "Los intereses son requeridos" })
     .min(10, { message: "Los intereses debe tener minimo 10 caracteres" })
@@ -295,7 +453,6 @@ export const profileFrontSchema = z.object({
     .max(100, { message: "La descripción debe tener maximo 100 caracteres" }),
 });
 
-// aqui
 export const profileDepenSchema = z.object({
   name: z
     .string({ required_error: "El nombre es requerido" })
@@ -304,9 +461,7 @@ export const profileDepenSchema = z.object({
     .regex(nameRegex, {
       message: "El nombre no debe contener números ni signos de puntuación",
     })
-    .transform((val) => val.toUpperCase())
-    , // Validación de solo letras
-
+    .transform((val) => val.toUpperCase()), // Validación de solo letras
   names: z
     .string({ required_error: "El nombre es requerido" })
     .min(3, { message: "El nombre debe tener minimo 3 caracteres" })
@@ -368,12 +523,7 @@ export const profileDepenSchema = z.object({
       }
       return parsed;
     })
-    .or(
-      z
-        .number()
-        .min(6000000)
-        .max(99999999)
-    )
+    .or(z.number().min(6000000).max(99999999))
     .optional(),
 });
 

@@ -5,7 +5,7 @@ import EstudianteFormActualizarProfile from "@/components/perfiles/EstudianteFor
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import  Skeleton  from "@/components/ui/SkeletonComponent";
+import Skeleton from "@/components/ui/SkeletonComponent";
 
 export default function EstudianteInfoForm() {
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -16,12 +16,16 @@ export default function EstudianteInfoForm() {
 
   const [profileData, setProfileData] = useState<{
     address: string;
-    university: string;
-    career: string;
-    quarter: string;
+    institution: {};
+    career: {};
     skills: string[];
     interests: string;
     description: string;
+    dateStart: Date;
+    dateEnd: Date;
+    estadoId: number;
+    municipioId: number;
+    parroquiaId: number;
     names: string;
     lastnames: string;
     phone: string;
@@ -54,7 +58,8 @@ export default function EstudianteInfoForm() {
     <>
       <Header
         title={
-          !session?.user.dataProfile ? "Registrando tu Perfil" : "Mi Perfil" }
+          !session?.user.dataProfile ? "Registrando tu Perfil" : "Mi Perfil"
+        }
         subtitle={
           !session?.user.profile
             ? "Este es tu formulario de registro. Por favor, sigue las indicaciones de las casillas y completa tu información personal y profesional."
@@ -73,9 +78,8 @@ export default function EstudianteInfoForm() {
       )}
 
       {/* //Muestra el loader aun sin saer si la data es null, false o true */}
-      {!session?.user.dataProfile && session?.user.profile != false 
-        ? (
-            <Skeleton/> 
+      {!session?.user.dataProfile && session?.user.profile != false ? (
+        <Skeleton />
       ) : (
         <div
           className={`${

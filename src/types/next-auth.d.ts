@@ -11,13 +11,25 @@ declare module "next-auth" {
       picture: string;
       dataProfile: {
         address: string;
-        university: string;
-        career: string;
-        quarter: string;
+        institution: {
+          id: number;
+          institutionCode: string;
+          name: string;
+        };
+        career: {
+          id: number;
+          careerCode: string;
+          name: string;
+        };
         skills: [string];
         interests: string;
         description: string;
         email: string;
+        dateStart: Date;
+        dateEnd: Date;
+        estadoId: number;
+        municipioId: number;
+        parroquiaId: number;
         social: string;
         rif: number | null;
         name: string;
@@ -37,13 +49,25 @@ declare module "next-auth" {
     picture: string;
     dataProfile: {
       address: string;
-      university: string;
-      career: string;
-      quarter: string;
+      institution: {
+        id: number;
+        institutionCode: string;
+        name: string;
+      };
+      career: {
+        id: number;
+        careerCode: string;
+        name: string;
+      };
       skills: [string];
       interests: string;
       description: string;
       email: string;
+      dateStart: Date;
+      dateEnd: Date;
+      estadoId: number;
+      municipioId: number;
+      parroquiaId: number;
       social: string;
       rif: number | null;
       name: string;
@@ -64,13 +88,25 @@ declare module "next-auth/jwt" {
     picture: string;
     dataProfile: {
       address: string;
-      university: string;
-      career: string;
-      quarter: string;
+      institution: {
+        id: number;
+        institutionCode: string;
+        name: string;
+      };
+      career: {
+        id: number;
+        careerCode: string;
+        name: string;
+      };
       skills: [string];
       interests: string;
       description: string;
       email: string;
+      dateStart: Date;
+      dateEnd: Date;
+      estadoId: number;
+      municipioId: number;
+      parroquiaId: number;
       social: string;
       rif: number | null;
       name: string;
