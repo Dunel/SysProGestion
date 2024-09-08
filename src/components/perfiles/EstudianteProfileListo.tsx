@@ -56,7 +56,6 @@ export default function EstudianteProfileListo({
 
   const handlePdfChange = async (pdfFile: File | null) => {
     try {
-      
       if (!pdfFile) return;
       if (pdfFile) {
         setLoadingPDF(true);
@@ -89,19 +88,15 @@ export default function EstudianteProfileListo({
         console.error("error:", error as Error);
         setLoading(false);
       }
-    }finally{
+    } finally {
       setLoadingPDF(false);
     }
   };
 
   return (
-    
     <div className="flex flex-col w-[100%] relative z-20 m-2 p-2 pb-0 mb-0 rounded-lg mt-1 shadow lg:shadow-none">
       {session?.user.profile && (
-        
         <div className="flex flex-col w-[100%] my-2 mb-2 bg-white md:sticky md:top-[15vh]">
-
-
           {/* //!Padre de foto + info personal */}
           <div className="flex flex-col items-center md:flex-row md:space-x-4">
             {/* Foto del Estudiante */}
@@ -117,7 +112,7 @@ export default function EstudianteProfileListo({
                 </div>
                 {loading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full transition-opacity duration-300">
-                    <Loader/>
+                    <Loader />
                   </div>
                 )}
               </label>
@@ -141,138 +136,127 @@ export default function EstudianteProfileListo({
                 {session.user.dataProfile.lastnames}
               </h2>
               <h2 className="text-2xl font-bold text-gray-800 pt-5 pb-2 md:text-3xl lg:text-2xl">
-                <i>{session.user.dataProfile.career}</i></h2>
+                <i>{session.user.dataProfile.career?.name}</i>
+              </h2>
               <p className="text-gray-600 md:text-1x1">
-                <strong>🪪 Cedula de identidad:</strong> {session.user.cedula}</p>
+                <strong>🪪 Cedula de identidad:</strong> {session.user.cedula}
+              </p>
               <p className="text-gray-600 md:text-1x1">
-                <strong>📲 Teléfono:</strong> {session.user.dataProfile.phone}</p>
+                <strong>📲 Teléfono:</strong> {session.user.dataProfile.phone}
+              </p>
               <p className="text-gray-600 md:text-1x1">
-                <strong>📧 Correo:</strong> {session.user.email}</p>
+                <strong>📧 Correo:</strong> {session.user.email}
+              </p>
               <p className="text-gray-600 md:text-1x1">
-                <strong>📍 Domicilio:</strong> {session.user.dataProfile.address}</p>
+                <strong>📍 Domicilio:</strong>{" "}
+                {session.user.dataProfile.address}
+              </p>
             </div>
           </div>
 
-
-        {/* //!caja de PERFIL PROFESIONAL hasta CV */}
+          {/* //!caja de PERFIL PROFESIONAL hasta CV */}
           <div className="m-6">
             <h4 className="text-2xl font-bold text-gray-800 m-2 text-center md:text-4xl lg:text-3xl">
-            Perfil Profesional</h4>
-            
+              Perfil Profesional
+            </h4>
+
             {/* universidad, trismestre e intereses */}
             <div className="flex flex-col items-start gap-2 md:flex-row">
-              
-                <div className="m-2 p-1 w-full md:w-[30%]">
-                  <p className="text-gray-600 font-bold md:text-1x1">
-                    🏫Universidad:</p>
-                  <p>{session.user.dataProfile.university}</p>
-                </div>
+              <div className="m-2 p-1 w-full md:w-[30%]">
+                <p className="text-gray-600 font-bold md:text-1x1">🏫insttt:</p>
+                <p>{session.user.dataProfile.institution.name || ""}</p>
+              </div>
 
-                <div className="m-2 p-1 w-full md:w-[20%]">
-                  <p className="text-gray-600 font-bold md:text-1x1">
-                    🎓Trimestre:</p>
-                  <p>{session.user.dataProfile.quarter}</p>
-                </div>
+              <div className="m-2 p-1 w-full md:w-[20%]">
+                <p className="text-gray-600 font-bold md:text-1x1">
+                  🎓Trimestre:
+                </p>
+                <p> ya no esta en db </p>
+              </div>
 
-                <div className="m-2 p-1 w-full md:w-[50%]">
-                  <p className="text-gray-600 font-bold md:text-1x1">
-                   🏓 Intereses:</p>
-                  <p>{session.user.dataProfile.interests}</p>
-                </div>
-
+              <div className="m-2 p-1 w-full md:w-[50%]">
+                <p className="text-gray-600 font-bold md:text-1x1">
+                  🏓 Intereses:
+                </p>
+                <p>{session.user.dataProfile.interests}</p>
+              </div>
             </div>
 
-           
-           {/* Habilidades y descripcion */}
-           <div className="flex flex-col items-start gap-2 md:flex-row">
-              
+            {/* Habilidades y descripcion */}
+            <div className="flex flex-col items-start gap-2 md:flex-row">
               <div className="m-2 p-1 w-full md:w-[30%]">
                 <p className="text-gray-600 font-bold md:text-1x1">
-                🤹🏽 Habilidades:</p>
-                <p>{formatSkillsToList(session.user.dataProfile.skills)}</p>
+                  🤹🏽 Habilidades:
+                </p>
+                {formatSkillsToList(session.user.dataProfile.skills)}
               </div>
 
-            <div className="flex flex-col justify-center w-full md:w-[70%]">
+              <div className="flex flex-col justify-center w-full md:w-[70%]">
+                <div className="m-2 p-1 w-full md:w-[100%]">
+                  <p className="text-gray-600 font-bold md:text-1x1">
+                    🧑🏽‍🦱 Descripción:
+                  </p>
+                  <p>{session.user.dataProfile.description}</p>
+                </div>
 
-              <div className="m-2 p-1 w-full md:w-[100%]">
-                <p className="text-gray-600 font-bold md:text-1x1">
-                🧑🏽‍🦱 Descripción:</p>
-                <p>{session.user.dataProfile.description}</p>
+                <div className="flex-col gap-1 justify-center m-2 w-full">
+                  {session?.user.dataProfile.curriculum && (
+                    <div>
+                      <Link
+                        className="underline text-blue-500 hover:text-blue-700 cursor-pointer"
+                        href={session.user.dataProfile.curriculum}
+                        target="_blank"
+                      >
+                        📜 Tu Resumen Curricular
+                      </Link>
+                    </div>
+                  )}
+                  <>
+                    <div className="w-full">
+                      {session?.user.dataProfile.curriculum ? (
+                        <Label>Actualiza tu currículum (Formato PDF)</Label>
+                      ) : (
+                        <Label>Sube tu currículum (Formato PDF)</Label>
+                      )}
+                    </div>
+
+                    <div className="flex gap-1 w-full">
+                      <Input
+                        type="file"
+                        accept="application/pdf"
+                        onChange={(e) => {
+                          if (e.target.files) {
+                            const file = e.target.files[0];
+                            setPdfFile(file);
+                          }
+                        }}
+                      />
+                      <button
+                        className="w-[30%] bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+                        onClick={() => {
+                          handlePdfChange(pdfFile);
+                        }}
+                      >
+                        ENVIAR
+                      </button>
+                    </div>
+
+                    {loadingPDF && (
+                      <div className="flex gap-1 w-full">
+                        <Loader />
+                      </div>
+                    )}
+
+                    {pdfFile && (
+                      <p className="m-2">
+                        Archivo seleccionado: {pdfFile?.name}
+                      </p>
+                    )}
+                  </>
+                </div>
               </div>
-
-
-              <div className="flex-col gap-1 justify-center m-2 w-full">
-              {session?.user.dataProfile.curriculum && (
-                <div>
-                  <Link
-                    className="underline text-blue-500 hover:text-blue-700 cursor-pointer"
-                    href={session.user.dataProfile.curriculum}
-                    target="_blank"
-                  >
-                  📜 Tu Resumen Curricular
-                  </Link>
-                </div>
-              )}
-              <>
-              <div className="w-full">
-                {session?.user.dataProfile.curriculum 
-                  ?<Label>Actualiza tu currículum (Formato PDF)</Label>
-                  :<Label>Sube tu currículum (Formato PDF)</Label>
-                }
-              </div>
-                
-                <div className="flex gap-1 w-full">
-                  <Input
-                    type="file"
-                    accept="application/pdf"
-                    onChange={(e) => {
-                      if (e.target.files) {
-                        const file = e.target.files[0];
-                        setPdfFile(file);
-                      }
-                    }}
-                  />
-                  <button
-                    className="w-[30%] bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={() => {
-                      handlePdfChange(pdfFile);
-                    }}
-                  >
-                    ENVIAR
-                  </button>
-                </div>
-
-                {loadingPDF && 
-                <div className="flex gap-1 w-full">
-                  <Loader/>
-                </div>
-                }
-
-                {pdfFile && (
-                  <p className="m-2">Archivo seleccionado: {pdfFile?.name}</p>
-                )}
-              </>
             </div>
-</div>
-
           </div>
-
-
-
-
-
-
-              
-              
-
-
-
-
-            
-
-
-          </div>
-
 
           {/* //!Botón para editar */}
 

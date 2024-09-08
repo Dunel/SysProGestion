@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/db";
 import { ZodError } from "zod";
-import { profileDepenSchema, profileSchema } from "@/validations/profile.schema";
+import {
+  profileDepenSchema,
+  profileSchema,
+} from "@/validations/profile.schema";
 import { getToken } from "next-auth/jwt";
 
 export async function ProfileEstudentUpdate(req: NextRequest) {
@@ -15,13 +18,16 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
       lastnames,
       phone,
       address,
-      university,
-      career,
+      institutionId,
+      careerId,
       skills,
       interests,
       description,
       dateStart,
       dateEnd,
+      estadoId,
+      municipioId,
+      parroquiaId
     } = await req.json();
 
     const result = profileSchema.parse({
@@ -29,34 +35,41 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
       lastnames,
       phone,
       address,
-      university,
-      career,
+      institutionId,
+      careerId,
       skills,
       interests,
       description,
       dateStart,
       dateEnd,
+      estadoId,
+      municipioId,
+      parroquiaId
     });
     const cedula = token.cedula;
 
     await prisma.estudentInfo.upsert({
       where: { userCedula: cedula },
       update: {
-        university: result.university,
-        career: result.career,
+        institutionId: result.institutionId,
+        careerId: result.careerId,
         skills: result.skills,
         interests: result.interests,
         description: result.description,
         address: result.address,
+        dateStart: result.dateStart,
+        dateEnd: result.dateEnd
       },
       create: {
         userCedula: cedula,
-        university: result.university,
-        career: result.career,
+        institutionId: result.institutionId,
+        careerId: result.careerId,
         skills: result.skills,
         interests: result.interests,
         description: result.description,
         address: result.address,
+        dateStart: result.dateStart,
+        dateEnd: result.dateEnd
       },
     });
 
@@ -67,12 +80,19 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
         lastnames: result.lastnames,
         phone: result.phone,
         profile: true,
+        estadoId: result.estadoId,
+        municipioId: result.municipioId,
+        parroquiaId: result.parroquiaId,
       },
     });
 
-    return NextResponse.json({ message: "Perfil actualizado" }, { status: 200 });
+    return NextResponse.json(
+      { message: "Perfil actualizado" },
+      { status: 200 }
+    );
   } catch (error) {
     if (error instanceof ZodError) {
+      console.log("Error: ", (error as Error).message);
       return NextResponse.json(
         { error: error.issues[0].message },
         { status: 400 }
@@ -101,7 +121,7 @@ export async function ProfileDependenciaUpdate(req: NextRequest) {
       description,
       email,
       social,
-      rif
+      rif,
     } = await req.json();
 
     const result = profileDepenSchema.parse({
@@ -149,7 +169,10 @@ export async function ProfileDependenciaUpdate(req: NextRequest) {
       },
     });
 
-    return NextResponse.json({ message: "Perfil actualizado" }, { status: 200 });
+    return NextResponse.json(
+      { message: "Perfil actualizado" },
+      { status: 200 }
+    );
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(
@@ -175,8 +198,20 @@ export async function ProfileEstudentGet(req: NextRequest) {
     const profile = await prisma.estudentInfo.findFirst({
       where: { userCedula: cedula },
       select: {
-        university: true,
-        career: true,
+        institution: {
+          select: {
+            id: true,
+            institutionCode: true,
+            name: true,
+          },
+        },
+        career: {
+          select: {
+            id: true,
+            careerCode: true,
+            name: true,
+          },
+        },
         skills: true,
         interests: true,
         dateStart: true,
@@ -184,16 +219,16 @@ export async function ProfileEstudentGet(req: NextRequest) {
         description: true,
         address: true,
         curriculum: true,
-        User:{
-          select:{
+        User: {
+          select: {
             names: true,
             lastnames: true,
             phone: true,
             estadoId: true,
             municipioId: true,
             parroquiaId: true,
-          }
-        }
+          },
+        },
       },
     });
     const object = {
@@ -201,7 +236,7 @@ export async function ProfileEstudentGet(req: NextRequest) {
       lastnames: profile?.User.lastnames,
       phone: profile?.User.phone,
       address: profile?.address,
-      university: profile?.university,
+      institution: profile?.institution,
       career: profile?.career,
       skills: profile?.skills,
       interests: profile?.interests,
@@ -209,7 +244,9 @@ export async function ProfileEstudentGet(req: NextRequest) {
       curriculum: profile?.curriculum,
       estadoId: profile?.User.estadoId,
       municipioId: profile?.User.municipioId,
-      parroquiaId: profile?.User.parroquiaId
+      parroquiaId: profile?.User.parroquiaId,
+      dateStart: profile?.dateStart,
+      dateEnd: profile?.dateEnd
     };
     return NextResponse.json({ object }, { status: 200 });
   } catch (error) {
@@ -244,12 +281,12 @@ export async function ProfileDepenGet(req: NextRequest) {
         email: true,
         social: true,
         rif: true,
-        User:{
-          select:{
+        User: {
+          select: {
             names: true,
             lastnames: true,
-          }
-        }
+          },
+        },
       },
     });
     const object = {

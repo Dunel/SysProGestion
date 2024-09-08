@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/components/lib/utils";
 import { Oval } from "react-loader-spinner";
-import { profileSchema, ProfileFormData, profileFrontSchema, ProfileFrontFormData } from "@/validations/profile.schema";
+import { profileSchema, ProfileFormData } from "@/validations/profile.schema";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
@@ -14,65 +14,108 @@ import { zodResolver } from "@hookform/resolvers/zod";
 interface EstudianteFormProfileProps {
   onToggleForm: () => void;
   titleForm: string;
-  data: { 
-    address: string; 
-    university: string;
-    career: string; 
-    skills: string[]; 
-    interests: string; 
-    description: string; 
-    names: string; 
+  data: {
+    address: string;
+    institution: {};
+    career: {};
+    skills: string[];
+    interests: string;
+    description: string;
+    names: string;
     lastnames: string;
-    dateStart : Date;
-    dateEnd : Date;
-    phone: string; 
+    dateStart: Date;
+    dateEnd: Date;
+    estadoId: number;
+    municipioId: number;
+    parroquiaId: number;
+    phone: string;
   } | null;
+}
+
+interface Estados {
+  id: number;
+  estado: string;
+}
+
+interface Municipios {
+  id: number;
+  estadoId: number;
+  municipio: string;
+}
+
+interface Parroquias {
+  id: number;
+  municipioId: number;
+  parroquia: string;
+}
+
+interface Institutions {
+  id: number;
+  institutionsCode: string;
+  name: string;
+}
+
+interface Career {
+  id: number;
+  careerCode: string;
+  name: string;
 }
 
 export default function EstudianteProfileForm({
   onToggleForm,
   titleForm,
   data,
-}: EstudianteFormProfileProps){
+}: EstudianteFormProfileProps) {
   const { data: session, update } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [estados, setEstados] = useState<Estados[]>([]);
+  const [estadoSelected, setEstadoSelected] = useState(0);
+  const [estadoOpen, setEstadoOpen] = useState(false);
+  const [municipios, setMunicipios] = useState<Municipios[]>([]);
+  const [municipioSelected, setMunicipioSelected] = useState(0);
+  const [municipiosOpen, setMunicipiosOpen] = useState(false);
+  const [parroquias, setParroquias] = useState<Parroquias[]>([]);
+  const [parroquiaSelected, setParroquiaSelected] = useState(0);
+  const [parroquiasOpen, setparroquiasOpen] = useState(false);
+  const [institutions, setInstitutions] = useState<Institutions[]>([]);
+  const [career, setCareer] = useState<Career[]>([]);
   const [formData, setFormData] = useState({
-    names: "",
-    lastnames: "",
-    phone: "",
-    address: "",
-    university: "",
-    career: "",
-    description: "",
-    interests: "",
+    university: null,
+    career: null,
+    estadoId: null,
+    municipioId: null,
+    parroquiaId: null,
   });
-
+  const [isUniversityOpen, setUniversityOpen] = useState(false);
+  const [isCareerOpen, setCareerOpen] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<ProfileFrontFormData>({
-    resolver: zodResolver(profileFrontSchema),
+    watch,
+  } = useForm<ProfileFormData>({
+    resolver: zodResolver(profileSchema),
     mode: "onChange",
   });
 
   useEffect(() => {
-    if(session && session.user.dataProfile?.skills.length > 0){
+    if (session && session.user.dataProfile?.skills.length > 0) {
       setSelectedSkills(session?.user.dataProfile.skills);
     }
   }, [session?.user.dataProfile?.skills]);
 
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-    setValue(name as keyof ProfileFrontFormData, value);
+    setValue(name as keyof ProfileFormData, value);
   };
 
   const skillsOptions = [
@@ -102,11 +145,12 @@ export default function EstudianteProfileForm({
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
-    setSelectedSkills((prevSelectedSkills) =>
-      checked
-        ? [...prevSelectedSkills, value]
-        : prevSelectedSkills.filter((skill) => skill !== value)
-    );
+    const updatedSelectedSkills = checked
+      ? [...selectedSkills, value]
+      : selectedSkills.filter((skill) => skill !== value);
+    setSelectedSkills(updatedSelectedSkills);
+
+    setValue("skills", updatedSelectedSkills as Skills[]);
   };
 
   const profileUpdate = async (data: ProfileFormData) => {
@@ -114,8 +158,25 @@ export default function EstudianteProfileForm({
       setLoading(true);
       const res = await axios.post("/api/estudiante/perfil", data);
       if (session) {
-        await update({ profile: true, dataProfile: data });
-       
+        await update({
+          profile: true,
+          dataProfile: {
+            ...data,
+            institution: {
+              id: data.institutionId,
+              name: institutions.find((e) => e.id === data.institutionId)?.name,
+              institutionCode: institutions.find(
+                (e) => e.id === data.institutionId
+              )?.institutionsCode,
+            },
+            career: {
+              id: data.careerId,
+              name: career.find((e) => e.id === data.careerId)?.name,
+              careerCode: career.find((e) => e.id === data.careerId)
+                ?.careerCode,
+            },
+          },
+        });
       }
       router.push("/estudiante/perfil");
     } catch (error) {
@@ -130,7 +191,7 @@ export default function EstudianteProfileForm({
     }
   };
 
-  const onSubmit = (data: ProfileFrontFormData) => {
+  const onSubmit = (data: ProfileFormData) => {
     const formData = {
       ...data,
       skills: selectedSkills,
@@ -140,21 +201,127 @@ export default function EstudianteProfileForm({
       console.error(validate.error);
       return;
     }
+    //console.log(formData as ProfileFormData);
     profileUpdate(formData as ProfileFormData);
   };
 
+  const getEstados = async () => {
+    try {
+      const res = await axios.get("/api/venezuela/estados");
+      setEstados(res.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error lanzado:", error.response?.data.error);
+      } else {
+        console.error("error:", error);
+      }
+    }
+  };
+
+  const getMunicipios = async () => {
+    try {
+      if (estadoSelected === 0 || !estadoSelected) {
+        setMunicipios([]);
+        return;
+      }
+      const res = await axios.get(
+        "/api/venezuela/municipios?estadoId=" + estadoSelected
+      );
+      setMunicipios(res.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error lanzado:", error.response?.data.error);
+      } else {
+        console.error("error:", error);
+      }
+    }
+  };
+
+  const getParroquias = async () => {
+    try {
+      if (municipioSelected === 0 || !municipioSelected) {
+        setParroquias([]);
+        return;
+      }
+      const res = await axios.get(
+        "/api/venezuela/parroquias?municipioId=" + municipioSelected
+      );
+      setParroquias(res.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error lanzado:", error.response?.data.error);
+      } else {
+        console.error("error:", error);
+      }
+    }
+  };
+
+  const getInsttt = async () => {
+    try {
+      const res = await axios.get("/api/estudiante/perfil/institutions");
+      setInstitutions(res.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error lanzado:", error.response?.data.error);
+      } else {
+        console.error("error:", error);
+      }
+    }
+  };
+
+  const getCareer = async () => {
+    try {
+      const res = await axios.get("/api/estudiante/perfil/career");
+      setCareer(res.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error lanzado:", error.response?.data.error);
+      } else {
+        console.error("error:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getEstados();
+    getInsttt();
+    getCareer();
+    if (session?.user.dataProfile) {
+      getMunicipios();
+      setValue("estadoId", session.user.dataProfile.estadoId);
+      setEstadoSelected(session.user.dataProfile.estadoId);
+      setValue("municipioId", session.user.dataProfile.municipioId);
+      setMunicipioSelected(session.user.dataProfile.municipioId);
+      setValue("parroquiaId", session.user.dataProfile.parroquiaId);
+      setParroquiaSelected(session.user.dataProfile.parroquiaId);
+      setValue("institutionId", session.user.dataProfile.institution.id);
+      setValue("careerId", session.user.dataProfile.career.id);
+    }
+  }, []);
+
+  useEffect(() => {
+    getMunicipios();
+    setValue("estadoId", estadoSelected);
+  }, [estadoSelected]);
+
+  useEffect(() => {
+    getParroquias();
+    setValue("municipioId", municipioSelected);
+  }, [municipioSelected]);
+
   return (
     <>
-      <div className="flex flex-col my-4 p-4 md:space-x-4">
+      <div className="flex flex-col my-2 md:space-x-4">
         <h2 className="text-2xl font-bold text-gray-800 text-center md:text-3xl">
           {titleForm}
         </h2>
       </div>
-      <div className="flex flex-col m-4 my-4 p-4 rounded-lg shadow-lg">
-        <form onSubmit={handleSubmit(onSubmit)} className="form-student-info">
-          
-          
-          <LabelInputContainer className="mb-4">
+      <div className="flex flex-col m-2 my-2 p-2 rounded-lg shadow-lg">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="mb-8 form-student-info"
+        >
+          <LabelInputContainer className="mb-8">
             <Label htmlFor="names">Nombres del estudiante *</Label>
             <Input
               {...register("names")}
@@ -171,9 +338,7 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
-
-
-          <LabelInputContainer className="mb-4">
+          <LabelInputContainer className="mb-8">
             <Label htmlFor="lastnames">Apellidos del estudiante *</Label>
             <Input
               {...register("lastnames")}
@@ -190,9 +355,7 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
-
-
-          <LabelInputContainer className="mb-4">
+          <LabelInputContainer className="mb-8">
             <Label htmlFor="phone">Teléfono del estudiante *</Label>
             <Input
               {...register("phone")}
@@ -209,9 +372,132 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
+          <LabelInputContainer className="mb-8">
+            <Label htmlFor="estado">ESTADO</Label>
+            <div className="relative">
+              <Input
+                id="estado"
+                type="text"
+                value={
+                  estados.find((e) => e.id === estadoSelected)?.estado || ""
+                }
+                onClick={() => setEstadoOpen(!estadoOpen)}
+                readOnly
+                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                placeholder="Selecciona una institución"
+              />
+              {estadoOpen && (
+                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
+                  {estados.map((e, index) => (
+                    <div
+                      key={index}
+                      onClick={() => {
+                        if (e.id !== estadoSelected) {
+                          setEstadoSelected(e.id);
+                          setMunicipioSelected(0);
+                          setParroquiaSelected(0);
+                        }
+                        setEstadoOpen(false);
+                      }}
+                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {e.estado}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            {errors.estadoId && (
+              <p className="text-red-500 text-sm">{errors.estadoId.message}</p>
+            )}
+          </LabelInputContainer>
 
-      <h2><mark>SECTORIZACION POR PARROKIA </mark></h2>
-          <LabelInputContainer className="mb-4">
+          <LabelInputContainer className="mb-8">
+            <Label htmlFor="municipio">Municipio</Label>
+            <div className="relative">
+              <Input
+                id="municipioId"
+                type="text"
+                value={
+                  municipios.find((e) => e.id === municipioSelected)
+                    ?.municipio || ""
+                }
+                onClick={() => setMunicipiosOpen(!municipiosOpen)}
+                readOnly
+                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                placeholder="Selecciona una institución"
+              />
+              {municipiosOpen && (
+                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
+                  {municipios.map((e, index) => (
+                    <div
+                      key={index}
+                      onClick={() => {
+                        if (e.id !== municipioSelected) {
+                          setMunicipioSelected(e.id);
+                          setParroquiaSelected(0);
+                        }
+                        setMunicipiosOpen(false);
+                      }}
+                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {e.municipio}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            {errors.municipioId && (
+              <p className="text-red-500 text-sm">
+                {errors.municipioId.message}
+              </p>
+            )}
+          </LabelInputContainer>
+
+          <LabelInputContainer className="mb-8">
+            <Label htmlFor="parroquia">Parroquia</Label>
+            <div className="relative">
+              <Input
+                id="parroquiaId"
+                type="text"
+                value={
+                  parroquias.find((e) => e.id === watch("parroquiaId"))
+                    ?.parroquia || ""
+                }
+                onClick={() => setparroquiasOpen(!parroquiasOpen)}
+                readOnly
+                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                placeholder="Selecciona una institución"
+              />
+              {parroquiasOpen && (
+                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
+                  {parroquias.map((e, index) => (
+                    <div
+                      key={index}
+                      onClick={() => {
+                        setParroquiaSelected(e.id);
+                        setValue("parroquiaId", e.id);
+                        setparroquiasOpen(false);
+                      }}
+                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {e.parroquia}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            {errors.parroquiaId && (
+              <p className="text-red-500 text-sm">
+                {errors.parroquiaId.message}
+              </p>
+            )}
+          </LabelInputContainer>
+
+          <h2>
+            <mark>SECTORIZACION POR PARROKIA </mark>
+          </h2>
+          <LabelInputContainer className="mb-8">
             <Label htmlFor="address">Dirección del estudiante *</Label>
             <Input
               {...register("address")}
@@ -228,61 +514,135 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
-          
-          <h2><mark>ALIMENTADA POR UNA TABLA CON CURD DE ALCALDIA</mark></h2>
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="university">Institución Educativa del estudiante *</Label>
-            <Input
-              {...register("university")}
-              defaultValue={session?.user.dataProfile?.university || ""}
-              onChange={handleInputChange}
-              id="university"
-              name="university"
-              placeholder="Universidad"
-              type="text"
-              className={cn(errors.university && "bg-red-100 focus:bg-red-100")}
-            />
-            {errors.university && (
-              <p className="text-red-500 text-sm">{errors.university.message}</p>
-            )}
-          </LabelInputContainer>
-
-          
-          <h2><mark>HACERLA SELECT</mark></h2>
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="career">Especialización ó carrera del estudiante *</Label>
-            <Input
-              {...register("career")}
-              defaultValue={session?.user.dataProfile?.career || ""}
-              onChange={handleInputChange}
-              id="career"
-              name="career"
-              placeholder="Carrera"
-              type="text"
-              className={cn(errors.career && "bg-red-100 focus:bg-red-100")}
-            />
-            {errors.career && (
-              <p className="text-red-500 text-sm">{errors.career.message}</p>
-            )}
-          </LabelInputContainer>
-
-          
-          <h2><mark>ADD FECHA INCIIO Y FIN DEL PROCESO DE PAS O SERV</mark></h2>
-        
-          <div className="flex flex-col gap-[5%] justify-start md:flex-row">
-              
-              <LabelInputContainer className=" flex m-2 md:w-[40%]">
-              <Label htmlFor="birthdate">Fecha de inicio del proceso *</Label>
+          <h2>
+            <mark>PREPARAR BDD</mark>
+          </h2>
+          <LabelInputContainer className="mb-8">
+            <Label htmlFor="institutions">
+              Institución Educativa del estudiante *
+            </Label>
+            <div className="relative">
               <Input
-                 {...register("dateStart")}
+                id="institution"
+                type="text"
+                value={
+                  institutions.find((e) => e.id === watch("institutionId"))
+                    ?.name
+                }
+                onClick={() => setUniversityOpen(!isUniversityOpen)}
+                readOnly
+                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                placeholder="Selecciona una institución"
+              />
+              {isUniversityOpen && (
+                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
+                  {institutions.map((e) => (
+                    <div
+                      key={e.id}
+                      onClick={() => {
+                        setValue("institutionId", e.id);
+                        setUniversityOpen(false);
+                      }}
+                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {e.name}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            {errors.institutionId && (
+              <p className="text-red-500 text-sm">
+                {errors.institutionId.message}
+              </p>
+            )}
+          </LabelInputContainer>
+
+          <h2>
+            <mark>PREPARAR BDD</mark>
+          </h2>
+          <LabelInputContainer className="mb-8">
+            <Label htmlFor="career">
+              Especialización o carrera del estudiante *
+            </Label>
+            <div className="relative">
+              <Input
+                id="career"
+                type="text"
+                value={career.find((e) => e.id === watch("careerId"))?.name}
+                onClick={() => setCareerOpen(!isCareerOpen)}
+                readOnly
+                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                placeholder="Selecciona una carrera"
+              />
+              {isCareerOpen && (
+                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
+                  {career.map((e) => (
+                    <div
+                      key={e.id}
+                      onClick={() => {
+                        setValue("careerId", e.id);
+                        setCareerOpen(false);
+                      }}
+                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {e.name}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            {errors.careerId && (
+              <p className="text-red-500 text-sm">{errors.careerId.message}</p>
+            )}
+          </LabelInputContainer>
+
+          <h2>
+            <mark>PREPARAR BDD</mark>
+          </h2>
+          <div className="flex flex-col gap-[5%] mb-8 justify-start md:flex-row">
+            <LabelInputContainer className=" flex m-2 md:w-[40%]">
+              <Label htmlFor="datestart">Fecha de inicio del proceso *</Label>
+              <Input
+                {...register("dateStart")}
+                defaultValue={session?.user && new Date(session.user.dataProfile.dateStart).toDateString()}
                 id="datestart"
                 type="date" // Mantener tipo "date"
-                className={cn(errors.dateStart && "bg-red-100 focus:bg-red-100")}
+                className={cn(
+                  errors.dateStart && "bg-red-100 focus:bg-red-100"
+                )}
               />
-               {errors.dateStart ? ( 
+              {errors.dateStart ? (
                 <>
                   <p className="text-red-500 text-sm">
-                     {errors.dateStart.message?.toString()}
+                    {errors.dateStart.message?.toString()}
+                  </p>
+                  <span className="text-gray-500 text-xs">
+                    La fecha debe tener el formato dd/mm/yyyy.
+                  </span>
+                </>
+              ) : (
+                <span className="text-gray-500 text-xs">
+                  La fecha debe tener el formato dd/mm/yyyy.
+                </span>
+              )}
+            </LabelInputContainer>
+
+            <LabelInputContainer className=" flex m-2 mr-20 md:w-[40%]">
+              <Label htmlFor="dateEnd">
+                Fecha de terminacion del proceso *
+              </Label>
+              <Input
+                {...register("dateEnd")}
+                defaultValue={session?.user && new Date(session.user.dataProfile.dateEnd).toString()}
+                id="dateEnd"
+                type="date"
+                className={cn(errors.dateEnd && "bg-red-100 focus:bg-red-100")}
+              />
+              {errors.dateEnd ? (
+                <>
+                  <p className="text-red-500 text-sm">
+                    {errors.dateEnd.message?.toString()}
                   </p>
                   <span className="text-gray-500 text-xs">
                     La fecha debe tener el formato yyyy-mm-dd.
@@ -292,44 +652,14 @@ export default function EstudianteProfileForm({
                 <span className="text-gray-500 text-xs">
                   La fecha debe tener el formato yyyy-mm-dd.
                 </span>
-              )
-            }
+              )}
             </LabelInputContainer>
+          </div>
 
-            <LabelInputContainer className=" flex m-2 mr-20 md:w-[40%]">
-          <Label htmlFor="datefinish">Fecha de terminacion del proceso *</Label>
-          <Input
-             {...register("dateEnd")}
-            id="datefinish"
-            type="date" // Mantener tipo "date"
-             className={cn(errors.dateEnd && "bg-red-100 focus:bg-red-100")}
-          />
-           {errors.dateEnd 
-            ? (
-              <>
-                <p className="text-red-500 text-sm">
-                   {errors.dateEnd.message?.toString()} 
-                </p>
-                <span className="text-gray-500 text-xs">
-                  La fecha debe tener el formato yyyy-mm-dd.
-                </span>
-              </>
-            ) : (
-              <span className="text-gray-500 text-xs">
-                La fecha debe tener el formato yyyy-mm-dd.
-              </span>
-            )
-          }
-        </LabelInputContainer>
-
-      </div>
-
-
-
-
-
-          <h2><mark>ELIMINAR DE LA BBDD</mark></h2>
-          <LabelInputContainer className="mb-4">
+          <h2>
+            <mark>ELIMINAR DE LA BBDD</mark>
+          </h2>
+          <LabelInputContainer className="mb-8">
             <Label htmlFor="quarter">Trimestre</Label>
             <Input
               onChange={handleInputChange}
@@ -340,10 +670,13 @@ export default function EstudianteProfileForm({
             />
           </LabelInputContainer>
 
-
-
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="description">Breve descripción del estudiante.</Label>
+          <h2>
+            <mark> QUE SEA NO REQUERIDO EN LA BBDD </mark>
+          </h2>
+          <LabelInputContainer className="mb-8">
+            <Label htmlFor="description">
+              Breve descripción del estudiante.
+            </Label>
             <Input
               {...register("description")}
               type="textarea"
@@ -352,35 +685,43 @@ export default function EstudianteProfileForm({
               id="description"
               name="description"
               placeholder="Soy una persona responsable, hablo inglés fluido y me apasiona la naturaleza..."
-              className={`w-full h-[12vh] overflow-hidden text-ellipsis white-space-nowrap ${cn(errors.description && "bg-red-100 focus:bg-red-100")}`}
+              className={`w-full h-[12vh] overflow-hidden text-ellipsis white-space-nowrap ${cn(
+                errors.description && "bg-red-100 focus:bg-red-100"
+              )}`}
             />
             {errors.description && (
-              <p className="text-red-500 text-sm">{errors.description.message}</p>
+              <p className="text-red-500 text-sm">
+                {errors.description.message}
+              </p>
             )}
           </LabelInputContainer>
 
-
-
-          <LabelInputContainer className="mb-4">
+          <h2>
+            <mark> QUE SEA NO REQUERIDO EN LA BBDD </mark>
+          </h2>
+          <LabelInputContainer className="mb-8">
             <Label htmlFor="interests">Intereses del estudiante</Label>
             <Input
               {...register("interests")}
+              type="textarea"
               defaultValue={session?.user.dataProfile?.interests || ""}
               onChange={handleInputChange}
               id="interests"
               name="interests"
               placeholder="Me interesa encontrar soluciones a problemas reales mediante el uso de tecnología..."
-              className={`w-full h-[12vh] overflow-hidden text-ellipsis white-space-nowrap ${cn(errors.interests && "bg-red-100 focus:bg-red-100")}`}
+              className={`w-full h-[12vh] overflow-hidden text-ellipsis white-space-nowrap ${cn(
+                errors.interests && "bg-red-100 focus:bg-red-100"
+              )}`}
             />
             {errors.interests && (
               <p className="text-red-500 text-sm">{errors.interests.message}</p>
             )}
           </LabelInputContainer>
 
-
-          
-
-          <LabelInputContainer>
+          <h2>
+            <mark> QUE SEA NO REQUERIDO EN LA BBDD </mark>
+          </h2>
+          <LabelInputContainer className="mb-8">
             <Label htmlFor="skills">Habilidades del estudiante</Label>
             {skillsOptions.map(({ value, label }) => (
               <div key={value} className="flex items-center">
@@ -391,42 +732,46 @@ export default function EstudianteProfileForm({
                   onChange={handleCheckboxChange}
                   className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                 />
-                <label htmlFor={value} className="ml-2 block text-sm text-gray-700">
+                <label
+                  htmlFor={value}
+                  className="ml-2 block text-sm text-gray-700"
+                >
                   {label}
                 </label>
               </div>
             ))}
             <div className="mt-4">
-              <h3 className="text-sm font-medium text-gray-700 m-2">Habilidades seleccionadas:</h3>
+              <h3 className="text-sm font-medium text-gray-700 m-2">
+                Habilidades seleccionadas:
+              </h3>
               <ul className="mt-2 list-disc list-inside text-sm text-gray-500">
                 {selectedSkills.length > 0 ? (
                   selectedSkills.map((skill, index) => (
                     <li key={index}>
-                      {skillsOptions.find((option) => option.value === skill)?.label}
+                      {
+                        skillsOptions.find((option) => option.value === skill)
+                          ?.label
+                      }
                     </li>
                   ))
                 ) : (
-                  <p style={{ color: "red" }}>No has seleccionado ninguna habilidad.</p>
+                  <p style={{ color: "red" }}>
+                    No has seleccionado ninguna habilidad.
+                  </p>
                 )}
               </ul>
             </div>
           </LabelInputContainer>
 
-          <div className="flex justify-center">
+          <div className="flex justify-center mb-8">
             <button
               type="submit"
-              className="w-[100%] bg-black hover:bg-gray-800 text-white font-bold py-1 px-1 mt-4 rounded focus:shadow-outline md:w-[80%]"
+              className="w-[100%] bg-black hover:bg-gray-800 text-white font-bold py-3 px-3 mt-4 rounded focus:shadow-outline md:w-[80%]"
             >
-              Guardar
+              GUARDAR DATOS
             </button>
           </div>
         </form>
-      
-
-
-
-
-
 
         {loading && ( // Muestra el loader si está cargando
           <div className="flex justify-center items-center flex-col mt-10">
@@ -459,3 +804,27 @@ const LabelInputContainer = ({
     </div>
   );
 };
+
+type Skills =
+  | "resoluciondeproblemas"
+  | "trabajoenequipo"
+  | "adaptabilidad"
+  | "comunicacionefectiva"
+  | "liderazgo"
+  | "pensamientocritico"
+  | "orientacionaresultados"
+  | "creatividad"
+  | "gestiondeltiempo"
+  | "aprendizajecontinuo"
+  | "dondegente"
+  | "ensenanza"
+  | "sociable"
+  | "salud"
+  | "deportes"
+  | "logistica"
+  | "expresionesartisticas"
+  | "diseno"
+  | "musica"
+  | "ingles"
+  | "otrosidiomasnaturales"
+  | "lenguajesdeprogramacion";

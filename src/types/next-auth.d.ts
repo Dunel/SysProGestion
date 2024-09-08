@@ -11,8 +11,16 @@ declare module "next-auth" {
       picture: string;
       dataProfile: {
         address: string;
-        university: string;
-        career: string;
+        institution: {
+          id: number;
+          institutionCode: string;
+          name: string;
+        };
+        career: {
+          id: number;
+          careerCode: string;
+          name: string;
+        };
         skills: [string];
         interests: string;
         description: string;
@@ -41,8 +49,16 @@ declare module "next-auth" {
     picture: string;
     dataProfile: {
       address: string;
-      university: string;
-      career: string;
+      institution: {
+        id: number;
+        institutionCode: string;
+        name: string;
+      };
+      career: {
+        id: number;
+        careerCode: string;
+        name: string;
+      };
       skills: [string];
       interests: string;
       description: string;
@@ -72,8 +88,16 @@ declare module "next-auth/jwt" {
     picture: string;
     dataProfile: {
       address: string;
-      university: string;
-      career: string;
+      institution: {
+        id: number;
+        institutionCode: string;
+        name: string;
+      };
+      career: {
+        id: number;
+        careerCode: string;
+        name: string;
+      };
       skills: [string];
       interests: string;
       description: string;

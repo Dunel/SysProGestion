@@ -82,8 +82,8 @@ enum Skills {
 model estudentInfo {
   id                  Int                   @id @default(autoincrement())
   userCedula          Int                   @unique
-  university          String
-  career              String?
+  careerId            Int?
+  institutionId       Int?
   dateStart           DateTime?
   dateEnd             DateTime?
   skills              Skills[]
@@ -94,6 +94,8 @@ model estudentInfo {
   updatedAt           DateTime              @updatedAt
   User                User                  @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
   applicationApproved applicationApproved[]
+  institution         institution?          @relation(fields: [institutionId], references: [id])
+  career              career?               @relation(fields: [careerId], references: [id])
 }
 
 enum typeApplication {
@@ -222,9 +224,17 @@ model parroquia {
 }
 
 model institution {
-  id              Int       @id @default(autoincrement())
+  id              Int            @id @default(autoincrement())
   institutionCode String
   name            String
   parroquiaId     Int
-  parroquia       parroquia @relation(fields: [parroquiaId], references: [id])
+  parroquia       parroquia      @relation(fields: [parroquiaId], references: [id])
+  estudentInfo    estudentInfo[]
+}
+
+model career {
+  id         Int            @id @default(autoincrement())
+  careerCode String
+  name       String
+  esInfo     estudentInfo[]
 }
