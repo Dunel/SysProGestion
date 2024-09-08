@@ -607,7 +607,7 @@ export default function EstudianteProfileForm({
               <Label htmlFor="datestart">Fecha de inicio del proceso *</Label>
               <Input
                 {...register("dateStart")}
-                defaultValue={new Date(watch("dateStart")).toDateString() || ""}
+                defaultValue={new Date(watch("dateStart")).toLocaleDateString()}
                 id="datestart"
                 type="date" // Mantener tipo "date"
                 className={cn(
@@ -636,7 +636,7 @@ export default function EstudianteProfileForm({
               </Label>
               <Input
                 {...register("dateEnd")}
-                defaultValue={new Date(watch("dateEnd")).toDateString() || ""}
+                defaultValue={new Date(watch("dateEnd")).toLocaleDateString()}
                 id="dateEnd"
                 type="date"
                 className={cn(errors.dateEnd && "bg-red-100 focus:bg-red-100")}

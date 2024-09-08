@@ -30,6 +30,9 @@ declare module "next-auth" {
         estadoId: number;
         municipioId: number;
         parroquiaId: number;
+        estado: string;
+        municipio: string;
+        parroquia: string;
         social: string;
         rif: number | null;
         name: string;
@@ -68,6 +71,9 @@ declare module "next-auth" {
       estadoId: number;
       municipioId: number;
       parroquiaId: number;
+      estado: string;
+      municipio: string;
+      parroquia: string;
       social: string;
       rif: number | null;
       name: string;
@@ -107,6 +113,9 @@ declare module "next-auth/jwt" {
       estadoId: number;
       municipioId: number;
       parroquiaId: number;
+      estado: string;
+      municipio: string;
+      parroquia: string;
       social: string;
       rif: number | null;
       name: string;

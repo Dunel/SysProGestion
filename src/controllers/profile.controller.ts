@@ -27,7 +27,7 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
       dateEnd,
       estadoId,
       municipioId,
-      parroquiaId
+      parroquiaId,
     } = await req.json();
 
     const result = profileSchema.parse({
@@ -44,7 +44,7 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
       dateEnd,
       estadoId,
       municipioId,
-      parroquiaId
+      parroquiaId,
     });
     const cedula = token.cedula;
 
@@ -58,7 +58,7 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
         description: result.description,
         address: result.address,
         dateStart: result.dateStart,
-        dateEnd: result.dateEnd
+        dateEnd: result.dateEnd,
       },
       create: {
         userCedula: cedula,
@@ -69,7 +69,7 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
         description: result.description,
         address: result.address,
         dateStart: result.dateStart,
-        dateEnd: result.dateEnd
+        dateEnd: result.dateEnd,
       },
     });
 
@@ -224,9 +224,24 @@ export async function ProfileEstudentGet(req: NextRequest) {
             names: true,
             lastnames: true,
             phone: true,
-            estadoId: true,
-            municipioId: true,
-            parroquiaId: true,
+            estado: {
+              select: {
+                id: true,
+                estado: true,
+              },
+            },
+            municipio:{
+              select:{
+                id: true,
+                municipio: true,
+              }
+            },
+            parroquia:{
+              select:{
+                id: true,
+                parroquia: true
+              }
+            }
           },
         },
       },
@@ -242,11 +257,14 @@ export async function ProfileEstudentGet(req: NextRequest) {
       interests: profile?.interests,
       description: profile?.description,
       curriculum: profile?.curriculum,
-      estadoId: profile?.User.estadoId,
-      municipioId: profile?.User.municipioId,
-      parroquiaId: profile?.User.parroquiaId,
+      estadoId: profile?.User.estado?.id,
+      estado: profile?.User.estado?.estado,
+      municipioId: profile?.User.municipio?.id,
+      municipio: profile?.User.municipio?.municipio,
+      parroquiaId: profile?.User.parroquia?.id,
+      parroquia: profile?.User.parroquia?.parroquia,
       dateStart: profile?.dateStart,
-      dateEnd: profile?.dateEnd
+      dateEnd: profile?.dateEnd,
     };
     return NextResponse.json({ object }, { status: 200 });
   } catch (error) {
