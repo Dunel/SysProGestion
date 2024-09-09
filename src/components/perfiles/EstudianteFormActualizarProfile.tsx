@@ -175,6 +175,11 @@ export default function EstudianteProfileForm({
               careerCode: career.find((e) => e.id === data.careerId)
                 ?.careerCode,
             },
+            estado: estados.find((e) => e.id === data.estadoId)?.estado,
+            municipio: municipios.find((e) => e.id === data.municipioId)
+              ?.municipio,
+            parroquia: parroquias.find((e) => e.id === data.parroquiaId)
+              ?.parroquia,
           },
         });
       }

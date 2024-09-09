@@ -122,6 +122,9 @@ export async function ProfileDependenciaUpdate(req: NextRequest) {
       email,
       social,
       rif,
+      estadoId,
+      municipioId,
+      parroquiaId,
     } = await req.json();
 
     const result = profileDepenSchema.parse({
@@ -134,6 +137,9 @@ export async function ProfileDependenciaUpdate(req: NextRequest) {
       email,
       social,
       rif,
+      estadoId,
+      municipioId,
+      parroquiaId,
     });
     const cedula = token.cedula;
 
@@ -166,6 +172,9 @@ export async function ProfileDependenciaUpdate(req: NextRequest) {
         names: result.names,
         lastnames: result.lastnames,
         profile: true,
+        estadoId: result.estadoId,
+        municipioId: result.municipioId,
+        parroquiaId: result.parroquiaId,
       },
     });
 
@@ -230,18 +239,18 @@ export async function ProfileEstudentGet(req: NextRequest) {
                 estado: true,
               },
             },
-            municipio:{
-              select:{
+            municipio: {
+              select: {
                 id: true,
                 municipio: true,
-              }
+              },
             },
-            parroquia:{
-              select:{
+            parroquia: {
+              select: {
                 id: true,
-                parroquia: true
-              }
-            }
+                parroquia: true,
+              },
+            },
           },
         },
       },
@@ -303,6 +312,9 @@ export async function ProfileDepenGet(req: NextRequest) {
           select: {
             names: true,
             lastnames: true,
+            estado: true,
+            municipio: true,
+            parroquia: true,
           },
         },
       },
@@ -317,6 +329,12 @@ export async function ProfileDepenGet(req: NextRequest) {
       email: profile?.email,
       social: profile?.social,
       rif: profile?.rif,
+      estado: profile?.User.estado?.estado,
+      estadoId: profile?.User.estado?.id,
+      municipio: profile?.User.municipio?.municipio,
+      municipioId: profile?.User.municipio?.id,
+      parroquia: profile?.User.parroquia?.parroquia,
+      parroquiaId: profile?.User.parroquia?.id,
     };
     return NextResponse.json({ object }, { status: 200 });
   } catch (error) {

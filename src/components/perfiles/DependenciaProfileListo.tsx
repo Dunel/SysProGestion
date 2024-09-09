@@ -109,19 +109,27 @@ export default function DependenciaProfileListo({
               </p>
               <p className="text-gray-600 md:text-1x1">
                 <strong>🔗 Red Social: </strong>
-                <Link href={session.user.dataProfile.social}>{session.user.dataProfile.social}</Link> 
+                <Link href={session.user.dataProfile.social}>
+                  {session.user.dataProfile.social}
+                </Link>
               </p>
               <p className="text-gray-600 md:text-1x1">
                 <strong>📍 Domicilio: </strong>
+                {session.user.dataProfile.estado}
+              </p>
+              <p className="text-gray-600 md:text-1x1">
+                {session.user.dataProfile.municipio}
+              </p>
+              <p className="text-gray-600 md:text-1x1">
+                {session.user.dataProfile.parroquia}
+              </p>
+              <p className="text-gray-600 md:text-1x1">
                 {session.user.dataProfile.address}
               </p>
             </div>
           </div>
 
-        
           <div className="m-6">
-           
-
             {/* Habilidades y descripcion */}
             <div className="flex flex-col items-start gap-2 md:flex-row">
               <div className="flex flex-col justify-center w-full md:w-[70%]">
@@ -129,7 +137,9 @@ export default function DependenciaProfileListo({
                   <p className="text-gray-600 font-bold md:text-1x1">
                     🏦 Descripción u objeto social de la Dependencia:
                   </p>
-                  <p className="text-justify">{session.user.dataProfile.description}</p>
+                  <p className="text-justify">
+                    {session.user.dataProfile.description}
+                  </p>
                 </div>
               </div>
             </div>

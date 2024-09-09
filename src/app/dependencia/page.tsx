@@ -18,7 +18,9 @@ type pendingList = {
     names: string;
     lastnames: string;
     esInfo: {
-      career: string;
+      career: {
+        name: string;
+      };
     };
   };
 };
@@ -226,7 +228,7 @@ export default function Page() {
                     <td className="py-2">
                       {student.User.names} {student.User.lastnames}
                     </td>
-                    <td className="py-2">{student.User.esInfo.career}</td>
+                    <td className="py-2">{student.User.esInfo.career.name}</td>
                   </tr>
                 ))}
               </tbody>
