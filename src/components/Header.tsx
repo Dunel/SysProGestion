@@ -52,11 +52,11 @@ export default function Header({ title, subtitle }: HeaderProps) {
   return (
     <header
       id="sticky-header"
-      className={`w-full sticky top-0 transition-all duration-300 ${
+      className={`w-full sticky top-0 transition-all duration-300 my-2 ${
         isSticky ? 'z-30 shadow scale-80 origin-top color-header h-auto p-1 sm:pt-4' : ''
       }`}
     >
-      <div className={`flex mx-auto px-2 py-2 sm:px-6 lg:px-20 transition-all duration-300 ${
+      <div className={`flex mx-auto px-2 py-2 sm:px-6 transition-all duration-300 lg:px-20 ${
         isSticky ? 'py-1 mt-[2vh]' : 'py-2'
       }`}>
         <div className={`${isSticky ? 'block' : 'hidden'}`}>
@@ -74,8 +74,8 @@ export default function Header({ title, subtitle }: HeaderProps) {
           }`}>
             <i>{title}</i>
             <div>
-              <p className={`text-justify font-normal transition-all duration-300 ${
-                isSticky ? 'text-base' : 'text-xl'
+              <p className={`text-justify font-normal transition-all duration-300 mb-2 ${
+                isSticky ? 'text-2xl' : 'text-1xl'
               }`}>
                 {subtitle}
               </p>
