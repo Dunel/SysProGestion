@@ -66,7 +66,11 @@ export async function getStatsDepend(req: NextRequest) {
             lastnames: true,
             esInfo: {
               select: {
-                career: true,
+                career: {
+                  select: {
+                    name: true,
+                  },
+                },
               },
             },
           },

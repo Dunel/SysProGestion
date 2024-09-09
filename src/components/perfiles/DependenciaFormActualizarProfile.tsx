@@ -6,7 +6,7 @@ import { cn } from "@/components/lib/utils";
 import { Oval } from "react-loader-spinner";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -19,6 +19,23 @@ interface ProfileProps {
   titleForm: string;
 }
 
+interface Estados {
+  id: number;
+  estado: string;
+}
+
+interface Municipios {
+  id: number;
+  estadoId: number;
+  municipio: string;
+}
+
+interface Parroquias {
+  id: number;
+  municipioId: number;
+  parroquia: string;
+}
+
 export default function DependenciaProfileForm({
   onToggleForm,
   titleForm,
@@ -26,12 +43,19 @@ export default function DependenciaProfileForm({
   const { data: session, update } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [estados, setEstados] = useState<Estados[]>([]);
+  const [estadoOpen, setEstadoOpen] = useState(false);
+  const [municipios, setMunicipios] = useState<Municipios[]>([]);
+  const [municipiosOpen, setMunicipiosOpen] = useState(false);
+  const [parroquias, setParroquias] = useState<Parroquias[]>([]);
+  const [parroquiasOpen, setparroquiasOpen] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
+    watch,
   } = useForm<ProfileDepenFormData>({
     resolver: zodResolver(profileDepenSchema),
     mode: "onChange",
@@ -49,7 +73,17 @@ export default function DependenciaProfileForm({
       setLoading(true);
       const res = await axios.post("/api/dependencia/perfil", data);
       if (session) {
-        await update({ profile: true, dataProfile: data });
+        await update({
+          profile: true,
+          dataProfile: {
+            ...data,
+            estado: estados.find((e) => e.id === data.estadoId)?.estado,
+            municipio: municipios.find((e) => e.id === data.municipioId)
+              ?.municipio,
+            parroquia: parroquias.find((e) => e.id === data.parroquiaId)
+              ?.parroquia,
+          },
+        });
       }
       router.push("/dependencia/perfil");
     } catch (error) {
@@ -76,6 +110,68 @@ export default function DependenciaProfileForm({
     profileUpdate(formData as ProfileDepenFormData);
   };
 
+  const getEstados = async () => {
+    try {
+      const res = await axios.get("/api/venezuela/estados");
+      setEstados(res.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error lanzado:", error.response?.data.error);
+      } else {
+        console.error("error:", error);
+      }
+    }
+  };
+
+  const getMunicipios = async () => {
+    try {
+      if (watch("estadoId") === 0 || !watch("estadoId")) {
+        setMunicipios([]);
+        return;
+      }
+      const res = await axios.get(
+        "/api/venezuela/municipios?estadoId=" + watch("estadoId")
+      );
+      setMunicipios(res.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error lanzado:", error.response?.data.error);
+      } else {
+        console.error("error:", error);
+      }
+    }
+  };
+
+  const getParroquias = async () => {
+    try {
+      if (watch("municipioId") === 0 || !watch("municipioId")) {
+        setParroquias([]);
+        return;
+      }
+      const res = await axios.get(
+        "/api/venezuela/parroquias?municipioId=" + watch("municipioId")
+      );
+      setParroquias(res.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error lanzado:", error.response?.data.error);
+      } else {
+        console.error("error:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getEstados();
+    if (session?.user.dataProfile) {
+      setValue("estadoId", session.user.dataProfile.estadoId);
+      getMunicipios();
+      setValue("municipioId", session.user.dataProfile.municipioId);
+      getParroquias();
+      setValue("parroquiaId", session.user.dataProfile.parroquiaId);
+    }
+  }, []);
+
   return (
     <>
       <div className="flex flex-col my-4 p-4 md:space-x-4">
@@ -85,9 +181,10 @@ export default function DependenciaProfileForm({
       </div>
       <div className="flex flex-col m-4 my-4 p-4 rounded-lg shadow-lg">
         <form onSubmit={handleSubmit(onSubmit)} className="form-student-info">
-          
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="names">Nombres del Representante de la Dependencia</Label>
+            <Label htmlFor="names">
+              Nombres del Representante de la Dependencia
+            </Label>
             <Input
               {...register("names")}
               defaultValue={session?.user.dataProfile?.names || ""}
@@ -103,10 +200,10 @@ export default function DependenciaProfileForm({
             )}
           </LabelInputContainer>
 
-
-
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="lastnames">Apellidos del Representante de la Dependencia</Label>
+            <Label htmlFor="lastnames">
+              Apellidos del Representante de la Dependencia
+            </Label>
             <Input
               {...register("lastnames")}
               defaultValue={session?.user.dataProfile?.lastnames || ""}
@@ -157,6 +254,129 @@ export default function DependenciaProfileForm({
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
+            <Label htmlFor="estado">ESTADO</Label>
+            <div className="relative">
+              <Input
+                id="estado"
+                type="text"
+                value={
+                  estados.find((e) => e.id === watch("estadoId"))?.estado || ""
+                }
+                onClick={() => setEstadoOpen(!estadoOpen)}
+                readOnly
+                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                placeholder="Selecciona una institución"
+              />
+              {estadoOpen && (
+                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
+                  {estados.map((e, index) => (
+                    <div
+                      key={index}
+                      onClick={() => {
+                        if (e.id !== watch("estadoId")) {
+                          setValue("estadoId", e.id);
+                          getMunicipios();
+                          setValue("municipioId", 0);
+                          setValue("parroquiaId", 0);
+                        }
+                        setEstadoOpen(false);
+                      }}
+                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {e.estado}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            {errors.estadoId && (
+              <p className="text-red-500 text-sm">{errors.estadoId.message}</p>
+            )}
+          </LabelInputContainer>
+
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="municipio">Municipio</Label>
+            <div className="relative">
+              <Input
+                id="municipioId"
+                type="text"
+                value={
+                  municipios.find((e) => e.id === watch("municipioId"))
+                    ?.municipio || ""
+                }
+                onClick={() => setMunicipiosOpen(!municipiosOpen)}
+                readOnly
+                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                placeholder="Selecciona una institución"
+              />
+              {municipiosOpen && (
+                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
+                  {municipios.map((e, index) => (
+                    <div
+                      key={index}
+                      onClick={() => {
+                        if (e.id !== watch("municipioId")) {
+                          setValue("municipioId", e.id);
+                          setValue("parroquiaId", 0);
+                        }
+                        getParroquias();
+                        setMunicipiosOpen(false);
+                      }}
+                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {e.municipio}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            {errors.municipioId && (
+              <p className="text-red-500 text-sm">
+                {errors.municipioId.message}
+              </p>
+            )}
+          </LabelInputContainer>
+
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="parroquia">Parroquia</Label>
+            <div className="relative">
+              <Input
+                id="parroquiaId"
+                type="text"
+                value={
+                  parroquias.find((e) => e.id === watch("parroquiaId"))
+                    ?.parroquia || ""
+                }
+                onClick={() => setparroquiasOpen(!parroquiasOpen)}
+                readOnly
+                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                placeholder="Selecciona una institución"
+              />
+              {parroquiasOpen && (
+                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
+                  {parroquias.map((e, index) => (
+                    <div
+                      key={index}
+                      onClick={() => {
+                        setValue("parroquiaId", e.id);
+                        setparroquiasOpen(false);
+                      }}
+                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {e.parroquia}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            {errors.parroquiaId && (
+              <p className="text-red-500 text-sm">
+                {errors.parroquiaId.message}
+              </p>
+            )}
+          </LabelInputContainer>
+
+          <LabelInputContainer className="mb-4">
             <Label htmlFor="address">Dirección de la Dependencia</Label>
             <Input
               {...register("address")}
@@ -173,59 +393,63 @@ export default function DependenciaProfileForm({
             )}
           </LabelInputContainer>
 
-            <LabelInputContainer className="mb-4">
-                <Label htmlFor="email">Correo de la Dependencia</Label>
-                <Input
-                {...register("email")}
-                defaultValue={session?.user.dataProfile?.email || ""}
-                onChange={handleInputChange}
-                id="email"
-                name="email"
-                placeholder="concejomunimaracaibo@gmail.com"
-                type="email"
-                className={cn(errors.email && "bg-red-100 focus:bg-red-100")}
-                />
-                {errors.email && (
-                <p className="text-red-500 text-sm">{errors.email.message}</p>
-                )}
-            </LabelInputContainer>
-
-            <LabelInputContainer className="mb-4">
-                <Label htmlFor="rif">Numero de RIF de la Dependencia</Label>
-                <Input
-                {...register("rif")}
-                defaultValue={session?.user.dataProfile?.rif || ""}
-                onChange={handleInputChange}
-                id="rif"
-                name="rif"
-                placeholder="808021441"
-                type="text"
-                className={cn(errors.rif && "bg-red-100 focus:bg-red-100")}
-                />
-                {errors.rif && (
-                <p className="text-red-500 text-sm">{errors.rif.message}</p>
-                )}
-            </LabelInputContainer>
-
-            <LabelInputContainer className="mb-4">
-                <Label htmlFor="social">Link de la Red Social de la Dependencia</Label>
-                <Input
-                {...register("social")}
-                defaultValue={session?.user.dataProfile?.social || ""}
-                onChange={handleInputChange}
-                id="social"
-                name="social"
-                placeholder="Link de la Red social"
-                type="text"
-                className={cn(errors.social && "bg-red-100 focus:bg-red-100")}
-                />
-                {errors.social && (
-                <p className="text-red-500 text-sm">{errors.social.message}</p>
-                )}
-            </LabelInputContainer>
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="email">Correo de la Dependencia</Label>
+            <Input
+              {...register("email")}
+              defaultValue={session?.user.dataProfile?.email || ""}
+              onChange={handleInputChange}
+              id="email"
+              name="email"
+              placeholder="concejomunimaracaibo@gmail.com"
+              type="email"
+              className={cn(errors.email && "bg-red-100 focus:bg-red-100")}
+            />
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email.message}</p>
+            )}
+          </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="description">Breve Descripción de la Dependencia</Label>
+            <Label htmlFor="rif">Numero de RIF de la Dependencia</Label>
+            <Input
+              {...register("rif")}
+              defaultValue={session?.user.dataProfile?.rif || ""}
+              onChange={handleInputChange}
+              id="rif"
+              name="rif"
+              placeholder="808021441"
+              type="text"
+              className={cn(errors.rif && "bg-red-100 focus:bg-red-100")}
+            />
+            {errors.rif && (
+              <p className="text-red-500 text-sm">{errors.rif.message}</p>
+            )}
+          </LabelInputContainer>
+
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="social">
+              Link de la Red Social de la Dependencia
+            </Label>
+            <Input
+              {...register("social")}
+              defaultValue={session?.user.dataProfile?.social || ""}
+              onChange={handleInputChange}
+              id="social"
+              name="social"
+              placeholder="Link de la Red social"
+              type="text"
+              className={cn(errors.social && "bg-red-100 focus:bg-red-100")}
+            />
+            {errors.social && (
+              <p className="text-red-500 text-sm">{errors.social.message}</p>
+            )}
+          </LabelInputContainer>
+
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="description">
+              Breve Descripción de la Dependencia
+            </Label>
             <Input
               {...register("description")}
               type="textarea"
