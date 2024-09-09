@@ -21,6 +21,12 @@ type Internship = {
     name: string;
     User: {
       image: string;
+      parroquia: {
+        parroquia: string;
+        municipio: {
+          municipio: string;
+        };
+      };
     };
   };
   apply: [
@@ -136,6 +142,8 @@ export default function InternshipCards({
             <i>{internship.dependencia.name}</i>
           </p>
           <p className="text-sm text-gray-500">📍{internship.location}</p>
+          <p className="text-sm text-gray-500">📍{internship.dependencia.User.parroquia?.parroquia}</p>
+          <p className="text-sm text-gray-500">📍{internship.dependencia.User.parroquia?.municipio.municipio}</p>
 
           <div className="flex my-2 gap-2">
             <div className="w-[33%]">

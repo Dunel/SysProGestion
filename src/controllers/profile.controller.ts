@@ -233,6 +233,7 @@ export async function ProfileEstudentGet(req: NextRequest) {
             names: true,
             lastnames: true,
             phone: true,
+            birthdate: true,
             estado: {
               select: {
                 id: true,
@@ -274,6 +275,7 @@ export async function ProfileEstudentGet(req: NextRequest) {
       parroquia: profile?.User.parroquia?.parroquia,
       dateStart: profile?.dateStart,
       dateEnd: profile?.dateEnd,
+      birthdate: profile?.User.birthdate
     };
     return NextResponse.json({ object }, { status: 200 });
   } catch (error) {
@@ -315,6 +317,7 @@ export async function ProfileDepenGet(req: NextRequest) {
             estado: true,
             municipio: true,
             parroquia: true,
+            birthdate: true,
           },
         },
       },
@@ -335,6 +338,7 @@ export async function ProfileDepenGet(req: NextRequest) {
       municipioId: profile?.User.municipio?.id,
       parroquia: profile?.User.parroquia?.parroquia,
       parroquiaId: profile?.User.parroquia?.id,
+      birthdate: profile?.User.birthdate
     };
     return NextResponse.json({ object }, { status: 200 });
   } catch (error) {

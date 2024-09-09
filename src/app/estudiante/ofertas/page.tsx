@@ -18,6 +18,12 @@ type Application = {
     name: string;
     User: {
       image: string;
+      parroquia: {
+        parroquia: string;
+        municipio: {
+          municipio: string;
+        };
+      };
     };
   };
   apply: [

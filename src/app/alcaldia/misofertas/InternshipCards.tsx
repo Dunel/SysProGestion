@@ -1,18 +1,12 @@
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import React from "react";
 
 interface Internship {
   handleDeleteApply: Function;
-  handleAcceptApply: Function;
   dependencia: {
     name: string;
     User: {
       image: string;
-      parroquia: {
-        parroquia: string;
-        municipio: {
-          municipio: string;
-        };
-      };
     };
   };
   id: number;
@@ -24,12 +18,6 @@ interface Internship {
   date: Date;
   skills: string[];
   status: string;
-  apply: [
-    {
-      id: number;
-      status: string;
-    }
-  ];
 }
 
 const skillFormated: { [key: string]: string } = {
@@ -57,36 +45,20 @@ const skillFormated: { [key: string]: string } = {
   lenguajesdeprogramacion: "Lenguajes de programación",
 };
 
-const statusFormated: { [key: string]: string } = {
-  pendiente: "Pendiente por Dependencia⌚",
-  aceptado: "Has sido Aceptado! Puedes empeza!🎉",
-  rechazado: "Rechazado! Intenta con otra oferta!🤓",
-  declinado: "Tu has Declinado⛔",
-  aprobado: "Fuiste Aprobado! ahora acepta!➡️",
-  active: "Activo✅",
-  inactive: "Inactivo⚠️",
-};
-
 export default function InternshipCards({
   internships,
 }: {
   internships: Internship[];
 }) {
-  const InternshipCard: React.FC<{ internship: Internship }> = ({
-    internship,
-  }) => (
+  const router = useRouter();
+
+  const InternshipCard: React.FC<{ internship: Internship }> = ({ internship}) => (
     <div className="flex flex-col justify-center bg-white rounded-lg shadow-md m-4 mb-8 p-2 w-[90%] mx-auto my-5">
       <div className="flex">
         {/* //!ESTE CODE DEBERIA VENIR DE UN CAPO DE LA TABLA "ofertas" CUYA NOMENCLATURA SE CREA DE SEGUN EL TIPO DE OFERTA + ANO + ID   */}
         <span className="flex  ml-auto p-1 text-red-500">
-          Codigo de Oferta de Vacante:{" "}
-          {internship.type.substring(0, 3).toUpperCase() +
-            "-" +
-            new Date(internship.date).getFullYear() +
-            "-" +
-            internship.dependencia.name.substring(0, 3).toUpperCase() +
-            "-000" +
-            internship.id}
+        Codigo de Oferta de Vacante: {(internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id}
+
         </span>
       </div>
       <div className="flex flex-col items-center md:flex-row md:space-x-4">
@@ -98,7 +70,7 @@ export default function InternshipCards({
             className="mx-auto w-60 h-60 object-cover rounded-full border-4 border-black-800 md:w-40 md:h-40"
           />
         </div>
-
+  
         {/* //! INFO */}
         <div className="m-1 p-1 word-wrap overflow-wrap h-[60%] md:w-[80%]">
           <h3 className="text-xl font-semibold text-gray-800 mb-2">
@@ -109,21 +81,13 @@ export default function InternshipCards({
             <i>{internship.dependencia.name}</i>
           </p>
           <p className="text-sm text-gray-500">📍{internship.location}</p>
-          <p className="text-sm text-gray-500">📍{internship.dependencia.User.parroquia?.parroquia}</p>
-          <p className="text-sm text-gray-500">📍{internship.dependencia.User.parroquia?.municipio.municipio}</p>
-
+  
           <div className="flex my-2 gap-2">
             <div className="w-[33%]">
               <span className="text-lg font-medium text-gray-700 mb-2">
                 Estado de la Solicitud:
               </span>
               <p>{internship.status}</p>
-            </div>
-            <div className="w-[33%]">
-              <span className="text-lg font-medium text-gray-700 mb-2">
-                Estado de tu Aplicacion:
-              </span>
-              <p>{statusFormated[internship.apply[0].status]}</p>
             </div>
             <div className="w-[33%]">
               <span className="text-lg font-medium text-gray-700 mb-2">
@@ -142,7 +106,7 @@ export default function InternshipCards({
               </p>
             </div>
           </div>
-
+  
           {/* //! CONTAINER FLEX: OF SKILLS AND DESCRIPTION */}
           <div className="flex flex-col justify-center gap-2 my-2 lg:flex-row">
             <div className="m-1 w-[100%] lg:w-[40%]">
@@ -166,37 +130,30 @@ export default function InternshipCards({
           </div>
         </div>
       </div>
+  
       <div className="flex justify-center">
-        {internship.apply[0].status === "aprobado" && (
-          <button
-            onClick={() =>
-              internship.handleAcceptApply(
-                internship.id,
-                internship.apply[0].id
-              )
-            }
-            className="w-[100%] p-1 m-1 bg-green-500 hover:bg-green-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
-          >
-            Aceptar Oferta
-          </button>
-        )}
-        {internship.apply[0].status === "aprobado" ||
-        internship.apply[0].status === "pendiente" ? (
-          <button
-            onClick={() =>
-              internship.handleDeleteApply(
-                internship.id,
-                internship.apply[0].id
-              )
-            }
-            className="w-[100%] p-1 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
-          >
-            Retirar aplicación
-          </button>
-        ) : null}
+        <button
+          onClick={() => router.push("./misofertas/modificar/"+ internship.id)}
+          className="w-[100%] p-1 m-1 bg-green-700 hover:bg-green-800 text-white font-bold rounded transition duration-300 md:w-[50%]"
+        >
+          Modificar aplicación
+        </button>
+        <button
+          onClick={() => router.push("./misofertas/received/"+ internship.id)}
+          className="w-[100%] p-1 m-1 bg-blue-700 hover:bg-blue-900 text-white font-bold rounded transition duration-300 md:w-[50%]"
+        >
+          Solicitudes recibidas
+        </button>
+        <button
+          onClick={() => internship.handleDeleteApply(internship.id)}
+          className="w-[100%] p-1 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
+        >
+          Eliminar aplicación
+        </button>
       </div>
     </div>
   );
+  
   return (
     <>
       <div className="relative z-20 mx-auto py-2 rounded shadow w-[90%]">

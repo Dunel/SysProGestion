@@ -1,60 +1,86 @@
 "use client";
-import ContainerWeb from "@/components/ContainerWeb";
-import GridContainer from "@/components/GridContainer";
-import GridMain from "@/components/GridMain";
-import GridSecond from "@/components/GridSecond";
 import Header from "@/components/Header";
-import AlcaldiaProfile from "@/components/perfiles/AlcaldiaProfile";
-import AlcaldiaFormProfile from "@/components/perfiles/AlcaldiaFormProfile";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import Skeleton from "@/components/ui/SkeletonComponent";
+import DependenciaProfileForm from "@/components/perfiles/DependenciaFormActualizarProfile";
+import DependenciaProfileListo from "@/components/perfiles/DependenciaProfileListo";
 
+export default function EstudianteInfoForm() {
+  const [isFormVisible, setIsFormVisible] = useState(false);
+  const { data: session, update } = useSession();
 
-export default function Register() {
-  
-  const profileData = {
-    nombreAlcaldia: 'Alcaldía de Maracaibo',
-    
-    nombreRepresentante: 'Jose Pérez',
-    fotoDelRepresentante: 'https://lgbtravel.com/wp-content/uploads/2023/11/paises-hombres-guapos-portada-1024x576.jpg', // URL de la foto
-    nombreCargo: 'Director de Asuntos Universitarios',
-    emailPersonal: 'jose_p@gmail.com',
-    telefonoPersonal: '0424 7613872',
-    
-    telefonoAlcaldia: '0261 7613872',
-    emailAlcaldia: 'direccionuniversitaria@alcaldiamcbo.com',
-    direccionAlcaldia: 'Calle # 123, Maracaibo, Zulia',
+  const toggleFormVisibility = () => {
+    setIsFormVisible((prev) => !prev);
   };
-  
-  
+
+  const getProfile = async () => {
+    try {
+      if (!session?.user.profile || session.user.dataProfile) {
+        return;
+      }
+      const res = await axios.get("/api/dependencia/perfil");
+      update({ profile: true, dataProfile: res.data.object });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error lanzado:", error.response?.data.error);
+      } else {
+        console.error("error:", error);
+      }
+    }
+  };
+  useEffect(() => {
+    getProfile();
+  }, [session?.user.profile]);
+
   return (
     <>
-      <Header title={"ALCALDIA DE MARACAIBO"} subtitle={"Mira tis datos de perfil"} />
-    
-      <ContainerWeb>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <GridMain>
-            <GridContainer>
-                  <h2 className="text-2xl font-bold">Bienvenido <i>Jose Perez.</i></h2>
-              <div>
-                <p className="text-justify mb-4 p-2" >
-                  Este es tu perfil, aquí podrás visualizar tu información personal y actualizarla si es necesario.
-                </p>
-              </div>
-              <AlcaldiaProfile profileData={profileData}/>
-            </GridContainer>
-          </GridMain>
-          
-          
-          <GridSecond>
-            
-            <GridContainer>
-                <AlcaldiaFormProfile/>
-            </GridContainer>
-            
+      <Header
+        title={
+          !session?.user.dataProfile ? "Registrando tu Perfil" : "Mi Perfil"
+        }
+        subtitle={
+          !session?.user.profile
+            ? "Este es tu formulario de registro. Por favor, sigue las indicaciones de las casillas y completa tu información personal y profesional."
+            : "Este es tu perfil personal, el cual podras actualizar mediante el formulario que se abre al presionar el boton 'Actualizar Perfil'. Es muy facil, solo sigue las indicaciones de las casillas y actualiza tu información personal y profesional que ha cambiado."
+        }
+      />
 
-
-          </GridSecond>
+      {session?.user.profile === false && (
+        <div className="w-[80%] m-4 p-4 mx-auto">
+          <DependenciaProfileForm
+            onToggleForm={toggleFormVisibility}
+            titleForm={"Completa los datos de tu Perfil!"}
+          />
         </div>
-      </ContainerWeb>
+      )}
+
+      {!session?.user.dataProfile && session?.user.profile != false ? (
+        <Skeleton />
+      ) : (
+        <div
+          className={`${
+            isFormVisible
+              ? "grid grid-cols-1 mx-8 lg:grid-cols-[60%_40%] gap-2"
+              : "flex justify-center w-[80%] mx-auto bg-white"
+          }`}
+        >
+          {<DependenciaProfileListo
+            onToggleForm={toggleFormVisibility}
+            isFormVisible={isFormVisible}
+          />}
+
+          {isFormVisible && (
+            <div className="bg-white mt-6 mx-4">
+              <DependenciaProfileForm
+                onToggleForm={toggleFormVisibility}
+                titleForm={"Actualizando tu Perfil!"}
+              />
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 }

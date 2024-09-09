@@ -37,14 +37,8 @@ interface Internship {
         phone: string;
         image: string;
         esInfo: {
-          institution: {
-            institutionCode: string;
-            name: string;
-          };
-          career: {
-            careerCode: string;
-            name: string;
-          };
+          university: string;
+          career: string;
           quarter: string;
           address: string;
           skills: string[];
@@ -95,10 +89,7 @@ export default function Page({ params }: { params: { id: string } }) {
               <Skeleton />
             ) : (
               <>
-                <InternShipCardReceived
-                  internship={applications}
-                  getApplication={getApplication}
-                />
+                <InternShipCardReceived internship={applications} getApplication={getApplication}/>
               </>
             )}
           </GridContainer>
