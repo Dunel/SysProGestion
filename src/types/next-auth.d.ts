@@ -9,8 +9,8 @@ declare module "next-auth" {
       role: "estudiante" | "alcaldia" | "dependencia";
       profile: boolean;
       picture: string;
-      birthdate: date;
       dataProfile: {
+        birthdate: date;
         address: string;
         institution: {
           id: number;
@@ -51,8 +51,8 @@ declare module "next-auth" {
     role: "estudiante" | "alcaldia" | "dependencia";
     profile: boolean;
     picture: string;
-    birthdate: date;
     dataProfile: {
+      birthdate: date;
       address: string;
       institution: {
         id: number;
@@ -94,8 +94,8 @@ declare module "next-auth/jwt" {
     role: "estudiante" | "alcaldia" | "dependencia";
     profile: boolean;
     picture: string;
-    birthdate: date;
     dataProfile: {
+      birthdate: date;
       address: string;
       institution: {
         id: number;
