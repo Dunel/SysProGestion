@@ -93,20 +93,24 @@ export default function InternshipCards({
   const InternshipCard: React.FC<{ internship: Internship }> = ({
     internship,
   }) => (
-    <div className="flex flex-col justify-center bg-white m-4 mb-8 mx-6 p-8 w-[90%] mx-auto my-5 shadow-md text-1xl text-justify rounded-lg lg:text-2xl">
+    <div className="flex flex-col justify-center bg-white m-4 mb-8 mx-6 p-8 w-[90%] mx-auto my-1 shadow-md text-base text-justify rounded-lg lg:text-lg">
       
-      <div className="flex flex-col lg:flex-row mt-6 text-lg lg:gap-2">    
+      <div className="flex flex-col lg:flex-row text-lg lg:gap-2">    
           <span className="flex mr-2 text-red-500">
              <i>
             Codigo de Oferta de Vacante: {(internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id}
             </i> 
           </span>   
-        { //!internship.pay
-          true &&
-            <span className="flex gap-2 mr-2 font-bold text-green-500 lg:ml-auto">
-            Esta vacante ofrece incentivos
-            <FaMoneyCheckAlt  style={{ color: 'green' }} size={30}/>  
-          </span>
+         
+         {/* //!internship.pay  */}
+          {true &&
+            <>
+                <span className="flex gap-2 mr-2 font-bold text-green-500 lg:ml-auto">
+                Esta vacante ofrece incentivos
+                <FaMoneyCheckAlt  style={{ color: 'green' }} size={30}/>  
+              </span>
+              <mark>pay === true</mark>
+            </>
         }
       </div>
 
@@ -136,16 +140,24 @@ export default function InternshipCards({
 
         {/* //! INFO */}
         <div className="m-1 p-1 word-wrap overflow-wrap h-[60%] md:w-[80%]">
-          <h3 className="text-xl text-center font-extrabold text-gray-800 mb-2 md:text-justify">
-            {internship.title}
+          <h3 className="text-xl text-center font-extrabold text-gray-800 mb-2 md:text-justify md:text-2xl">
+            {(internship.title).toUpperCase()}
           </h3>
-          <p className="text-2xl text-gray-600 mb-1 font-bold"> 
+          <p className="text-2xl text-gray-600 mb-1 font-bold">🏦
             {" "}
-            <i>{internship.dependencia.name}</i>
+            <i>{(internship.dependencia.name).toUpperCase()}</i>
           </p>
-          <p className="text-sm text-gray-500">📍{internship.location}</p>
-          <p className="text-sm text-gray-500">📍{internship.dependencia.User.parroquia?.parroquia}</p>
-          <p className="text-sm text-gray-500">📍{internship.dependencia.User.parroquia?.municipio.municipio}</p>
+          <p className="text-gray-600 text-justify md:text-1x1">
+            <strong>📍Dirección de la Dependencia:</strong>{" "}
+                <br/>
+                Municipio {internship.dependencia.User.parroquia?.municipio.municipio},{" "}
+                <strong>
+                  Parroquia {(internship.dependencia.User.parroquia?.parroquia)},{" "}
+                </strong>
+                {internship.location}
+          </p>
+
+          
 
          
          
@@ -216,32 +228,31 @@ export default function InternshipCards({
           </div>
         </div>
       </div>
-      <div className="flex justify-center p-2 mt-4 w-[100%]">  
+      <div className="flex justify-center w-[100%]">  
                       
                       {internship.apply.length > 0 
                         ? <button
-                        className="w-full bg-gray-500 text-white font-bold py-2 px-4 rounded  md:w-[50%]"
-                        disabled>  
-                          { internship.status === "inactive" 
-                          ? <div className="flex gap-2 justify-center">
-                          <span>OFERTA INACTIVA</span>
-                          <FaExclamation  style={{ color: 'white' }} size={30}/>  
-                        </div> 
-                           : internship.apply.length > 0 && internship.apply[0]?.status != 'declinado'  
-                                      ?  <div className="flex gap-2 justify-center">
-                                      <span>YA HAS APLICADO A ESTA OFERTA</span>
-                                      <FaRegThumbsUp style={{ color: 'white' }} size={30}/>  
-                                    </div>
-                                      :internship.apply[0]?.status === 'declinado' 
-                                        ?   <div className="flex gap-2 justify-center">
-                                              <span>HAS DECLINADO ESTA OFERTA</span>
-                                              <FaRegThumbsDown style={{ color: 'white' }} size={30}/>  
-                                            </div>
-                                        :null                       
-                            } 
-                          
-                         
-                          </button>
+                            className="w-full bg-gray-500 text-white font-bold py-2 rounded md:w-[50%]"
+                            disabled>  
+                              { internship.status === "inactive" 
+                              ? <div className="flex gap-2 justify-center">
+                              <span>OFERTA INACTIVA</span>
+                              <FaExclamation  style={{ color: 'white' }} size={30}/>  
+                            </div> 
+                              : internship.apply.length > 0 && internship.apply[0]?.status != 'declinado'  
+                                        ?  <div className="flex gap-2 justify-center">
+                                        <span>YA HAS APLICADO A ESTA OFERTA</span>
+                                        <FaRegThumbsUp style={{ color: 'white' }} size={30}/>  
+                                      </div>
+                                        :internship.apply[0]?.status === 'declinado' 
+                                          ?   <div className="flex gap-2 justify-center">
+                                                <span>HAS DECLINADO ESTA OFERTA</span>
+                                                <FaRegThumbsDown style={{ color: 'white' }} size={30}/>  
+                                              </div>
+                                          :null                       
+                            }
+                        </button>
+
                         : internship.status !== "inactive" 
                         ? (
                             <button
@@ -297,4 +308,3 @@ const BottomGradient = () => {
 };
 
 
-// w-full bg-green-500 hover:bg-green-800 text-white font-bold py-2 px-4 rounded md:w-[50%]
