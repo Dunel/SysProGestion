@@ -52,6 +52,7 @@ export default function EstudianteInfoForm() {
   
   useEffect(() => {
     getProfile();
+    //console.log(session?.user)
   }, [session?.user.profile]);
 
   return (
