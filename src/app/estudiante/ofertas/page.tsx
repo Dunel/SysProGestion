@@ -107,6 +107,7 @@ export default function Page() {
           internships={applications.map((internship) => ({
             ...internship,
             handleApply: handleApply,
+            //stado: internship.
            
           }))}
         />

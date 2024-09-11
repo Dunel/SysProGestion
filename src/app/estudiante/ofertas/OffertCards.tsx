@@ -70,6 +70,7 @@ const colorStatys = (status:string) => {
 
   return colorText;
 }
+
 function formatearFechaYHora(fecha:Date) {
   const date = new Date(fecha);
   const año = date.getFullYear();
@@ -86,9 +87,9 @@ export default function InternshipCards({
   const InternshipCard: React.FC<{ internship: Internship }> = ({
     internship,
   }) => (
-    <div className="flex flex-col justify-center bg-white rounded-lg shadow-md m-4 mb-8 p-2 w-[90%] mx-auto my-5">
+    <div className="flex flex-col justify-center bg-white m-4 mb-8 mx-6 p-8 w-[90%] mx-auto my-5 shadow-md text-1xl text-justify rounded-lg lg:text-2xl">
       
-      <div className="flex flex-col lg:flex-row lg:gap-2">    
+      <div className="flex flex-col lg:flex-row mt-6 text-lg lg:gap-2">    
           <span className="flex mr-2 text-red-500">
              <i>
             Codigo de Oferta de Vacante: {(internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id}
@@ -101,11 +102,10 @@ export default function InternshipCards({
             <FaMoneyCheckAlt  style={{ color: 'green' }} size={30}/>  
           </span>
         }
-       
       </div>
 
       <div className="flex ">
-        <span className="flex mr-2 text-gray-500 lg:ml-auto">
+        <span className="flex mr-2 text-gray-500 text-lg lg:ml-auto">
         Han aplicado {internship._count.apply} 🧑🏽‍🎓 a esta Oferta de {internship.type === "pasantia"
                   ? "Pasantias"
                   : internship.type === "servicio"
@@ -116,9 +116,11 @@ export default function InternshipCards({
         </span> 
       </div>
 
+
       <div className="flex flex-col items-center md:flex-row md:space-x-4">
+        
         {/* //! IMG */}
-        <div className="flex m-1 p-1 mx-auto h-[40%] md:w-[30%] lg:w-[20%]">
+        <div className="flex m-1 md:w-[30%] lg:w-[20%]">
           <img
             src={internship.dependencia.User.image}
             alt={`${internship.dependencia} logo`}
@@ -128,32 +130,41 @@ export default function InternshipCards({
 
         {/* //! INFO */}
         <div className="m-1 p-1 word-wrap overflow-wrap h-[60%] md:w-[80%]">
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">
+          <h3 className="text-xl text-center font-extrabold text-gray-800 mb-2 md:text-justify">
             {internship.title}
           </h3>
-          <p className="text-lg text-gray-600 mb-1">
+          <p className="text-2xl text-gray-600 mb-1 font-bold"> 
             {" "}
             <i>{internship.dependencia.name}</i>
           </p>
-          <p className="text-sm text-gray-500">📍{internship.location}</p>
+          <p className="text-xl text-gray-500">📍{internship.location}</p>
 
-          <div className="flex my-2 gap-2">
-            <div className="w-[33%]">
-                <span className="text-lg font-medium text-gray-700 mb-2">
+         
+         
+          <div className="flex flex-col my-2 gap-2 lg:flex-row">
+           
+            <div className="w-[100%] lg:w-[33%]">
+                <span className="text-xl font-bold text-gray-700 mb-2">
                   Fecha de la Oferta:
                 </span>
                 <p>{ formatearFechaYHora(internship.date)}</p>
             </div>
 
-            <div className="w-[33%]">
-              <span className="text-lg font-medium text-gray-700 mb-2">
+            <div className="w-[100%] lg:w-[33%]">
+              <span className="text-xl font-bold text-gray-700 mb-2">
                 Estado de la Oferta:
               </span>
-              <p className={colorStatys(internship.status)} > <b> {internship.status}</b></p>
+              <p className={colorStatys(internship.status)} > 
+                <b> {
+                    internship.status === "active" ? 'Activa ✅' 
+                      : internship.status === "inactive" ? 'Inactiva ⚠️' : 'Cerrada ⛔'
+
+                    }</b>
+              </p>
             </div>
             
-            <div className="w-[33%]">
-              <span className="text-lg font-medium text-gray-700 mb-2">
+            <div className="w-[100%] md:w-[33%]">
+              <span className="text-xl font-bold text-gray-700 mb-2">
                 Tipo de Oferta:
               </span>
               {/* //! ASI QUE NO DEBERIA SER {internship.type} DADO QUE EL TYPO DEL PROCEDIMIENTO LO DEFINE LA OFERTA NO EL QUE UN ESTUDIANTE APLIQUE A ELLA */}
@@ -170,24 +181,28 @@ export default function InternshipCards({
             </div>
           </div>
 
+
+
           {/* //! CONTAINER FLEX: OF SKILLS AND DESCRIPTION */}
           <div className="flex flex-col justify-center gap-2 my-2 lg:flex-row">
             <div className="m-1 w-[100%] lg:w-[40%]">
-              <h4 className="text-lg font-medium text-gray-700 mb-2">
-                Habilidades requeridas 📝
-              </h4>
+              <span className="text-xl font-bold text-gray-700 mb-2">
+                🤹🏽 Habilidades requeridas
+              </span>   
               <ul className="list-disc list-inside">
                 {internship.skills.map((skill, index) => (
-                  <li key={index} className="text-gray-600">
+                  <li key={index} className="text-gray-700">
                     {skillFormated[skill]}
                   </li>
                 ))}
               </ul>
             </div>
+
+
             <div className="m-1 w-[100%] lg:w-[60%]">
-              <h4 className="text-lg font-medium text-gray-700 mb-2">
-                Descripcion de la Vacante 📋
-              </h4>
+              <span className="text-xl font-bold text-gray-700 mb-2">
+              📋Descripcion de la Vacante 
+              </span> 
               <p>{internship.description}</p>
             </div>
           </div>
@@ -255,7 +270,7 @@ export default function InternshipCards({
   );
   return (
     <>
-      <div className="relative z-20 mx-auto py-2 rounded shadow w-[90%]">
+      <div className="flex-col justify-center items-center relative z-20 mx-auto py-2 rounded shadow w-[90%]">
         {internships.map((internship) => (
           <InternshipCard key={internship.id} internship={internship} />
         ))}

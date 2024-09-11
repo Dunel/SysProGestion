@@ -182,12 +182,13 @@ function calcularEdad(fechaNacimiento: string | Date): string {
               </p>
               <p className="text-gray-600 md:text-1x1">
                 <strong>📍 Domicilio:</strong>{" "}
-                <mark>traer edo, mun, parro</mark>
-                Estado {session.user.dataProfile.estadoId},
-                Municipio {session.user.dataProfile.municipioId},
-                Parroquia {session.user.dataProfile.parroquiaId}, 
+                <br/>
+                Estado {session.user.dataProfile.estado},{" "}
+                Municipio {session.user.dataProfile.municipio},{" "}
+                <strong>
+                Parroquia {session.user.dataProfile.parroquia},{" "} 
+                </strong>
                 {session.user.dataProfile.address}
-                {/* {session.user.dataProfile.parroquiaId} //!OJO */}
               </p>
               <p className="text-gray-600 md:text-1x1">
                 <strong>🗓️ Fecha de nacimiento:</strong>{" "}
@@ -196,7 +197,6 @@ function calcularEdad(fechaNacimiento: string | Date): string {
               </p>
               <p className="text-gray-600 md:text-1x1">
                 <strong>✔️Edad:</strong>{" "}
-                <mark>traer la fecha de nacimiento</mark>
                 {calcularEdad(session.user.dataProfile.dateEnd)}
               </p>
             </div>
