@@ -31,6 +31,16 @@ export async function getApplication(req: NextRequest) {
             User: {
               select: {
                 image: true,
+                parroquia: {
+                  select: {
+                    parroquia: true,
+                    municipio: {
+                      select: {
+                        municipio: true,
+                      },
+                    },
+                  },
+                },
               },
             },
           },
@@ -242,6 +252,16 @@ export async function getMyApplication(req: NextRequest) {
             User: {
               select: {
                 image: true,
+                parroquia: {
+                  select: {
+                    parroquia: true,
+                    municipio: {
+                      select: {
+                        municipio: true,
+                      },
+                    },
+                  },
+                },
               },
             },
           },
@@ -428,7 +448,8 @@ export async function updateApplicationById(req: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
     const result = applyUpdateSchema.parse(await req.json());
-    const { id, title, description, pay, location, type, skills, status } = result;
+    const { id, title, description, pay, location, type, skills, status } =
+      result;
     const application = await prisma.application.findFirst({
       where: {
         id,
@@ -567,14 +588,18 @@ export async function getApplicationDepend(req: NextRequest) {
                 image: true,
                 esInfo: {
                   select: {
-                    institution:  {
-                      select:{
-                        id: true,
+                    institution: {
+                      select: {
                         institutionCode: true,
                         name: true,
-                      }
+                      },
                     },
-                    career: true,
+                    career: {
+                      select: {
+                        careerCode: true,
+                        name: true,
+                      },
+                    },
                     address: true,
                     skills: true,
                     interests: true,

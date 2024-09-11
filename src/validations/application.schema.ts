@@ -200,8 +200,7 @@ export const applyCreateSchema = z.object({
           },
         }
       )
-    )
-    .min(1, { message: "Debe seleccionar al menos una habilidad" }),
+    ).optional(),
   status: z.enum(["active", "inactive"], {
     message: "El estado de la oferta no es valido",
   }),

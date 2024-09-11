@@ -7,6 +7,12 @@ interface Internship {
     name: string;
     User: {
       image: string;
+      parroquia: {
+        parroquia: string;
+        municipio: {
+          municipio: string;
+        };
+      };
     };
   };
   id: number;
@@ -58,7 +64,7 @@ const statusFormated: { [key: string]: string } = {
   declinado: "Tu has Declinado⛔",
   aprobado: "Fuiste Aprobado! ahora acepta!➡️",
   active: "Activo✅",
-  inactive: "Inactivo⚠️",
+  inactive: "Inactivo⚠️",
 };
 
 export default function InternshipCards({
@@ -73,8 +79,14 @@ export default function InternshipCards({
       <div className="flex">
         {/* //!ESTE CODE DEBERIA VENIR DE UN CAPO DE LA TABLA "ofertas" CUYA NOMENCLATURA SE CREA DE SEGUN EL TIPO DE OFERTA + ANO + ID   */}
         <span className="flex  ml-auto p-1 text-red-500">
-        Codigo de Oferta de Vacante: {(internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id}
-
+          Codigo de Oferta de Vacante:{" "}
+          {internship.type.substring(0, 3).toUpperCase() +
+            "-" +
+            new Date(internship.date).getFullYear() +
+            "-" +
+            internship.dependencia.name.substring(0, 3).toUpperCase() +
+            "-000" +
+            internship.id}
         </span>
       </div>
       <div className="flex flex-col items-center md:flex-row md:space-x-4">
@@ -97,6 +109,8 @@ export default function InternshipCards({
             <i>{internship.dependencia.name}</i>
           </p>
           <p className="text-sm text-gray-500">📍{internship.location}</p>
+          <p className="text-sm text-gray-500">📍{internship.dependencia.User.parroquia?.parroquia}</p>
+          <p className="text-sm text-gray-500">📍{internship.dependencia.User.parroquia?.municipio.municipio}</p>
 
           <div className="flex my-2 gap-2">
             <div className="w-[33%]">

@@ -28,8 +28,14 @@ interface Internship {
         phone: string;
         image: string;
         esInfo: {
-          university: string;
-          career: string;
+          institution: {
+            institutionCode: string;
+            name: string;
+          };
+          career: {
+            careerCode: string;
+            name: string;
+          };
           quarter: string;
           address: string;
           skills: string[];
@@ -76,8 +82,9 @@ const ofertsStatus = [
   { key: "inactive", name: "Inactiva" },
   { key: "aceptado", name: "Aceptada" },
   { key: "pendiente", name: "Pendiente" },
-  { key: "aprobado", name: "Aprobada"},
+  { key: "aprobado", name: "Aprobada" },
   { key: "rechazado", name: "Rechazada" },
+  { key: "declinado", name: "Declinado" },
 ];
 
 export default function InternShipCardReceived({
@@ -212,11 +219,11 @@ export default function InternShipCardReceived({
                     </p>
                     <p>
                       <span className="font-semibold">Universidad: </span>
-                      {apply.User.esInfo.university}
+                      {apply.User.esInfo.institution.name}
                     </p>
                     <p>
                       <span className="font-semibold">Carrera: </span>
-                      {apply.User.esInfo.career}
+                      {apply.User.esInfo.career.name}
                     </p>
                     <p>
                       <span className="font-semibold">Trimestre: </span>

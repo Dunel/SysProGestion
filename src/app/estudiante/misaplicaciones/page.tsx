@@ -20,6 +20,12 @@ type Application = {
     name: string;
     User: {
       image: string;
+      parroquia: {
+        parroquia: string;
+        municipio: {
+          municipio: string;
+        };
+      };
     };
   };
   apply: [
@@ -93,7 +99,10 @@ export default function Page() {
 
   const acceptOffer = async (idApp: number, applyId: number) => {
     try {
-      const res = await axios.post("/api/estudiante/apply/myapply", { idApp, applyId });
+      const res = await axios.post("/api/estudiante/apply/myapply", {
+        idApp,
+        applyId,
+      });
       console.log(res.data);
       getApplications();
     } catch (error) {
@@ -103,7 +112,7 @@ export default function Page() {
         console.error("error:", error);
       }
     }
-  }
+  };
 
   useEffect(() => {
     getApplications();

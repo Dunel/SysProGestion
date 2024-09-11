@@ -36,7 +36,7 @@ interface Parroquias {
   parroquia: string;
 }
 
-export default function AlcaldiaProfileForm({
+export default function DependenciaProfileForm({
   onToggleForm,
   titleForm,
 }: ProfileProps) {

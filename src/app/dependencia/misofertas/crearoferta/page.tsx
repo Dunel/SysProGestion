@@ -82,7 +82,6 @@ export default function Page() {
     const formData = {
       ...data,
       skills: selectedSkills,
-
     };
     const validate = applyCreateSchema.safeParse(formData);
     if (!validate.success) {
@@ -97,7 +96,7 @@ export default function Page() {
       const res = await axios.post("/api/dependencia/apply/myapply", {
         ...data,
       });
-      router.push("./")
+      router.push("./");
       console.log("data: ", res.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -107,8 +106,6 @@ export default function Page() {
       }
     }
   };
-  
-
 
   return (
     <>
@@ -152,7 +149,10 @@ export default function Page() {
                   )}
                 </div>
                 <div className="mt-2">
-                  <Label>Ubicación de la institución a realizar la pasantia o Servicio Comunitario</Label>
+                  <Label>
+                    Ubicación de la institución a realizar la pasantia o
+                    Servicio Comunitario
+                  </Label>
                   <Input
                     {...register("location")}
                     id="location"
@@ -204,43 +204,36 @@ export default function Page() {
                   )}
                 </div>
 
-                   {selectedType === 'pasantia' &&
-                    <div>
+                {selectedType === "pasantia" && (
+                  <div>
                     <Label>Tipo de Incentivo</Label>
                     <div className="flex items-center">
-                        <Input
-                            {...register("pay")}
-                            id="pay"
-                            name="pay"
-                            type="radio"
-                            value="true"
-                        
-                            className="mr-2"
-                        />
-                        <Label>Con Incentivo</Label>
-            
-                        <Input
-                            type="radio"
-                            id="pay"
-                            {...register("pay")}
-                            value="false"
-                     
-                            className="mr-2"
-                        />
-                        <Label>Sin Insentivo</Label>
+                      <Input
+                        {...register("pay")}
+                        id="pay"
+                        name="pay"
+                        type="radio"
+                        value="true"
+                        className="mr-2"
+                      />
+                      <Label>Con Incentivo</Label>
+
+                      <Input
+                        type="radio"
+                        id="pay"
+                        {...register("pay")}
+                        value="false"
+                        className="mr-2"
+                      />
+                      <Label>Sin Insentivo</Label>
                     </div>
                     {errors.pay && (
-                    <p className="text-red-500 text-sm">
+                      <p className="text-red-500 text-sm">
                         {errors.pay.message}
-                    </p>
-                  )}
-                </div>
-          }
-                  
-
-
-
-                  
+                      </p>
+                    )}
+                  </div>
+                )}
 
                 <div className="mt-2">
                   <Label>Habilidades deseadas en el estudiente</Label>
@@ -268,21 +261,15 @@ export default function Page() {
                       Habilidades seleccionadas:
                     </h3>
                     <ul className="mt-2 list-disc list-inside text-sm text-gray-500">
-                      {selectedSkills.length > 0 ? (
-                        selectedSkills.map((skill, index) => (
-                          <li key={index}>
-                            {
-                              skillsOptions.find(
-                                (option) => option.value === skill
-                              )?.label
-                            }
-                          </li>
-                        ))
-                      ) : (
-                        <p style={{ color: "red" }}>
-                          No has seleccionado ninguna habilidad.
-                        </p>
-                      )}
+                      {selectedSkills.map((skill, index) => (
+                        <li key={index}>
+                          {
+                            skillsOptions.find(
+                              (option) => option.value === skill
+                            )?.label
+                          }
+                        </li>
+                      ))}
                     </ul>
                   </div>
                   {errors.skills && (
