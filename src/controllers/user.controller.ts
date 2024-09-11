@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 import { userSchema } from "@/validations/user.schema";
 import { deleteCode } from "./code.controller";
+import { getToken } from "next-auth/jwt";
 
 interface DecodedToken {
   codeId: string;
@@ -85,6 +86,110 @@ export async function createUser(req: NextRequest) {
     await deleteCode(codeFind.mail);
 
     return NextResponse.json({ message: "Registro exitoso" }, { status: 200 });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+
+    if(error instanceof jwt.JsonWebTokenError) {
+      return NextResponse.json(
+        { error: "El registro ha expirado", step: 0 },
+        { status: 401 }
+      );
+    }
+
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function getUser(req: NextRequest) {
+  try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const cedula = userSchema.shape.cedula.parse(req.nextUrl.searchParams.get("ci"))
+    const profile = await prisma.estudentInfo.findFirst({
+      where: { userCedula: cedula },
+      select: {
+        institution: {
+          select: {
+            id: true,
+            institutionCode: true,
+            name: true,
+          },
+        },
+        career: {
+          select: {
+            id: true,
+            careerCode: true,
+            name: true,
+          },
+        },
+        skills: true,
+        interests: true,
+        dateStart: true,
+        dateEnd: true,
+        description: true,
+        address: true,
+        curriculum: true,
+        User: {
+          select: {
+            names: true,
+            lastnames: true,
+            phone: true,
+            birthdate: true,
+            estado: {
+              select: {
+                id: true,
+                estado: true,
+              },
+            },
+            municipio: {
+              select: {
+                id: true,
+                municipio: true,
+              },
+            },
+            parroquia: {
+              select: {
+                id: true,
+                parroquia: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    const object = {
+      names: profile?.User.names,
+      lastnames: profile?.User.lastnames,
+      phone: profile?.User.phone,
+      address: profile?.address,
+      institution: profile?.institution,
+      career: profile?.career,
+      skills: profile?.skills,
+      interests: profile?.interests,
+      description: profile?.description,
+      curriculum: profile?.curriculum,
+      estadoId: profile?.User.estado?.id,
+      estado: profile?.User.estado?.estado,
+      municipioId: profile?.User.municipio?.id,
+      municipio: profile?.User.municipio?.municipio,
+      parroquiaId: profile?.User.parroquia?.id,
+      parroquia: profile?.User.parroquia?.parroquia,
+      dateStart: profile?.dateStart,
+      dateEnd: profile?.dateEnd,
+      birthdate: profile?.User.birthdate,
+    };
+    return NextResponse.json({ object }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(

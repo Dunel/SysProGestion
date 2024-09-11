@@ -104,6 +104,19 @@ export async function apply(req: NextRequest) {
       );
     }
 
+    const appProccessing = await prisma.applicationApproved.findFirst({
+      where:{
+        userCedula: token.cedula,
+        status: "enproceso"
+      }
+    })
+    if (appProccessing) {
+      return NextResponse.json(
+        { error: "Tienes un aplicación activa" },
+        { status: 400 }
+      );
+    }
+
     await prisma.application.update({
       where: {
         id: result,
@@ -476,6 +489,12 @@ export async function updateApplicationById(req: NextRequest) {
         type,
         skills,
         status,
+        notification: {
+          create: {
+            action: "update",
+            userCedula: token.cedula,
+          },
+        },
       },
     });
     return NextResponse.json(
@@ -516,6 +535,12 @@ export async function createAppDepend(req: NextRequest) {
         pay,
         dependencia: {
           connect: {
+            userCedula: token.cedula,
+          },
+        },
+        notification: {
+          create: {
+            action: "create",
             userCedula: token.cedula,
           },
         },
@@ -703,6 +728,8 @@ export async function updateApplyDepend(req: NextRequest) {
   }
 }
 
+
+////////ALCALDIA
 export async function acceptApplyStudent(req: NextRequest) {
   try {
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
@@ -795,6 +822,257 @@ export async function acceptApplyStudent(req: NextRequest) {
       { message: "Postulacion aceptada" },
       { status: 200 }
     );
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function getMyAppAlcaldia(req: NextRequest) {
+  try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const applications = await prisma.application.findMany({
+      where: {
+        OR: [{ status: "active" }, { status: "inactive" }],
+      },
+      orderBy: {
+        date: "desc",
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        pay: true,
+        location: true,
+        status: true,
+        imagen: true,
+        type: true,
+        skills: true,
+        date: true,
+        dependencia: {
+          select: {
+            name: true,
+            User: {
+              select: {
+                image: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    return NextResponse.json({ applications }, { status: 200 });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function getAppAlcaldia(req: NextRequest) {
+  try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const result = idApplySchema.shape.idApplication.parse(
+      req.nextUrl.searchParams.get("id")
+    );
+    const applications = await prisma.application.findFirst({
+      where: {
+        id: result,
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        pay: true,
+        location: true,
+        status: true,
+        type: true,
+        skills: true,
+        date: true,
+        dependencia: {
+          select: {
+            name: true,
+            User: {
+              select: {
+                image: true,
+              },
+            },
+          },
+        },
+        apply: {
+          select: {
+            id: true,
+            status: true,
+            User: {
+              select: {
+                cedula: true,
+                names: true,
+                lastnames: true,
+                mail: true,
+                birthdate: true,
+                phone: true,
+                image: true,
+                esInfo: {
+                  select: {
+                    institution: {
+                      select: {
+                        institutionCode: true,
+                        name: true,
+                      },
+                    },
+                    career: {
+                      select: {
+                        careerCode: true,
+                        name: true,
+                      },
+                    },
+                    address: true,
+                    skills: true,
+                    interests: true,
+                    description: true,
+                    curriculum: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+    return NextResponse.json(applications, { status: 200 });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function updateApplyAlcaldia(req: NextRequest) {
+  try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const { id, status } = await req.json();
+    const idApply = idApplySchema.shape.idApply.parse(id);
+    const statusApply = idApplySchema.shape.status.parse(status);
+    const apply = await prisma.apply.findFirst({
+      where: {
+        id: idApply,
+        status: "pendiente",
+      },
+    });
+    if (!apply) {
+      return NextResponse.json(
+        { error: "No se encontró la postulación" },
+        { status: 404 }
+      );
+    }
+
+    await prisma.apply.update({
+      where: {
+        id: idApply,
+        application: {
+          dependencia: {
+            userCedula: token.cedula,
+          },
+        },
+      },
+      data: {
+        status: statusApply,
+        User: {
+          update: {
+            notification: {
+              create: {
+                action: statusApply === "aprobado" ? "approve" : "reject",
+                application: {
+                  connect: {
+                    id: apply.applicationId,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return NextResponse.json(
+      { message: "Postulacion actualizada" },
+      { status: 200 }
+    );
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function deleteApplicationAlcaldia(req: NextRequest) {
+  try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const { id } = await req.json();
+    const result = idApplySchema.shape.idApplication.parse(id);
+    const application = await prisma.application.findFirst({
+      where: {
+        id: result,
+      },
+    });
+    if (!application) {
+      return NextResponse.json(
+        { error: "No tienes permisos para eliminar esta oferta" },
+        { status: 400 }
+      );
+    }
+
+    await prisma.application.delete({
+      where: {
+        id: result,
+      },
+    });
+    return NextResponse.json({ message: "Oferta eliminada" }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(

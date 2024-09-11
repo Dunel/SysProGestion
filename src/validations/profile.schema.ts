@@ -470,7 +470,7 @@ export const profileDepenSchema = z.object({
     .string({ required_error: "El telefono es requerido" })
     .min(10, { message: "El telefono debe tener minimo 10 caracteres" })
     .max(12, { message: "El telefono debe tener maximo 12 caracteres" })
-    .optional(),
+    .optional().or(z.literal('')),
   estadoId: z
     .string()
     .min(1)
@@ -544,23 +544,22 @@ export const profileDepenSchema = z.object({
     .string({ required_error: "La dirección es requerida" })
     .min(10, { message: "La dirección debe tener minimo 10 caracteres" })
     .max(100, { message: "La dirección debe tener maximo 100 caracteres" })
-    .optional(),
+    .optional().or(z.literal('')),
   description: z
     .string({ required_error: "La descripción es requerida" })
     .min(7, { message: "La descripción debe tener minimo 7 caracteres" })
     .max(100, { message: "La descripción debe tener maximo 100 caracteres" })
-    .optional(),
+    .optional().or(z.literal('')),
   email: z
     .string({ required_error: "El correo es requerido" })
     .email({ message: "El correo no es valido" })
-    .optional(),
+    .optional().or(z.literal('')),
   social: z
     .string({ required_error: "El social es requerido" })
     .url({ message: "El social no es valido" })
-    .optional(),
+    .optional().or(z.literal('')),
   rif: z
     .string({ required_error: "El rif es requerido" })
-    .min(8, { message: "El rif debe tener minimo 8 caracteres" })
     .max(10, { message: "El rif debe tener maximo 10 caracteres" })
     .transform((val, ctx) => {
       const parsed = parseInt(val);

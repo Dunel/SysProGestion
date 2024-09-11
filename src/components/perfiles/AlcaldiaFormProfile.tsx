@@ -36,7 +36,7 @@ interface Parroquias {
   parroquia: string;
 }
 
-export default function DependenciaProfileForm({
+export default function AlcaldiaProfileForm({
   onToggleForm,
   titleForm,
 }: ProfileProps) {
@@ -71,7 +71,7 @@ export default function DependenciaProfileForm({
   const profileUpdate = async (data: ProfileDepenFormData) => {
     try {
       setLoading(true);
-      const res = await axios.post("/api/dependencia/perfil", data);
+      const res = await axios.post("/api/alcaldia/perfil", data);
       if (session) {
         await update({
           profile: true,
@@ -85,7 +85,7 @@ export default function DependenciaProfileForm({
           },
         });
       }
-      router.push("/dependencia/perfil");
+      router.push("/alcaldia/perfil");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);
@@ -183,7 +183,7 @@ export default function DependenciaProfileForm({
         <form onSubmit={handleSubmit(onSubmit)} className="form-student-info">
           <LabelInputContainer className="mb-4">
             <Label htmlFor="names">
-              Nombres del Representante de la Dependencia
+              Nombres del Representante de la Alcaldia
             </Label>
             <Input
               {...register("names")}
@@ -202,7 +202,7 @@ export default function DependenciaProfileForm({
 
           <LabelInputContainer className="mb-4">
             <Label htmlFor="lastnames">
-              Apellidos del Representante de la Dependencia
+              Apellidos del Representante de la Alcaldia
             </Label>
             <Input
               {...register("lastnames")}
@@ -220,14 +220,14 @@ export default function DependenciaProfileForm({
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="name">Nombre de la Dependencia</Label>
+            <Label htmlFor="name">Nombre de la Alcaldia</Label>
             <Input
               {...register("name")}
               defaultValue={session?.user.dataProfile?.name || ""}
               onChange={handleInputChange}
               id="name"
               name="name"
-              placeholder="Concejo Municipal de Maracaibo"
+              placeholder="Alcaldia de Maracaibo"
               type="text"
               className={cn(errors.name && "bg-red-100 focus:bg-red-100")}
             />
@@ -237,7 +237,7 @@ export default function DependenciaProfileForm({
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="phone">Teléfono de la Dependencia</Label>
+            <Label htmlFor="phone">Teléfono de la Alcaldia</Label>
             <Input
               {...register("phone")}
               defaultValue={session?.user.dataProfile?.phone || ""}
@@ -254,7 +254,7 @@ export default function DependenciaProfileForm({
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="estado">ESTADO</Label>
+            <Label htmlFor="estado">Estado</Label>
             <div className="relative">
               <Input
                 id="estado"
@@ -377,7 +377,7 @@ export default function DependenciaProfileForm({
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="address">Dirección de la Dependencia</Label>
+            <Label htmlFor="address">Dirección de la Alcaldia</Label>
             <Input
               {...register("address")}
               defaultValue={session?.user.dataProfile?.address || ""}
@@ -394,7 +394,7 @@ export default function DependenciaProfileForm({
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="email">Correo de la Dependencia</Label>
+            <Label htmlFor="email">Correo de la Alcaldia</Label>
             <Input
               {...register("email")}
               defaultValue={session?.user.dataProfile?.email || ""}
@@ -410,8 +410,8 @@ export default function DependenciaProfileForm({
             )}
           </LabelInputContainer>
 
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="rif">Numero de RIF de la Dependencia</Label>
+          {/*<LabelInputContainer className="mb-4">
+            <Label htmlFor="rif">Numero de RIF de la Alcaldia</Label>
             <Input
               {...register("rif")}
               defaultValue={session?.user.dataProfile?.rif || ""}
@@ -425,11 +425,11 @@ export default function DependenciaProfileForm({
             {errors.rif && (
               <p className="text-red-500 text-sm">{errors.rif.message}</p>
             )}
-          </LabelInputContainer>
+          </LabelInputContainer>*/}
 
           <LabelInputContainer className="mb-4">
             <Label htmlFor="social">
-              Link de la Red Social de la Dependencia
+              Link de la Red Social de la Alcaldia
             </Label>
             <Input
               {...register("social")}
@@ -448,7 +448,7 @@ export default function DependenciaProfileForm({
 
           <LabelInputContainer className="mb-4">
             <Label htmlFor="description">
-              Breve Descripción de la Dependencia
+              Breve Descripción de la Alcaldia
             </Label>
             <Input
               {...register("description")}
