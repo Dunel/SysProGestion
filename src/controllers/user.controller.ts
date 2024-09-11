@@ -17,7 +17,10 @@ export async function createUser(req: NextRequest) {
     const { code, data, token } = await req.json();
     const result = userSchema.parse({ ...data, code });
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET as string
+    ) as DecodedToken;
     if (!decoded) {
       return NextResponse.json(
         { error: "Acceso no autorizado", step: 0 },
@@ -94,7 +97,7 @@ export async function createUser(req: NextRequest) {
       );
     }
 
-    if(error instanceof jwt.JsonWebTokenError) {
+    if (error instanceof jwt.JsonWebTokenError) {
       return NextResponse.json(
         { error: "El registro ha expirado", step: 0 },
         { status: 401 }
@@ -115,81 +118,93 @@ export async function getUser(req: NextRequest) {
     if (!token) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
-    const cedula = userSchema.shape.cedula.parse(req.nextUrl.searchParams.get("ci"))
-    const profile = await prisma.estudentInfo.findFirst({
-      where: { userCedula: cedula },
+    const cedula = userSchema.shape.cedula.parse(
+      req.nextUrl.searchParams.get("ci")
+    );
+    const user = await prisma.user.findFirst({
+      where: { cedula: cedula, role: "estudiante" },
       select: {
-        institution: {
+        id: true,
+        names: true,
+        lastnames: true,
+        phone: true,
+        birthdate: true,
+        mail: true,
+        estado: {
           select: {
             id: true,
-            institutionCode: true,
-            name: true,
+            estado: true,
           },
         },
-        career: {
+        municipio: {
           select: {
             id: true,
-            careerCode: true,
-            name: true,
+            municipio: true,
           },
         },
-        skills: true,
-        interests: true,
-        dateStart: true,
-        dateEnd: true,
-        description: true,
-        address: true,
-        curriculum: true,
-        User: {
+        parroquia: {
           select: {
-            names: true,
-            lastnames: true,
-            phone: true,
-            birthdate: true,
-            estado: {
+            id: true,
+            parroquia: true,
+          },
+        },
+        esInfo: {
+          select: {
+            institution: {
               select: {
                 id: true,
-                estado: true,
+                institutionCode: true,
+                name: true,
               },
             },
-            municipio: {
+            career: {
               select: {
                 id: true,
-                municipio: true,
+                careerCode: true,
+                name: true,
               },
             },
-            parroquia: {
-              select: {
-                id: true,
-                parroquia: true,
-              },
-            },
+            skills: true,
+            interests: true,
+            dateStart: true,
+            dateEnd: true,
+            description: true,
+            address: true,
+            curriculum: true,
           },
         },
       },
     });
+    if (!user) {
+      return NextResponse.json(
+        { error: "Usuario no encontrado." },
+        { status: 404 }
+      );
+    }
     const object = {
-      names: profile?.User.names,
-      lastnames: profile?.User.lastnames,
-      phone: profile?.User.phone,
-      address: profile?.address,
-      institution: profile?.institution,
-      career: profile?.career,
-      skills: profile?.skills,
-      interests: profile?.interests,
-      description: profile?.description,
-      curriculum: profile?.curriculum,
-      estadoId: profile?.User.estado?.id,
-      estado: profile?.User.estado?.estado,
-      municipioId: profile?.User.municipio?.id,
-      municipio: profile?.User.municipio?.municipio,
-      parroquiaId: profile?.User.parroquia?.id,
-      parroquia: profile?.User.parroquia?.parroquia,
-      dateStart: profile?.dateStart,
-      dateEnd: profile?.dateEnd,
-      birthdate: profile?.User.birthdate,
+      id: user.id,
+      names: user.names,
+      lastnames: user.lastnames,
+      phone: user.phone,
+      address: user.esInfo?.address,
+      institution: user.esInfo?.institution,
+      career: user.esInfo?.career,
+      skills: user.esInfo?.skills,
+      interests: user.esInfo?.interests,
+      description: user.esInfo?.description,
+      curriculum: user.esInfo?.curriculum,
+      estadoId: user.estado?.id,
+      estado: user.estado?.estado,
+      municipioId: user.municipio?.id,
+      municipio: user.municipio?.municipio,
+      parroquiaId: user.parroquia?.id,
+      parroquia: user.parroquia?.parroquia,
+      dateStart: user.esInfo?.dateStart,
+      dateEnd: user.esInfo?.dateEnd,
+      birthdate: user.birthdate,
+      mail: user.mail,
     };
-    return NextResponse.json({ object }, { status: 200 });
+    return NextResponse.json(object, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(
@@ -198,7 +213,123 @@ export async function getUser(req: NextRequest) {
       );
     }
 
-    if(error instanceof jwt.JsonWebTokenError) {
+    if (error instanceof jwt.JsonWebTokenError) {
+      return NextResponse.json(
+        { error: "El registro ha expirado", step: 0 },
+        { status: 401 }
+      );
+    }
+
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function updateUser(req: NextRequest) {
+  try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const cedula = userSchema.shape.cedula.parse(
+      req.nextUrl.searchParams.get("ci")
+    );
+    const user = await prisma.user.findFirst({
+      where: { cedula: cedula, role: "estudiante" },
+      select: {
+        id: true,
+        names: true,
+        lastnames: true,
+        phone: true,
+        birthdate: true,
+        mail: true,
+        estado: {
+          select: {
+            id: true,
+            estado: true,
+          },
+        },
+        municipio: {
+          select: {
+            id: true,
+            municipio: true,
+          },
+        },
+        parroquia: {
+          select: {
+            id: true,
+            parroquia: true,
+          },
+        },
+        esInfo: {
+          select: {
+            institution: {
+              select: {
+                id: true,
+                institutionCode: true,
+                name: true,
+              },
+            },
+            career: {
+              select: {
+                id: true,
+                careerCode: true,
+                name: true,
+              },
+            },
+            skills: true,
+            interests: true,
+            dateStart: true,
+            dateEnd: true,
+            description: true,
+            address: true,
+            curriculum: true,
+          },
+        },
+      },
+    });
+    if (!user) {
+      return NextResponse.json(
+        { error: "Usuario no encontrado." },
+        { status: 404 }
+      );
+    }
+    const object = {
+      id: user.id,
+      names: user.names,
+      lastnames: user.lastnames,
+      phone: user.phone,
+      address: user.esInfo?.address,
+      institution: user.esInfo?.institution,
+      career: user.esInfo?.career,
+      skills: user.esInfo?.skills,
+      interests: user.esInfo?.interests,
+      description: user.esInfo?.description,
+      curriculum: user.esInfo?.curriculum,
+      estadoId: user.estado?.id,
+      estado: user.estado?.estado,
+      municipioId: user.municipio?.id,
+      municipio: user.municipio?.municipio,
+      parroquiaId: user.parroquia?.id,
+      parroquia: user.parroquia?.parroquia,
+      dateStart: user.esInfo?.dateStart,
+      dateEnd: user.esInfo?.dateEnd,
+      birthdate: user.birthdate,
+      mail: user.mail,
+    };
+    return NextResponse.json(object, { status: 200 });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+
+    if (error instanceof jwt.JsonWebTokenError) {
       return NextResponse.json(
         { error: "El registro ha expirado", step: 0 },
         { status: 401 }
