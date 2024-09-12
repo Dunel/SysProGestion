@@ -589,7 +589,29 @@ export const profileDepenSchema = z.object({
 });
 
 export const profileSchemaEdit = z.object({
-  id: z.number().min(1).max(99999999),
+  cedula: z
+    .string()
+    .min(7)
+    .max(8)
+    .transform((val, ctx) => {
+      const parsed = parseInt(val);
+      if (isNaN(parsed)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Los caracteres deben ser un númericos",
+        });
+        return z.NEVER;
+      }
+      if (parsed < 6000000 || parsed > 99999999) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Número de cedula no valido",
+        });
+        return z.NEVER;
+      }
+      return parsed;
+    })
+    .or(z.number().min(6000000).max(999999999)),
   names: z
     .string({ required_error: "El nombre es requerido" })
     .min(3, { message: "El nombre debe tener minimo 3 caracteres" })
@@ -798,40 +820,39 @@ export const profileSchemaEdit = z.object({
       return parsed;
     })
     .or(z.number().min(1).max(9999)),
-  skills: z
-    .array(
-      z.enum(
-        [
-          "resoluciondeproblemas",
-          "trabajoenequipo",
-          "adaptabilidad",
-          "comunicacionefectiva",
-          "liderazgo",
-          "pensamientocritico",
-          "orientacionaresultados",
-          "creatividad",
-          "gestiondeltiempo",
-          "aprendizajecontinuo",
-          "dondegente",
-          "ensenanza",
-          "sociable",
-          "salud",
-          "deportes",
-          "logistica",
-          "expresionesartisticas",
-          "diseno",
-          "musica",
-          "ingles",
-          "otrosidiomasnaturales",
-          "lenguajesdeprogramacion",
-        ],
-        {
-          errorMap: (issue, ctx) => {
-            return { message: "Habilidad no valida" };
-          },
-        }
-      )
-    ),
+  skills: z.array(
+    z.enum(
+      [
+        "resoluciondeproblemas",
+        "trabajoenequipo",
+        "adaptabilidad",
+        "comunicacionefectiva",
+        "liderazgo",
+        "pensamientocritico",
+        "orientacionaresultados",
+        "creatividad",
+        "gestiondeltiempo",
+        "aprendizajecontinuo",
+        "dondegente",
+        "ensenanza",
+        "sociable",
+        "salud",
+        "deportes",
+        "logistica",
+        "expresionesartisticas",
+        "diseno",
+        "musica",
+        "ingles",
+        "otrosidiomasnaturales",
+        "lenguajesdeprogramacion",
+      ],
+      {
+        errorMap: (issue, ctx) => {
+          return { message: "Habilidad no valida" };
+        },
+      }
+    )
+  ),
   interests: z
     .string({ required_error: "Los intereses son requeridos" })
     .min(10, { message: "Los intereses debe tener minimo 10 caracteres" })

@@ -11,10 +11,10 @@ type CardSearch = {
   handleSelectUser: () => void;
 };
 
-type Estudiante  = {
+type Estudiante = {
   names: string;
   lastnames: string;
-}
+};
 
 export default function SearchStudents({
   searchTerm,
@@ -39,7 +39,10 @@ export default function SearchStudents({
             className="px-10"
           />
           <button
-            onClick={() => searchUser()}
+            onClick={() => {
+              setIsRegistering(false)
+              searchUser();
+            }}
             className="inline-flex items-center justify-center rounded-md px-6 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             BUSCAR
@@ -59,7 +62,9 @@ export default function SearchStudents({
         <ul className="space-y-2">
           {user && (
             <li className="flex justify-between items-center p-2 bg-gray-100 rounded">
-              <span>{searchTerm} {user.names} {user.lastnames}</span>
+              <span>
+                {searchTerm} {user.names} {user.lastnames}
+              </span>
               <button
                 className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={() => handleSelectUser}

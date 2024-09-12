@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 interface EstudianteFormProfileProps {
   data: {
-    id: number;
+    cedula: number;
     address: string;
     institution: {
       id: number;
@@ -37,6 +37,7 @@ interface EstudianteFormProfileProps {
     phone: string;
     mail: string;
   } | null;
+  regForm: boolean;
 }
 
 interface Estados {
@@ -70,6 +71,7 @@ interface Career {
 
 export default function AlcaldiaFormEditStudent({
   data,
+  regForm,
 }: EstudianteFormProfileProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -148,9 +150,10 @@ export default function AlcaldiaFormEditStudent({
   const profileUpdate = async (data: ProfileFormDataEdit) => {
     try {
       setLoading(true);
-      //const res = await axios.post("/api/estudiante/perfil", data);
-      //router.push("/estudiante/perfil");
-      console.log(data);
+      const res = await axios.put("/api/alcaldia/users", data);
+      alert("Actualización exitosa");
+      router.push("/alcaldia/estudiante");
+      //console.log(data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);
@@ -265,11 +268,18 @@ export default function AlcaldiaFormEditStudent({
       setValue("parroquiaId", data.parroquiaId);
       setValue("institutionId", data.institution?.id);
       setValue("careerId", data.career?.id);
-      setValue("dateStart", data.dateStart);
-      setValue("dateEnd", data.dateEnd);
-      setValue("id", data.id);
-      setValue("birthdate", data.birthdate);
     }
+    setValue("dateStart", data?.dateStart || new Date());
+    setValue("dateEnd", data?.dateEnd || new Date());
+    setValue("cedula", data?.cedula || 0);
+    setValue("birthdate", data?.birthdate || new Date());
+    setValue("names", data?.names || "");
+    setValue("lastnames", data?.lastnames || "");
+    setValue("mail", data?.mail || "");
+    setValue("phone", data?.phone || "");
+    setValue("address", data?.address || "");
+    setValue("description", data?.address || "");
+    setValue("interests", data?.interests || "");
   }, [data]);
 
   return (
@@ -284,11 +294,30 @@ export default function AlcaldiaFormEditStudent({
           onSubmit={handleSubmit(onSubmit)}
           className="mb-8 form-student-info"
         >
+          {regForm && (
+            <LabelInputContainer className="mb-8">
+              <Label htmlFor="cedula">Cedula *</Label>
+              <Input
+                {...register("cedula")}
+                value={watch("cedula") || ""}
+                onChange={handleInputChange}
+                id="cedula"
+                name="cedula"
+                placeholder="23456789"
+                type="text"
+                className={cn(errors.cedula && "bg-red-100 focus:bg-red-100")}
+              />
+              {errors.cedula && (
+                <p className="text-red-500 text-sm">{errors.cedula.message}</p>
+              )}
+            </LabelInputContainer>
+          )}
+
           <LabelInputContainer className="mb-8">
             <Label htmlFor="names">Nombres del estudiante *</Label>
             <Input
               {...register("names")}
-              value={data?.names || ""}
+              value={watch("names") || ""}
               onChange={handleInputChange}
               id="names"
               name="names"
@@ -305,7 +334,7 @@ export default function AlcaldiaFormEditStudent({
             <Label htmlFor="lastnames">Apellidos del estudiante *</Label>
             <Input
               {...register("lastnames")}
-              value={data?.lastnames}
+              value={watch("lastnames") || ""}
               onChange={handleInputChange}
               id="lastnames"
               name="lastnames"
@@ -322,7 +351,7 @@ export default function AlcaldiaFormEditStudent({
             <Label htmlFor="mail">Correo Electronico *</Label>
             <Input
               {...register("mail")}
-              value={data?.mail}
+              value={watch("mail") || ""}
               onChange={handleInputChange}
               id="mail"
               name="mail"
@@ -368,7 +397,7 @@ export default function AlcaldiaFormEditStudent({
             <Label htmlFor="phone">Teléfono del estudiante *</Label>
             <Input
               {...register("phone")}
-              value={data?.phone || ""}
+              value={watch("phone") || ""}
               onChange={handleInputChange}
               id="phone"
               name="phone"
@@ -508,7 +537,7 @@ export default function AlcaldiaFormEditStudent({
             <Label htmlFor="address">Dirección del estudiante *</Label>
             <Input
               {...register("address")}
-              value={data?.address || ""}
+              value={watch("address") || ""}
               onChange={handleInputChange}
               id="address"
               name="address"
@@ -671,7 +700,7 @@ export default function AlcaldiaFormEditStudent({
             <Input
               {...register("description")}
               type="textarea"
-              value={data?.description || ""}
+              value={watch("description") || ""}
               onChange={handleInputChange}
               id="description"
               name="description"
@@ -692,7 +721,7 @@ export default function AlcaldiaFormEditStudent({
             <Input
               {...register("interests")}
               type="textarea"
-              value={data?.interests || ""}
+              value={watch("interests") || ""}
               onChange={handleInputChange}
               id="interests"
               name="interests"

@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Header from "@/components/Header";
@@ -15,7 +14,7 @@ type User = {
 };
 
 type Estudiante = {
-  id: number;
+  cedula: number;
   address: string;
   institution: {
     id: number;
@@ -41,7 +40,7 @@ type Estudiante = {
 export default function EstudentManagement() {
   const [user, setUser] = useState<Estudiante>();
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<Estudiante | null>(null);
   const [isRegistering, setIsRegistering] = useState(false);
 
   const handleSelectUser = () => {};
@@ -56,9 +55,12 @@ export default function EstudentManagement() {
 
   const searchUser = async () => {
     try {
+      if(searchTerm === user?.cedula.toString()){
+        return
+      }
       const res = await axios.get("/api/alcaldia/users?ci=" + searchTerm);
       setUser(res.data);
-      console.log(res.data);
+      //console.log(res.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);
@@ -89,16 +91,13 @@ export default function EstudentManagement() {
           </div>
 
           {isRegistering ? (
-            <Card>
-              <CardHeader>
-                <CardTitle>Registrar Nuevo Usuario</CardTitle>
-              </CardHeader>
-              <CardContent></CardContent>
-            </Card>
+            <div className="bg-white mx-4 rounded-lg border gap-2">
+            <AlcaldiaFormEditStudent regForm={true} data={null} />
+            </div>
           ) : (
             user && (
               <div className="bg-white mx-4 rounded-lg border gap-2">
-                <AlcaldiaFormEditStudent data={user} />
+                <AlcaldiaFormEditStudent regForm={false} data={user} />
               </div>
             )
           )}
