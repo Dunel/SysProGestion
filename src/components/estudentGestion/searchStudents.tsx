@@ -6,7 +6,7 @@ type CardSearch = {
   setSearchTerm: Function;
   searchUser: Function;
   setIsRegistering: Function;
-  setSelectedUser: Function;
+  setUser: Function;
   user: Estudiante | undefined;
   handleSelectUser: () => void;
 };
@@ -14,14 +14,14 @@ type CardSearch = {
 type Estudiante = {
   names: string;
   lastnames: string;
-};
+} | null;
 
 export default function SearchStudents({
   searchTerm,
   setSearchTerm,
   searchUser,
   setIsRegistering,
-  setSelectedUser,
+  setUser,
   user,
   handleSelectUser,
 }: CardSearch) {
@@ -41,7 +41,7 @@ export default function SearchStudents({
           <button
             onClick={() => {
               setIsRegistering(false)
-              searchUser();
+              searchUser(searchTerm)
             }}
             className="inline-flex items-center justify-center rounded-md px-6 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
@@ -52,7 +52,7 @@ export default function SearchStudents({
         <button
           onClick={() => {
             setIsRegistering(true);
-            setSelectedUser(null);
+            setUser(null);
           }}
           className="mb-4 inline-flex items-center justify-center rounded-md px-6 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
         >

@@ -50,6 +50,7 @@ export default function Navbar() {
           href: "/alcaldia/notificaciones",
           current: false,
         },
+        { name: "ESTUDIANTES", href: "/alcaldia/estudiantes", current: false },
       ]);
     } else if (session?.user.role === "dependencia") {
       setNavigation([

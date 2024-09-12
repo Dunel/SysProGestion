@@ -152,7 +152,7 @@ export default function AlcaldiaFormEditStudent({
       setLoading(true);
       const res = await axios.put("/api/alcaldia/users", data);
       alert("Actualización exitosa");
-      router.push("/alcaldia/estudiante");
+      router.push("/alcaldia/estudiantes");
       //console.log(data);
     } catch (error) {
       if (axios.isAxiosError(error)) {

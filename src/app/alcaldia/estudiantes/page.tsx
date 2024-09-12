@@ -38,7 +38,7 @@ type Estudiante = {
 };
 
 export default function EstudentManagement() {
-  const [user, setUser] = useState<Estudiante>();
+  const [user, setUser] = useState<Estudiante | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUser, setSelectedUser] = useState<Estudiante | null>(null);
   const [isRegistering, setIsRegistering] = useState(false);
@@ -84,7 +84,7 @@ export default function EstudentManagement() {
               setSearchTerm={setSearchTerm}
               searchUser={searchUser}
               setIsRegistering={setIsRegistering}
-              setSelectedUser={setSelectedUser}
+              setUser={setUser}
               user={user}
               handleSelectUser={handleSelectUser}
             />
