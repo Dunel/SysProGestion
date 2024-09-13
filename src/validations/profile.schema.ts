@@ -48,7 +48,17 @@ export const profileSchema = z.object({
   dateStart: z
     .string()
     .transform((val, ctx) => {
-      const date = new Date(val);
+      const datePart = val.split("T")[0];
+      const isValidFormat = /^\d{4}-\d{2}-\d{2}$/.test(datePart);
+      if (!isValidFormat) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Formato de fecha no válido. Usa el formato YYYY-MM-DD",
+        });
+        return z.NEVER;
+      }
+      const date = new Date(`${datePart}T00:00:00-04:00`);
+
       if (isNaN(date.getTime())) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -56,10 +66,7 @@ export const profileSchema = z.object({
         });
         return z.NEVER;
       }
-      const today = new Date();
-      const age = today.getFullYear() - date.getFullYear();
-      const monthDiff = today.getMonth() - date.getMonth();
-      const dayDiff = today.getDate() - date.getDate();
+
       return date;
     })
     .or(
@@ -71,7 +78,17 @@ export const profileSchema = z.object({
   dateEnd: z
     .string()
     .transform((val, ctx) => {
-      const date = new Date(val);
+      const datePart = val.split("T")[0];
+      const isValidFormat = /^\d{4}-\d{2}-\d{2}$/.test(datePart);
+      if (!isValidFormat) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Formato de fecha no válido. Usa el formato YYYY-MM-DD",
+        });
+        return z.NEVER;
+      }
+      const date = new Date(`${datePart}T00:00:00-04:00`);
+
       if (isNaN(date.getTime())) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -79,10 +96,7 @@ export const profileSchema = z.object({
         });
         return z.NEVER;
       }
-      const today = new Date();
-      const age = today.getFullYear() - date.getFullYear();
-      const monthDiff = today.getMonth() - date.getMonth();
-      const dayDiff = today.getDate() - date.getDate();
+
       return date;
     })
     .or(
@@ -631,11 +645,15 @@ export const profileSchemaEdit = z.object({
   phone: z
     .string({ required_error: "El telefono es requerido" })
     .min(10, { message: "El telefono debe tener minimo 10 caracteres" })
-    .max(12, { message: "El telefono debe tener maximo 12 caracteres" }),
+    .max(12, { message: "El telefono debe tener maximo 12 caracteres" })
+    .optional()
+    .or(z.literal("")),
   address: z
     .string({ required_error: "La dirección es requerida" })
     .min(10, { message: "La dirección debe tener minimo 10 caracteres" })
-    .max(100, { message: "La dirección debe tener maximo 100 caracteres" }),
+    .max(100, { message: "La dirección debe tener maximo 100 caracteres" })
+    .optional()
+    .or(z.literal("")),
   institutionId: z
     .string({ required_error: "institucion es requerida" })
     .min(1)
@@ -666,7 +684,17 @@ export const profileSchemaEdit = z.object({
       },
     })
     .transform((val, ctx) => {
-      const date = new Date(val);
+      const datePart = val.split("T")[0];
+      const isValidFormat = /^\d{4}-\d{2}-\d{2}$/.test(datePart);
+      if (!isValidFormat) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Formato de fecha no válido. Usa el formato YYYY-MM-DD",
+        });
+        return z.NEVER;
+      }
+      const date = new Date(`${datePart}T00:00:00-04:00`);
+
       if (isNaN(date.getTime())) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -674,6 +702,7 @@ export const profileSchemaEdit = z.object({
         });
         return z.NEVER;
       }
+
       return date;
     })
     .or(
@@ -685,7 +714,17 @@ export const profileSchemaEdit = z.object({
   dateStart: z
     .string()
     .transform((val, ctx) => {
-      const date = new Date(val);
+      const datePart = val.split("T")[0];
+      const isValidFormat = /^\d{4}-\d{2}-\d{2}$/.test(datePart);
+      if (!isValidFormat) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Formato de fecha no válido. Usa el formato YYYY-MM-DD",
+        });
+        return z.NEVER;
+      }
+      const date = new Date(`${datePart}T00:00:00-04:00`);
+
       if (isNaN(date.getTime())) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -693,10 +732,7 @@ export const profileSchemaEdit = z.object({
         });
         return z.NEVER;
       }
-      const today = new Date();
-      const age = today.getFullYear() - date.getFullYear();
-      const monthDiff = today.getMonth() - date.getMonth();
-      const dayDiff = today.getDate() - date.getDate();
+
       return date;
     })
     .or(
@@ -708,7 +744,17 @@ export const profileSchemaEdit = z.object({
   dateEnd: z
     .string()
     .transform((val, ctx) => {
-      const date = new Date(val);
+      const datePart = val.split("T")[0];
+      const isValidFormat = /^\d{4}-\d{2}-\d{2}$/.test(datePart);
+      if (!isValidFormat) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Formato de fecha no válido. Usa el formato YYYY-MM-DD",
+        });
+        return z.NEVER;
+      }
+      const date = new Date(`${datePart}T00:00:00-04:00`);
+
       if (isNaN(date.getTime())) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -716,10 +762,7 @@ export const profileSchemaEdit = z.object({
         });
         return z.NEVER;
       }
-      const today = new Date();
-      const age = today.getFullYear() - date.getFullYear();
-      const monthDiff = today.getMonth() - date.getMonth();
-      const dayDiff = today.getDate() - date.getDate();
+
       return date;
     })
     .or(
@@ -820,47 +863,53 @@ export const profileSchemaEdit = z.object({
       return parsed;
     })
     .or(z.number().min(1).max(9999)),
-  skills: z.array(
-    z.enum(
-      [
-        "resoluciondeproblemas",
-        "trabajoenequipo",
-        "adaptabilidad",
-        "comunicacionefectiva",
-        "liderazgo",
-        "pensamientocritico",
-        "orientacionaresultados",
-        "creatividad",
-        "gestiondeltiempo",
-        "aprendizajecontinuo",
-        "dondegente",
-        "ensenanza",
-        "sociable",
-        "salud",
-        "deportes",
-        "logistica",
-        "expresionesartisticas",
-        "diseno",
-        "musica",
-        "ingles",
-        "otrosidiomasnaturales",
-        "lenguajesdeprogramacion",
-      ],
-      {
-        errorMap: (issue, ctx) => {
-          return { message: "Habilidad no valida" };
-        },
-      }
+  skills: z
+    .array(
+      z.enum(
+        [
+          "resoluciondeproblemas",
+          "trabajoenequipo",
+          "adaptabilidad",
+          "comunicacionefectiva",
+          "liderazgo",
+          "pensamientocritico",
+          "orientacionaresultados",
+          "creatividad",
+          "gestiondeltiempo",
+          "aprendizajecontinuo",
+          "dondegente",
+          "ensenanza",
+          "sociable",
+          "salud",
+          "deportes",
+          "logistica",
+          "expresionesartisticas",
+          "diseno",
+          "musica",
+          "ingles",
+          "otrosidiomasnaturales",
+          "lenguajesdeprogramacion",
+        ],
+        {
+          errorMap: (issue, ctx) => {
+            return { message: "Habilidad no valida" };
+          },
+        }
+      )
     )
-  ),
+    .optional(),
   interests: z
     .string({ required_error: "Los intereses son requeridos" })
     .min(10, { message: "Los intereses debe tener minimo 10 caracteres" })
-    .max(100, { message: "Los intereses debe tener maximo 100 caracteres" }),
+    .max(100, { message: "Los intereses debe tener maximo 100 caracteres" })
+    .optional()
+    .or(z.literal("")),
   description: z
     .string({ required_error: "La descripción es requerida" })
     .min(7, { message: "La descripción debe tener minimo 7 caracteres" })
-    .max(100, { message: "La descripción debe tener maximo 100 caracteres" }),
+    .max(100, { message: "La descripción debe tener maximo 100 caracteres" })
+    .optional()
+    .or(z.literal("")),
 });
 
 export type ProfileDepenFormData = z.infer<typeof profileDepenSchema>;

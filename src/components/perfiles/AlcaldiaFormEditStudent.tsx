@@ -157,6 +157,7 @@ export default function AlcaldiaFormEditStudent({
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);
+        alert ("ERROR: "+ error.response?.data.error)
       } else {
         console.error("error:", error);
       }
@@ -394,7 +395,7 @@ export default function AlcaldiaFormEditStudent({
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-8">
-            <Label htmlFor="phone">Teléfono del estudiante *</Label>
+            <Label htmlFor="phone">Teléfono del estudiante</Label>
             <Input
               {...register("phone")}
               value={watch("phone") || ""}
@@ -411,7 +412,7 @@ export default function AlcaldiaFormEditStudent({
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-8">
-            <Label htmlFor="estado">ESTADO</Label>
+            <Label htmlFor="estado">Estado *</Label>
             <div className="relative">
               <Input
                 id="estado"
@@ -452,7 +453,7 @@ export default function AlcaldiaFormEditStudent({
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-8">
-            <Label htmlFor="municipio">Municipio</Label>
+            <Label htmlFor="municipio">Municipio *</Label>
             <div className="relative">
               <Input
                 id="municipioId"
@@ -495,7 +496,7 @@ export default function AlcaldiaFormEditStudent({
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-8">
-            <Label htmlFor="parroquia">Parroquia</Label>
+            <Label htmlFor="parroquia">Parroquia *</Label>
             <div className="relative">
               <Input
                 id="parroquiaId"
@@ -534,7 +535,7 @@ export default function AlcaldiaFormEditStudent({
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-8">
-            <Label htmlFor="address">Dirección del estudiante *</Label>
+            <Label htmlFor="address">Dirección del estudiante</Label>
             <Input
               {...register("address")}
               value={watch("address") || ""}

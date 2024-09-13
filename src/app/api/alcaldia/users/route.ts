@@ -8,3 +8,7 @@ export async function GET(req: NextRequest) {
 export async function PUT(req: NextRequest){
   return await updateUser(req);
 }
+
+export async function POST(req: NextRequest){
+  return await updateUser(req);
+}

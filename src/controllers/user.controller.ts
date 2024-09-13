@@ -278,8 +278,143 @@ export async function updateUser(req: NextRequest) {
       where: { cedula: result.cedula, role: "estudiante" },
     });
 
-    if(!userFound){
-      return NextResponse.json({ error: "Usuario no encontrado" }, { status: 404 });
+    if (!userFound) {
+      return NextResponse.json(
+        { error: "Usuario no encontrado" },
+        { status: 404 }
+      );
+    }
+
+    await prisma.estudentInfo.upsert({
+      where: { userCedula: result.cedula },
+      update: {
+        institutionId: result.institutionId,
+        careerId: result.careerId,
+        skills: result.skills,
+        interests: result.interests,
+        description: result.description,
+        address: result.address,
+        dateStart: result.dateStart,
+        dateEnd: result.dateEnd,
+      },
+      create: {
+        userCedula: result.cedula,
+        institutionId: result.institutionId,
+        careerId: result.careerId,
+        skills: result.skills,
+        interests: result.interests,
+        description: result.description,
+        address: result.address,
+        dateStart: result.dateStart,
+        dateEnd: result.dateEnd,
+      },
+    });
+
+    await prisma.user.update({
+      where: { cedula: result.cedula, role: "estudiante" },
+      data: {
+        names: result.names,
+        lastnames: result.lastnames,
+        phone: result.phone,
+        profile: true,
+        estadoId: result.estadoId,
+        municipioId: result.municipioId,
+        parroquiaId: result.parroquiaId,
+        mail: result.mail,
+        birthdate: result.birthdate,
+      },
+    });
+
+    return NextResponse.json(
+      { message: "Perfil actualizado" },
+      { status: 200 }
+    );
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+
+    if (error instanceof jwt.JsonWebTokenError) {
+      return NextResponse.json(
+        { error: "El registro ha expirado", step: 0 },
+        { status: 401 }
+      );
+    }
+
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function createUserAlcaldia(req: NextRequest) {
+  try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const {
+      names,
+      lastnames,
+      phone,
+      address,
+      institutionId,
+      careerId,
+      skills,
+      interests,
+      description,
+      dateStart,
+      dateEnd,
+      estadoId,
+      municipioId,
+      parroquiaId,
+      mail,
+      birthdate,
+      cedula,
+    } = await req.json();
+    const result = profileSchemaEdit.parse({
+      names,
+      lastnames,
+      phone,
+      address,
+      institutionId,
+      careerId,
+      skills,
+      interests,
+      description,
+      dateStart,
+      dateEnd,
+      estadoId,
+      municipioId,
+      parroquiaId,
+      mail,
+      birthdate,
+      cedula,
+    });
+
+    const userFound = await prisma.user.findFirst({
+      where: {
+        OR: [{ cedula: result.cedula }, { mail: result.mail }],
+      },
+      select: {
+        cedula: true,
+      },
+    });
+    if (userFound) {
+      return NextResponse.json(
+        {
+          error:
+            result.cedula === userFound.cedula
+              ? "La cédula se encuentra registrada."
+              : "El correo electronico se encuentra registrado.",
+        },
+        { status: 401 }
+      );
     }
 
     await prisma.estudentInfo.upsert({

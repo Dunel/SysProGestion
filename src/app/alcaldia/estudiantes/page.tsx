@@ -64,6 +64,7 @@ export default function EstudentManagement() {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);
+        alert("ERROR: " + error.response?.data.error);
       } else {
         console.error("error:", error);
       }

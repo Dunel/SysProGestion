@@ -90,7 +90,7 @@ model estudentInfo {
   skills              Skills[]
   interests           String?
   description         String?
-  address             String
+  address             String?
   curriculum          String?
   updatedAt           DateTime              @updatedAt
   User                User                  @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
