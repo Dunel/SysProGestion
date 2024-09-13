@@ -127,7 +127,7 @@ function calcularEdad(fechaNacimiento: string | Date): string {
   return edad.toString()+' años';
 }
   return (
-    <div className="flex flex-col w-[100%] relative z-20 text-1xl m-2 p-2 pb-0 mb-0 rounded-lg mt-1 shadow lg:shadow-none md:text-2xl">
+    <div className="flex flex-col w-[100%] relative z-20 text-base m-2 p-2 pb-0 mb-0 rounded-lg mt-1 shadow lg:shadow-none md:text-lg">
       {session?.user.profile && (
         <div className="flex flex-col w-[100%] my-2 mb-2 bg-white md:sticky md:top-[15vh]">
           {/* //!Padre de foto + info personal */}
@@ -192,11 +192,13 @@ function calcularEdad(fechaNacimiento: string | Date): string {
               </p>
               <p className="text-gray-600 md:text-1x1">
                 <strong>🗓️ Fecha de nacimiento:</strong>{" "}
-                {new Date(session.user.dataProfile.birthdate).toLocaleDateString()},
+                {new Date(session.user.dataProfile.birthdate).toLocaleDateString()},CONTINUA MAL
               </p>
               <p className="text-gray-600 md:text-1x1">
+                {/* //! OJOOO */}
                 <strong>✔️Edad:</strong>{" "}
-                {calcularEdad(session.user.dataProfile.dateEnd)}
+                {calcularEdad(session.user.dataProfile.dateEnd)} 
+                {session.user.dataProfile.birthdate} CONTINUA MAL
               </p>
             </div>
           </div>
@@ -207,28 +209,30 @@ function calcularEdad(fechaNacimiento: string | Date): string {
               Perfil Profesional
             </h4>
 
-            {/* universidad, trismestre e intereses */}
+         
+            {/* universidad y duracion del proceso */}
             <div className="flex flex-col items-start gap-2 md:flex-row">
-              <div className="m-2 p-1 w-full md:w-[30%]">
+              <div className="m-2 p-1 w-full md:w-[50%]">
                 <p className="text-gray-600 font-bold md:text-1x1">🏫Institucion Educativa:</p>
                 <p>{session.user.dataProfile.institution.name || ""}</p>
               </div>
 
-              <div className="m-2 p-1 w-full md:w-[20%]">
+              <div className="m-2 p-1 w-full md:w-[50%]">
                 <p className="text-gray-600 font-bold md:text-1x1">
                   ⌛duracion del proceso:
                 </p>
-
-                <p>{new Date(session.user.dataProfile.dateStart).toLocaleDateString()} a {new Date(session.user.dataProfile.dateEnd).toLocaleDateString()}</p> 
+                  <p>{new Date(session.user.dataProfile.dateStart).toLocaleDateString()} 
+                    a {new Date(session.user.dataProfile.dateEnd).toLocaleDateString()}</p> 
               </div>
 
-              <div className="m-2 p-1 w-full md:w-[50%]">
+            </div>
+               {/* universidad, trismestre e intereses */}
+              <div className="m-2 p-1 w-full md:w-[100%]">
                 <p className="text-gray-600 font-bold md:text-1x1">
                   🏓 Intereses:
                 </p>
                 <p>{session.user.dataProfile.interests}</p>
               </div>
-            </div>
 
             {/* Habilidades y descripcion */}
             <div className="flex flex-col items-start gap-2 md:flex-row">
