@@ -277,10 +277,19 @@ export async function updateUser(req: NextRequest) {
     const userFound = await prisma.user.findFirst({
       where: { cedula: result.cedula, role: "estudiante" },
     });
-
     if (!userFound) {
       return NextResponse.json(
         { error: "Usuario no encontrado" },
+        { status: 404 }
+      );
+    }
+
+    const mailFound = await prisma.user.findFirst({
+      where: { mail: result.mail, cedula: { not: result.cedula } },
+    });
+    if (mailFound) {
+      return NextResponse.json(
+        { error: "El correo electronico ya esta registrado." },
         { status: 404 }
       );
     }
@@ -417,34 +426,10 @@ export async function createUserAlcaldia(req: NextRequest) {
       );
     }
 
-    await prisma.estudentInfo.upsert({
-      where: { userCedula: result.cedula },
-      update: {
-        institutionId: result.institutionId,
-        careerId: result.careerId,
-        skills: result.skills,
-        interests: result.interests,
-        description: result.description,
-        address: result.address,
-        dateStart: result.dateStart,
-        dateEnd: result.dateEnd,
-      },
-      create: {
-        userCedula: result.cedula,
-        institutionId: result.institutionId,
-        careerId: result.careerId,
-        skills: result.skills,
-        interests: result.interests,
-        description: result.description,
-        address: result.address,
-        dateStart: result.dateStart,
-        dateEnd: result.dateEnd,
-      },
-    });
-
-    await prisma.user.update({
-      where: { cedula: result.cedula, role: "estudiante" },
+    await prisma.user.create({
       data: {
+        cedula: result.cedula,
+        mail: result.mail,
         names: result.names,
         lastnames: result.lastnames,
         phone: result.phone,
@@ -452,15 +437,71 @@ export async function createUserAlcaldia(req: NextRequest) {
         estadoId: result.estadoId,
         municipioId: result.municipioId,
         parroquiaId: result.parroquiaId,
-        mail: result.mail,
         birthdate: result.birthdate,
+        esInfo: {
+          create: {
+            institutionId: result.institutionId,
+            careerId: result.careerId,
+            skills: result.skills,
+            interests: result.interests,
+            description: result.description,
+            address: result.address,
+            dateStart: result.dateStart,
+            dateEnd: result.dateEnd,
+          },
+        },
       },
     });
 
     return NextResponse.json(
-      { message: "Perfil actualizado" },
+      { message: "Estudiante registrado." },
       { status: 200 }
     );
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+
+    if (error instanceof jwt.JsonWebTokenError) {
+      return NextResponse.json(
+        { error: "El registro ha expirado", step: 0 },
+        { status: 401 }
+      );
+    }
+
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function deleteUser(req: NextRequest) {
+  try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const { cedula } = await req.json();
+    const result = userSchema.shape.cedula.parse(cedula);
+    const user = await prisma.user.findFirst({
+      where: { cedula: result, role: "estudiante" },
+    });
+    if (!user) {
+      return NextResponse.json(
+        { error: "Usuario no encontrado." },
+        { status: 404 }
+      );
+    }
+    await prisma.user.delete({
+      where: { cedula: result, role: "estudiante" },
+    });
+
+    return NextResponse.json("Usuario eliminado.", { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(

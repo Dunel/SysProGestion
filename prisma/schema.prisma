@@ -38,7 +38,7 @@ model User {
   lastnames    String
   role         Role             @default(estudiante)
   birthdate    DateTime
-  phone        String
+  phone        String?
   profile      Boolean          @default(false)
   image        String?
   updatedAt    DateTime         @updatedAt

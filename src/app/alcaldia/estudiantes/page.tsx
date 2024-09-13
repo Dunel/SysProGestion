@@ -1,17 +1,11 @@
 "use client";
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Header from "@/components/Header";
 import ContainerWeb from "@/components/ContainerWeb";
-import SearchStudents from "@/components/estudentGestion/searchStudents";
+import SearchStudents from "@/components/studentGestion/searchStudents";
 import axios from "axios";
-import AlcaldiaFormEditStudent from "@/components/perfiles/AlcaldiaFormEditStudent";
-
-type User = {
-  id: number;
-  name: string;
-  email: string;
-};
+import AlcaldiaFormEditStudent from "@/components/studentGestion/AlcaldiaFormEditStudent";
+import { useRouter } from "next/navigation";
 
 type Estudiante = {
   cedula: number;
@@ -40,23 +34,39 @@ type Estudiante = {
 export default function EstudentManagement() {
   const [user, setUser] = useState<Estudiante | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedUser, setSelectedUser] = useState<Estudiante | null>(null);
   const [isRegistering, setIsRegistering] = useState(false);
+  const router = useRouter();
 
-  const handleSelectUser = () => {};
-
-  const handleUpdateUser = () => {
-    setSelectedUser(null);
+  const handleEliminarUser = async () => {
+    try {
+      const res = await axios.delete("/api/alcaldia/users", {
+        data: {
+          cedula: user?.cedula,
+        },
+      });
+      alert("Usuario eliminado!");
+      setUser(null);
+      router.push("/alcaldia/estudiantes");
+      //console.log(data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error lanzado:", error.response?.data.error);
+        alert("ERROR: " + error.response?.data.error);
+      } else {
+        console.error("error:", error);
+      }
+    }
   };
 
-  const handleRegisterUser = () => {
+  const handleReset = () => {
+    setUser(null);
     setIsRegistering(false);
-  };
+  }
 
   const searchUser = async () => {
     try {
-      if(searchTerm === user?.cedula.toString()){
-        return
+      if (searchTerm === user?.cedula.toString()) {
+        return;
       }
       const res = await axios.get("/api/alcaldia/users?ci=" + searchTerm);
       setUser(res.data);
@@ -87,18 +97,26 @@ export default function EstudentManagement() {
               setIsRegistering={setIsRegistering}
               setUser={setUser}
               user={user}
-              handleSelectUser={handleSelectUser}
+              handleDelete={handleEliminarUser}
             />
           </div>
 
           {isRegistering ? (
             <div className="bg-white mx-4 rounded-lg border gap-2">
-            <AlcaldiaFormEditStudent regForm={true} data={null} />
+              <AlcaldiaFormEditStudent
+                regForm={true}
+                data={null}
+                handleReset={handleReset}
+              />
             </div>
           ) : (
             user && (
               <div className="bg-white mx-4 rounded-lg border gap-2">
-                <AlcaldiaFormEditStudent regForm={false} data={user} />
+                <AlcaldiaFormEditStudent
+                  regForm={false}
+                  data={user}
+                  handleReset={handleReset}
+                />
               </div>
             )
           )}

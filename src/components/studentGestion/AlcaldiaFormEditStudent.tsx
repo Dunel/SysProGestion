@@ -38,6 +38,7 @@ interface EstudianteFormProfileProps {
     mail: string;
   } | null;
   regForm: boolean;
+  handleReset: () => void;
 }
 
 interface Estados {
@@ -72,6 +73,7 @@ interface Career {
 export default function AlcaldiaFormEditStudent({
   data,
   regForm,
+  handleReset
 }: EstudianteFormProfileProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -157,7 +159,26 @@ export default function AlcaldiaFormEditStudent({
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);
-        alert ("ERROR: "+ error.response?.data.error)
+        alert("ERROR: " + error.response?.data.error);
+      } else {
+        console.error("error:", error);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const profileRegister = async (data: ProfileFormDataEdit) => {
+    try {
+      setLoading(true);
+      const res = await axios.post("/api/alcaldia/users", data);
+      alert("Registro completado");
+      handleReset();
+      router.push("/alcaldia/estudiantes");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error lanzado:", error.response?.data.error);
+        alert("ERROR: " + error.response?.data.error);
       } else {
         console.error("error:", error);
       }
@@ -176,8 +197,11 @@ export default function AlcaldiaFormEditStudent({
       console.error(validate.error);
       return;
     }
-    //console.log(formData as ProfileFormData);
-    profileUpdate(formData as ProfileFormDataEdit);
+    if (regForm) {
+      profileRegister(formData as ProfileFormDataEdit);
+    } else {
+      profileUpdate(formData as ProfileFormDataEdit);
+    }
   };
 
   const getEstados = async () => {
@@ -287,7 +311,7 @@ export default function AlcaldiaFormEditStudent({
     <>
       <div className="flex flex-col my-2 md:space-x-4">
         <h2 className="text-2xl font-bold text-gray-800 text-center md:text-3xl">
-          Editar Estudiante
+          {regForm ? "Registrar" : "Actualizar"} Estudiante
         </h2>
       </div>
       <div className="flex flex-col m-2 my-2 p-2 rounded-lg shadow-lg">
