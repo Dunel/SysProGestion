@@ -195,8 +195,8 @@ function calcularEdad(fechaNacimiento: string | Date): string {
               <p className="text-gray-600 md:text-1x1">
                 <strong>🗓️ Fecha de nacimiento:</strong>{" "}
                 <mark>traer la fecha de nacimiento</mark>
-                {session.user.birthdate}, deberia salir al lado!
-                {formatDate(session.user.dataProfile.birthdate)},
+                {session.user.dataProfile.birthdate}, deberia salir al lado!
+                {/* {formatDate(session.user.dataProfile.birthdate)}, */}
               </p>
               <p className="text-gray-600 md:text-1x1">
                 <strong>✔️Edad:</strong>{" "}

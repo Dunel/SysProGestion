@@ -96,13 +96,15 @@ export default function EstudianteProfileForm({
     formState: { errors },
     setValue,
     watch,
+    trigger,
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     mode: "onChange",
   });
 
   useEffect(() => {
-    if (session && session.user.dataProfile?.skills.length > 0) {
+    //if (session && session.user.dataProfile?.skills.length > 0) {
+    if (session) {
       setSelectedSkills(session?.user.dataProfile.skills);
     }
   }, [session?.user.dataProfile?.skills]);
@@ -315,6 +317,16 @@ export default function EstudianteProfileForm({
     getParroquias();
     setValue("municipioId", municipioSelected);
   }, [municipioSelected]);
+
+  useEffect(() => {
+    // Trigger validation when dateStart or dateEnd changes
+    if (watch("dateStart") || watch("dateEnd")) {
+      trigger(["dateStart", "dateEnd"]);
+    }
+  }, [watch("dateStart"), watch("dateEnd"), trigger]);
+
+  // ... (otro código sin cambios)
+
 
   return (
     <>
@@ -606,7 +618,7 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
-           {/* //!Fechas del proceso */}
+           {/* //!Fechas del proceso
           <div className="flex flex-col gap-[5%] mb-8 justify-start md:flex-row">
             <LabelInputContainer className=" flex m-2 md:w-[40%]">
               <Label htmlFor="datestart">Fecha de inicio del proceso *</Label>
@@ -661,7 +673,59 @@ export default function EstudianteProfileForm({
                 </span>
               )}
             </LabelInputContainer>
-          </div>
+          </div> */}
+
+<div className="flex flex-col gap-[5%] mb-8 justify-start md:flex-row">
+        <LabelInputContainer className="flex m-2 md:w-[40%]">
+          <Label htmlFor="dateStart">Fecha de inicio del proceso *</Label>
+          <Input
+            {...register("dateStart")}
+            defaultValue={new Date(watch("dateStart")).toLocaleDateString()}
+            id="dateStart"
+            type="date"
+            className={cn(
+              errors.dateStart && "bg-red-100 focus:bg-red-100"
+            )}
+          />
+          {errors.dateStart && (
+            <p className="text-red-500 text-sm">
+              {errors.dateStart.message}
+            </p>
+          )}
+          <span className="text-gray-500 text-xs">
+            La fecha debe tener el formato dd/mm/yyyy.
+          </span>
+        </LabelInputContainer>
+
+        <LabelInputContainer className="flex m-2 mr-20 md:w-[40%]">
+          <Label htmlFor="dateEnd">
+            Fecha de terminación del proceso *
+          </Label>
+          <Input
+            {...register("dateEnd")}
+            defaultValue={new Date(watch("dateEnd")).toLocaleDateString()}
+            id="dateEnd"
+            type="date"
+            className={cn(errors.dateEnd && "bg-red-100 focus:bg-red-100")}
+          />
+          {errors.dateEnd && (
+            <p className="text-red-500 text-sm">
+              {errors.dateEnd.message}
+            </p>
+          )}
+          <span className="text-gray-500 text-xs">
+            La fecha debe tener el formato dd/mm/yyyy, y ser posterior a la fecha de inicio.
+          </span>
+        </LabelInputContainer>
+      </div>
+
+
+
+
+
+
+
+
 
         
 

@@ -51,52 +51,110 @@ export const profileSchema = z.object({
       return parsed;
     })
     .or(z.number().min(1).max(9999)),
+
+
+
+
+
+    
+  // dateStart: z
+  //   .string()
+  //   .transform((val, ctx) => {
+  //     const date = new Date(val);
+  //     if (isNaN(date.getTime())) {
+  //       ctx.addIssue({
+  //         code: z.ZodIssueCode.custom,
+  //         message: "La fecha no es válida",
+  //       });
+  //       return z.NEVER;
+  //     }
+  //     const today = new Date();
+  //     const age = today.getFullYear() - date.getFullYear();
+  //     const monthDiff = today.getMonth() - date.getMonth();
+  //     const dayDiff = today.getDate() - date.getDate();
+  //     return date;
+  //   })
+  //   .or(
+  //     z.date({
+  //       required_error: "Please select a date and time",
+  //       invalid_type_error: "That's not a date!",
+  //     })
+  //   ),
+  // dateEnd: z
+  //   .string()
+  //   .transform((val, ctx) => {
+  //     const date = new Date(val);
+  //     if (isNaN(date.getTime())) {
+  //       ctx.addIssue({
+  //         code: z.ZodIssueCode.custom,
+  //         message: "La fecha no es válida",
+  //       });
+  //       return z.NEVER;
+  //     }
+  //     const today = new Date();
+  //     const age = today.getFullYear() - date.getFullYear();
+  //     const monthDiff = today.getMonth() - date.getMonth();
+  //     const dayDiff = today.getDate() - date.getDate();
+  //     return date;
+  //   })
+  //   .or(
+  //     z.date({
+  //       required_error: "Please select a date and time",
+  //       invalid_type_error: "That's not a date!",
+  //     })
+  //   ),
+
+
+
+
   dateStart: z
-    .string()
-    .transform((val, ctx) => {
-      const date = new Date(val);
-      if (isNaN(date.getTime())) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "La fecha no es válida",
-        });
-        return z.NEVER;
-      }
-      const today = new Date();
-      const age = today.getFullYear() - date.getFullYear();
-      const monthDiff = today.getMonth() - date.getMonth();
-      const dayDiff = today.getDate() - date.getDate();
-      return date;
+  .string()
+  .transform((val, ctx) => {
+    const date = new Date(val);
+    if (isNaN(date.getTime())) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "La fecha no es válida",
+      });
+      return z.NEVER;
+    }
+    return date;
+  })
+  .or(
+    z.date({
+      required_error: "Por favor, selecciona una fecha de inicio",
+      invalid_type_error: "Eso no es una fecha válida",
     })
-    .or(
-      z.date({
-        required_error: "Please select a date and time",
-        invalid_type_error: "That's not a date!",
-      })
-    ),
-  dateEnd: z
-    .string()
-    .transform((val, ctx) => {
-      const date = new Date(val);
-      if (isNaN(date.getTime())) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "La fecha no es válida",
-        });
-        return z.NEVER;
-      }
-      const today = new Date();
-      const age = today.getFullYear() - date.getFullYear();
-      const monthDiff = today.getMonth() - date.getMonth();
-      const dayDiff = today.getDate() - date.getDate();
-      return date;
+  ),
+dateEnd: z
+  .string()
+  .transform((val, ctx) => {
+    const date = new Date(val);
+    if (isNaN(date.getTime())) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "La fecha no es válida",
+      });
+      return z.NEVER;
+    }
+    return date;
+  })
+  .or(
+    z.date({
+      required_error: "Por favor, selecciona una fecha de fin",
+      invalid_type_error: "Eso no es una fecha válida",
     })
-    .or(
-      z.date({
-        required_error: "Please select a date and time",
-        invalid_type_error: "That's not a date!",
-      })
-    ),
+  ),
+
+
+
+
+
+
+
+
+
+
   estadoId: z
     .string()
     .min(1)
@@ -223,16 +281,29 @@ export const profileSchema = z.object({
         }
       )
     )
-    .min(1, { message: "Debe seleccionar al menos una habilidad" }),
+    .optional(),
   interests: z
     .string({ required_error: "Los intereses son requeridos" })
     .min(10, { message: "Los intereses debe tener minimo 10 caracteres" })
-    .max(100, { message: "Los intereses debe tener maximo 100 caracteres" }),
+    .max(100, { message: "Los intereses debe tener maximo 100 caracteres" })
+    .optional()
+    .or(z.literal("")),
   description: z
     .string({ required_error: "La descripción es requerida" })
     .min(7, { message: "La descripción debe tener minimo 7 caracteres" })
     .max(100, { message: "La descripción debe tener maximo 100 caracteres" }),
-});
+}).refine(
+  (data) => {
+    if (data.dateStart && data.dateEnd) {
+      return data.dateEnd > data.dateStart;
+    }
+    return true;
+  },
+  {
+    message: "La fecha de fin debe ser posterior a la fecha de inicio",
+    path: ["dateEnd"],
+  }
+);
 
 export const profileFrontSchema = z.object({
   names: z
@@ -254,7 +325,10 @@ export const profileFrontSchema = z.object({
   phone: z
     .string({ required_error: "El telefono es requerido" })
     .min(10, { message: "El telefono debe tener minimo 10 caracteres" })
-    .max(12, { message: "El telefono debe tener maximo 12 caracteres" }),
+    .max(12, { message: "El telefono debe tener maximo 12 caracteres" })
+    .optional()
+    .or(z.literal("")),
+
   address: z
     .string({ required_error: "La dirección es requerida" })
     .min(10, { message: "La dirección debe tener minimo 10 caracteres" })
@@ -283,74 +357,148 @@ export const profileFrontSchema = z.object({
     })
     .or(z.number().min(1).max(9999)),
 
+  // dateStart: z
+  //   .string({ required_error: "La fecha de nacimiento es requerida" })
+  //   .refine(
+  //     (val) => {
+  //       const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
+  //       return regex.test(val);
+  //     },
+  //     {
+  //       message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
+  //     }
+  //   )
+  //   .transform((val, ctx) => {
+  //     const [year, month, day] = val.split("-").map(Number); // Separar año, mes y día
+  //     const date = new Date(year, month - 1, day); // Crear el objeto Date con los valores extraídos
+
+  //     if (
+  //       isNaN(date.getTime()) ||
+  //       date.getDate() !== day ||
+  //       date.getMonth() !== month - 1 ||
+  //       date.getFullYear() !== year
+  //     ) {
+  //       ctx.addIssue({
+  //         code: z.ZodIssueCode.custom,
+  //         message: "La fecha de nacimiento no es válida",
+  //       });
+  //       return z.NEVER;
+  //     }
+  //     const today = new Date();
+  //     const age = today.getFullYear() - date.getFullYear();
+  //     const monthDiff = today.getMonth() - date.getMonth();
+  //     const dayDiff = today.getDate() - date.getDate();
+  //     return date;
+  //   }),
+
+  // dateEnd: z
+  //   .string({ required_error: "La fecha de nacimiento es requerida" })
+  //   .refine(
+  //     (val) => {
+  //       const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
+  //       return regex.test(val);
+  //     },
+  //     {
+  //       message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
+  //     }
+  //   )
+  //   .transform((val, ctx) => {
+  //     const [year, month, day] = val.split("-").map(Number); // Separar año, mes y día
+  //     const date = new Date(year, month - 1, day); // Crear el objeto Date con los valores extraídos
+
+  //     if (
+  //       isNaN(date.getTime()) ||
+  //       date.getDate() !== day ||
+  //       date.getMonth() !== month - 1 ||
+  //       date.getFullYear() !== year
+  //     ) {
+  //       ctx.addIssue({
+  //         code: z.ZodIssueCode.custom,
+  //         message: "La fecha de nacimiento no es válida",
+  //       });
+  //       return z.NEVER;
+  //     }
+  //     const today = new Date();
+  //     const age = today.getFullYear() - date.getFullYear();
+  //     const monthDiff = today.getMonth() - date.getMonth();
+  //     const dayDiff = today.getDate() - date.getDate();
+  //     return date;
+  //   }),
+
+
   dateStart: z
-    .string({ required_error: "La fecha de nacimiento es requerida" })
-    .refine(
-      (val) => {
-        const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
-        return regex.test(val);
-      },
-      {
-        message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
-      }
-    )
-    .transform((val, ctx) => {
-      const [year, month, day] = val.split("-").map(Number); // Separar año, mes y día
-      const date = new Date(year, month - 1, day); // Crear el objeto Date con los valores extraídos
+  .string({ required_error: "La fecha de inicio es requerida" })
+  .refine(
+    (val) => {
+      const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
+      return regex.test(val);
+    },
+    {
+      message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
+    }
+  )
+  .transform((val, ctx) => {
+    const [year, month, day] = val.split("-").map(Number); // Separar año, mes y día
+    const selectedDate = new Date(`${year}-${month}-${day}T00:00:00`); // Crear el objeto Date
+    const offset = -4; // GMT -4 para Venezuela
+    const localTime = selectedDate.getTime();
+    const localOffset = selectedDate.getTimezoneOffset() * 60000;
+    const utc = localTime + localOffset;
+    const caracasTime = new Date(utc + 3600000 * offset); // Ajustar a la hora de Caracas
 
-      if (
-        isNaN(date.getTime()) ||
-        date.getDate() !== day ||
-        date.getMonth() !== month - 1 ||
-        date.getFullYear() !== year
-      ) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "La fecha de nacimiento no es válida",
-        });
-        return z.NEVER;
-      }
-      const today = new Date();
-      const age = today.getFullYear() - date.getFullYear();
-      const monthDiff = today.getMonth() - date.getMonth();
-      const dayDiff = today.getDate() - date.getDate();
-      return date;
-    }),
+    // Validación adicional para asegurar que la fecha sea válida
+    if (
+      isNaN(caracasTime.getTime()) ||
+      caracasTime.getUTCDate() !== day ||
+      caracasTime.getUTCMonth() + 1 !== month ||
+      caracasTime.getUTCFullYear() !== year
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "La fecha de inicio no es válida",
+      });
+      return z.NEVER;
+    }
 
-  dateEnd: z
-    .string({ required_error: "La fecha de nacimiento es requerida" })
-    .refine(
-      (val) => {
-        const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
-        return regex.test(val);
-      },
-      {
-        message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
-      }
-    )
-    .transform((val, ctx) => {
-      const [year, month, day] = val.split("-").map(Number); // Separar año, mes y día
-      const date = new Date(year, month - 1, day); // Crear el objeto Date con los valores extraídos
+    return caracasTime;
+  }),
 
-      if (
-        isNaN(date.getTime()) ||
-        date.getDate() !== day ||
-        date.getMonth() !== month - 1 ||
-        date.getFullYear() !== year
-      ) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "La fecha de nacimiento no es válida",
-        });
-        return z.NEVER;
-      }
-      const today = new Date();
-      const age = today.getFullYear() - date.getFullYear();
-      const monthDiff = today.getMonth() - date.getMonth();
-      const dayDiff = today.getDate() - date.getDate();
-      return date;
-    }),
+dateEnd: z
+  .string({ required_error: "La fecha de fin es requerida" })
+  .refine(
+    (val) => {
+      const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
+      return regex.test(val);
+    },
+    {
+      message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
+    }
+  )
+  .transform((val, ctx) => {
+    const [year, month, day] = val.split("-").map(Number); // Separar año, mes y día
+    const selectedDate = new Date(`${year}-${month}-${day}T00:00:00`); // Crear el objeto Date
+    const offset = -4; // GMT -4 para Venezuela
+    const localTime = selectedDate.getTime();
+    const localOffset = selectedDate.getTimezoneOffset() * 60000;
+    const utc = localTime + localOffset;
+    const caracasTime = new Date(utc + 3600000 * offset); // Ajustar a la hora de Caracas
 
+    // Validación adicional para asegurar que la fecha sea válida
+    if (
+      isNaN(caracasTime.getTime()) ||
+      caracasTime.getUTCDate() !== day ||
+      caracasTime.getUTCMonth() + 1 !== month ||
+      caracasTime.getUTCFullYear() !== year
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "La fecha de fin no es válida",
+      });
+      return z.NEVER;
+    }
+
+    return caracasTime;
+  }),
   estadoId: z
     .string()
     .min(1)
@@ -452,6 +600,8 @@ export const profileFrontSchema = z.object({
     .min(7, { message: "La descripción debe tener minimo 7 caracteres" })
     .max(100, { message: "La descripción debe tener maximo 100 caracteres" }),
 });
+
+
 
 export const profileDepenSchema = z.object({
   name: z
@@ -599,3 +749,4 @@ export const profileDepenSchema = z.object({
 export type ProfileDepenFormData = z.infer<typeof profileDepenSchema>;
 export type ProfileFormData = z.infer<typeof profileSchema>;
 export type ProfileFrontFormData = z.infer<typeof profileFrontSchema>;
+
