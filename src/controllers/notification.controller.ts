@@ -63,13 +63,63 @@ export async function getNoti(req: NextRequest) {
           },
         },
       },
-      orderBy:{
-        date: "desc"
+      orderBy: {
+        date: "desc",
       },
       take: 20,
     });
 
-    return NextResponse.json( notifications , { status: 200 });
+    return NextResponse.json(notifications, { status: 200 });
+  } catch (error) {
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function getAlcaldiaNoti(req: NextRequest) {
+  try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const notifications = await prisma.notification.findMany({
+      where: {
+        OR: [
+          { action: "create" },
+          { action: "update" },
+          { userCedula: token.cedula },
+        ],
+      },
+      select: {
+        userCedula: true,
+        action: true,
+        date: true,
+        application: {
+          select: {
+            title: true,
+            type: true,
+          },
+        },
+        User:{
+          select:{
+            depInfo: {
+              select:{
+                name: true,
+              }
+            }
+          }
+        }
+      },
+      orderBy: {
+        date: "desc",
+      },
+      take: 20,
+    });
+
+    return NextResponse.json(notifications, { status: 200 });
   } catch (error) {
     console.error("Error: ", (error as Error).message);
     return NextResponse.json(

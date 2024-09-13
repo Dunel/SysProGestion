@@ -52,6 +52,7 @@ model User {
   estado       estado?          @relation(fields: [estadoId], references: [id])
   municipio    municipio?       @relation(fields: [municipioId], references: [id])
   parroquia    parroquia?       @relation(fields: [parroquiaId], references: [id])
+  alcaldiaInfo alcaldiaInfo?
 }
 
 enum Skills {
@@ -165,6 +166,8 @@ enum actionNoti {
   delete
   reject
   proposal
+  create
+  update
 }
 
 model dependenciaInfo {
@@ -237,4 +240,17 @@ model career {
   careerCode String
   name       String
   esInfo     estudentInfo[]
+}
+
+model alcaldiaInfo {
+  id          Int           @id @default(autoincrement())
+  userCedula  Int           @unique
+  name        String
+  description String?
+  address     String?
+  email       String?
+  social      String?
+  phone       String?
+  updatedAt   DateTime      @updatedAt
+  User        User          @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
 }

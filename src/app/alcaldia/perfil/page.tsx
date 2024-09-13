@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Skeleton from "@/components/ui/SkeletonComponent";
-import DependenciaProfileForm from "@/components/perfiles/DependenciaFormActualizarProfile";
-import DependenciaProfileListo from "@/components/perfiles/DependenciaProfileListo";
+import AlcaldiaProfileForm from "@/components/perfiles/AlcaldiaFormProfile";
+import AlcaldiaProfile from "@/components/perfiles/AlcaldiaProfile";
 
-export default function EstudianteInfoForm() {
+export default function AlcaldiaInfoForm() {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const { data: session, update } = useSession();
 
@@ -20,7 +20,7 @@ export default function EstudianteInfoForm() {
       if (!session?.user.profile || session.user.dataProfile) {
         return;
       }
-      const res = await axios.get("/api/dependencia/perfil");
+      const res = await axios.get("/api/alcaldia/perfil");
       update({ profile: true, dataProfile: res.data.object });
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -49,7 +49,7 @@ export default function EstudianteInfoForm() {
 
       {session?.user.profile === false && (
         <div className="w-[80%] m-4 p-4 mx-auto">
-          <DependenciaProfileForm
+          <AlcaldiaProfileForm
             onToggleForm={toggleFormVisibility}
             titleForm={"Completa los datos de tu Perfil!"}
           />
@@ -66,16 +66,14 @@ export default function EstudianteInfoForm() {
               : "flex justify-center w-[80%] mx-auto bg-white"
           }`}
         >
-          {
-            <DependenciaProfileListo
-              onToggleForm={toggleFormVisibility}
-              isFormVisible={isFormVisible}
-            />
-          }
+          {<AlcaldiaProfile
+            onToggleForm={toggleFormVisibility}
+            isFormVisible={isFormVisible}
+          />}
 
           {isFormVisible && (
             <div className="bg-white mt-6 mx-4">
-              <DependenciaProfileForm
+              <AlcaldiaProfileForm
                 onToggleForm={toggleFormVisibility}
                 titleForm={"Actualizando tu Perfil!"}
               />
