@@ -127,12 +127,11 @@ function calcularEdad(fechaNacimiento: string | Date): string {
   return edad.toString()+' años';
 }
   return (
-    <div className="flex flex-col w-[100%] relative z-20 text-1xl m-2 p-2 pb-0 mb-0 rounded-lg mt-1 shadow lg:text-xl">
+    <div className="flex flex-col w-[100%] relative z-20 text-1xl m-2 p-2 pb-0 mb-0 rounded-lg mt-1 shadow lg:shadow-none md:text-2xl">
       {session?.user.profile && (
         <div className="flex flex-col w-[100%] my-2 mb-2 bg-white md:sticky md:top-[15vh]">
           {/* //!Padre de foto + info personal */}
           <div className="flex flex-col items-center md:flex-row md:space-x-4">
-            
             {/* Foto del Estudiante */}
             <div className="relative group m-1 p-1">
               <label htmlFor="profileImageInput" className="cursor-pointer">
@@ -163,14 +162,13 @@ function calcularEdad(fechaNacimiento: string | Date): string {
                 }}
               />
             </div>
-
             {/* !Información del Estudiente */}
             <div className="m-1 p-1 word-wrap overflow-wrap">
-              <h2 className="text-2xl font-bold text-gray-800 text-center md:text-3xl lg:text-4xl">
+              <h2 className="text-3xl font-bold text-gray-800 text-center md:text-5xl lg:text-4xl">
                 {session.user.dataProfile.names}{" "}
                 {session.user.dataProfile.lastnames}
               </h2>
-              <h2 className="text-xl font-bold text-gray-800 pt-5 pb-2 md:text-1xl lg:text-2xl">
+              <h2 className="text-2xl font-bold text-gray-800 pt-5 pb-2 md:text-3xl lg:text-2xl">
                 <i>{session.user.dataProfile.career?.name}</i>
               </h2>
               <p className="text-gray-600 md:text-1x1">
@@ -182,7 +180,7 @@ function calcularEdad(fechaNacimiento: string | Date): string {
               <p className="text-gray-600 md:text-1x1">
                 <strong>📧 Correo:</strong> {session.user.email}
               </p>
-              <p className="text-gray-600 text-justify md:text-1x1">
+              <p className="text-gray-600 md:text-1x1">
                 <strong>📍 Domicilio:</strong>{" "}
                 <br/>
                 Estado {session.user.dataProfile.estado},{" "}
@@ -194,60 +192,54 @@ function calcularEdad(fechaNacimiento: string | Date): string {
               </p>
               <p className="text-gray-600 md:text-1x1">
                 <strong>🗓️ Fecha de nacimiento:</strong>{" "}
-                <mark>traer la fecha de nacimiento</mark>
-                {session.user.dataProfile.birthdate}, deberia salir al lado!
-                {/* {formatDate(session.user.dataProfile.birthdate)}, */}
+                {new Date(session.user.dataProfile.birthdate).toLocaleDateString()},
               </p>
               <p className="text-gray-600 md:text-1x1">
                 <strong>✔️Edad:</strong>{" "}
-                <mark>traer la fecha de nacimiento</mark>
-                {/* {calcularEdad(session.user.birthdate)} */}
+                {calcularEdad(session.user.dataProfile.dateEnd)}
               </p>
-              </div>
             </div>
-
+          </div>
 
           {/* //!caja de PERFIL PROFESIONAL hasta CV */}
           <div className="m-6">
             <h4 className="text-2xl font-bold text-gray-800 m-2 text-center md:text-4xl lg:text-3xl">
-              PERFIL PROFESIONAL
+              Perfil Profesional
             </h4>
 
-            {/* universidad y duracion */}
-           
-            <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
-
-              <div className="m-2 p-1 w-full md:w-[50%]">
+            {/* universidad, trismestre e intereses */}
+            <div className="flex flex-col items-start gap-2 md:flex-row">
+              <div className="m-2 p-1 w-full md:w-[30%]">
                 <p className="text-gray-600 font-bold md:text-1x1">🏫Institucion Educativa:</p>
                 <p>{session.user.dataProfile.institution.name || ""}</p>
               </div>
 
-              <div className="m-2 p-1 w-full md:w-[50%]">
-                <p className="text-gray-600 font-bold md:text-1x1">⌛duracion del proceso:</p>
-                <p>{formatDate(session.user.dataProfile.dateStart)} a {formatDate(session.user.dataProfile.dateEnd)}</p> 
-              </div>
-            </div>
+              <div className="m-2 p-1 w-full md:w-[20%]">
+                <p className="text-gray-600 font-bold md:text-1x1">
+                  ⌛duracion del proceso:
+                </p>
 
-            { /* intereses */}
-              <div className="m-2 p-1 w-full">
+                <p>{new Date(session.user.dataProfile.dateStart).toLocaleDateString()} a {new Date(session.user.dataProfile.dateEnd).toLocaleDateString()}</p> 
+              </div>
+
+              <div className="m-2 p-1 w-full md:w-[50%]">
                 <p className="text-gray-600 font-bold md:text-1x1">
                   🏓 Intereses:
                 </p>
                 <p>{session.user.dataProfile.interests}</p>
               </div>
+            </div>
 
             {/* Habilidades y descripcion */}
             <div className="flex flex-col items-start gap-2 md:flex-row">
-              <div className="m-2 p-1 w-full md:w-[40%]">
+              <div className="m-2 p-1 w-full md:w-[30%]">
                 <p className="text-gray-600 font-bold md:text-1x1">
                   🤹🏽 Habilidades:
                 </p>
-                <p >
                 {formatSkillsToList(session.user.dataProfile.skills)}
-                </p>
               </div>
 
-              <div className="flex flex-col justify-center w-full md:w-[60%]">
+              <div className="flex flex-col justify-center w-full md:w-[70%]">
                 <div className="m-2 p-1 w-full md:w-[100%]">
                   <p className="text-gray-600 font-bold md:text-1x1">
                     🧑🏽‍🦱 Descripción:
@@ -315,6 +307,7 @@ function calcularEdad(fechaNacimiento: string | Date): string {
           </div>
 
           {/* //!Botón para editar */}
+
           <div className="flex justify-center my-2">
             <button
               onClick={onToggleForm}
@@ -325,7 +318,6 @@ function calcularEdad(fechaNacimiento: string | Date): string {
                 : "ACTUALIZAR PERFIL"}
             </button>
           </div>
-
         </div>
       )}
     </div>
