@@ -14,6 +14,7 @@ type Application = {
   date: Date;
   location: string;
   status: string;
+  pay: boolean | null;
   dependencia: {
     name: string;
     User: {

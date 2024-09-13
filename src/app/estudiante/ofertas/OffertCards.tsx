@@ -17,6 +17,7 @@ type Internship = {
   date: Date;
   location: string;
   status: string;
+  pay: boolean | null;
   dependencia: {
     name: string;
     User: {
@@ -109,7 +110,7 @@ export default function InternshipCards({
                 Esta vacante ofrece incentivos
                 <FaMoneyCheckAlt  style={{ color: 'green' }} size={30}/>  
               </span>
-              <mark>pay === true</mark>
+              {internship.pay? "si": "no"}
             </>
         }
       </div>
