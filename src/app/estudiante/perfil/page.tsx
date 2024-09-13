@@ -30,6 +30,7 @@ export default function EstudianteInfoForm() {
     lastnames: string;
     phone: string;
     curriculum: string;
+    birthdate: Date;
   } | null>(null);
 
   const getProfile = async () => {
