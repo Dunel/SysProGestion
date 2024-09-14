@@ -95,63 +95,43 @@ export default function EstudianteProfileListo({
 
   function formatDate(date: Date | string): string {
     // Si se pasa un string, convertirlo a un objeto Date
-    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    const dateObj = typeof date === "string" ? new Date(date) : date;
 
     // Asegurarse de que dateObj es un objeto Date válido
     if (isNaN(dateObj.getTime())) {
-        throw new Error('Invalid date');
+      throw new Error("Invalid date");
     }
 
     // Obtener el día, mes y año
-    const day = String(dateObj.getDate()).padStart(2, '0'); // Asegura que el día tenga dos dígitos
-    const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // Los meses son 0-indexados
+    const day = String(dateObj.getDate()).padStart(2, "0"); // Asegura que el día tenga dos dígitos
+    const month = String(dateObj.getMonth() + 1).padStart(2, "0"); // Los meses son 0-indexados
     const year = dateObj.getFullYear();
 
     // Retornar la fecha en formato 'dd/mm/yyyy'
     return `${day}/${month}/${year}`;
-}
+  }
 
-// function calcularEdad(fechaNacimiento: string | Date): string {
-//   // Convertir a objeto Date si es necesario
-//   const fechaNacimientoDate = typeof fechaNacimiento === 'string' ? new Date(fechaNacimiento) : fechaNacimiento;
-  
-//   const hoy = new Date();
-//   let edad = hoy.getFullYear() - fechaNacimientoDate.getFullYear();
-//   const mes = hoy.getMonth() - fechaNacimientoDate.getMonth();
-  
-//   // Ajustar la edad si el mes o el día actual es anterior al de nacimiento
-//   if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNacimientoDate.getDate())) {
-//     edad--;
-//   }
+  function calcularEdad(fechaNacimiento: string | Date): string {
+    // Convertir a objeto Date si es necesario
+    const fechaNacimientoDate =
+      typeof fechaNacimiento === "string"
+        ? new Date(fechaNacimiento)
+        : fechaNacimiento;
 
-//   return edad.toString()+' años';
-// }
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - fechaNacimientoDate.getFullYear();
+    const mes = hoy.getMonth() - fechaNacimientoDate.getMonth();
 
+    // Ajustar la edad si el mes o el día actual es anterior al de nacimiento
+    if (
+      mes < 0 ||
+      (mes === 0 && hoy.getDate() < fechaNacimientoDate.getDate())
+    ) {
+      edad--;
+    }
 
-
-
-// function calcularEdad(fechaNacimiento: string | Date): string {
-//   // Convertir a objeto Date si es necesario
-//   const fechaNacimientoDate = typeof fechaNacimiento === 'string' ? new Date(fechaNacimiento) : fechaNacimiento;
-
-//   // Verificar si fechaNacimientoDate es una fecha válida
-//   if (!(fechaNacimientoDate instanceof Date) || isNaN(fechaNacimientoDate.getTime())) {
-//     return 'Fecha de nacimiento inválida';
-//   }
-  
-//   const hoy = new Date();
-//   let edad = hoy.getFullYear() - fechaNacimientoDate.getFullYear();
-//   const mes = hoy.getMonth() - fechaNacimientoDate.getMonth();
-  
-//   // Ajustar la edad si el mes o el día actual es anterior al de nacimiento
-//   if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNacimientoDate.getDate())) {
-//     edad--;
-//   }
-
-//   return edad.toString() + ' años';
-// }
-
-
+    return edad.toString() + " años";
+  }
   return (
     <div className="flex flex-col w-[100%] relative z-20 text-base m-2 p-2 pb-0 mb-0 rounded-lg mt-2 shadow lg:shadow-none md:text-lg">
       {session?.user.profile && (
@@ -219,24 +199,25 @@ export default function EstudianteProfileListo({
                 <strong>📧 Correo:</strong> {session.user.email}
               </p>
               <p className="text-gray-600 md:text-1x1">
-                <strong>📍 Domicilio:</strong>{" "}
-                <br/>
-                Estado {session.user.dataProfile.estado},{" "}
-                Municipio {session.user.dataProfile.municipio},{" "}
+                <strong>📍 Domicilio:</strong> <br />
+                Estado {session.user.dataProfile.estado}, Municipio{" "}
+                {session.user.dataProfile.municipio},{" "}
                 <strong>
-                Parroquia {session.user.dataProfile.parroquia},{" "} 
+                  Parroquia {session.user.dataProfile.parroquia},{" "}
                 </strong>
                 {session.user.dataProfile.address}
               </p>
               <p className="text-gray-600 md:text-1x1">
                 <strong>🗓️ Fecha de nacimiento:</strong>{" "}
-                {new Date(session.user.dataProfile.birthdate).toLocaleDateString()}
+                {new Date(
+                  session.user.dataProfile.birthdate
+                ).toLocaleDateString()}
               </p>
               <p className="text-gray-600 md:text-1x1">
                 {/* //! OJOOO */}
                 <strong>✔️Edad:</strong>{" "}
-                {/* {calcularEdad(session.user.dataProfile.birthdate)}  */}
-         
+                {session.user.dataProfile.birthdate &&
+                  calcularEdad(session.user.dataProfile.birthdate)}
               </p>
             </div>
           </div>
@@ -251,11 +232,12 @@ export default function EstudianteProfileListo({
               PERFIL PROFESIONAL
             </h4>
 
-         
             {/* universidad y duracion del proceso */}
             <div className="flex flex-col items-start gap-2 md:flex-row">
               <div className="m-2 p-1 w-full md:w-[50%]">
-                <p className="text-gray-600 font-bold md:text-1x1">🏫Institucion Educativa:</p>
+                <p className="text-gray-600 font-bold md:text-1x1">
+                  🏫Institucion Educativa:
+                </p>
                 <p>{session.user.dataProfile.institution.name || ""}</p>
               </div>
 
@@ -263,18 +245,24 @@ export default function EstudianteProfileListo({
                 <p className="text-gray-600 font-bold md:text-1x1">
                   ⌛duracion del proceso:
                 </p>
-                  <p>{new Date(session.user.dataProfile.dateStart).toLocaleDateString()} 
-                  {" a "}{new Date(session.user.dataProfile.dateEnd).toLocaleDateString()}</p> 
-              </div>
-
-            </div>
-               {/* universidad, trismestre e intereses */}
-              <div className="m-2 p-1 w-full md:w-[100%]">
-                <p className="text-gray-600 font-bold md:text-1x1">
-                  🏓 Intereses:
+                <p>
+                  {new Date(
+                    session.user.dataProfile.dateStart
+                  ).toLocaleDateString()}
+                  {" a "}
+                  {new Date(
+                    session.user.dataProfile.dateEnd
+                  ).toLocaleDateString()}
                 </p>
-                <p>{session.user.dataProfile.interests}</p>
               </div>
+            </div>
+            {/* universidad, trismestre e intereses */}
+            <div className="m-2 p-1 w-full md:w-[100%]">
+              <p className="text-gray-600 font-bold md:text-1x1">
+                🏓 Intereses:
+              </p>
+              <p>{session.user.dataProfile.interests}</p>
+            </div>
 
             {/* Habilidades y descripcion */}
             <div className="flex flex-col items-start gap-2 md:flex-row">
@@ -308,9 +296,13 @@ export default function EstudianteProfileListo({
                   <>
                     <div className="w-full md:text-3xl">
                       {session?.user.dataProfile.curriculum ? (
-                        <Label className="md:text-[20px]">Actualiza tu currículum (Formato PDF)</Label>
+                        <Label className="md:text-[20px]">
+                          Actualiza tu currículum (Formato PDF)
+                        </Label>
                       ) : (
-                        <Label className="md:text-[20px]">Sube tu currículum (Formato PDF)</Label>
+                        <Label className="md:text-[20px]">
+                          Sube tu currículum (Formato PDF)
+                        </Label>
                       )}
                     </div>
 
@@ -359,9 +351,7 @@ export default function EstudianteProfileListo({
               onClick={onToggleForm}
               className="m-2 w-[100%] bg-black hover:bg-gray-700 text-white font-bold py-4 px-4 rounded md:w-[50%]"
             >
-              {isFormVisible
-                ? "DESCARTAR ACTUALIZACIÓN"
-                : "ACTUALIZAR PERFIL"}
+              {isFormVisible ? "DESCARTAR ACTUALIZACIÓN" : "ACTUALIZAR PERFIL"}
             </button>
           </div>
         </div>
@@ -408,4 +398,3 @@ const formatSkillsToList = (skills: string[]): JSX.Element => {
     </ol>
   );
 };
-

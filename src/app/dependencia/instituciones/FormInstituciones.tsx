@@ -93,7 +93,6 @@ export default function FormInstituciones({
         <form onSubmit={handleSubmit(onSubmit)} className="mb-8 form-student-info">
 
 
-          {/* //!codigoInstitucion */}
           <LabelInputContainer className="mb-8">
             <Label htmlFor="codigoInstitucion">Código de la Institución Educativa *</Label>
             <Input
@@ -115,7 +114,6 @@ export default function FormInstituciones({
             )}
           </LabelInputContainer>
 
-          {/* //!nombreInstitucion */}
           <LabelInputContainer className="mb-8">
             <Label htmlFor="nombreInstitucion">Nombre de la Institución Educativa *</Label>
             <Input
@@ -137,7 +135,6 @@ export default function FormInstituciones({
             )}
           </LabelInputContainer>
 
-          {/* //!parroquiaInstitucion */}
           <LabelInputContainer className="mb-8">
             <Label htmlFor="parroquiaInstitucion">Parroquia de la Institución Educativa *</Label>
             <Input

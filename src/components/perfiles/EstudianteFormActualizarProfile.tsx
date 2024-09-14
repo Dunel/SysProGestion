@@ -103,9 +103,10 @@ export default function EstudianteProfileForm({
   });
 
   useEffect(() => {
-    //if (session && session.user.dataProfile?.skills.length > 0) {
-    if (session) {
+    if (session && session.user.dataProfile?.skills?.length > 0) {
       setSelectedSkills(session?.user.dataProfile.skills);
+    } else {
+      setSelectedSkills([]);
     }
   }, [session?.user.dataProfile?.skills]);
 
@@ -305,6 +306,7 @@ export default function EstudianteProfileForm({
       setValue("careerId", session.user.dataProfile.career.id);
       setValue("dateStart", session.user.dataProfile.dateStart);
       setValue("dateEnd", session.user.dataProfile.dateEnd);
+      setValue("birthdate", session.user.dataProfile.birthdate);
     }
   }, []);
 
@@ -319,14 +321,10 @@ export default function EstudianteProfileForm({
   }, [municipioSelected]);
 
   useEffect(() => {
-    // Trigger validation when dateStart or dateEnd changes
     if (watch("dateStart") || watch("dateEnd")) {
       trigger(["dateStart", "dateEnd"]);
     }
   }, [watch("dateStart"), watch("dateEnd"), trigger]);
-
-  // ... (otro código sin cambios)
-
 
   return (
     <>
@@ -349,7 +347,7 @@ export default function EstudianteProfileForm({
               onChange={handleInputChange}
               id="names"
               name="names"
-              placeholder='José Manuel'
+              placeholder="José Manuel"
               type="text"
               className={cn(errors.names && "bg-red-100 focus:bg-red-100")}
             />
@@ -373,6 +371,35 @@ export default function EstudianteProfileForm({
             />
             {errors.lastnames && (
               <p className="text-red-500 text-sm">{errors.lastnames.message}</p>
+            )}
+          </LabelInputContainer>
+
+          <LabelInputContainer className=" flex m-2 md:w-[40%]">
+            <Label htmlFor="birthdate">Fecha de nacimiento *</Label>
+            <Input
+              {...register("birthdate")}
+              value={
+                watch("birthdate")
+                  ? new Date(watch("birthdate")).toISOString().split("T")[0]
+                  : ""
+              }
+              id="birthdate"
+              type="date"
+              className={cn(errors.birthdate && "bg-red-100 focus:bg-red-100")}
+            />
+            {errors.birthdate ? (
+              <>
+                <p className="text-red-500 text-sm">
+                  {errors.birthdate.message?.toString()}
+                </p>
+                <span className="text-gray-500 text-xs">
+                  La fecha debe tener el formato dd/mm/yyyy.
+                </span>
+              </>
+            ) : (
+              <span className="text-gray-500 text-xs">
+                La fecha debe tener el formato dd/mm/yyyy.
+              </span>
             )}
           </LabelInputContainer>
 
@@ -434,7 +461,6 @@ export default function EstudianteProfileForm({
               <p className="text-red-500 text-sm">{errors.estadoId.message}</p>
             )}
           </LabelInputContainer>
-
 
           {/* //! municipio */}
           <LabelInputContainer className="mb-8">
@@ -520,7 +546,7 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
-             {/*//! Direccion mas precisa*/}
+          {/*//! Direccion mas precisa*/}
           <LabelInputContainer className="mb-8">
             <Label htmlFor="address">Dirección del estudiante *</Label>
             <Input
@@ -536,10 +562,13 @@ export default function EstudianteProfileForm({
             {errors.address && (
               <p className="text-red-500 text-sm">{errors.address.message}</p>
             )}
-            <span>Indique Sector, Av., Calle, No. de habitación y punto de referencia.</span>
+            <span>
+              Indique Sector, Av., Calle, No. de habitación y punto de
+              referencia.
+            </span>
           </LabelInputContainer>
-          
-             {/* //!institutions Edu */}
+
+          {/* //!institutions Edu */}
           <LabelInputContainer className="mb-8">
             <Label htmlFor="institutions">
               Institución Educativa del estudiante *
@@ -581,7 +610,7 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
-            {/* //!Especialización o carrera del estudiante */}
+          {/* //!Especialización o carrera del estudiante */}
           <LabelInputContainer className="mb-8">
             <Label htmlFor="career">
               Especialización o carrera del estudiante *
@@ -618,52 +647,50 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
-<div className="flex flex-col gap-[5%] mb-8 justify-start md:flex-row">
-        <LabelInputContainer className="flex m-2 md:w-[40%]">
-          <Label htmlFor="dateStart">Fecha de inicio del proceso *</Label>
-          <Input
-            {...register("dateStart")}
-            defaultValue={new Date(watch("dateStart")).toLocaleDateString()}
-            id="dateStart"
-            type="date"
-            className={cn(
-              errors.dateStart && "bg-red-100 focus:bg-red-100"
-            )}
-          />
-          {errors.dateStart && (
-            <p className="text-red-500 text-sm">
-              {errors.dateStart.message}
-            </p>
-          )}
-          <span className="text-gray-500 text-xs">
-            La fecha debe tener el formato dd/mm/yyyy.
-          </span>
-        </LabelInputContainer>
+          <div className="flex flex-col gap-[5%] mb-8 justify-start md:flex-row">
+            <LabelInputContainer className="flex m-2 md:w-[40%]">
+              <Label htmlFor="dateStart">Fecha de inicio del proceso *</Label>
+              <Input
+                {...register("dateStart")}
+                defaultValue={new Date(watch("dateStart")).toLocaleDateString()}
+                id="dateStart"
+                type="date"
+                className={cn(
+                  errors.dateStart && "bg-red-100 focus:bg-red-100"
+                )}
+              />
+              {errors.dateStart && (
+                <p className="text-red-500 text-sm">
+                  {errors.dateStart.message}
+                </p>
+              )}
+              <span className="text-gray-500 text-xs">
+                La fecha debe tener el formato dd/mm/yyyy.
+              </span>
+            </LabelInputContainer>
 
-        <LabelInputContainer className="flex m-2 mr-20 md:w-[40%]">
-          <Label htmlFor="dateEnd">
-            Fecha de terminación del proceso *
-          </Label>
-          <Input
-            {...register("dateEnd")}
-            defaultValue={new Date(watch("dateEnd")).toLocaleDateString()}
-            id="dateEnd"
-            type="date"
-            className={cn(errors.dateEnd && "bg-red-100 focus:bg-red-100")}
-          />
-          {errors.dateEnd && (
-            <p className="text-red-500 text-sm">
-              {errors.dateEnd.message}
-            </p>
-          )}
-          <span className="text-gray-500 text-xs">
-            La fecha debe tener el formato dd/mm/yyyy, y ser posterior a la fecha de inicio.
-          </span>
-        </LabelInputContainer>
-      </div>
- 
+            <LabelInputContainer className="flex m-2 mr-20 md:w-[40%]">
+              <Label htmlFor="dateEnd">
+                Fecha de terminación del proceso *
+              </Label>
+              <Input
+                {...register("dateEnd")}
+                defaultValue={new Date(watch("dateEnd")).toLocaleDateString()}
+                id="dateEnd"
+                type="date"
+                className={cn(errors.dateEnd && "bg-red-100 focus:bg-red-100")}
+              />
+              {errors.dateEnd && (
+                <p className="text-red-500 text-sm">{errors.dateEnd.message}</p>
+              )}
+              <span className="text-gray-500 text-xs">
+                La fecha debe tener el formato dd/mm/yyyy, y ser posterior a la
+                fecha de inicio.
+              </span>
+            </LabelInputContainer>
+          </div>
 
-         {/* //!Descripcion */}
+          {/* //!Descripcion */}
           <LabelInputContainer className="mb-8">
             <Label htmlFor="description">
               Breve descripción del estudiante.
@@ -687,7 +714,6 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
-         
           {/* //!Intereses */}
           <LabelInputContainer className="mb-8">
             <Label htmlFor="interests">Intereses del estudiante</Label>
@@ -708,7 +734,7 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
-             {/* //!Habilidades */}
+          {/* //!Habilidades */}
           <LabelInputContainer className="mb-8">
             <Label htmlFor="skills">Habilidades del estudiante</Label>
             {skillsOptions.map(({ value, label }) => (
@@ -733,20 +759,14 @@ export default function EstudianteProfileForm({
                 Habilidades seleccionadas:
               </h3>
               <ul className="mt-2 list-disc list-inside text-sm text-gray-500">
-                {selectedSkills.length > 0 ? (
-                  selectedSkills.map((skill, index) => (
-                    <li key={index}>
-                      {
-                        skillsOptions.find((option) => option.value === skill)
-                          ?.label
-                      }
-                    </li>
-                  ))
-                ) : (
-                  <p style={{ color: "red" }}>
-                    No has seleccionado ninguna habilidad.
-                  </p>
-                )}
+                {selectedSkills.map((skill, index) => (
+                  <li key={index}>
+                    {
+                      skillsOptions.find((option) => option.value === skill)
+                        ?.label
+                    }
+                  </li>
+                ))}
               </ul>
             </div>
           </LabelInputContainer>

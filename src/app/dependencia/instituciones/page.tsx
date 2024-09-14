@@ -38,7 +38,7 @@ export default function EstudianteInfoForm() {
   const getProfile = async () => {
     try {
       if (!session?.user.profile || session.user.dataProfile) {
-        setProfileData(session?.user.dataProfile || null);
+        //setProfileData(session?.user.dataProfile || null);
         return;
       }
       const res = await axios.get("/api/estudiante/perfil");
@@ -74,7 +74,7 @@ export default function EstudianteInfoForm() {
             />
 
             <TableInstituciones 
-            titleTable={'Tabla de las instituciones educativas'}
+            //titleTable={'Tabla de las instituciones educativas'}
             records={records} setRecords={setRecords} />
     
         </div>
