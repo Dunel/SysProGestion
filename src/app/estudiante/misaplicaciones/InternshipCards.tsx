@@ -92,7 +92,8 @@ export default function InternshipCards({
   const InternshipCard: React.FC<{ internship: Internship }> = ({
     internship,
   }) => (
-    <div className="flex flex-col justify-center text-xs bg-white rounded-lg shadow-md m-4 mb-8 p-2 w-[90%] mx-auto my-5 md:p-4 md:text-sm lg:text-base">
+    <div className="flex flex-col justify-center bg-white mb-8 mx-6 p-4 w-[90%] mx-auto my-1 shadow-md text-base text-justify rounded-lg md:p-8 lg:text-lg">
+      
       {/* //!codigo & num students apply  */}
       <div className="flex flex-col lg:flex-row text-sm lg:gap-2">
         <span className="flex mr-2 text-red-500">
@@ -127,41 +128,52 @@ export default function InternshipCards({
               </span> 
         }
 
-      <div className="flex flex-col items-center md:flex-row md:space-x-4">
-        {/* //! IMG */}
-        <div className="flex m-1 p-1">
-          <img
-            src={internship.dependencia.User.image}
-            alt={`${internship.dependencia} logo`}
-            className="mx-auto w-40 h-40 object-cover rounded-full border-4 border-black-800 md:w-40 md:h-40"
-          />
+        {/* //! IMG, title, dependencia, direccion*/}
+        <div className="flex flex-col mt-2 gap-[5%] md:flex-row">
+              
+              {/* //! IMG */}
+              <div className="m-1 mx-auto">
+                <img
+                  src={internship.dependencia.User.image}
+                  alt={`${internship.dependencia} logo`}
+                  className="w-40 h-40 object-cover rounded-full border-4 border-black-800"
+                />
+              </div>
+
+              {/* //! INFO */}
+              <div className="flex flex-col m-1 w-[100%] md:w-[75%]">
+
+                  <h3 className="text-xl text-center font-extrabold text-gray-800 mb-2 md:text-justify md:text-2xl">
+                    {(internship.title).toUpperCase()}
+                  </h3>
+                  <p className="text-2xl text-gray-600 mb-1 font-bold">🏦
+                    {" "}
+                    <i>{(internship.dependencia.name).toUpperCase()}</i>
+                  </p>
+                  <p className="text-gray-600 text-justify md:text-1x1">
+                    <strong>📍Dirección de la Dependencia:</strong>{" "}
+                        <br/>
+                        Municipio {internship.dependencia.User.parroquia?.municipio.municipio},{" "}
+                        <strong>
+                          Parroquia {(internship.dependencia.User.parroquia?.parroquia)},{" "}
+                        </strong>
+                        {internship.location}
+                  </p>
+
+              </div>
         </div>
 
-        {/* //! INFO */}
-        <div className="m-1 p-1 word-wrap overflow-wrap h-[60%] md:w-[80%]">
-          <h3 className="text-xl text-center font-extrabold text-gray-800 mb-2 md:text-justify md:text-2xl">
-            {internship.title.toUpperCase()}
-          </h3>
-          <p className="text-lg text-gray-600 mb-1">
-            {" "}
-            <i>{internship.dependencia.name.toUpperCase()}</i>
-          </p>
 
-          <p className="text-gray-600 text-justify md:text-base lg:text-lg">
-            <strong>📍Dirección de la Dependencia:</strong> <br />
-            Municipio{" "}
-            {internship.dependencia.User.parroquia?.municipio.municipio},{" "}
-            <strong>
-              Parroquia {internship.dependencia.User.parroquia?.parroquia},{" "}
-            </strong>
-            {internship.location}
-          </p>
 
-          <div className="flex flex-col gap-2 my-2 justify-center items-center mx-auto text-xs md:text-sm lg:text-base md:flex-row">
-            <div className="w-[100%] md:w-auto mx-auto">
-              <span className="text-sm font-medium text-gray-700">
-                Estado de la Solicitud:
-              </span>
+        <div className="flex flex-col m-1 p-1 word-wrap overflow-wrap">
+
+            {/* fecha, estado y tipo de oferta */}
+            <div className="flex flex-col my-2 gap-2 md:flex-row">
+
+                <div className="w-[100%] md:w-auto mx-auto">
+                  <span className="font-bold text-gray-700 mb-2">
+                          Estado de la Solicitud:
+                  </span>
               <p className={colorStatys(internship.status)}>
                 <b>
                   {" "}
@@ -174,14 +186,14 @@ export default function InternshipCards({
               </p>
             </div>
             <div className="w-[100%] md:w-auto mx-auto">
-              <span className="text-sm font-medium text-gray-700">
+            <span className="font-bold text-gray-700 mb-2">
                 Estado de tu Aplicacion:
               </span>
               <p>{statusFormated[internship.apply[0].status]}</p>
             </div>
 
             <div className="w-[100%] md:w-auto mx-auto">
-              <span className="text-sm font-medium text-gray-700">
+            <span className="font-bold text-gray-700 mb-2 w-[100%] mx-auto md:w-auto">
                 Tipo de Oferta:
               </span>
               <p>
@@ -197,11 +209,11 @@ export default function InternshipCards({
           </div>
 
           {/* //! CONTAINER FLEX: OF SKILLS AND DESCRIPTION */}
-          <div className="flex flex-col justify-center gap-2 my-2 lg:flex-row">
-            <div className="m-1 w-[100%] lg:w-[40%]">
-              <h4 className="text-sm font-medium text-gray-700 mb-2 md:text-lg">
+          <div className="flex flex-col justify-center gap-4 my-2 md:flex-row">
+                <div className="m-1 w-[100%] mx-auto md:w-auto">
+                  <span className="font-bold text-gray-700 mb-2 md:text-x1">
                 Habilidades requeridas 📝
-              </h4>
+                  </span>
               <ul className="list-disc list-inside">
                 {internship.skills.map((skill, index) => (
                   <li key={index} className="text-gray-600">
@@ -210,47 +222,50 @@ export default function InternshipCards({
                 ))}
               </ul>
             </div>
-            <div className="m-1 w-[100%] lg:w-[60%]">
-              <h4 className="text-sm font-medium text-gray-700 mb-2 md:text-lg">
+            <div className="m-1 w-[100%] mx-auto md:w-[60%]">
+                  <span className="font-bold text-gray-700 mb-2 md:text-x1">
                 Descripcion de la Vacante 📋
-              </h4>
+              </span>
               <p className="text-justify">{internship.description}</p>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div className="flex justify-center">
-        {internship.apply[0].status === "aprobado" && (
-          <button
-            onClick={() =>
-              internship.handleAcceptApply(
-                internship.id,
-                internship.apply[0].id
-              )
-            }
-            className="w-[100%] p-1 m-1 bg-green-500 hover:bg-green-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
-          >
-            Aceptar Oferta
-          </button>
-        )}
-        {internship.apply[0].status === "aprobado" ||
-        internship.apply[0].status === "pendiente" ? (
-          <button
-            onClick={() =>
-              internship.handleDeleteApply(
-                internship.id,
-                internship.apply[0].id
-              )
-            }
-            className="w-[100%] p-1 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
-          >
-            Retirar aplicación
-          </button>
-        ) : null}
-      </div>
+        </div>
+   
+
+        {/* ACCION BUTTONS */}
+        <div className="flex justify-center">
+          {internship.apply[0].status === "aprobado" && (
+            <button
+              onClick={() =>
+                internship.handleAcceptApply(
+                  internship.id,
+                  internship.apply[0].id
+                )
+              }
+              className="w-[100%] p-1 m-1 bg-green-500 hover:bg-green-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
+            >
+              Aceptar Oferta
+            </button>
+          )}
+          {internship.apply[0].status === "aprobado" ||
+          internship.apply[0].status === "pendiente" ? (
+            <button
+              onClick={() =>
+                internship.handleDeleteApply(
+                  internship.id,
+                  internship.apply[0].id
+                )
+              }
+              className="w-[100%] p-1 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
+            >
+              Retirar aplicación
+            </button>
+          ) : null}
+        </div>
     </div>
   );
+
   return (
     <>
       <div className="relative z-20 mx-auto py-2 rounded shadow w-[90%]">

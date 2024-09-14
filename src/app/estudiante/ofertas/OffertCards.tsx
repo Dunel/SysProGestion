@@ -124,7 +124,6 @@ export default function InternshipCards({
         }
 
      {/* //! IMG, title, dependencia, direccion*/}
-      {/* <div className="flex flex-col items-center md:flex-row md:space-x-4"> */}
       <div className="flex flex-col mt-2 gap-[5%] md:flex-row">
       
           {/* //! IMG */}
