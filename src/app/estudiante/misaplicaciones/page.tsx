@@ -16,6 +16,7 @@ type Application = {
   date: Date;
   skills: string[];
   status: string;
+  pay: boolean | null;
   dependencia: {
     name: string;
     User: {
@@ -34,6 +35,9 @@ type Application = {
       status: string;
     }
   ];
+  _count: {
+    apply: number;
+  };
 };
 
 export default function Page() {

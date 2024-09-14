@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import {
-  FaMoneyCheckAlt 
-} from "react-icons/fa";
+import { FaMoneyCheckAlt } from "react-icons/fa";
 
 interface Internship {
   handleDeleteApply: Function;
@@ -27,12 +25,16 @@ interface Internship {
   date: Date;
   skills: string[];
   status: string;
+  pay: boolean | null;
   apply: [
     {
       id: number;
       status: string;
     }
   ];
+  _count: {
+    apply: number;
+  };
 }
 
 const skillFormated: { [key: string]: string } = {
@@ -70,16 +72,18 @@ const statusFormated: { [key: string]: string } = {
   inactive: "Inactivo⚠️",
 };
 
-const colorStatys = (status:string) => {
+const colorStatys = (status: string) => {
+  let colorText =
+    status === "inactive"
+      ? "text-yellow-500"
+      : status === "active"
+      ? "text-green-500"
+      : status === "close"
+      ? 'inactive: "text-red-500'
+      : "";
 
-  let colorText =  status === "inactive" 
-                    ? 'text-yellow-500'
-                    : status === "active"
-                        ? 'text-green-500'
-                        : status === "close" ? 'inactive: "text-red-500': '';
-
-return colorText;
-}
+  return colorText;
+};
 export default function InternshipCards({
   internships,
 }: {
@@ -88,41 +92,42 @@ export default function InternshipCards({
   const InternshipCard: React.FC<{ internship: Internship }> = ({
     internship,
   }) => (
-
-
-  <div className="flex flex-col justify-center text-xs bg-white rounded-lg shadow-md m-4 mb-8 p-2 w-[90%] mx-auto my-5 md:p-4 md:text-sm lg:text-base">
-       
-        
+    <div className="flex flex-col justify-center text-xs bg-white rounded-lg shadow-md m-4 mb-8 p-2 w-[90%] mx-auto my-5 md:p-4 md:text-sm lg:text-base">
       {/* //!codigo & num students apply  */}
-      <div  className="flex flex-col lg:flex-row text-sm lg:gap-2">    
-          
-          <span className="flex mr-2 text-red-500">
-             <i>
-            Codigo de Oferta de Vacante: {(internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id}
-            </i> 
-          </span>   
-   
-          <span className="flex mr-2 gap-2 text-gray-500 lg:ml-auto">
-          Han aplicado {80} 🧑🏽‍🎓 a esta Oferta de {internship.type === "pasantia"
-                    ? "Pasantias"
-                    : internship.type === "servicio"
-                    ? "Servicio Comunitario"
-                    : internship.type === "proyecto"
-                    ? "Proyecto de Tesis"
-                    : ""}
-          </span> 
- 
+      <div className="flex flex-col lg:flex-row text-sm lg:gap-2">
+        <span className="flex mr-2 text-red-500">
+          <i>
+            Codigo de Oferta de Vacante:{" "}
+            {internship.type.substring(0, 3).toUpperCase() +
+              "-" +
+              new Date(internship.date).getFullYear() +
+              "-" +
+              internship.dependencia.name.substring(0, 3).toUpperCase() +
+              "-000" +
+              internship.id}
+          </i>
+        </span>
+
+        <span className="flex mr-2 gap-2 text-gray-500 lg:ml-auto">
+          Han aplicado {internship._count.apply} 🧑🏽‍🎓 a esta Oferta de{" "}
+          {internship.type === "pasantia"
+            ? "Pasantias"
+            : internship.type === "servicio"
+            ? "Servicio Comunitario"
+            : internship.type === "proyecto"
+            ? "Proyecto de Tesis"
+            : ""}
+        </span>
       </div>
 
       {/* //! TRAEEEEEEEEEEEEEER internship.pay  */}
       {/* { internship.pay && */}
-      { true &&
+      { internship.pay &&
                 <span className="flex gap-2 mr-2 text-base font-bold text-green-500 lg:ml-auto">
                 Esta vacante ofrece incentivos
                 <FaMoneyCheckAlt  style={{ color: 'green' }} size={30}/>  
-              </span>
+              </span> 
         }
-
 
       <div className="flex flex-col items-center md:flex-row md:space-x-4">
         {/* //! IMG */}
@@ -137,22 +142,21 @@ export default function InternshipCards({
         {/* //! INFO */}
         <div className="m-1 p-1 word-wrap overflow-wrap h-[60%] md:w-[80%]">
           <h3 className="text-xl text-center font-extrabold text-gray-800 mb-2 md:text-justify md:text-2xl">
-              {(internship.title).toUpperCase()}
+            {internship.title.toUpperCase()}
           </h3>
           <p className="text-lg text-gray-600 mb-1">
             {" "}
-            <i>{(internship.dependencia.name).toUpperCase()}</i>
+            <i>{internship.dependencia.name.toUpperCase()}</i>
           </p>
 
-
           <p className="text-gray-600 text-justify md:text-base lg:text-lg">
-            <strong>📍Dirección de la Dependencia:</strong>{" "}
-                <br/>
-                Municipio {internship.dependencia.User.parroquia?.municipio.municipio},{" "}
-                <strong>
-                  Parroquia {(internship.dependencia.User.parroquia?.parroquia)},{" "}
-                </strong>
-                {internship.location}
+            <strong>📍Dirección de la Dependencia:</strong> <br />
+            Municipio{" "}
+            {internship.dependencia.User.parroquia?.municipio.municipio},{" "}
+            <strong>
+              Parroquia {internship.dependencia.User.parroquia?.parroquia},{" "}
+            </strong>
+            {internship.location}
           </p>
 
           <div className="flex flex-col gap-2 my-2 justify-center items-center mx-auto text-xs md:text-sm lg:text-base md:flex-row">
@@ -160,12 +164,15 @@ export default function InternshipCards({
               <span className="text-sm font-medium text-gray-700">
                 Estado de la Solicitud:
               </span>
-              <p className={colorStatys(internship.status)} > 
-                <b> {
-                    internship.status === "active" ? 'Activa ✅' 
-                      : internship.status === "inactive" ? 'Inactiva ⚠️' : 'Cerrada ⛔'
-
-                    }</b>
+              <p className={colorStatys(internship.status)}>
+                <b>
+                  {" "}
+                  {internship.status === "active"
+                    ? "Activa ✅"
+                    : internship.status === "inactive"
+                    ? "Inactiva ⚠️"
+                    : "Cerrada ⛔"}
+                </b>
               </p>
             </div>
             <div className="w-[100%] md:w-auto mx-auto">
@@ -174,7 +181,6 @@ export default function InternshipCards({
               </span>
               <p>{statusFormated[internship.apply[0].status]}</p>
             </div>
-
 
             <div className="w-[100%] md:w-auto mx-auto">
               <span className="text-sm font-medium text-gray-700">
@@ -216,7 +222,6 @@ export default function InternshipCards({
         </div>
       </div>
 
-
       <div className="flex justify-center">
         {internship.apply[0].status === "aprobado" && (
           <button
@@ -246,8 +251,6 @@ export default function InternshipCards({
           </button>
         ) : null}
       </div>
-
-
     </div>
   );
   return (
