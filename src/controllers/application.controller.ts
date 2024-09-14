@@ -288,6 +288,11 @@ export async function getMyApplication(req: NextRequest) {
             status: true,
           },
         },
+        _count: {
+          select: {
+            apply: true,
+          },
+        },
       },
     });
     return NextResponse.json({ applications }, { status: 200 });
