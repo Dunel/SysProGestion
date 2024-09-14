@@ -138,10 +138,10 @@ export default function InternshipCards({
           {/* //! INFO */}
           <div className="flex flex-col m-1 w-[100%] md:w-[75%]">
 
-              <h3 className="text-xl text-center font-extrabold text-gray-800 mb-2 md:text-justify md:text-2xl">
+              <h3 className="text-center font-extrabold text-gray-800 mb-2 text-lg md:text-justify sm:text-xl md:text-2xl lg:text-3xl">
                 {(internship.title).toUpperCase()}
               </h3>
-              <p className="text-2xl text-gray-600 mb-1 font-bold">🏦
+              <p className="text-gray-600 mb-1 font-bold text-base sm:text-lg md:text-xl lg:text-2xl">🏦
                 {" "}
                 <i>{(internship.dependencia.name).toUpperCase()}</i>
               </p>
