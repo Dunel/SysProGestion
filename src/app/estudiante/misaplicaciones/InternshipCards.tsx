@@ -172,7 +172,7 @@ export default function InternshipCards({
 
                 <div className="w-[100%] md:w-auto mx-auto">
                   <span className="font-bold text-gray-700 mb-2">
-                          Estado de la Solicitud:
+                          Estado de la Oferta:
                   </span>
               <p className={colorStatys(internship.status)}>
                 <b>
