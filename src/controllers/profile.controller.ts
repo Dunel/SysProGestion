@@ -28,6 +28,7 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
       estadoId,
       municipioId,
       parroquiaId,
+      birthdate
     } = await req.json();
 
     const result = profileSchema.parse({
@@ -45,6 +46,7 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
       estadoId,
       municipioId,
       parroquiaId,
+      birthdate
     });
     const cedula = token.cedula;
 
@@ -83,6 +85,7 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
         estadoId: result.estadoId,
         municipioId: result.municipioId,
         parroquiaId: result.parroquiaId,
+        birthdate: result.birthdate,
       },
     });
 

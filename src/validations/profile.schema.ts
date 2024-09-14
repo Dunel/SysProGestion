@@ -51,54 +51,40 @@ export const profileSchema = z.object({
       return parsed;
     })
     .or(z.number().min(1).max(9999)),
+    birthdate: z
+    .string({
+      errorMap: (issue, ctx) => {
+        return { message: "Por favor, seleccione una fecha valida." };
+      },
+    })
+    .transform((val, ctx) => {
+      const datePart = val.split("T")[0];
+      const isValidFormat = /^\d{4}-\d{2}-\d{2}$/.test(datePart);
+      if (!isValidFormat) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Formato de fecha no válido. Usa el formato YYYY-MM-DD",
+        });
+        return z.NEVER;
+      }
+      const date = new Date(`${datePart}T00:00:00-04:00`);
 
-  // dateStart: z
-  //   .string()
-  //   .transform((val, ctx) => {
-  //     const date = new Date(val);
-  //     if (isNaN(date.getTime())) {
-  //       ctx.addIssue({
-  //         code: z.ZodIssueCode.custom,
-  //         message: "La fecha no es válida",
-  //       });
-  //       return z.NEVER;
-  //     }
-  //     const today = new Date();
-  //     const age = today.getFullYear() - date.getFullYear();
-  //     const monthDiff = today.getMonth() - date.getMonth();
-  //     const dayDiff = today.getDate() - date.getDate();
-  //     return date;
-  //   })
-  //   .or(
-  //     z.date({
-  //       required_error: "Please select a date and time",
-  //       invalid_type_error: "That's not a date!",
-  //     })
-  //   ),
-  // dateEnd: z
-  //   .string()
-  //   .transform((val, ctx) => {
-  //     const date = new Date(val);
-  //     if (isNaN(date.getTime())) {
-  //       ctx.addIssue({
-  //         code: z.ZodIssueCode.custom,
-  //         message: "La fecha no es válida",
-  //       });
-  //       return z.NEVER;
-  //     }
-  //     const today = new Date();
-  //     const age = today.getFullYear() - date.getFullYear();
-  //     const monthDiff = today.getMonth() - date.getMonth();
-  //     const dayDiff = today.getDate() - date.getDate();
-  //     return date;
-  //   })
-  //   .or(
-  //     z.date({
-  //       required_error: "Please select a date and time",
-  //       invalid_type_error: "That's not a date!",
-  //     })
-  //   ),
+      if (isNaN(date.getTime())) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "La fecha no es válida",
+        });
+        return z.NEVER;
+      }
 
+      return date;
+    })
+    .or(
+      z.date({
+        required_error: "Please select a date and time",
+        invalid_type_error: "That's not a date!",
+      })
+    ),
   dateStart: z
     .string()
     .transform((val, ctx) => {
