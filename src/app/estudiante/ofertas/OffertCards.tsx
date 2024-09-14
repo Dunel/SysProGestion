@@ -94,48 +94,44 @@ export default function InternshipCards({
   const InternshipCard: React.FC<{ internship: Internship }> = ({
     internship,
   }) => (
-    <div className="flex flex-col justify-center bg-white m-4 mb-8 mx-6 p-8 w-[90%] mx-auto my-1 shadow-md text-base text-justify rounded-lg lg:text-lg">
+    <div className="flex flex-col justify-center bg-white mb-8 mx-6 p-4 w-[90%] mx-auto my-1 shadow-md text-base text-justify rounded-lg md:p-8 lg:text-lg">
       
-      <div className="flex flex-col lg:flex-row text-lg lg:gap-2">    
+      {/* //!codigo & num students apply  */}
+      <div  className="flex flex-col lg:flex-row text-sm lg:gap-2">    
           <span className="flex mr-2 text-red-500">
              <i>
             Codigo de Oferta de Vacante: {(internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id}
             </i> 
           </span>   
-         
-         {/* //!internship.pay  */}
-          {true &&
-            <>
-                <span className="flex gap-2 mr-2 font-bold text-green-500 lg:ml-auto">
+   
+          <span className="flex mr-2 gap-2 text-gray-500 lg:ml-auto">
+          Han aplicado {internship._count.apply} 🧑🏽‍🎓 a esta Oferta de {internship.type === "pasantia"
+                    ? "Pasantias"
+                    : internship.type === "servicio"
+                    ? "Servicio Comunitario"
+                    : internship.type === "proyecto"
+                    ? "Proyecto de Tesis"
+                    : ""}
+          </span> 
+      </div>
+
+      {/* //!internship.pay  */}
+      { internship.pay &&
+                <span className="flex gap-2 mr-2 text-base font-bold text-green-500 lg:ml-auto">
                 Esta vacante ofrece incentivos
                 <FaMoneyCheckAlt  style={{ color: 'green' }} size={30}/>  
-              </span>
-              {internship.pay? "si": "no"}
-            </>
+              </span> 
         }
-      </div>
 
-      <div className="flex ">
-        <span className="flex mr-2 text-gray-500 text-lg lg:ml-auto">
-        Han aplicado {internship._count.apply} 🧑🏽‍🎓 a esta Oferta de {internship.type === "pasantia"
-                  ? "Pasantias"
-                  : internship.type === "servicio"
-                  ? "Servicio Comunitario"
-                  : internship.type === "proyecto"
-                  ? "Proyecto de Tesis"
-                  : ""}
-        </span> 
-      </div>
-
-
+    
       <div className="flex flex-col items-center md:flex-row md:space-x-4">
         
         {/* //! IMG */}
-        <div className="flex m-1 md:w-[30%] lg:w-[20%]">
+        <div className="flex m-1">
           <img
             src={internship.dependencia.User.image}
             alt={`${internship.dependencia} logo`}
-            className="mx-auto w-60 h-60 object-cover rounded-full border-4 border-black-800 md:w-40 md:h-40"
+            className="mx-auto w-40 h-40 object-cover rounded-full border-4 border-black-800 md:w-40 md:h-40"
           />
         </div>
 
@@ -290,7 +286,7 @@ export default function InternshipCards({
   );
   return (
     <>
-      <div className="flex-col justify-center items-center relative z-20 mx-auto py-2 rounded shadow w-[90%]">
+      <div className="flex-col justify-center items-center relative z-20 mx-auto rounded shadow w-[90%]">
         {internships.map((internship) => (
           <InternshipCard key={internship.id} internship={internship} />
         ))}

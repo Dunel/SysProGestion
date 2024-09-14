@@ -9,11 +9,13 @@ import Loader from "../Loader";
 interface EstudianteProfileListoProps {
   onToggleForm: () => void;
   isFormVisible: boolean;
+  birthdate: Date;
 }
 
 export default function EstudianteProfileListo({
   onToggleForm,
   isFormVisible,
+  birthdate,
 }: EstudianteProfileListoProps) {
   const { data: session, update } = useSession();
   const [loading, setLoading] = useState(false);
@@ -197,8 +199,8 @@ function calcularEdad(fechaNacimiento: string | Date): string {
               <p className="text-gray-600 md:text-1x1">
                 {/* //! OJOOO */}
                 <strong>✔️Edad:</strong>{" "}
-                {calcularEdad(session.user.dataProfile.dateEnd)} 
-                {session.user.dataProfile.birthdate} CONTINUA MAL
+                {/* {calcularEdad(birthdate)}  */}
+                {/* {birthdate} */}
               </p>
             </div>
           </div>
@@ -222,7 +224,7 @@ function calcularEdad(fechaNacimiento: string | Date): string {
                   ⌛duracion del proceso:
                 </p>
                   <p>{new Date(session.user.dataProfile.dateStart).toLocaleDateString()} 
-                    a {new Date(session.user.dataProfile.dateEnd).toLocaleDateString()}</p> 
+                  {" a "}{new Date(session.user.dataProfile.dateEnd).toLocaleDateString()}</p> 
               </div>
 
             </div>

@@ -93,6 +93,7 @@ export default function EstudianteInfoForm() {
           <EstudianteProfileListo
             onToggleForm={toggleFormVisibility}
             isFormVisible={isFormVisible}
+            birthdate={session.user.dataProfile.birthdate}
           />
 
           {isFormVisible && (
