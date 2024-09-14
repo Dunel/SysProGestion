@@ -180,7 +180,8 @@ export default function Step2({ setData, sendData }: Step2Props) {
             type="password"
             className={cn(errors.password && "bg-red-100 focus:bg-red-100")}
           />
-          {errors.password ? (
+          {errors.password 
+          ? (
             <>
               <p className="text-red-500 text-sm">
                 {errors.password.message?.toString()}
@@ -190,12 +191,13 @@ export default function Step2({ setData, sendData }: Step2Props) {
                 letra mayúscula, un dígito y un carácter especial.
               </span>
             </>
-          ) : (
+            ) 
+          : (
             <span className="text-gray-500 text-xs">
               La contraseña debe tener entre 8 y 26 caracteres, incluyendo una
               letra mayúscula, un dígito y un carácter especial.
             </span>
-          )}
+            )}
         </LabelInputContainer>
 
         <LabelInputContainer className="mb-4">

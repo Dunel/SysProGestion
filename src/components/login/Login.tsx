@@ -15,6 +15,7 @@ export default function Login() {
     mode: "onChange"
   });
 
+  const [errorLog, setErrorLog] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   
@@ -29,6 +30,7 @@ export default function Login() {
     if (login?.error) {
       // Manejo de errores de inicio de sesión
       console.error(login.error);
+      setErrorLog(login.error)
     } else {
       router.push("/checking");
     }
@@ -72,14 +74,29 @@ export default function Login() {
                 type="password"
                 className={cn(errors.password && "bg-red-100 focus:bg-red-100")}
               />
-              {errors.password ? (
+              {errors.password 
+              ? (
                 <>
-                  <p className="text-red-500 text-sm">{errors.password.message?.toString()}</p>
-                  <span className="text-gray-500 text-xs">La contraseña debe tener entre 8 y 26 caracteres, incluyendo una letra mayúscula, un dígito y un carácter especial.</span>
+                  <p className="text-red-500 text-sm">
+                    {errors.password.message?.toString()}
+                  </p>
+                  <span className="text-gray-500 text-xs">
+                    La contraseña debe tener entre 8 y 26 caracteres, incluyendo una letra mayúscula, un dígito y un carácter especial.
+                  </span>
                 </>
-              ) : (
-                <span className="text-gray-500 text-xs">La contraseña debe tener entre 8 y 26 caracteres, incluyendo una letra mayúscula, un dígito y un carácter especial.</span>
-              )}
+                ) 
+              : (
+                <span className="text-gray-500 text-xs">
+                  La contraseña debe tener entre 8 y 26 caracteres, incluyendo una letra mayúscula, un dígito y un carácter especial.
+                </span>
+                )}
+                {
+                  errorLog && (
+                    <p className="text-red-500 text-sm">{errorLog}</p>
+                  )
+                  
+                }
+               
             </LabelInputContainer>
 
             <button
