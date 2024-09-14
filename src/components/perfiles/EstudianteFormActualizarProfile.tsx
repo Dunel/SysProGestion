@@ -618,63 +618,6 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
-           {/* //!Fechas del proceso
-          <div className="flex flex-col gap-[5%] mb-8 justify-start md:flex-row">
-            <LabelInputContainer className=" flex m-2 md:w-[40%]">
-              <Label htmlFor="datestart">Fecha de inicio del proceso *</Label>
-              <Input
-                {...register("dateStart")}
-                defaultValue={new Date(watch("dateStart")).toLocaleDateString()}
-                id="datestart"
-                type="date" // Mantener tipo "date"
-                className={cn(
-                  errors.dateStart && "bg-red-100 focus:bg-red-100"
-                )}
-              />
-              {errors.dateStart ? (
-                <>
-                  <p className="text-red-500 text-sm">
-                    {errors.dateStart.message?.toString()}
-                  </p>
-                  <span className="text-gray-500 text-xs">
-                    La fecha debe tener el formato dd/mm/yyyy.
-                  </span>
-                </>
-              ) : (
-                <span className="text-gray-500 text-xs">
-                  La fecha debe tener el formato dd/mm/yyyy.
-                </span>
-              )}
-            </LabelInputContainer>
-
-            <LabelInputContainer className=" flex m-2 mr-20 md:w-[40%]">
-              <Label htmlFor="dateEnd">
-                Fecha de terminacion del proceso *
-              </Label>
-              <Input
-                {...register("dateEnd")}
-                defaultValue={new Date(watch("dateEnd")).toLocaleDateString()}
-                id="dateEnd"
-                type="date"
-                className={cn(errors.dateEnd && "bg-red-100 focus:bg-red-100")}
-              />
-              {errors.dateEnd ? (
-                <>
-                  <p className="text-red-500 text-sm">
-                    {errors.dateEnd.message?.toString()}
-                  </p>
-                  <span className="text-gray-500 text-xs">
-                    La fecha debe tener el formato yyyy-mm-dd.
-                  </span>
-                </>
-              ) : (
-                <span className="text-gray-500 text-xs">
-                  La fecha debe tener el formato yyyy-mm-dd.
-                </span>
-              )}
-            </LabelInputContainer>
-          </div> */}
-
 <div className="flex flex-col gap-[5%] mb-8 justify-start md:flex-row">
         <LabelInputContainer className="flex m-2 md:w-[40%]">
           <Label htmlFor="dateStart">Fecha de inicio del proceso *</Label>
@@ -718,16 +661,7 @@ export default function EstudianteProfileForm({
           </span>
         </LabelInputContainer>
       </div>
-
-
-
-
-
-
-
-
-
-        
+ 
 
          {/* //!Descripcion */}
           <LabelInputContainer className="mb-8">
@@ -820,7 +754,7 @@ export default function EstudianteProfileForm({
           <div className="flex justify-center mb-8">
             <button
               type="submit"
-              className="w-[100%] bg-black hover:bg-gray-800 text-white font-bold py-3 px-3 mt-4 rounded focus:shadow-outline md:w-[80%]"
+              className="w-[100%] bg-black hover:bg-gray-800 text-white font-bold py-1 px-3 mt-4 rounded focus:shadow-outline md:w-[80%]"
             >
               GUARDAR DATOS
             </button>
@@ -828,7 +762,7 @@ export default function EstudianteProfileForm({
         </form>
 
         {loading && ( // Muestra el loader si está cargando
-          <div className="flex justify-center items-center flex-col mt-10">
+          <div className="flex justify-center items-center flex-col">
             <Oval
               color="#000000"
               secondaryColor="#FFFFFF" // Color de fondo blanco

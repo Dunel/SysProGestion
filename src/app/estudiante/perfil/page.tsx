@@ -93,14 +93,13 @@ export default function EstudianteInfoForm() {
           <EstudianteProfileListo
             onToggleForm={toggleFormVisibility}
             isFormVisible={isFormVisible}
-            birthdate={session.user.dataProfile.birthdate}
           />
 
           {isFormVisible && (
             <div className="bg-white mt-6 mx-4">
               <EstudianteFormActualizarProfile
                 onToggleForm={toggleFormVisibility}
-                titleForm={"Actualizando tu Perfil!"}
+                titleForm={"ACTUALIZANDO TU PERFIL"}
                 data={profileData}
               />
             </div>
