@@ -109,7 +109,7 @@ export default function InternshipCards({
         </span>
 
         <span className="flex mr-2 gap-2 text-gray-500 lg:ml-auto">
-          Han aplicado {internship._count.apply} 🧑🏽‍🎓 a esta Oferta de{" "}
+          Han aplicado {internship._count?.apply} 🧑🏽‍🎓 a esta Oferta de{" "}
           {internship.type === "pasantia"
             ? "Pasantias"
             : internship.type === "servicio"
@@ -120,8 +120,6 @@ export default function InternshipCards({
         </span>
       </div>
 
-      {/* //! TRAEEEEEEEEEEEEEER internship.pay  */}
-      {/* { internship.pay && */}
       { internship.pay &&
                 <span className="flex gap-2 mr-2 text-base font-bold text-green-500 lg:ml-auto">
                 Esta vacante ofrece incentivos
