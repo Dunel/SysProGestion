@@ -214,7 +214,6 @@ export default function EstudianteProfileListo({
                 ).toLocaleDateString()}
               </p>
               <p className="text-gray-600 md:text-1x1">
-                {/* //! OJOOO */}
                 <strong>✔️Edad:</strong>{" "}
                 {session.user.dataProfile.birthdate &&
                   calcularEdad(session.user.dataProfile.birthdate)}
@@ -225,7 +224,7 @@ export default function EstudianteProfileListo({
 
 
           {/* //!caja de PERFIL PROFESIONAL hasta CV */}
-          <div className="m-6">
+          <div>
             <h4 className={`font-bold text-gray-800 m-2 text-center
                               ${isFormVisible ? 'text-lg sm:text-xl md:text-2xl lg:text-3xl' : "text-xl sm:text-2xl md:text-3xl lg:text-4xl"}
                               `}>
@@ -236,14 +235,14 @@ export default function EstudianteProfileListo({
             <div className="flex flex-col items-start gap-2 md:flex-row">
               <div className="m-2 p-1 w-full md:w-[50%]">
                 <p className="text-gray-600 font-bold md:text-1x1">
-                  🏫Institucion Educativa:
+                  🏫Institución Educativa:
                 </p>
                 <p>{session.user.dataProfile.institution.name || ""}</p>
               </div>
 
               <div className="m-2 p-1 w-full md:w-[50%]">
                 <p className="text-gray-600 font-bold md:text-1x1">
-                  ⌛duracion del proceso:
+                  ⌛Duración del proceso:
                 </p>
                 <p>
                   {new Date(
@@ -300,7 +299,7 @@ export default function EstudianteProfileListo({
                           Actualiza tu currículum (Formato PDF)
                         </Label>
                       ) : (
-                        <Label className="md:text-[20px]">
+                        <Label className="text-base md:text-lg">
                           Sube tu currículum (Formato PDF)
                         </Label>
                       )}
@@ -318,7 +317,7 @@ export default function EstudianteProfileListo({
                         }}
                       />
                       <button
-                        className="w-[30%] bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+                        className="w-auto p-2 bg-black text-xs hover:bg-gray-700 text-white font-bold rounded md:text-sm"
                         onClick={() => {
                           handlePdfChange(pdfFile);
                         }}
@@ -362,7 +361,7 @@ export default function EstudianteProfileListo({
 
 const formatSkillsToList = (skills: string[]): JSX.Element => {
   const skillMapping: { [key: string]: string } = {
-    resoluciondeproblemas: "Resolucion de problemas",
+    resoluciondeproblemas: "Resolución de problemas",
     trabajoenequipo: "Trabajo en equipo",
     adaptabilidad: "Adaptabilidad",
     comunicacionefectiva: "Comunicación efectiva",
