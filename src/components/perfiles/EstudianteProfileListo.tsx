@@ -194,13 +194,13 @@ function calcularEdad(fechaNacimiento: string | Date): string {
               </p>
               <p className="text-gray-600 md:text-1x1">
                 <strong>🗓️ Fecha de nacimiento:</strong>{" "}
-                {new Date(session.user.dataProfile.birthdate).toLocaleDateString()},CONTINUA MAL
+                {new Date(session.user.dataProfile.birthdate).toLocaleDateString()}
               </p>
               <p className="text-gray-600 md:text-1x1">
                 {/* //! OJOOO */}
                 <strong>✔️Edad:</strong>{" "}
-                {/* {calcularEdad(birthdate)}  */}
-                {/* {birthdate} */}
+                {calcularEdad(session.user.dataProfile.birthdate)} 
+         
               </p>
             </div>
           </div>

@@ -123,11 +123,12 @@ export default function InternshipCards({
               </span> 
         }
 
-    
-      <div className="flex flex-col items-center md:flex-row md:space-x-4">
+     {/* //! IMG, title, dependencia, direccion*/}
+      {/* <div className="flex flex-col items-center md:flex-row md:space-x-4"> */}
+      <div className="flex-col md:flex-row">
         
         {/* //! IMG */}
-        <div className="flex m-1">
+        <div className="flex m-1 w-[100%] md:w-[30%]">
           <img
             src={internship.dependencia.User.image}
             alt={`${internship.dependencia} logo`}
@@ -136,7 +137,8 @@ export default function InternshipCards({
         </div>
 
         {/* //! INFO */}
-        <div className="m-1 p-1 word-wrap overflow-wrap h-[60%] md:w-[80%]">
+          <div className="flex m-1 w-[100%] md:w-[70%]">
+
           <h3 className="text-xl text-center font-extrabold text-gray-800 mb-2 md:text-justify md:text-2xl">
             {(internship.title).toUpperCase()}
           </h3>
@@ -154,48 +156,50 @@ export default function InternshipCards({
                 {internship.location}
           </p>
 
+          </div>
           
 
-         
+          <div className="m-1 p-1 word-wrap overflow-wrap h-[60%] md:w-[80%]">
+
          
           <div className="flex flex-col my-2 gap-2 lg:flex-row">
            
-            <div className="w-[100%] lg:w-[33%]">
+              <div className="w-[100%] lg:w-[33%]">
+                  <span className="text-xl font-bold text-gray-700 mb-2">
+                    Fecha de la Oferta:
+                  </span>
+                  <p>{ formatearFechaYHora(internship.date)}</p>
+              </div>
+
+              <div className="w-[100%] lg:w-[33%]">
                 <span className="text-xl font-bold text-gray-700 mb-2">
-                  Fecha de la Oferta:
+                  Estado de la Oferta:
                 </span>
-                <p>{ formatearFechaYHora(internship.date)}</p>
-            </div>
+                <p className={colorStatys(internship.status)} > 
+                  <b> {
+                      internship.status === "active" ? 'Activa ✅' 
+                        : internship.status === "inactive" ? 'Inactiva ⚠️' : 'Cerrada ⛔'
 
-            <div className="w-[100%] lg:w-[33%]">
-              <span className="text-xl font-bold text-gray-700 mb-2">
-                Estado de la Oferta:
-              </span>
-              <p className={colorStatys(internship.status)} > 
-                <b> {
-                    internship.status === "active" ? 'Activa ✅' 
-                      : internship.status === "inactive" ? 'Inactiva ⚠️' : 'Cerrada ⛔'
-
-                    }</b>
-              </p>
-            </div>
-            
-            <div className="w-[100%] md:w-[33%]">
-              <span className="text-xl font-bold text-gray-700 mb-2">
-                Tipo de Oferta:
-              </span>
-              {/* //! ASI QUE NO DEBERIA SER {internship.type} DADO QUE EL TYPO DEL PROCEDIMIENTO LO DEFINE LA OFERTA NO EL QUE UN ESTUDIANTE APLIQUE A ELLA */}
-              {/* //! PROYECTO DE TESIS DEBERIA ESTAR EN OFERTAS? NO LO CREO */}
-              <p>
-                {internship.type === "pasantia"
-                  ? "Pasantias"
-                  : internship.type === "servicio"
-                  ? "Servicio Comunitario"
-                  : internship.type === "proyecto"
-                  ? "Proyecto de Tesis"
-                  : ""}
-              </p>
-            </div>
+                      }</b>
+                </p>
+              </div>
+              
+              <div className="w-[100%] md:w-[33%]">
+                <span className="text-xl font-bold text-gray-700 mb-2">
+                  Tipo de Oferta:
+                </span>
+                {/* //! ASI QUE NO DEBERIA SER {internship.type} DADO QUE EL TYPO DEL PROCEDIMIENTO LO DEFINE LA OFERTA NO EL QUE UN ESTUDIANTE APLIQUE A ELLA */}
+                {/* //! PROYECTO DE TESIS DEBERIA ESTAR EN OFERTAS? NO LO CREO */}
+                <p>
+                  {internship.type === "pasantia"
+                    ? "Pasantias"
+                    : internship.type === "servicio"
+                    ? "Servicio Comunitario"
+                    : internship.type === "proyecto"
+                    ? "Proyecto de Tesis"
+                    : ""}
+                </p>
+              </div>
           </div>
 
 
