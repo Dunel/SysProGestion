@@ -17,6 +17,7 @@ type Internship = {
   date: Date;
   location: string;
   status: string;
+  pay: boolean | null;
   dependencia: {
     name: string;
     User: {
@@ -76,6 +77,7 @@ const colorStatys = (status:string) => {
 
   return colorText;
 }
+
 function formatearFechaYHora(fecha:Date) {
   const date = new Date(fecha);
   const año = date.getFullYear();
@@ -92,141 +94,166 @@ export default function InternshipCards({
   const InternshipCard: React.FC<{ internship: Internship }> = ({
     internship,
   }) => (
-    <div className="flex flex-col justify-center bg-white rounded-lg shadow-md m-4 mb-8 p-2 w-[90%] mx-auto my-5">
+    <div className="flex flex-col justify-center bg-white mb-8 mx-6 p-4 w-[90%] mx-auto my-1 shadow-md text-base text-justify rounded-lg md:p-8 lg:text-lg">
       
-      <div className="flex flex-col lg:flex-row lg:gap-2">    
+      {/* //!codigo & num students apply  */}
+      <div  className="flex flex-col lg:flex-row text-sm lg:gap-2">    
           <span className="flex mr-2 text-red-500">
              <i>
             Codigo de Oferta de Vacante: {(internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id}
             </i> 
           </span>   
-        { //!internship.pay
-          true &&
-            <span className="flex gap-2 mr-2 font-bold text-green-500 lg:ml-auto">
-            Esta vacante ofrece incentivos
-            <FaMoneyCheckAlt  style={{ color: 'green' }} size={30}/>  
-          </span>
+   
+          <span className="flex mr-2 gap-2 text-gray-500 lg:ml-auto">
+          Han aplicado {internship._count.apply} 🧑🏽‍🎓 a esta Oferta de {internship.type === "pasantia"
+                    ? "Pasantias"
+                    : internship.type === "servicio"
+                    ? "Servicio Comunitario"
+                    : internship.type === "proyecto"
+                    ? "Proyecto de Tesis"
+                    : ""}
+          </span> 
+      </div>
+
+      {/* //!internship.pay  */}
+      { internship.pay &&
+                <span className="flex gap-2 mr-2 text-base font-bold text-green-500 lg:ml-auto">
+                Esta vacante ofrece incentivos
+                <FaMoneyCheckAlt  style={{ color: 'green' }} size={30}/>  
+              </span> 
         }
-       
-      </div>
 
-      <div className="flex ">
-        <span className="flex mr-2 text-gray-500 lg:ml-auto">
-        Han aplicado {internship._count.apply} 🧑🏽‍🎓 a esta Oferta de {internship.type === "pasantia"
-                  ? "Pasantias"
-                  : internship.type === "servicio"
-                  ? "Servicio Comunitario"
-                  : internship.type === "proyecto"
-                  ? "Proyecto de Tesis"
-                  : ""}
-        </span> 
-      </div>
-
-      <div className="flex flex-col items-center md:flex-row md:space-x-4">
+     {/* //! IMG, title, dependencia, direccion*/}
+      {/* <div className="flex flex-col items-center md:flex-row md:space-x-4"> */}
+      <div className="flex-col md:flex-row">
+        
         {/* //! IMG */}
-        <div className="flex m-1 p-1 mx-auto h-[40%] md:w-[30%] lg:w-[20%]">
+        <div className="flex m-1 w-[100%] md:w-[30%]">
           <img
             src={internship.dependencia.User.image}
             alt={`${internship.dependencia} logo`}
-            className="mx-auto w-60 h-60 object-cover rounded-full border-4 border-black-800 md:w-40 md:h-40"
+            className="mx-auto w-40 h-40 object-cover rounded-full border-4 border-black-800 md:w-40 md:h-40"
           />
         </div>
 
         {/* //! INFO */}
-        <div className="m-1 p-1 word-wrap overflow-wrap h-[60%] md:w-[80%]">
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">
-            {internship.title}
+          <div className="flex m-1 w-[100%] md:w-[70%]">
+
+          <h3 className="text-xl text-center font-extrabold text-gray-800 mb-2 md:text-justify md:text-2xl">
+            {(internship.title).toUpperCase()}
           </h3>
-          <p className="text-lg text-gray-600 mb-1">
+          <p className="text-2xl text-gray-600 mb-1 font-bold">🏦
             {" "}
-            <i>{internship.dependencia.name}</i>
+            <i>{(internship.dependencia.name).toUpperCase()}</i>
           </p>
-          <p className="text-sm text-gray-500">📍{internship.location}</p>
-          <p className="text-sm text-gray-500">📍{internship.dependencia.User.parroquia?.parroquia}</p>
-          <p className="text-sm text-gray-500">📍{internship.dependencia.User.parroquia?.municipio.municipio}</p>
+          <p className="text-gray-600 text-justify md:text-1x1">
+            <strong>📍Dirección de la Dependencia:</strong>{" "}
+                <br/>
+                Municipio {internship.dependencia.User.parroquia?.municipio.municipio},{" "}
+                <strong>
+                  Parroquia {(internship.dependencia.User.parroquia?.parroquia)},{" "}
+                </strong>
+                {internship.location}
+          </p>
 
-          <div className="flex my-2 gap-2">
-            <div className="w-[33%]">
-                <span className="text-lg font-medium text-gray-700 mb-2">
-                  Fecha de la Oferta:
-                </span>
-                <p>{ formatearFechaYHora(internship.date)}</p>
-            </div>
-
-            <div className="w-[33%]">
-              <span className="text-lg font-medium text-gray-700 mb-2">
-                Estado de la Oferta:
-              </span>
-              <p className={colorStatys(internship.status)} > <b> {internship.status}</b></p>
-            </div>
-            
-            <div className="w-[33%]">
-              <span className="text-lg font-medium text-gray-700 mb-2">
-                Tipo de Oferta:
-              </span>
-              {/* //! ASI QUE NO DEBERIA SER {internship.type} DADO QUE EL TYPO DEL PROCEDIMIENTO LO DEFINE LA OFERTA NO EL QUE UN ESTUDIANTE APLIQUE A ELLA */}
-              {/* //! PROYECTO DE TESIS DEBERIA ESTAR EN OFERTAS? NO LO CREO */}
-              <p>
-                {internship.type === "pasantia"
-                  ? "Pasantias"
-                  : internship.type === "servicio"
-                  ? "Servicio Comunitario"
-                  : internship.type === "proyecto"
-                  ? "Proyecto de Tesis"
-                  : ""}
-              </p>
-            </div>
           </div>
+          
+
+          <div className="m-1 p-1 word-wrap overflow-wrap h-[60%] md:w-[80%]">
+
+         
+          <div className="flex flex-col my-2 gap-2 lg:flex-row">
+           
+              <div className="w-[100%] lg:w-[33%]">
+                  <span className="text-xl font-bold text-gray-700 mb-2">
+                    Fecha de la Oferta:
+                  </span>
+                  <p>{ formatearFechaYHora(internship.date)}</p>
+              </div>
+
+              <div className="w-[100%] lg:w-[33%]">
+                <span className="text-xl font-bold text-gray-700 mb-2">
+                  Estado de la Oferta:
+                </span>
+                <p className={colorStatys(internship.status)} > 
+                  <b> {
+                      internship.status === "active" ? 'Activa ✅' 
+                        : internship.status === "inactive" ? 'Inactiva ⚠️' : 'Cerrada ⛔'
+
+                      }</b>
+                </p>
+              </div>
+              
+              <div className="w-[100%] md:w-[33%]">
+                <span className="text-xl font-bold text-gray-700 mb-2">
+                  Tipo de Oferta:
+                </span>
+                {/* //! ASI QUE NO DEBERIA SER {internship.type} DADO QUE EL TYPO DEL PROCEDIMIENTO LO DEFINE LA OFERTA NO EL QUE UN ESTUDIANTE APLIQUE A ELLA */}
+                {/* //! PROYECTO DE TESIS DEBERIA ESTAR EN OFERTAS? NO LO CREO */}
+                <p>
+                  {internship.type === "pasantia"
+                    ? "Pasantias"
+                    : internship.type === "servicio"
+                    ? "Servicio Comunitario"
+                    : internship.type === "proyecto"
+                    ? "Proyecto de Tesis"
+                    : ""}
+                </p>
+              </div>
+          </div>
+
+
 
           {/* //! CONTAINER FLEX: OF SKILLS AND DESCRIPTION */}
           <div className="flex flex-col justify-center gap-2 my-2 lg:flex-row">
             <div className="m-1 w-[100%] lg:w-[40%]">
-              <h4 className="text-lg font-medium text-gray-700 mb-2">
-                Habilidades requeridas 📝
-              </h4>
+              <span className="text-xl font-bold text-gray-700 mb-2">
+                🤹🏽 Habilidades requeridas
+              </span>   
               <ul className="list-disc list-inside">
                 {internship.skills.map((skill, index) => (
-                  <li key={index} className="text-gray-600">
+                  <li key={index} className="text-gray-700">
                     {skillFormated[skill]}
                   </li>
                 ))}
               </ul>
             </div>
+
+
             <div className="m-1 w-[100%] lg:w-[60%]">
-              <h4 className="text-lg font-medium text-gray-700 mb-2">
-                Descripcion de la Vacante 📋
-              </h4>
+              <span className="text-xl font-bold text-gray-700 mb-2">
+              📋Descripcion de la Vacante 
+              </span> 
               <p>{internship.description}</p>
             </div>
           </div>
         </div>
       </div>
-      <div className="flex justify-center p-2 mt-4 w-[100%]">  
+      <div className="flex justify-center w-[100%]">  
                       
                       {internship.apply.length > 0 
                         ? <button
-                        className="w-full bg-gray-500 text-white font-bold py-2 px-4 rounded  md:w-[50%]"
-                        disabled>  
-                          { internship.status === "inactive" 
-                          ? <div className="flex gap-2 justify-center">
-                          <span>OFERTA INACTIVA</span>
-                          <FaExclamation  style={{ color: 'white' }} size={30}/>  
-                        </div> 
-                           : internship.apply.length > 0 && internship.apply[0]?.status != 'declinado'  
-                                      ?  <div className="flex gap-2 justify-center">
-                                      <span>YA HAS APLICADO A ESTA OFERTA</span>
-                                      <FaRegThumbsUp style={{ color: 'white' }} size={30}/>  
-                                    </div>
-                                      :internship.apply[0]?.status === 'declinado' 
-                                        ?   <div className="flex gap-2 justify-center">
-                                              <span>HAS DECLINADO ESTA OFERTA</span>
-                                              <FaRegThumbsDown style={{ color: 'white' }} size={30}/>  
-                                            </div>
-                                        :null                       
-                            } 
-                          
-                         
-                          </button>
+                            className="w-full bg-gray-500 text-white font-bold py-2 rounded md:w-[50%]"
+                            disabled>  
+                              { internship.status === "inactive" 
+                              ? <div className="flex gap-2 justify-center">
+                              <span>OFERTA INACTIVA</span>
+                              <FaExclamation  style={{ color: 'white' }} size={30}/>  
+                            </div> 
+                              : internship.apply.length > 0 && internship.apply[0]?.status != 'declinado'  
+                                        ?  <div className="flex gap-2 justify-center">
+                                        <span>YA HAS APLICADO A ESTA OFERTA</span>
+                                        <FaRegThumbsUp style={{ color: 'white' }} size={30}/>  
+                                      </div>
+                                        :internship.apply[0]?.status === 'declinado' 
+                                          ?   <div className="flex gap-2 justify-center">
+                                                <span>HAS DECLINADO ESTA OFERTA</span>
+                                                <FaRegThumbsDown style={{ color: 'white' }} size={30}/>  
+                                              </div>
+                                          :null                       
+                            }
+                        </button>
+
                         : internship.status !== "inactive" 
                         ? (
                             <button
@@ -263,7 +290,7 @@ export default function InternshipCards({
   );
   return (
     <>
-      <div className="relative z-20 mx-auto py-2 rounded shadow w-[90%]">
+      <div className="flex-col justify-center items-center relative z-20 mx-auto rounded shadow w-[90%]">
         {internships.map((internship) => (
           <InternshipCard key={internship.id} internship={internship} />
         ))}
@@ -282,4 +309,3 @@ const BottomGradient = () => {
 };
 
 
-// w-full bg-green-500 hover:bg-green-800 text-white font-bold py-2 px-4 rounded md:w-[50%]

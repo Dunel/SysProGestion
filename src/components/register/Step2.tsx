@@ -68,15 +68,14 @@ export default function Step2({ setData, sendData }: Step2Props) {
             </span>
           )}
         </LabelInputContainer>
-
-       
+   
        
         <LabelInputContainer className="mb-4">
           <Label htmlFor="apellido">Apellidos del estudiante</Label>
           <Input
             {...register("apellido")}
             id="apellido"
-            placeholder="Cardenas Mora"
+            placeholder="Di´martino Hangun"
             type="text"
             className={cn(errors.apellido && "bg-red-100 focus:bg-red-100")}
           />
@@ -95,6 +94,7 @@ export default function Step2({ setData, sendData }: Step2Props) {
             </span>
           )}
         </LabelInputContainer>
+
 
         <LabelInputContainer className="mb-4">
           <Label htmlFor="cedula">Cédula de Identidad del estudiante</Label>

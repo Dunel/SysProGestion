@@ -96,13 +96,15 @@ export default function EstudianteProfileForm({
     formState: { errors },
     setValue,
     watch,
+    trigger,
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     mode: "onChange",
   });
 
   useEffect(() => {
-    if (session && session.user.dataProfile?.skills.length > 0) {
+    //if (session && session.user.dataProfile?.skills.length > 0) {
+    if (session) {
       setSelectedSkills(session?.user.dataProfile.skills);
     }
   }, [session?.user.dataProfile?.skills]);
@@ -316,6 +318,16 @@ export default function EstudianteProfileForm({
     setValue("municipioId", municipioSelected);
   }, [municipioSelected]);
 
+  useEffect(() => {
+    // Trigger validation when dateStart or dateEnd changes
+    if (watch("dateStart") || watch("dateEnd")) {
+      trigger(["dateStart", "dateEnd"]);
+    }
+  }, [watch("dateStart"), watch("dateEnd"), trigger]);
+
+  // ... (otro código sin cambios)
+
+
   return (
     <>
       <div className="flex flex-col my-2 md:space-x-4">
@@ -328,6 +340,7 @@ export default function EstudianteProfileForm({
           onSubmit={handleSubmit(onSubmit)}
           className="mb-8 form-student-info"
         >
+          {/* //!Nombres */}
           <LabelInputContainer className="mb-8">
             <Label htmlFor="names">Nombres del estudiante *</Label>
             <Input
@@ -336,7 +349,7 @@ export default function EstudianteProfileForm({
               onChange={handleInputChange}
               id="names"
               name="names"
-              placeholder="Jose Manuel"
+              placeholder='José Manuel'
               type="text"
               className={cn(errors.names && "bg-red-100 focus:bg-red-100")}
             />
@@ -345,6 +358,7 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
+          {/* //!Apellidos */}
           <LabelInputContainer className="mb-8">
             <Label htmlFor="lastnames">Apellidos del estudiante *</Label>
             <Input
@@ -353,7 +367,7 @@ export default function EstudianteProfileForm({
               onChange={handleInputChange}
               id="lastnames"
               name="lastnames"
-              placeholder="Apellidos"
+              placeholder="Di´martino Han-gun"
               type="text"
               className={cn(errors.lastnames && "bg-red-100 focus:bg-red-100")}
             />
@@ -362,6 +376,7 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
+          {/* //!Teléfono */}
           <LabelInputContainer className="mb-8">
             <Label htmlFor="phone">Teléfono del estudiante *</Label>
             <Input
@@ -370,7 +385,7 @@ export default function EstudianteProfileForm({
               onChange={handleInputChange}
               id="phone"
               name="phone"
-              placeholder="Teléfono"
+              placeholder="04246558941"
               type="text"
               className={cn(errors.phone && "bg-red-100 focus:bg-red-100")}
             />
@@ -379,8 +394,9 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
+          {/* //!estado */}
           <LabelInputContainer className="mb-8">
-            <Label htmlFor="estado">ESTADO</Label>
+            <Label htmlFor="estado">Estado del estudiante</Label>
             <div className="relative">
               <Input
                 id="estado"
@@ -419,8 +435,10 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
+
+          {/* //! municipio */}
           <LabelInputContainer className="mb-8">
-            <Label htmlFor="municipio">Municipio</Label>
+            <Label htmlFor="municipio">Municipio del estudiente</Label>
             <div className="relative">
               <Input
                 id="municipioId"
@@ -461,8 +479,9 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
+          {/*//! Parroquia */}
           <LabelInputContainer className="mb-8">
-            <Label htmlFor="parroquia">Parroquia</Label>
+            <Label htmlFor="parroquia">Parroquia del estudiente</Label>
             <div className="relative">
               <Input
                 id="parroquiaId"
@@ -501,9 +520,7 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
-          <h2>
-            <mark>SECTORIZACION POR PARROKIA </mark>
-          </h2>
+             {/*//! Direccion mas precisa*/}
           <LabelInputContainer className="mb-8">
             <Label htmlFor="address">Dirección del estudiante *</Label>
             <Input
@@ -512,18 +529,17 @@ export default function EstudianteProfileForm({
               onChange={handleInputChange}
               id="address"
               name="address"
-              placeholder="Dirección"
+              placeholder="Haticos, Av. 25B con Calle 100, casa No 23-87, cerca de Upaca C.A"
               type="text"
               className={cn(errors.address && "bg-red-100 focus:bg-red-100")}
             />
             {errors.address && (
               <p className="text-red-500 text-sm">{errors.address.message}</p>
             )}
+            <span>Indique Sector, Av., Calle, No. de habitación y punto de referencia.</span>
           </LabelInputContainer>
-
-          <h2>
-            <mark>PREPARAR BDD</mark>
-          </h2>
+          
+             {/* //!institutions Edu */}
           <LabelInputContainer className="mb-8">
             <Label htmlFor="institutions">
               Institución Educativa del estudiante *
@@ -565,9 +581,7 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
-          <h2>
-            <mark>PREPARAR BDD</mark>
-          </h2>
+            {/* //!Especialización o carrera del estudiante */}
           <LabelInputContainer className="mb-8">
             <Label htmlFor="career">
               Especialización o carrera del estudiante *
@@ -604,9 +618,7 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
-          <h2>
-            <mark>PREPARAR BDD</mark>
-          </h2>
+           {/* //!Fechas del proceso
           <div className="flex flex-col gap-[5%] mb-8 justify-start md:flex-row">
             <LabelInputContainer className=" flex m-2 md:w-[40%]">
               <Label htmlFor="datestart">Fecha de inicio del proceso *</Label>
@@ -661,25 +673,63 @@ export default function EstudianteProfileForm({
                 </span>
               )}
             </LabelInputContainer>
-          </div>
+          </div> */}
 
-          <h2>
-            <mark>ELIMINAR DE LA BBDD</mark>
-          </h2>
-          <LabelInputContainer className="mb-8">
-            <Label htmlFor="quarter">Trimestre</Label>
-            <Input
-              onChange={handleInputChange}
-              id="quarter"
-              name="quarter"
-              placeholder="Trimestre"
-              type="text"
-            />
-          </LabelInputContainer>
+<div className="flex flex-col gap-[5%] mb-8 justify-start md:flex-row">
+        <LabelInputContainer className="flex m-2 md:w-[40%]">
+          <Label htmlFor="dateStart">Fecha de inicio del proceso *</Label>
+          <Input
+            {...register("dateStart")}
+            defaultValue={new Date(watch("dateStart")).toLocaleDateString()}
+            id="dateStart"
+            type="date"
+            className={cn(
+              errors.dateStart && "bg-red-100 focus:bg-red-100"
+            )}
+          />
+          {errors.dateStart && (
+            <p className="text-red-500 text-sm">
+              {errors.dateStart.message}
+            </p>
+          )}
+          <span className="text-gray-500 text-xs">
+            La fecha debe tener el formato dd/mm/yyyy.
+          </span>
+        </LabelInputContainer>
 
-          <h2>
-            <mark> QUE SEA NO REQUERIDO EN LA BBDD </mark>
-          </h2>
+        <LabelInputContainer className="flex m-2 mr-20 md:w-[40%]">
+          <Label htmlFor="dateEnd">
+            Fecha de terminación del proceso *
+          </Label>
+          <Input
+            {...register("dateEnd")}
+            defaultValue={new Date(watch("dateEnd")).toLocaleDateString()}
+            id="dateEnd"
+            type="date"
+            className={cn(errors.dateEnd && "bg-red-100 focus:bg-red-100")}
+          />
+          {errors.dateEnd && (
+            <p className="text-red-500 text-sm">
+              {errors.dateEnd.message}
+            </p>
+          )}
+          <span className="text-gray-500 text-xs">
+            La fecha debe tener el formato dd/mm/yyyy, y ser posterior a la fecha de inicio.
+          </span>
+        </LabelInputContainer>
+      </div>
+
+
+
+
+
+
+
+
+
+        
+
+         {/* //!Descripcion */}
           <LabelInputContainer className="mb-8">
             <Label htmlFor="description">
               Breve descripción del estudiante.
@@ -703,9 +753,8 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
-          <h2>
-            <mark> QUE SEA NO REQUERIDO EN LA BBDD </mark>
-          </h2>
+         
+          {/* //!Intereses */}
           <LabelInputContainer className="mb-8">
             <Label htmlFor="interests">Intereses del estudiante</Label>
             <Input
@@ -725,9 +774,7 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
-          <h2>
-            <mark> QUE SEA NO REQUERIDO EN LA BBDD </mark>
-          </h2>
+             {/* //!Habilidades */}
           <LabelInputContainer className="mb-8">
             <Label htmlFor="skills">Habilidades del estudiante</Label>
             {skillsOptions.map(({ value, label }) => (

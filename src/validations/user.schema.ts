@@ -4,7 +4,7 @@ const passwordRegex =
   /^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%&*./=])[A-Za-z\d@#$%&*./=]{8,26}$/;
 
 // Expresiones regulares para validar los campos
-const nameRegex = /^[A-Za-zÀ-ÿ\s]+$/; // Solo letras y espacios (incluyendo caracteres acentuados)
+const nameRegex = /^[A-Za-zÀ-ÿ\s' -]+$/; // Solo letras (incluyendo caracteres acentuados), espacios, apostrofe y guiones
 const numericRegex = /^\d+$/; // Solo números
 
 //validacionbackend no tocar plox
@@ -36,34 +36,44 @@ export const userSchema = z.object({
     .string({ required_error: "El nombre es requerido" })
     .min(3, { message: "El nombre debe tener minimo 3 caracteres" })
     .max(50, { message: "El nombre debe tener maximo 50 caracteres" })
+    .regex(nameRegex, {
+      message: "El nombre no debe contener números ni signos de puntuación",
+    })
     .transform((val) => val.toUpperCase()),
   apellido: z
     .string({ required_error: "El apellido es requerido" })
     .min(3, { message: "El apellido debe tener minimo 3 caracteres" })
     .max(50, { message: "El apellido debe tener maximo 50 caracteres" })
+    .regex(nameRegex, {
+      message: "El apellido no debe contener números ni signos de puntuación",
+    })
     .transform((val) => val.toUpperCase()),
-    birthdate: z
-      .string({ required_error: "La fecha de nacimiento es requerida" })
-      .datetime({ offset: true })
-      .transform((val, ctx) => {
-        const date = new Date(val);
-        if (isNaN(date.getTime())) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "La fecha de nacimiento no es válida",
-          });
-          return z.NEVER;
-        }
-  
-        const today = new Date();
-        const age = today.getFullYear() - date.getFullYear();
-        const month = today.getMonth() - date.getMonth();
-        const day = today.getDate() - date.getDate();
-  
-       
-  
-        return date;
-      }),
+  // Validación de solo letras
+  birthdate: z
+    .string({ required_error: "La fecha de nacimiento es requerida" })
+    .datetime({ offset: true })
+    .transform((val, ctx) => {
+      const datePart = val.split("T")[0];
+      const isValidFormat = /^\d{4}-\d{2}-\d{2}$/.test(datePart);
+      if (!isValidFormat) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Formato de fecha no válido. Usa el formato YYYY-MM-DD",
+        });
+        return z.NEVER;
+      }
+      const date = new Date(`${datePart}T00:00:00-04:00`);
+
+      if (isNaN(date.getTime())) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "La fecha no es válida",
+        });
+        return z.NEVER;
+      }
+
+      return date;
+    }),
   telefono: z
     .string({ required_error: "El telefono es requerido" })
     .min(10, { message: "El telefono debe tener minimo 10 caracteres" })
@@ -100,7 +110,8 @@ export const userSchema = z.object({
     }),
 }); /// no tocar plix
 
-export const userFormSchema = z.object({
+export const userFormSchema = z
+  .object({
     cedula: z
       .string({ required_error: "La cédula es requerida" })
       .min(7, { message: "La cédula debe tener mínimo 7 caracteres" })
@@ -133,34 +144,40 @@ export const userFormSchema = z.object({
 
     birthdate: z
       .string({ required_error: "La fecha de nacimiento es requerida" })
-      .refine((val) => {
-        const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
-        return regex.test(val);
-      }, {
-        message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
-      })
+      .refine(
+        (val) => {
+          const regex = /^\d{4}-\d{2}-\d{2}$/; // Validación para el formato "yyyy-mm-dd"
+          return regex.test(val);
+        },
+        {
+          message: "El formato de la fecha es incorrecto. Debe ser yyyy-mm-dd",
+        }
+      )
       .transform((val, ctx) => {
-        const [year, month, day] = val.split('-').map(Number); // Separar año, mes y día
+        const [year, month, day] = val.split("-").map(Number); // Separar año, mes y día
         const date = new Date(year, month - 1, day); // Crear el objeto Date con los valores extraídos
-    
-        if (isNaN(date.getTime()) || date.getDate() !== day || date.getMonth() !== (month - 1) || date.getFullYear() !== year) {
+
+        if (
+          isNaN(date.getTime()) ||
+          date.getDate() !== day ||
+          date.getMonth() !== month - 1 ||
+          date.getFullYear() !== year
+        ) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: "La fecha de nacimiento no es válida",
           });
           return z.NEVER;
         }
-    
+
         const today = new Date();
         const age = today.getFullYear() - date.getFullYear();
         const monthDiff = today.getMonth() - date.getMonth();
         const dayDiff = today.getDate() - date.getDate();
-  
-    
-         return date;
+
+        return date;
       }),
-    
-    
+
     password: z
       .string({ required_error: "La contraseña es requerida" })
       .min(8, { message: "La contraseña debe tener mínimo 8 caracteres" })
@@ -174,6 +191,7 @@ export const userFormSchema = z.object({
       required_error: "La confirmación de contraseña es requerida.",
     }),
   })
+
   .refine((data) => data.password === data.confirmPassword, {
     message: "Las contraseñas no coinciden",
     path: ["confirmPassword"],

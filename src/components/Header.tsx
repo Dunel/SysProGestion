@@ -53,11 +53,11 @@ export default function Header({ title, subtitle }: HeaderProps) {
     <header
       id="sticky-header"
       className={`w-full sticky top-0 transition-all duration-300 ${
-        isSticky ? 'z-30 shadow scale-80 origin-top color-header h-auto p-1 sm:pt-4' : ''
+        isSticky ? 'z-30 shadow scale-80 origin-top color-header h-auto p-1 sm:pt-1' : ''
       }`}
     >
-      <div className={`flex mx-auto px-2 py-2 sm:px-6 lg:px-20 transition-all duration-300 ${
-        isSticky ? 'py-1 mt-[2vh]' : 'py-2'
+      <div className={`flex mx-auto px-4 transition-all duration-300 lg:px-20 ${
+        isSticky ? 'py-1 mt-[2vh]' : 'py-1'
       }`}>
         <div className={`${isSticky ? 'block' : 'hidden'}`}>
           <button
@@ -69,13 +69,13 @@ export default function Header({ title, subtitle }: HeaderProps) {
           </button>
         </div>
         <div>
-          <h1 className={`text-2xl font-bold tracking-tight text-gray-900 text-justify transition-all duration-300 md:text-3xl ${
-            isSticky ? 'text-xl md:text-2xl' : 'text-3xl'
+          <h1 className={`text-xl font-bold tracking-tight text-gray-900 text-justify transition-all duration-300 md:text-2xl lg:text-3xl ${
+            isSticky ? 'text-lg md:text-xl lg:text-2xl' : ''
           }`}>
             <i>{title}</i>
             <div>
-              <p className={`text-justify font-normal transition-all duration-300 ${
-                isSticky ? 'text-base' : 'text-xl'
+              <p className={`text-base text-justify font-normal transition-all duration-300 mb-2 md:text-lg lg:text-xl ${
+                isSticky ? 'text-sm md:text-mase lg:text-lg leading-tight' : ''
               }`}>
                 {subtitle}
               </p>

@@ -30,6 +30,7 @@ export default function EstudianteInfoForm() {
     lastnames: string;
     phone: string;
     curriculum: string;
+    birthdate: Date;
   } | null>(null);
 
   const getProfile = async () => {
@@ -48,8 +49,11 @@ export default function EstudianteInfoForm() {
       }
     }
   };
+
+  
   useEffect(() => {
     getProfile();
+    //console.log(session?.user)
   }, [session?.user.profile]);
 
   return (
@@ -89,6 +93,7 @@ export default function EstudianteInfoForm() {
           <EstudianteProfileListo
             onToggleForm={toggleFormVisibility}
             isFormVisible={isFormVisible}
+            birthdate={session.user.dataProfile.birthdate}
           />
 
           {isFormVisible && (

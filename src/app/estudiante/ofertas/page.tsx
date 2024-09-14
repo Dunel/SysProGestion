@@ -14,6 +14,7 @@ type Application = {
   date: Date;
   location: string;
   status: string;
+  pay: boolean | null;
   dependencia: {
     name: string;
     User: {
@@ -113,6 +114,7 @@ export default function Page() {
           internships={applications.map((internship) => ({
             ...internship,
             handleApply: handleApply,
+            //stado: internship.
            
           }))}
         />
