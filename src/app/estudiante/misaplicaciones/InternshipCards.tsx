@@ -168,7 +168,7 @@ export default function InternshipCards({
         <div className="flex flex-col m-1 p-1 word-wrap overflow-wrap">
 
             {/* fecha, estado y tipo de oferta */}
-            <div className="flex flex-col my-2 gap-2 md:flex-row">
+            <div className="flex flex-col gap-2 md:flex-row">
 
                 <div className="w-[100%] md:w-auto mx-auto">
                   <span className="font-bold text-gray-700 mb-2">
@@ -189,7 +189,11 @@ export default function InternshipCards({
             <span className="font-bold text-gray-700 mb-2">
                 Estado de tu Aplicacion:
               </span>
-                <p className="bg-black text-center rounded text-white">{statusFormated[internship.apply[0].status]} </p>
+                <p className="w-auto rounded text-white md:text-center sm:w-[100%]">
+                  <span className="bg-black font-semibold">
+                  {statusFormated[internship.apply[0].status]} 
+                  </span>
+                  </p>
             </div>
 
             <div className="w-[100%] md:w-auto mx-auto">
