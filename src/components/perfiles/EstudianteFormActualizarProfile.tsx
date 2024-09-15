@@ -165,6 +165,7 @@ export default function EstudianteProfileForm({
           profile: true,
           dataProfile: {
             ...data,
+            curriculum: session.user.dataProfile?.curriculum,
             institution: {
               id: data.institutionId,
               name: institutions.find((e) => e.id === data.institutionId)?.name,
@@ -579,7 +580,7 @@ export default function EstudianteProfileForm({
                 type="text"
                 value={
                   institutions.find((e) => e.id === watch("institutionId"))
-                    ?.name
+                    ?.name || ""
                 }
                 onClick={() => setUniversityOpen(!isUniversityOpen)}
                 readOnly
@@ -619,7 +620,9 @@ export default function EstudianteProfileForm({
               <Input
                 id="career"
                 type="text"
-                value={career.find((e) => e.id === watch("careerId"))?.name}
+                value={
+                  career.find((e) => e.id === watch("careerId"))?.name || ""
+                }
                 onClick={() => setCareerOpen(!isCareerOpen)}
                 readOnly
                 className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
