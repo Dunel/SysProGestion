@@ -52,7 +52,7 @@ export default function Bienvenida() {
                 </p>
                 <div className='h-[30%] p-1 m-1'>
                 <img 
-                  src="https://as1.ftcdn.net/v2/jpg/06/59/43/38/1000_F_659433864_ImsAvxQ7sJO4KRxinvMyzjdXrH1nRvXj.webp" 
+                  src="/images/mayor.webp"
                   alt="Alcaldía" 
                   className="mx-auto my-2 py-2 object-cover rounded-full w-auto h-40 md:h-60" />
                 </div>

@@ -62,14 +62,14 @@ const skillFormated: { [key: string]: string } = {
   lenguajesdeprogramacion: "Lenguajes de programación",
 };
 
-const statusFormated: { [key: string]: string } = {
-  pendiente: "Pendiente por Dependencia⌚",
-  aceptado: "Has sido Aceptado! Puedes empeza!🎉",
-  rechazado: "Rechazado! Intenta con otra oferta!🤓",
-  declinado: "Tu has Declinado⛔",
-  aprobado: "Fuiste Aprobado! ahora acepta!➡️",
-  active: "Activo✅",
-  inactive: "Inactivo⚠️",
+const statusFormated: { [key: string]: Array<string> } = {
+  pendiente: ["Pendiente por Dependencia⌚",'text-blue-500'],
+  aceptado: ["Has sido Aceptado! Puedes empeza!🎉", 'text-green-500'],
+  rechazado: ["Rechazado! Intenta con otra oferta!🤓", 'text-red-500'],
+  declinado: ["Tu has Declinado⛔",'text-red-500'],
+  aprobado: ["Fuiste Aprobado! ahora acepta!➡️", 'text-yellow-500'],
+  active: ["Activo✅", 'text-green-500'],
+  inactive: ["Inactivo⚠️", 'text-yellow-500']
 };
 
 const colorStatys = (status: string) => {
@@ -189,9 +189,9 @@ export default function InternshipCards({
             <span className="font-bold text-gray-700 mb-2">
                 Estado de tu Aplicacion:
               </span>
-                <p className="w-auto rounded text-white md:text-center sm:w-[100%]">
+                <p className={`w-auto rounded ${statusFormated[internship.apply[0].status][1]} md:text-center sm:w-[100%]`}>
                   <span className="bg-black font-semibold">
-                  {statusFormated[internship.apply[0].status]} 
+                  {statusFormated[internship.apply[0].status][0]} 
                   </span>
                   </p>
             </div>

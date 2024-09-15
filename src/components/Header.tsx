@@ -91,7 +91,7 @@ export default function Header({ title, subtitle }: HeaderProps) {
                 { isSticky 
                   ? 
                   <img
-                    src={session?.user.picture}
+                    src={session?.user.picture ? session.user.picture : "/images/no-image.png"}
                     alt={`${session?.user.picture} logo`}
                     className="w-10 h-10 object-cover rounded-full border-4 border-black-800"
                   />
