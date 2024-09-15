@@ -37,6 +37,7 @@ export default function Login() {
     setLoading(false);
   };
 
+
   return (
     <>
       <div className="flex flex-col items-center justify-center">
@@ -90,12 +91,15 @@ export default function Login() {
                   La contraseña debe tener entre 8 y 26 caracteres, incluyendo una letra mayúscula, un dígito y un carácter especial.
                 </span>
                 )}
-                {
-                  errorLog && (
-                    <p className="text-red-500 text-sm">{errorLog}</p>
-                  )
+                
+                {/* //! aca tengo q capturar la onChange del pass */}
+                  {errorLog &&
+                   <p className={`text-red-500 text-sm`}>{errorLog}</p>
+                  }
                   
-                }
+                
+                  
+                
                
             </LabelInputContainer>
 
