@@ -92,7 +92,7 @@ export default function Login() {
                 </span>
                 )}
                 
-                {/* //! aca tengo q capturar la onChange del pass */}
+                {/* this components shows up when some error is throw from the validation/login.schema.ts */}
                   {errorLog &&
                    <p className={`text-red-500 text-sm`}>{errorLog}</p>
                   }

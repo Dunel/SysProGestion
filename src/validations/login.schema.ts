@@ -14,7 +14,4 @@ export const LoginSchema = z.object({
     .string({ required_error: "La contraseña es requerida." })
     .min(8, { message: "Correo o contraseña incorrecta" })
     .max(26, { message: "Correo o contraseña incorrecta" })
-    .regex(passwordRegex, {
-      message: "Correo o contraseña incorrecta",
-    }),
 });
