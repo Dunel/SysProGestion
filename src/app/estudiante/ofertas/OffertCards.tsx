@@ -160,7 +160,7 @@ export default function InternshipCards({
 
 
 
-        <div className="flex flex-col m-1 p-1 word-wrap overflow-wrap md:text-x1">
+        <div className="flex flex-col word-wrap overflow-wrap md:text-x1">
 
               {/* fecha, estado y tipo de oferta */}
               <div className="flex flex-col my-2 gap-2 sm:flex-row">
@@ -296,7 +296,7 @@ export default function InternshipCards({
   );
   return (
     <>
-      <div className="flex-col justify-center items-center relative z-20 mx-auto rounded shadow w-[90%]">
+      <div className="flex-col justify-center items-center relative z-20 py-2 mx-auto rounded shadow w-[90%]">
         {internships.map((internship) => (
           <InternshipCard key={internship.id} internship={internship} />
         ))}

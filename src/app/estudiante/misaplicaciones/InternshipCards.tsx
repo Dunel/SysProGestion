@@ -189,7 +189,7 @@ export default function InternshipCards({
             <span className="font-bold text-gray-700 mb-2">
                 Estado de tu Aplicacion:
               </span>
-                <p><mark>{statusFormated[internship.apply[0].status]}</mark> </p>
+                <p className="bg-black text-center rounded text-white">{statusFormated[internship.apply[0].status]} </p>
             </div>
 
             <div className="w-[100%] md:w-auto mx-auto">

@@ -17,9 +17,6 @@ html {
 body {
     margin: 0;
     padding: 0;
-    /* display: grid;
-    min-height: 100vh;
-    grid-template-rows: auto 1fr auto; */
 }
 
 form.form-student-info input[type="text"], 

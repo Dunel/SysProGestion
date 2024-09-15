@@ -100,7 +100,7 @@ export default function Page() {
       {squeleton ? (
         <Skeleton />
       ) : applications && applications.length === 0 ? (
-        <div className="flex flex-col justify-center items-center mt-12 mx-auto bg-white w-[60%] min-h-[30vh]">
+        <div className="flex flex-col justify-center items-center mt-8 mx-auto bg-white w-[60%] min-h-[30vh]">
           <p className="m-2 p-2 text-center text-red-500">
             No tienes aplicaciones a Oferta de Vacante.
           </p>
