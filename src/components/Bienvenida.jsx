@@ -1,5 +1,4 @@
 // components/Bienvenida.js
-
 import React from 'react';
 import Link from 'next/link';
 import { motion } from "framer-motion";
@@ -8,9 +7,9 @@ import TitleH1 from "@/components/Title-h1";
 export default function Bienvenida() {
 
   return (
-    <div className='space-y-4 m-1'>
+    <div className='space-y-4 m-10'>
 
-      <TitleH1 title="Bienvenido a la Gestión de Pasantías y Servicios Comunitarios" />
+      <TitleH1 title="BIENVENIDO A LA GESTIÓN DE PASANTÍAS Y SERVICIOS COMUNITARIOS" />
 
       <motion.div
               initial={{ opacity: 0.0, y: 40 }}
@@ -24,55 +23,84 @@ export default function Bienvenida() {
               className="relative flex flex-col gap-4 items-center justify-center px-4 space-y-6"
             >
 
-      <div className='space-y-4 w-full mx-auto p-6'>
+      <div className='w-full mx-auto p-2 m-2'>
             
-            <p className="text-gray-700 text-justify text-2xl md:text-3xl lg:text-3xl leading-12 mt-40">
+            <p className="text-gray-700 text-justify leading-12 mt-24 text-2xl md:text-3xl lg:text-3xl">
               Esta aplicación web está diseñada para facilitar la gestión de los procesos de pasantías y servicios comunitarios
               en la Gerencia de Asuntos Universitarios de la Alcaldía. Aquí podrás encontrar información sobre las vacantes
               disponibles y cómo aplicar a ellas.
             </p>
       </div>
        
-          <div className="w-full mx-auto p-6 rounded-lg mt-5 child w-4/5 text-xl">
+          <div className="w-full mx-auto p-2 rounded-lg mt-2 child w-4/5 text-xl md:text-base lg:text-xl">
 
-            <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center md:text-4xl lg:text-4xl">Roles en la Aplicación</h2>
+            <h2 className="font-bold text-gray-800 mb-4 text-center text-2xl md:text-3xl lg:text-4xl">
+              ROLES DE LA APLICACIÓN</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 h-auto">
+              
               {/* Rol de Alcaldía */}
-              <div className=" flex flex-col bg-blue-50 p-4 rounded-lg h-auto">
-                <h3 className="text-xl font-bold text-blue-800 mb-2 text-center">Alcaldía (Administrador)</h3>
-                <p className="text-blue-700 mb-2 text-justify">
-                  La Alcaldía es responsable de gestionar y supervisar todo el proceso de pasantías y servicios comunitarios.
-                  Pueden publicar nuevas vacantes, aprobar solicitudes de estudiantes y generar informes.
+              <div className=" flex flex-col ga-1 bg-blue-50 p-4 rounded-lg h-auto">
+                
+                <h3 className="h-auto text-xl font-extrabold text-blue-800 mb-2 text-center">ALCALDÍA (ADMINISTRADOR)</h3>
+                
+                <p className="h-auto text-blue-700 mb-2 text-justify">
+                  La Alcaldía es responsable de gestionar y supervisar todos los procesos de pasantías y servicios comunitarios.
+                  Puede <strong> publicar y actualizar las ofertas vacantes</strong> del rol <i>"Dependencia",</i> 
+                  <strong> aprobar solicitudes de estudiantes y crear perfiles desde el rol de <i>"Estudiante"</i></strong>. 
+                  La Alcaldía como administrador tiene acceso a métricas de los procesos que gestiona.
                 </p>
-                <img src="https://cdn.pixabay.com/photo/2018/02/23/19/40/elegant-3176410_640.png" alt="Alcaldía" className="w-1/3 mx-auto" />
+                <div className='h-[30%] p-1 m-1'>
+                <img 
+                  src="https://as1.ftcdn.net/v2/jpg/06/59/43/38/1000_F_659433864_ImsAvxQ7sJO4KRxinvMyzjdXrH1nRvXj.webp" 
+                  alt="Alcaldía" 
+                  className="mx-auto my-2 py-2 object-cover rounded-full w-auto h-40 md:h-60" />
+                </div>
               </div>
 
               {/* Rol de Dependencia */}
-              <div className="flex flex-col bg-green-50 p-4 rounded-lg h-auto">
-                <h3 className="text-xl font-bold text-green-800 mb-2 text-center">Dependencia de Alcaldía</h3>
-                <p className="text-green-700 mb-2 text-justify">
-                  Las dependencias Autorizadas por la Alcaldía, pueden ofertar vacantes de pasantías
-                  y servicios comunitarios. Ellos describen los requisitos, habilidades y tareas de cada vacante.
+              <div className="flex flex-col ga-1 bg-green-50 p-4 rounded-lg h-auto">
+                
+                <h3 className="h-auto text-xl font-extrabold text-green-800 mb-2 text-center">DEPENDENCIA DE ALCALDÍA</h3>
+                
+                <p className="h-auto text-green-700 mb-2 text-justify">
+                  Las Dependencias Autorizadas por el rol <i>"Alcaldía",</i> pueden <strong> publicar y actualizar 
+                  sus ofertas vacantes</strong> de pasantías y servicios comunitarios, las cuales deben ser descritivas. 
+                  El responsable del perfil debe elegir al <i>"Estudiante"</i> cuyo perfil, habilidades y domicilio 
+                  se ajuste más a la vacante.
                 </p>
-                <img src="https://cdn.pixabay.com/photo/2020/12/18/00/43/business-5840870_960_720.png" alt="Dependencia" className="w-1/3 mx-auto mt-4" />
+                <div className='p-1 m-1 md:mt-14 lg:mt-20'>
+                  <img 
+                    src="/images/company2.png"  
+                    alt="Dependencia" 
+                    className="mx-auto my-2 py-2 object-cover rounded-full w-auto h-40 md:h-60" />
+                </div>
               </div>
 
               {/* Rol de Estudiante */}
-              <div className="flex flex-col bg-yellow-50 p-4 rounded-lg h-auto">
-                <h3 className="text-xl font-bold text-yellow-800 mb-2 text-center">Estudiante</h3>
-                <p className="text-yellow-700 mb-2 text-justify">
-                  Los estudiantes universitarios pueden buscar y aplicar a las vacantes de pasantías y servicios comunitarios
-                  que mejor se adapten a su perfil y ubicación. Pueden ver el estado de sus solicitudes y recibir notificaciones.
+              <div className="flex flex-col gap-2 bg-yellow-50 p-4 rounded-lg h-auto">
+               
+                <h3 className="h-auto text-xl font-extrabold text-yellow-800 mb-2 text-center">ESTUDIANTE</h3>
+
+                <p className="h-auto text-yellow-700 mb-2 text-justify">
+                  Los Estudiantes de Universidades, Escuelas Tecnicas e Institutos de Capacitacion pueden buscar,  
+                  <strong> aplicar y retirar ofertas de vacantes</strong> de pasantías y servicios comunitarios publicadas 
+                  por las <i>"Dependencias"</i> que mejor se adapten a su perfil, habilidades y domicilio. 
+                  El estudiente Puede ver el estado de sus solicitudes y recibir notificaciones.
                 </p>
-                <img src="https://cdn.pixabay.com/photo/2021/01/28/06/23/woman-5957134_1280.png" alt="Estudiante" className="w-1/3 mx-auto -m-4" />
+                <div className='p-1 m-1'>
+                  <img 
+                    src="/images/classmates.png" 
+                    alt="Estudiante" 
+                    className="mx-auto my-2 py-2 object-cover rounded-full w-auto h-40 md:h-60" />
+                </div>
             </div>
               </div>
 
               <div className='space-y-4 w-full mx-auto p-6'>
                 <p className="text-gray-700 text-justify text-2xl md:text-3xl lg:text-3xl leading-12">
-                  Explora las diferentes secciones de la aplicación para descubrir más sobre cada rol y cómo participar en este
-                  programa de pasantías y servicios comunitarios.
+                  Explora las diferentes secciones de la aplicación para descubrir más sobre cada rol y cómo participar 
+                  en este Programa de Pasantías y Servicios Comunitarios.
                 </p>
               </div>
 
@@ -81,14 +109,14 @@ export default function Bienvenida() {
 
             <div className="flex flex-col items-stretch my-4 text-center md:flex-row">
               <div className='w-full md:mr-4'>
-                <label className="block text-3xl text-gray-700 mb-1 md:text-4xl">¿Ya tienes una cuenta?</label>
+                <label className="block text-gray-700 font-bold mb-1 text-xl md:text-2xl">¿Ya tienes una cuenta?</label>
                 <button className="relative z-50 w-full bg-gray-950 text-white py-2 px-4 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-xl">
                   <Link href="/login">Iniciar sesión</Link>
                 </button>
               </div>
 
               <div className='w-full md:ml-4 mt-4 md:mt-0'>
-                <label className="block text-3xl  text-gray-700 mb-1 md:text-4xl">¿No tienes una cuenta?</label>
+                <label className="block text-gray-700 font-bold mb-1 text-xl md:text-2xl">¿No tienes una cuenta?</label>
                 <button className="relative z-50 w-full bg-gray-950 text-white py-2 px-4 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-xl">
                   <Link href="/register">Regístrate</Link>
                 </button>
