@@ -9,13 +9,11 @@ import Loader from "../Loader";
 interface EstudianteProfileListoProps {
   onToggleForm: () => void;
   isFormVisible: boolean;
-  birthdate: Date;
 }
 
 export default function EstudianteProfileListo({
   onToggleForm,
   isFormVisible,
-  birthdate,
 }: EstudianteProfileListoProps) {
   const { data: session, update } = useSession();
   const [loading, setLoading] = useState(false);
@@ -135,16 +133,27 @@ export default function EstudianteProfileListo({
     return edad.toString() + " años";
   }
   return (
-    <div className="flex flex-col w-[100%] relative z-20 text-base m-2 p-2 pb-0 mb-0 rounded-lg mt-1 shadow lg:shadow-none md:text-lg">
+    <div className="flex flex-col w-[100%] relative z-20 text-base m-2 p-2 pb-0 mb-0 rounded-lg mt-2 shadow lg:shadow-none md:text-lg">
       {session?.user.profile && (
-        <div className="flex flex-col w-[100%] my-2 mb-2 bg-white md:sticky md:top-[15vh]">
-          {/* //!Padre de foto + info personal */}
+
+        
+        
+        <div className="flex flex-col w-[100%] my-2 mb-2 mt-2 pt-6 bg-white md:sticky md:top-[15vh]">
+              <h2 className={`text-xl font-bold text-gray-800 text-center
+                              ${isFormVisible ? 'text-lg sm:text-xl md:text-2xl lg:text-3xl' : "text-xl sm:text-2xl md:text-3xl lg:text-4xl"}
+                              `}>
+                {session.user.dataProfile.names}{" "}
+                {session.user.dataProfile.lastnames}
+              </h2>
+          
+          {/* //!foto + info personal */}
           <div className="flex flex-col items-center md:flex-row md:space-x-4">
+            
             {/* Foto del Estudiante */}
-            <div className="relative group m-1 p-1">
+            <div className="relative group m-1 p-1 md:w-auto mx-auto">
               <label htmlFor="profileImageInput" className="cursor-pointer">
                 <img
-                  className="flex h-60 w-60 rounded-full border-4 border-black-800 object-cover"
+                  className="flex h-40 w-40 rounded-full border-4 border-black-800 object-cover sm:h-60 sm:w-60"
                   src={session?.user?.picture || "/images/no-image.png"}
                   alt="Foto del estudiante"
                 />
@@ -170,13 +179,14 @@ export default function EstudianteProfileListo({
                 }}
               />
             </div>
+
+
             {/* !Información del Estudiente */}
-            <div className="m-1 p-1 word-wrap overflow-wrap">
-              <h2 className="text-3xl font-bold text-gray-800 text-center md:text-5xl lg:text-4xl">
-                {session.user.dataProfile.names}{" "}
-                {session.user.dataProfile.lastnames}
-              </h2>
-              <h2 className="text-2xl font-bold text-gray-800 pt-5 pb-2 md:text-3xl lg:text-2xl">
+            <div className="m-1 p-1 word-wrap overflow-wrap w-[100%] md:w-[80%] mx-auto">
+             
+              <h2 className={`font-bold text-gray-800 pt-5 pb-2 text-center
+                              ${isFormVisible ? 'text-base sm:text-lg md:text-xl lg:text-2xl' : "text-lg sm:text-xl md:text-2xl lg:text-3xl"}
+                              `}>
                 <i>{session.user.dataProfile.career?.name}</i>
               </h2>
               <p className="text-gray-600 md:text-1x1">
@@ -204,7 +214,6 @@ export default function EstudianteProfileListo({
                 ).toLocaleDateString()}
               </p>
               <p className="text-gray-600 md:text-1x1">
-                {/* //! OJOOO */}
                 <strong>✔️Edad:</strong>{" "}
                 {session.user.dataProfile.birthdate &&
                   calcularEdad(session.user.dataProfile.birthdate)}
@@ -212,24 +221,28 @@ export default function EstudianteProfileListo({
             </div>
           </div>
 
+
+
           {/* //!caja de PERFIL PROFESIONAL hasta CV */}
-          <div className="m-6">
-            <h4 className="text-2xl font-bold text-gray-800 m-2 text-center md:text-4xl lg:text-3xl">
-              Perfil Profesional
+          <div>
+            <h4 className={`font-bold text-gray-800 m-2 text-center
+                              ${isFormVisible ? 'text-lg sm:text-xl md:text-2xl lg:text-3xl' : "text-xl sm:text-2xl md:text-3xl lg:text-4xl"}
+                              `}>
+              PERFIL PROFESIONAL
             </h4>
 
             {/* universidad y duracion del proceso */}
             <div className="flex flex-col items-start gap-2 md:flex-row">
               <div className="m-2 p-1 w-full md:w-[50%]">
                 <p className="text-gray-600 font-bold md:text-1x1">
-                  🏫Institucion Educativa:
+                  🏫Institución Educativa:
                 </p>
                 <p>{session.user.dataProfile.institution.name || ""}</p>
               </div>
 
               <div className="m-2 p-1 w-full md:w-[50%]">
                 <p className="text-gray-600 font-bold md:text-1x1">
-                  ⌛duracion del proceso:
+                  ⌛Duración del proceso:
                 </p>
                 <p>
                   {new Date(
@@ -286,7 +299,7 @@ export default function EstudianteProfileListo({
                           Actualiza tu currículum (Formato PDF)
                         </Label>
                       ) : (
-                        <Label className="md:text-[20px]">
+                        <Label className="text-base md:text-lg">
                           Sube tu currículum (Formato PDF)
                         </Label>
                       )}
@@ -304,7 +317,7 @@ export default function EstudianteProfileListo({
                         }}
                       />
                       <button
-                        className="w-[30%] bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+                        className="w-auto p-2 bg-black text-xs hover:bg-gray-700 text-white font-bold rounded md:text-sm"
                         onClick={() => {
                           handlePdfChange(pdfFile);
                         }}
@@ -348,7 +361,7 @@ export default function EstudianteProfileListo({
 
 const formatSkillsToList = (skills: string[]): JSX.Element => {
   const skillMapping: { [key: string]: string } = {
-    resoluciondeproblemas: "Resolucion de problemas",
+    resoluciondeproblemas: "Resolución de problemas",
     trabajoenequipo: "Trabajo en equipo",
     adaptabilidad: "Adaptabilidad",
     comunicacionefectiva: "Comunicación efectiva",

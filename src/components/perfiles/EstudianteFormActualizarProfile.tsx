@@ -777,7 +777,7 @@ export default function EstudianteProfileForm({
           <div className="flex justify-center mb-8">
             <button
               type="submit"
-              className="w-[100%] bg-black hover:bg-gray-800 text-white font-bold py-3 px-3 mt-4 rounded focus:shadow-outline md:w-[80%]"
+              className="w-[100%] bg-black hover:bg-gray-800 text-white font-bold py-1 px-3 mt-4 rounded focus:shadow-outline md:w-[80%]"
             >
               GUARDAR DATOS
             </button>
@@ -785,7 +785,7 @@ export default function EstudianteProfileForm({
         </form>
 
         {loading && ( // Muestra el loader si está cargando
-          <div className="flex justify-center items-center flex-col mt-10">
+          <div className="flex justify-center items-center flex-col">
             <Oval
               color="#000000"
               secondaryColor="#FFFFFF" // Color de fondo blanco

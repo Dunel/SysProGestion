@@ -37,19 +37,16 @@ export default function NotificationsCard(
   
   return (
             <>
-                        <div className="flex flex-row">
+                        <div className="flex flex-row text-justify">
 
                             <div className="flex-col w-[80%]">
                                 <div className="flex flex-col">
                                     <p className="text-lg text-gray-600 mb-1">
                                         {actionDesc[noti.action as keyof typeof actionDesc]}
-                                        <strong>{" "}{typeDesc[noti.application.type as keyof typeof typeDesc]}</strong> de <i>{noti.application.title}</i>
+                                        <strong>{" "}{typeDesc[noti.application.type as keyof typeof typeDesc]}</strong> de <i>{noti.application.title}, en fecha: {new Date(noti.date).toLocaleString()}</i>
                                     </p>
-                                
                                 </div>
-                                <div className="flex flex-col">
-                                <p className="text-lg text-gray-600 mb-1">En fecha: {new Date(noti.date).toLocaleString()}</p>
-                                </div>
+                             
                             </div>
 
 

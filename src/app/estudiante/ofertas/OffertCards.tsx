@@ -96,7 +96,7 @@ export default function InternshipCards({
   }) => (
     <div className="flex flex-col justify-center bg-white mb-8 mx-6 p-4 w-[90%] mx-auto my-1 shadow-md text-base text-justify rounded-lg md:p-8 lg:text-lg">
       
-      {/* //!codigo & num students apply  */}
+      {/* //!codigo & num students que han apply  */}
       <div  className="flex flex-col lg:flex-row text-sm lg:gap-2">    
           <span className="flex mr-2 text-red-500">
              <i>
@@ -124,111 +124,117 @@ export default function InternshipCards({
         }
 
      {/* //! IMG, title, dependencia, direccion*/}
-      {/* <div className="flex flex-col items-center md:flex-row md:space-x-4"> */}
-      <div className="flex-col md:flex-row">
-        
-        {/* //! IMG */}
-        <div className="flex m-1 w-[100%] md:w-[30%]">
-          <img
-            src={internship.dependencia.User.image}
-            alt={`${internship.dependencia} logo`}
-            className="mx-auto w-40 h-40 object-cover rounded-full border-4 border-black-800 md:w-40 md:h-40"
-          />
-        </div>
+      <div className="flex flex-col mt-2 gap-[5%] md:flex-row">
+      
+          {/* //! IMG */}
+          <div className="m-1 mx-auto">
+            <img
+              src={internship.dependencia.User.image}
+              alt={`${internship.dependencia} logo`}
+              className="w-40 h-40 object-cover rounded-full border-4 border-black-800"
+            />
+          </div>
 
-        {/* //! INFO */}
-          <div className="flex m-1 w-[100%] md:w-[70%]">
+          {/* //! INFO */}
+          <div className="flex flex-col m-1 w-[100%] md:w-[75%]">
 
-          <h3 className="text-xl text-center font-extrabold text-gray-800 mb-2 md:text-justify md:text-2xl">
-            {(internship.title).toUpperCase()}
-          </h3>
-          <p className="text-2xl text-gray-600 mb-1 font-bold">🏦
-            {" "}
-            <i>{(internship.dependencia.name).toUpperCase()}</i>
-          </p>
-          <p className="text-gray-600 text-justify md:text-1x1">
-            <strong>📍Dirección de la Dependencia:</strong>{" "}
-                <br/>
-                Municipio {internship.dependencia.User.parroquia?.municipio.municipio},{" "}
-                <strong>
-                  Parroquia {(internship.dependencia.User.parroquia?.parroquia)},{" "}
-                </strong>
-                {internship.location}
-          </p>
+              <h3 className="text-center font-extrabold text-gray-800 mb-2 text-lg md:text-justify sm:text-xl md:text-2xl lg:text-3xl">
+                {(internship.title).toUpperCase()}
+              </h3>
+              <p className="text-gray-600 mb-1 font-bold text-base sm:text-lg md:text-xl lg:text-2xl">🏦
+                {" "}
+                <i>{(internship.dependencia.name).toUpperCase()}</i>
+              </p>
+              <p className="text-gray-600 text-justify md:text-1x1">
+                <strong>📍Dirección de la Dependencia:</strong>{" "}
+                    <br/>
+                    Municipio {internship.dependencia.User.parroquia?.municipio.municipio},{" "}
+                    <strong>
+                      Parroquia {(internship.dependencia.User.parroquia?.parroquia)},{" "}
+                    </strong>
+                    {internship.location}
+              </p>
 
           </div>
-          
+    </div>
 
-          <div className="m-1 p-1 word-wrap overflow-wrap h-[60%] md:w-[80%]">
 
-         
-          <div className="flex flex-col my-2 gap-2 lg:flex-row">
-           
-              <div className="w-[100%] lg:w-[33%]">
-                  <span className="text-xl font-bold text-gray-700 mb-2">
-                    Fecha de la Oferta:
-                  </span>
-                  <p>{ formatearFechaYHora(internship.date)}</p>
-              </div>
 
-              <div className="w-[100%] lg:w-[33%]">
-                <span className="text-xl font-bold text-gray-700 mb-2">
-                  Estado de la Oferta:
-                </span>
-                <p className={colorStatys(internship.status)} > 
-                  <b> {
-                      internship.status === "active" ? 'Activa ✅' 
-                        : internship.status === "inactive" ? 'Inactiva ⚠️' : 'Cerrada ⛔'
+        <div className="flex flex-col word-wrap overflow-wrap md:text-x1">
 
-                      }</b>
-                </p>
-              </div>
+              {/* fecha, estado y tipo de oferta */}
+              <div className="flex flex-col my-2 gap-2 sm:flex-row">
               
-              <div className="w-[100%] md:w-[33%]">
-                <span className="text-xl font-bold text-gray-700 mb-2">
-                  Tipo de Oferta:
-                </span>
-                {/* //! ASI QUE NO DEBERIA SER {internship.type} DADO QUE EL TYPO DEL PROCEDIMIENTO LO DEFINE LA OFERTA NO EL QUE UN ESTUDIANTE APLIQUE A ELLA */}
-                {/* //! PROYECTO DE TESIS DEBERIA ESTAR EN OFERTAS? NO LO CREO */}
-                <p>
-                  {internship.type === "pasantia"
-                    ? "Pasantias"
-                    : internship.type === "servicio"
-                    ? "Servicio Comunitario"
-                    : internship.type === "proyecto"
-                    ? "Proyecto de Tesis"
-                    : ""}
-                </p>
+                  <div className="w-[100%] md:w-auto mx-auto">
+                      <span className="font-bold text-gray-700 mb-2">
+                        Fecha de la Oferta:
+                      </span>
+                      <p>{ formatearFechaYHora(internship.date)}</p>
+                  </div>
+
+                  <div className="w-[100%] md:w-auto mx-auto">
+                    <span className="font-bold text-gray-700 mb-2">
+                      Estado de la Oferta:
+                    </span>
+                    <p className={colorStatys(internship.status)} > 
+                      <b> {
+                          internship.status === "active" ? 'Activa ✅' 
+                            : internship.status === "inactive" ? 'Inactiva ⚠️' : 'Cerrada ⛔'
+
+                          }</b>
+                    </p>
+                  </div>
+                  
+                  <div className="w-[100%] md:w-auto mx-auto">
+                    <span className="font-bold text-gray-700 mb-2 w-[100%] mx-auto md:w-auto">
+                      Tipo de Oferta:
+                    </span>
+    
+                    <p>
+                      {internship.type === "pasantia"
+                        ? "Pasantias"
+                        : internship.type === "servicio"
+                        ? "Servicio Comunitario"
+                        : internship.type === "proyecto"
+                        ? "Proyecto de Tesis"
+                        : ""}
+                    </p>
+                  </div>
               </div>
-          </div>
 
 
 
-          {/* //! CONTAINER FLEX: OF SKILLS AND DESCRIPTION */}
-          <div className="flex flex-col justify-center gap-2 my-2 lg:flex-row">
-            <div className="m-1 w-[100%] lg:w-[40%]">
-              <span className="text-xl font-bold text-gray-700 mb-2">
-                🤹🏽 Habilidades requeridas
-              </span>   
-              <ul className="list-disc list-inside">
-                {internship.skills.map((skill, index) => (
-                  <li key={index} className="text-gray-700">
-                    {skillFormated[skill]}
-                  </li>
-                ))}
-              </ul>
-            </div>
+
+              {/*CONTAINER FLEX: OF SKILLS AND DESCRIPTION */}
+              <div className="flex flex-col justify-center gap-4 my-2 md:flex-row">
+                
+                <div className="m-1 w-[100%] mx-auto md:w-auto">
+                  <span className="font-bold text-gray-700 mb-2 md:text-x1">
+                    🤹🏽Habilidades requeridas
+                  </span>   
+                  <ul className="list-disc list-inside">
+                    {internship.skills.map((skill, index) => (
+                      <li key={index} className="text-gray-700">
+                        {skillFormated[skill]}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
 
-            <div className="m-1 w-[100%] lg:w-[60%]">
-              <span className="text-xl font-bold text-gray-700 mb-2">
-              📋Descripcion de la Vacante 
-              </span> 
-              <p>{internship.description}</p>
-            </div>
-          </div>
+                <div className="m-1 w-[100%] mx-auto md:w-[60%]">
+                  <span className="font-bold text-gray-700 mb-2 md:text-x1">
+                  📋Descripcion de la Vacante 
+                  </span> 
+                  <p>{internship.description}</p>
+                </div>
+              </div>
+
         </div>
-      </div>
+
+
+
+    
       <div className="flex justify-center w-[100%]">  
                       
                       {internship.apply.length > 0 
@@ -290,7 +296,7 @@ export default function InternshipCards({
   );
   return (
     <>
-      <div className="flex-col justify-center items-center relative z-20 mx-auto rounded shadow w-[90%]">
+      <div className="flex-col justify-center items-center relative z-20 py-2 mx-auto rounded shadow w-[90%]">
         {internships.map((internship) => (
           <InternshipCard key={internship.id} internship={internship} />
         ))}

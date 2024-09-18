@@ -27,7 +27,7 @@ const NavBarEmergente: React.FC = () => {
 
   return (
     <div
-      className={`fixed top-[13vh] left-0 h-full opacidad text-white transition-all duration-300 ease-in-out z-50 ${
+      className={`fixed top-[8vh] left-0 h-full opacidad text-white transition-all duration-300 ease-in-out z-50 ${
         isHovered ? 'w-64' : 'w-16'
       } overflow-hidden`}
       onMouseEnter={() => setIsHovered(true)}
