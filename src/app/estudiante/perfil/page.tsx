@@ -49,7 +49,6 @@ export default function EstudianteInfoForm() {
       }
     }
   };
-
   
   useEffect(() => {
     getProfile();
@@ -74,7 +73,7 @@ export default function EstudianteInfoForm() {
         <div className="w-[90%] m-2 mx-auto">
           <EstudianteFormActualizarProfile
             onToggleForm={toggleFormVisibility}
-            titleForm={"DATOS DEL PERFIL DEL ESTUDIANTEANTE"}
+            titleForm={"DATOS DEL PERFIL DEL ESTUDIANTE"}
             data={profileData}
           />
         </div>
