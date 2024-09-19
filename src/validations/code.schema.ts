@@ -94,8 +94,9 @@ export const recoveryPasswordSchema = z.object({
     passwordConfirmation: z.string(),
   }).refine((data) => data.password === data.passwordConfirmation, {
     message: "Las contraseñas no coinciden",
-    path: ["confirmPassword"],
+    path: ["passwordConfirmation"],
   });
 
 export type emailFormRecovery = z.infer<typeof emailRecoverySchema>;
 export type recoveryPasswordForm = z.infer<typeof recoveryPasswordSchema>;
+export type recoveryCodeForm = z.infer<typeof recoveryCodeSchema>;

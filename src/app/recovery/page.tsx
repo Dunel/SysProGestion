@@ -15,7 +15,6 @@ import { useForm } from "react-hook-form";
 
 export default function Page() {
   const [step, setStep] = useState(true);
-  const [email, setEmail] = useState("");
   const [text, setText] = useState("");
   const [emailError, setEmailError] = useState("");
   const {

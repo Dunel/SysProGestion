@@ -8,15 +8,14 @@ import {
   recoveryPasswordSchema,
   recoveryCodeSchema,
   recoveryPasswordForm,
+  recoveryCodeForm,
 } from "@/validations/code.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useSearchParams } from "next/navigation";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-export default function Page() {
-  const recoveryParams = useSearchParams();
+export default function Page({ params }: { params: { recovery: string[] } }) {
   const [step, setStep] = useState(0);
   const [code, setCode] = useState(Number);
   const [id, setId] = useState(String);
@@ -56,13 +55,10 @@ export default function Page() {
     }
   };
 
-  const validateRecovery = async () => {
+  const validateRecovery = async (data: recoveryCodeForm) => {
     try {
       const res = await axios.get(
-        "/api/recovery?code=" +
-          recoveryParams.get("code") +
-          "&id=" +
-          recoveryParams.get("id")
+        "/api/recovery?code=" + data.code + "&id=" + data.id
       );
       setStep(1);
     } catch (error) {
@@ -75,25 +71,17 @@ export default function Page() {
     }
   };
 
-  const validateParams = () => {
-    const validate = recoveryCodeSchema.safeParse({
-      code: recoveryParams.get("code"),
-      id: recoveryParams.get("id"),
-    });
-    if (validate.success) {
-      setCode(validate.data.code);
-      setId(validate.data.id);
-      validateRecovery();
-    } else {
-      setStep(0);
-    }
-  };
-
   useEffect(() => {
-    if (recoveryParams.get("code") && recoveryParams.get("id")) {
-      validateParams();
-    } else {
-      setStep(0);
+    if (params.recovery.length === 2) {
+      const validate = recoveryCodeSchema.safeParse({
+        code: params.recovery[0],
+        id: params.recovery[1],
+      });
+      if (validate.success) {
+        setCode(validate.data.code);
+        setId(validate.data.id);
+        validateRecovery(validate.data);
+      }
     }
   }, []);
 
@@ -175,8 +163,8 @@ export default function Page() {
             )}{" "}
             {step === 2 && (
               <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200 text-center mb-4">
-              ¡Contraseña actualizada!
-            </h2>
+                ¡Contraseña actualizada!
+              </h2>
             )}
           </div>
         </div>

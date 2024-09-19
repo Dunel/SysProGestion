@@ -267,7 +267,7 @@ export async function createRecovery(req: NextRequest) {
       email,
       `Tu link de recuperación es:`,
       "Recuperación de contraseña",
-      `${env.NEXTAUTH_URL}/recovery/newpassword?code=${newCode}&id=${recoveryPass.id}`
+      `${env.NEXTAUTH_URL}/recovery/newpassword/${newCode}/${recoveryPass.id}`
     );
 
     return NextResponse.json(
