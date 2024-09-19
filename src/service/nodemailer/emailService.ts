@@ -16,15 +16,26 @@ class EmailService {
   public async sendMail(
     mail: string,
     text: string,
-    subject: string
+    subject: string,
+    link: string
   ): Promise<string> {
     try {
-      const mailOptions = {
-        from: process.env.EMAIL,
-        to: mail,
-        subject,
-        text,
-      };
+      let mailOptions;
+      if (link !== "") {
+        mailOptions = {
+          from: process.env.EMAIL,
+          to: mail,
+          subject: subject,
+          html: `<p>${text}</p><a href="${link}">${link}</a>`,
+        };
+      } else {
+        mailOptions = {
+          from: process.env.EMAIL,
+          to: mail,
+          subject: subject,
+          html: `conn<p>${text}</p>`,
+        };
+      }
 
       await this.transporter.sendMail(mailOptions);
       return "Correo enviado con éxito";

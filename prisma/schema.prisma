@@ -30,18 +30,18 @@ model PreRegister {
 }
 
 model User {
-  id           Int              @id @default(autoincrement())
-  cedula       Int              @unique
-  mail         String           @unique
-  password     String           @default("defaultpasswordunregistereduser")
+  id           Int               @id @default(autoincrement())
+  cedula       Int               @unique
+  mail         String            @unique
+  password     String            @default("defaultpasswordunregistereduser")
   names        String
   lastnames    String
-  role         Role             @default(estudiante)
+  role         Role              @default(estudiante)
   birthdate    DateTime
   phone        String?
-  profile      Boolean          @default(false)
+  profile      Boolean           @default(false)
   image        String?
-  updatedAt    DateTime         @updatedAt
+  updatedAt    DateTime          @updatedAt
   estadoId     Int?
   municipioId  Int?
   parroquiaId  Int?
@@ -49,10 +49,11 @@ model User {
   apply        apply[]
   notification notification[]
   depInfo      dependenciaInfo?
-  estado       estado?          @relation(fields: [estadoId], references: [id])
-  municipio    municipio?       @relation(fields: [municipioId], references: [id])
-  parroquia    parroquia?       @relation(fields: [parroquiaId], references: [id])
+  estado       estado?           @relation(fields: [estadoId], references: [id])
+  municipio    municipio?        @relation(fields: [municipioId], references: [id])
+  parroquia    parroquia?        @relation(fields: [parroquiaId], references: [id])
   alcaldiaInfo alcaldiaInfo?
+  recovery     recoveryPassword?
 }
 
 enum Skills {
@@ -243,14 +244,25 @@ model career {
 }
 
 model alcaldiaInfo {
-  id          Int           @id @default(autoincrement())
-  userCedula  Int           @unique
+  id          Int      @id @default(autoincrement())
+  userCedula  Int      @unique
   name        String
   description String?
   address     String?
   email       String?
   social      String?
   phone       String?
-  updatedAt   DateTime      @updatedAt
-  User        User          @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
+  updatedAt   DateTime @updatedAt
+  User        User     @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
+}
+
+model recoveryPassword {
+  id        String   @id @unique @default(cuid())
+  email      String   @unique
+  code      Int
+  used      Boolean  @default(false)
+  try       Int      @default(0)
+  week      Int      @default(1)
+  updatedAt DateTime @updatedAt
+  User      User     @relation(fields: [email], references: [mail], onDelete: Cascade)
 }
