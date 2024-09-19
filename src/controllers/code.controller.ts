@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import emailService from "@/service/nodemailer/emailService";
-import { codeSchema, roleSchema } from "@/validations/code.schema";
+import {
+  codeSchema,
+  emailRecoverySchema,
+  recoveryCodeSchema,
+  recoveryPasswordSchema,
+  roleSchema,
+} from "@/validations/code.schema";
 import { ZodError } from "zod";
 import prisma from "@/db";
 import jwt from "jsonwebtoken";
+import { env } from "process";
+import bcrypt from "bcrypt";
 
 type generateCode = {
   mail: string;
@@ -90,7 +98,8 @@ export async function createCode(req: NextRequest) {
     const resmail = await emailService.sendMail(
       email,
       `Tu código de registro es: ${newCode}`,
-      "Codigo de registro"
+      "Codigo de registro",
+      ""
     );
 
     const token = jwt.sign(
@@ -167,12 +176,226 @@ export async function deleteCode(mail: string) {
   try {
     const deleteCode = await prisma.coderegister.delete({
       where: {
-        mail
+        mail,
       },
     });
 
     return;
   } catch (error) {
     return;
+  }
+}
+
+//recovery
+
+export async function createRecovery(req: NextRequest) {
+  try {
+    const { email } = await req.json();
+    const result = emailRecoverySchema.parse({ email });
+
+    const userFound = await prisma.user.findFirst({
+      where: {
+        mail: {
+          equals: result.email,
+          mode: "insensitive",
+        },
+      },
+    });
+    if (!userFound) {
+      return NextResponse.json(
+        { error: "Este correo no se encuentra registrado." },
+        { status: 404 }
+      );
+    }
+
+    const recoveryFound = await prisma.recoveryPassword.findFirst({
+      where: {
+        email: {
+          equals: result.email,
+          mode: "insensitive",
+        },
+      },
+    });
+    if (recoveryFound) {
+      const TWENTY_MINUTES_IN_MS = 20 * 60 * 1000;
+      if (
+        new Date(recoveryFound.updatedAt).getTime() + TWENTY_MINUTES_IN_MS >
+        Date.now()
+      ) {
+        return NextResponse.json(
+          { message: "Ya se ha enviado un código recientemente" },
+          { status: 200 }
+        );
+      }
+    }
+
+    const code = await prisma.coderegister.findFirst({
+      where: {
+        mail: {
+          equals: result.email,
+          mode: "insensitive",
+        },
+      },
+    });
+
+    const FIVE_MINUTES_IN_MS = 5 * 60 * 1000;
+    if (
+      code &&
+      new Date(code.updatedAt).getTime() + FIVE_MINUTES_IN_MS > Date.now()
+    ) {
+      return NextResponse.json(
+        { message: "Ya se ha enviado un código recientemente" },
+        { status: 200 }
+      );
+    }
+
+    const newCode = Math.floor(100000000 + Math.random() * 900000000);
+    const recoveryPass = await prisma.recoveryPassword.upsert({
+      where: {
+        email: result.email,
+      },
+      update: {
+        code: newCode,
+      },
+      create: {
+        email: result.email,
+        code: newCode,
+      },
+    });
+
+    const resmail = await emailService.sendMail(
+      email,
+      `Tu link de recuperación es:`,
+      "Recuperación de contraseña",
+      `${env.NEXTAUTH_URL}/recovery/newpassword/${newCode}/${recoveryPass.id}`
+    );
+
+    return NextResponse.json(
+      {
+        message:
+          "Hemos enviado un correo a tu dirección de correo electrónico.",
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function validateRecovery(req: NextRequest) {
+  try {
+    const code = req.nextUrl.searchParams.get("code");
+    const id = req.nextUrl.searchParams.get("id");
+    const result = recoveryCodeSchema.parse({ code, id });
+
+    const codeFind = await prisma.recoveryPassword.findFirst({
+      where: {
+        id: result.id,
+        code: result.code,
+      },
+    });
+    if (!codeFind) {
+      return NextResponse.json({ error: "Link incorrecto" }, { status: 400 });
+    }
+
+    const TWENTY_MINUTES_IN_MS = 20 * 60 * 1000;
+    if (
+      new Date(codeFind.updatedAt).getTime() + TWENTY_MINUTES_IN_MS <
+      Date.now()
+    ) {
+      return NextResponse.json(
+        { error: "El link ha expirado", step: 0 },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json({ message: "Código validado" }, { status: 200 });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function passwordRecovery(req: NextRequest){
+  try {
+    const { id, code, password, passwordConfirmation } = await req.json();
+    const result = recoveryCodeSchema.parse({ id, code });
+    const passwordRecovery = recoveryPasswordSchema.parse({ password, passwordConfirmation });
+
+    const codeFind = await prisma.recoveryPassword.findFirst({
+      where: {
+        id: result.id,
+        code: result.code,
+      },
+    });
+    if (!codeFind /*|| codeFind.used*/) {
+      return NextResponse.json({ error: "Link incorrecto" }, { status: 400 });
+    }
+
+    const user = await prisma.user.findFirst({
+      where: {
+        mail: {
+          equals: codeFind.email,
+          mode: "insensitive",
+        },
+      },
+    });
+    if (!user) {
+      return NextResponse.json(
+        { error: "Link incorrecto." },
+        { status: 404 }
+      );
+    }
+
+    const passwordHash = await bcrypt.hash(passwordRecovery.password, 10);
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        password: passwordHash,
+      },
+    });
+
+    await prisma.recoveryPassword.delete({
+      where: {
+        id: codeFind.id,
+      },
+    });
+
+    return NextResponse.json({ message: "Contraseña actualizada" }, { status: 200 });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
   }
 }

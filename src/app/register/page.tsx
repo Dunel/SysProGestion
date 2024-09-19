@@ -12,7 +12,7 @@ import axios from "axios";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Loader from '@/components/Loader'; 
+import Loader from "@/components/Loader";
 
 type Data = {
   cedula: string;
@@ -33,7 +33,7 @@ export default function Register() {
   const [token, setToken] = useState("");
   const [role, setRole] = useState("" as Roles);
   const [loading, setLoading] = useState(false);
-   
+
   const router = useRouter();
 
   const sendMail = async () => {
@@ -47,16 +47,16 @@ export default function Register() {
         setLoading(false); // Oculta el loader
         throw new Error("El correo es requerido");
       }
-      
+
       const res = await axios.post("/api/register/mailer", {
         mail,
         role: role,
       });
 
-      setCount(Date.now() + 300);    
+      setCount(Date.now() + 300);
 
       res.data.message && alert(res.data.message);
-      
+
       setStep(1);
       setToken(res.data.token);
     } catch (error) {
@@ -143,36 +143,34 @@ export default function Register() {
     } finally {
       setLoading(false); // Oculta el loader
     }
-    
   };
 
   return (
     <>
-      <Header title={"Registro"} subtitle={" Llena los siguientes datos para registrarte en el sistema. Por favor, introduce tu información correctamente siguiendo las indicaciones en cada casilla."} />
+      <Header
+        title={"Registro"}
+        subtitle={
+          " Llena los siguientes datos para registrarte en el sistema. Por favor, introduce tu información correctamente siguiendo las indicaciones en cada casilla."
+        }
+      />
 
-        <div className="flex w-[80%] mx-auto mt-4">
-      
-            {  step === 0 ? (
-              <Step0
-                setMail={setMail}
-                sendMail={sendMail}
-                role={role}
-                setRole={setRole}
-              />
-            ) : step === 1 ? (
-              <Step1 setCode={setCode} validateCode={validateCode} time={count}/>
-            ) : step === 2 ? (
-              <Step2 setData={setData} sendData={sendRegister} />
-            ) : (
-              `Usuario ${mail} registrado con éxito`
-            )
-            }
-       
-        </div>
-            {
-              loading  && <Loader/>
-            }
-
+      <div className="flex w-[80%] mx-auto mt-4">
+        {step === 0 ? (
+          <Step0
+            setMail={setMail}
+            sendMail={sendMail}
+            role={role}
+            setRole={setRole}
+          />
+        ) : step === 1 ? (
+          <Step1 setCode={setCode} validateCode={validateCode} time={count} />
+        ) : step === 2 ? (
+          <Step2 setData={setData} sendData={sendRegister} />
+        ) : (
+          `Usuario ${mail} registrado con éxito`
+        )}
+      </div>
+      {loading && <Loader />}
     </>
   );
 }

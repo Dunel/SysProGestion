@@ -191,7 +191,6 @@ export const userFormSchema = z
       required_error: "La confirmación de contraseña es requerida.",
     }),
   })
-
   .refine((data) => data.password === data.confirmPassword, {
     message: "Las contraseñas no coinciden",
     path: ["confirmPassword"],
