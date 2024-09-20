@@ -91,13 +91,12 @@ export default function Page() {
 
   return (
     <>
-      <Header title={"MIS OFERTAS"} subtitle={""} />
-      <ContainerWeb>
-        <GridMain>
+      <Header title={"MIS OFERTAS DE VACANTES"} 
+      subtitle={"Aqui puedes visializar todas las ofertas a vacantes de Pasantias y Servicio Comunitario que haz creado."} />
+     
           {squeleton ? (
-            <GridContainer>
+       
               <Skeleton />
-            </GridContainer>
           ) : applications && applications.length === 0 ? (
             <GridContainer>
               <p className="m-2 p-2 text-center text-red-500">
@@ -124,8 +123,8 @@ export default function Page() {
             onClose={() => setModalOpen(false)}
             onConfirm={handleDeleteApply}
           />
-        </GridMain>
-      </ContainerWeb>
+
+   
     </>
   );
 }

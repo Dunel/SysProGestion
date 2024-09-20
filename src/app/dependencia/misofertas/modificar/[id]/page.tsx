@@ -15,6 +15,8 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import Loader from "@/components/Loader";
+
 
 type Application = {
   id: number;
@@ -39,6 +41,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const [selectedType, setSelectedType] = useState<string | undefined>();
   const [selectedStatus, setSelectedStatus] = useState<string | undefined>();
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const router = useRouter();
@@ -139,6 +142,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   const updateOfert = async (data: ApplyFormUpdate) => {
     try {
+      setLoading(true);
       const res = await axios.put("/api/dependencia/apply/myapply/edit", {
         ...data,
         id: params.id,
@@ -151,6 +155,9 @@ export default function Page({ params }: { params: { id: string } }) {
       } else {
         console.error("error:", error);
       }
+    }finally {
+      setLoading(false);
+
     }
   };
 
@@ -395,6 +402,11 @@ export default function Page({ params }: { params: { id: string } }) {
                     </button>
                   </div>
                 </form>
+                {loading && (
+                  <div >
+                    <Loader />
+                  </div>
+                )}
               </>
             )}
           </GridContainer>

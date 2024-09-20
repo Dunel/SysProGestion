@@ -221,7 +221,7 @@ export default function EstudianteProfileListo({
                   calcularEdad(session.user.dataProfile.birthdate)}
               </p>
             </div>
-          </div>
+      </div>
 
 
 

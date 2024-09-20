@@ -278,7 +278,9 @@ export default function InternShipCardReceived({
                     </p>
                   </div>
                 </div>
-                <div className="flex flex-col items-center gap-2">
+
+                
+                <div className="flex flex-row items-center gap-2">
                   {apply.status === "pendiente" ? (
                     <>
                       <button
@@ -300,7 +302,15 @@ export default function InternShipCardReceived({
                     </p>
                   )}
                 </div>
+
+                
               </div>
+
+
+
+
+
+
             ))}
           </div>
         </div>

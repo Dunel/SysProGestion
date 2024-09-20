@@ -73,7 +73,8 @@ export default function DependenciaProfileListo({
               <label htmlFor="profileImageInput" 
               className="cursor-pointer">
                 <img
-                  className="flex h-40 w-40 rounded-full border-4 border-black-800 object-cover sm:h-60 md:w-20 lg:w-60"
+                  className={`flex h-40 w-40 rounded-full border-4 border-black-800 object-cover sm:h-60 md:w-20 lg:w-60
+                            ${isFormVisible ? '' : '' }`}
                   src={session?.user?.picture || "/images/no-image.png"}
                   alt="Foto del estudiante"
                 />
