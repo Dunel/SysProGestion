@@ -258,7 +258,7 @@ model alcaldiaInfo {
 
 model recoveryPassword {
   id        String   @id @unique @default(cuid())
-  email      String   @unique
+  email     String   @unique
   code      Int
   used      Boolean  @default(false)
   try       Int      @default(0)

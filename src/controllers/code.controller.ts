@@ -10,7 +10,6 @@ import {
 import { ZodError } from "zod";
 import prisma from "@/db";
 import jwt from "jsonwebtoken";
-import { env } from "process";
 import bcrypt from "bcrypt";
 
 type generateCode = {
@@ -229,26 +228,6 @@ export async function createRecovery(req: NextRequest) {
       }
     }
 
-    const code = await prisma.coderegister.findFirst({
-      where: {
-        mail: {
-          equals: result.email,
-          mode: "insensitive",
-        },
-      },
-    });
-
-    const FIVE_MINUTES_IN_MS = 5 * 60 * 1000;
-    if (
-      code &&
-      new Date(code.updatedAt).getTime() + FIVE_MINUTES_IN_MS > Date.now()
-    ) {
-      return NextResponse.json(
-        { message: "Ya se ha enviado un código recientemente" },
-        { status: 200 }
-      );
-    }
-
     const newCode = Math.floor(100000000 + Math.random() * 900000000);
     const recoveryPass = await prisma.recoveryPassword.upsert({
       where: {
@@ -267,7 +246,7 @@ export async function createRecovery(req: NextRequest) {
       email,
       `Tu link de recuperación es:`,
       "Recuperación de contraseña",
-      `${env.NEXTAUTH_URL}/recovery/newpassword/${newCode}/${recoveryPass.id}`
+      `${process.env.NEXTAUTH_URL}/recovery/newpassword/${newCode}/${recoveryPass.id}`
     );
 
     return NextResponse.json(

@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 import { userSchema } from "@/validations/user.schema";
-import { deleteCode } from "./code.controller";
 import { getToken } from "next-auth/jwt";
 import { profileSchemaEdit } from "@/validations/profile.schema";
 
@@ -86,8 +85,24 @@ export async function createUser(req: NextRequest) {
         role: decoded.role,
       },
     });
+    await prisma.coderegister.delete({
+      where: {
+        mail: codeFind.mail,
+      },
+    });
 
-    await deleteCode(codeFind.mail);
+    const preRegister = await prisma.preRegister.findFirst({
+      where: {
+        mail: codeFind.mail,
+      },
+    });
+    if (preRegister) {
+      await prisma.preRegister.delete({
+        where: {
+          mail: codeFind.mail,
+        },
+      });
+    }
 
     return NextResponse.json({ message: "Registro exitoso" }, { status: 200 });
   } catch (error) {
