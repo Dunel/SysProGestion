@@ -189,7 +189,7 @@ export default function InternshipCards({
           onClick={() => router.push("./misofertas/modificar/"+ internship.id)}
           className="w-[100%] p-1 m-1 bg-green-700 hover:bg-green-800 text-white font-bold rounded transition duration-300 md:w-[80%]"
         >
-          Modificar aplicación
+          Modificar Oferta
         </button>
         <button
           onClick={() => router.push("./misofertas/received/"+ internship.id)}
@@ -201,7 +201,7 @@ export default function InternshipCards({
           onClick={() => internship.handleDeleteApply(internship.id)}
           className="w-[100%] p-1 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[80%]"
         >
-          Eliminar aplicación
+          Eliminar Oferta
         </button>
       </div>
     </div>

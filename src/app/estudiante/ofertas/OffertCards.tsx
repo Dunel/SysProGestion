@@ -96,7 +96,7 @@ export default function InternshipCards({
   }) => (
     <div className="flex flex-col justify-center bg-white mb-8 mx-6 p-4 w-[90%] mx-auto my-1 shadow-md text-base text-justify rounded-lg md:p-8 lg:text-lg">
       
-      {/* //!codigo & num students que han apply  */}
+      {/* codigo & num students que han apply  */}
       <div  className="flex flex-col lg:flex-row text-sm lg:gap-2">    
           <span className="flex mr-2 text-red-500">
              <i>
@@ -115,7 +115,7 @@ export default function InternshipCards({
           </span> 
       </div>
 
-      {/* //!internship.pay  */}
+      {/* internship.pay  */}
       { internship.pay &&
                 <span className="flex gap-2 mr-2 text-base font-bold text-green-500 lg:ml-auto">
                 Esta vacante ofrece incentivos
@@ -123,10 +123,13 @@ export default function InternshipCards({
               </span> 
         }
 
-     {/* //! IMG, title, dependencia, direccion*/}
+
+    {/* //! {internship.apply[0].status === "aprobado" && INAVILITAR LOS BOTONES} */}
+
+     {/*  IMG, title, dependencia, direccion*/}
       <div className="flex flex-col mt-2 gap-[5%] md:flex-row">
       
-          {/* //! IMG */}
+          {/*  IMG */}
           <div className="m-1 mx-auto">
             <img
               src={internship.dependencia.User.image}
@@ -135,7 +138,7 @@ export default function InternshipCards({
             />
           </div>
 
-          {/* //! INFO */}
+          {/* INFO */}
           <div className="flex flex-col m-1 w-[100%] md:w-[75%]">
 
               <h3 className="text-center font-extrabold text-gray-800 mb-2 text-lg md:text-justify sm:text-xl md:text-2xl lg:text-3xl">

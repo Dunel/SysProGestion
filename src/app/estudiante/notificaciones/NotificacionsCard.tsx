@@ -21,12 +21,12 @@ export default function NotificationsCard(
   { index }: { index: number }
 ) {
   const actionDesc = {
-    apply: "Aplicaste a",
-    reject: "Rechazaron tú solicitud de",
-    accept: "Tu has Aceptado la solicitud de",
-    approve: "Dependencia a Aprobaron tú solicitud de",
-    proposal: "Aplicaste a la propuesta de proyecto de",
-    delete: "declinaste tú solicitud de",
+    apply: "APLICASTE a",
+    reject: "RECHAZARON tú solicitud de",
+    accept: "Tu has ACEPTADO la solicitud de",
+    approve: "Dependencia ha APROBADO tú solicitud de",
+    proposal: "APLICASTE a la propuesta de proyecto de",
+    delete: "DECLINASTE tú solicitud de",
   };
 
   const typeDesc = {
@@ -58,11 +58,11 @@ export default function NotificationsCard(
                                             ? <FaTrashAlt style={{ color: 'red' }} size={40}/>
                                             : noti.action === 'apply' 
                                                 ? <FaClipboardCheck style={{ color: 'green' }} size={40}/>
-                                                : noti.action === 'accept' 
+                                                : noti.action === 'accept'
                                                 ? <FaRegLaughSquint style={{ color: 'green' }} size={40}/>
                                                     :noti.action === 'reject' 
-                                                        ? <FaRegSadCry style={{ color: 'red' }} size={40}/> 
-                                                        : <FaRegLaugh style={{ color: 'yellow' }} size={40}/> //approve
+                                                        ? <FaRegSadCry style={{ color: 'red' }} size={40}/>
+                                                        : <FaRegLaugh style={{ color: 'green' }} size={40}/> //approve
                                         }
                                 </button>
                             </div>

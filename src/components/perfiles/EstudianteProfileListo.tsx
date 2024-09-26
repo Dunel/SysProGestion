@@ -93,24 +93,6 @@ export default function EstudianteProfileListo({
     }
   };
 
-  // function formatDate(date: Date | string): string {
-  //   // Si se pasa un string, convertirlo a un objeto Date
-  //   const dateObj = typeof date === "string" ? new Date(date) : date;
-
-  //   // Asegurarse de que dateObj es un objeto Date válido
-  //   if (isNaN(dateObj.getTime())) {
-  //     throw new Error("Invalid date");
-  //   }
-
-  //   // Obtener el día, mes y año
-  //   const day = String(dateObj.getDate()).padStart(2, "0"); // Asegura que el día tenga dos dígitos
-  //   const month = String(dateObj.getMonth() + 1).padStart(2, "0"); // Los meses son 0-indexados
-  //   const year = dateObj.getFullYear();
-
-  //   // Retornar la fecha en formato 'dd/mm/yyyy'
-  //   return `${day}/${month}/${year}`;
-  // }
-
   function calcularEdad(fechaNacimiento: string | Date): string {
     // Convertir a objeto Date si es necesario
     const fechaNacimientoDate =
@@ -138,6 +120,8 @@ export default function EstudianteProfileListo({
       {session?.user.profile && (
 
         
+
+
         
         <div className="flex flex-col w-[100%] my-2 mb-2 mt-2 pt-6 bg-white md:sticky md:top-[15vh]">
               <h2 className={`text-xl font-bold text-gray-800 text-center

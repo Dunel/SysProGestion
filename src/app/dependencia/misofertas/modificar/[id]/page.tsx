@@ -167,7 +167,8 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <Header title={"MODIFICAR OFERTA"} subtitle={"Aqui podrás modificar las ofertas del Pasantias y Servicio Comunitario que hayas publicado."} />
+      <Header title={"MODIFICAR OFERTA"} 
+      subtitle={"Aqui podrás modificar las ofertas del Pasantías y Servicio Comunitario que hayas publicado."} />
       <ContainerWeb>
         <GridMain>
           <GridContainer>

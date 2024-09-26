@@ -92,7 +92,7 @@ export default function Page() {
   return (
     <>
       <Header title={"MIS OFERTAS DE VACANTES"} 
-      subtitle={"Aqui puedes visializar todas las ofertas a vacantes de Pasantias y Servicio Comunitario que haz creado."} />
+      subtitle={"Aquí puedes visualizar todas las ofertas a vacantes de Pasantías y Servicio Comunitario que has creado."} />
      
           {squeleton ? (
        
@@ -117,7 +117,8 @@ export default function Page() {
           ) : null}
 
           <Modal
-            info={`¿Estás seguro de que deseas retirar su aplicación a la oferta ID: ${codeOferta}`}
+            info={`¿Estás seguro de que deseas Eliminar/Retirar oferta ID: ${codeOferta}`}
+            //! info={`¿Estás seguro de que deseas Eliminar/Retirar oferta ID: ${ Codigo de Oferta de Vacante: {(internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id}}`}
             isLoading={spanRetirar}
             isOpen={isModalOpen}
             onClose={() => setModalOpen(false)}
