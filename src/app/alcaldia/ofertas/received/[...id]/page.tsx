@@ -7,7 +7,7 @@ import { Skeleton } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import InternShipCardReceived from "@/components/offerts/InternShipCardReceived";
+import InternShipCardReceived from "@/app/dependencia/misofertas/received/InternShipCardReceived";
 
 interface Internship {
   id: number;
