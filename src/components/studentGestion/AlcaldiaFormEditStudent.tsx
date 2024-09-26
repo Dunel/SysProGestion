@@ -665,7 +665,7 @@ export default function AlcaldiaFormEditStudent({
                     : ""
                 }
                 id="datestart"
-                type="date" // Mantener tipo "date"
+                type="date"
                 className={cn(
                   errors.dateStart && "bg-red-100 focus:bg-red-100"
                 )}

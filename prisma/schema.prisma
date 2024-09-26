@@ -25,7 +25,7 @@ model PreRegister {
   id        Int      @id @default(autoincrement())
   cedula    Int      @unique
   mail      String   @unique
-  role      Role     @default(estudiante)
+  role      Role     @default(dependencia)
   updatedAt DateTime @updatedAt
 }
 
