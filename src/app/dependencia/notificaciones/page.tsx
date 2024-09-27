@@ -45,7 +45,9 @@ export default function Page() {
       <Header
         title={"NOTIFICACIONES"}
         subtitle={
-          "Aquí podrás visualizar todas las notificaciones relacionadas con los procesos a los que aplicaste y eres parte interesada. ¡Mantente informado!"
+          `Aquí podrás visualizar todas las notificaciones 
+          relacionadas con los procesos a los que aplicaste y 
+          eres parte interesada. ¡Mantente informado!`
         }
       />
       <ContainerWeb>

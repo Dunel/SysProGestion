@@ -78,8 +78,8 @@ const ofertsType = [
 ];
 
 const ofertsStatus = [
-  { key: "active", name: "Activa" },
-  { key: "inactive", name: "Inactiva" },
+  { key: "active", name: "Activa✅", color:'green'},
+  { key: "inactive", name: "Inactiva⚠️", color:'yellow' },
   { key: "aceptado", name: "El estudiante ha Aceptado esta oferta🎉 Contactalo y comiencen el proceso.", color:'green' },
   { key: "pendiente", name: "Pendiente⌚, debes Aprobar o Rechazar solicitud de estudiante", color:'blue'},
   { key: "aprobado", name: "Haz Aprobadó a este estudiante, espera que él acepte⌚", color:'blue'},
@@ -136,56 +136,77 @@ export default function InternShipCardReceived({
   return (
     <>
       {internship ? (
-        <div className="flex flex-col justify-center mb-8 w-[90%] mx-auto">
+        <div className="flex flex-col justify-center mb-8 w-[90%] mx-auto text-sm md:text-base lg:text-lg">
           <div className="flex">
             <span className="flex  ml-auto p-1 text-red-500">
               Codigo de Oferta de Vacante: {"P-2024-000" + internship.id}
             </span>
           </div>
 
+
+          <h2 className="font-bold text-gray-800 mb-2 text-center text-2xl md:text-3xl lg:text-4xl">
+                {(internship.title).toUpperCase()}
+          </h2>
+          
+          
           <div className="flex flex-col items-center md:flex-row md:space-x-4">
-            <div className="flex m-1 p-1 mx-auto h-[40%] md:w-[30%] lg:w-[20%]">
-              <img
-                src={internship.dependencia.User.image}
-                alt={`${internship.dependencia} logo`}
-                className="mx-auto w-60 h-60 object-cover rounded-full border-4 border-black-800 md:w-40 md:h-40"
-              />
+
+            
+          <div className="w-[95%] m-1 p-1 word-wrap overflow-wrap">
+
+            <div className="flex flex-col gap-2 mx-auto md:flex-row md:justify-start">
+
+              {/* lado izquierdo - La foto */}
+                <div className="relative group m-1 p-1 mx-auto md:w-auto">
+                  <img
+                    src={internship.dependencia.User.image}
+                    alt={`${internship.dependencia} logo`}
+                    className="flex h-40 w-40 rounded-full border-4 border-black-800 object-cover sm:h-50 sm:w-50"
+                  />
+                </div>
+
+              {/* lado derecho foto */}
+              <div className="w-[100%] m-1 p-1 md:w-[70%]">
+                  <p className="text-gray-600 mb-1 font-bold text-lg md:text-xl lg:text-2xl">
+                    {" "}
+                    <i>{internship.dependencia.name}</i>
+                  </p>
+                  
+                  <p className="text-gray-500">📍{internship.location}</p>
+
+                  <div className="flex flex-col my-2 gap-2 sm:flex-row">
+                  
+                    <div className="w-[50%]">
+                      <span className="font-medium text-gray-700 mb-2 text-sm md:text-lg">
+                        Estado de la Solicitud:
+                      </span>
+                      <p className={`text-${ofertsStatus.find((e) => e.key === internship.status)?.color}-500 font-extrabold p-2`}>
+                        {
+                          ofertsStatus.find((e) => e.key === internship.status)
+                            ?.name
+                        }
+                      </p>
+                    </div>
+
+                    <div className="w-[50%]">
+                      <span className="font-medium text-gray-700 mb-2 text-sm md:text-lg">
+                        Tipo de Oferta:
+                      </span>
+                      <p>
+                        {
+                          ofertsType.find((type) => type.key === internship.type)
+                            ?.name
+                        }
+                      </p>
+                    </div>
+
+                  </div>
+              </div>
             </div>
 
-            <div className="m-1 p-1 word-wrap overflow-wrap h-[60%] md:w-[80%]">
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                {internship.title}
-              </h3>
-              <p className="text-lg text-gray-600 mb-1">
-                {" "}
-                <i>{internship.dependencia.name}</i>
-              </p>
-              <p className="text-sm text-gray-500">📍{internship.location}</p>
 
-              <div className="flex my-2 gap-2">
-                <div className="w-[33%]">
-                  <span className="text-lg font-medium text-gray-700 mb-2">
-                    Estado de la Solicitud:
-                  </span>
-                  <p>
-                    {
-                      ofertsStatus.find((e) => e.key === internship.status)
-                        ?.name
-                    }
-                  </p>
-                </div>
-                <div className="w-[33%]">
-                  <span className="text-lg font-medium text-gray-700 mb-2">
-                    Tipo de Oferta:
-                  </span>
-                  <p>
-                    {
-                      ofertsType.find((type) => type.key === internship.type)
-                        ?.name
-                    }
-                  </p>
-                </div>
-              </div>
+
+
               <div className="flex flex-col justify-center gap-2 my-2 lg:flex-row">
                 <div className="m-1 w-[100%] lg:w-[40%]">
                   <h4 className="text-lg font-medium text-gray-700 mb-2">
@@ -206,23 +227,24 @@ export default function InternShipCardReceived({
                   <p>{internship.description}</p>
                 </div>
               </div>
+
             </div>
           </div>
 
           <div className="flex flex-col items-center gap-1">
-            <h3 className="text-xl font-semibold text-gray-800 mb-1">
+            
+            <h3 className="font-bold text-gray-800 mb-4 text-xl underline md:text-2xl lg:text-3xl">
               {internship.apply.length > 0
-                ? "Solicitudes Recibidas"
-                : "No hay Solicitudes Recibidas"}
+                ? "SOLICITUDES RECIBIDAS"
+                : "NO HAS RECIBIDo SOLICITUDES"}
             </h3>
 
 
             {internship.apply.map((apply, index) => (
               <div
                 key={index}
-                className="bg-white flex flex-col w-full my-2 p-2 border-2 border-gray-300 rounded-lg h-autotext-lg sm:text-sm md:text-base lg:text-lg sm:sticky sm:top-[-45vh]"
-                // className="flex flex-row items-center gap-2 p-2 border-2 border-gray-300 rounded-lg w-full"
-                // className="bg-blue-200 flex flex-col w-[100%] my-2 mb-2 mt-2 pt-6 bg-white gap-2 p-2 border-2 border-gray-300 rounded-lg w-full h-auto md:sticky md:overflow-y-auto md:top-0"
+                className="bg-white flex flex-col w-full my-2 p-2 border-2 border-gray-300 rounded-lg 
+                h-autotext-lg sm:sticky sm:top-[-45vh] text-sm md:text-base lg:text-lg"
                 >
 
 
@@ -233,66 +255,73 @@ export default function InternShipCardReceived({
           </h2>
 
                   {/* //!foto + info personal */}
-          <div className="flex flex-col items-center md:flex-row md:space-x-4">
-            
-            {/* Foto del Estudiante */}
-            <div className="relative group m-1 p-1 mx-auto md:w-auto">
-                <img
-                  className="flex h-40 w-40 rounded-full border-4 border-black-800 object-cover sm:h-60 sm:w-60"
-                  src={apply.User.image || "/images/no-image.png"}
-                  alt="Foto del estudiante" />
-            </div>
+            <div className="flex flex-col items-center md:flex-row md:space-x-4">
+              
+              {/* Foto del Estudiante */}
+              <div className="relative group m-1 p-1 mx-auto md:w-auto">
+                  <img
+                    className="flex h-40 w-40 rounded-full border-4 border-black-800 object-cover sm:h-60 sm:w-60"
+                    src={apply.User.image || "/images/no-image.png"}
+                    alt="Foto del estudiante" />
+              </div>
 
 
-            {/* !Información del Estudiente */}
-            <div className="m-1 p-1 word-wrap overflow-wrap w-[100%] md:w-[80%] mx-auto">
-             
-            
-              <p className="text-gray-600 md:text-1x1">
-                <strong>🪪 Cedula de identidad:</strong> {apply.User.cedula}
-              </p>
-              <p className="text-gray-600 md:text-1x1">
-                <strong>📲 Teléfono:</strong> {apply.User.phone}
-              </p>
-              <p className="text-gray-600 md:text-1x1">
-                <strong>📧 Correo:</strong> {apply.User.mail}
-              </p>
-              <p className="text-gray-600 md:text-1x1">
-                <strong>📍 Domicilio:</strong> <br />
-                Estado {apply.User.esInfo.address}.
-              </p>
-              <p className="text-gray-600 md:text-1x1">
-                <strong>🗓️ Fecha de nacimiento:</strong>{" "}
-                {new Date(
-                  apply.User.birthdate
-                ).toLocaleDateString()}
-              </p>
-              <p className="text-gray-600 md:text-1x1">
-                <strong>✔️Edad:</strong>{" "}
-                {apply.User.birthdate &&
-                  calcularEdad(apply.User.birthdate)}
-              </p>
+              {/* !Información del Estudiente */}
+              {/* //! parrokia */}
+              <div className="m-1 p-1 word-wrap overflow-wrap w-[100%] md:w-[80%] mx-auto">
+              
+              
+                <p className="text-gray-600 md:text-1x1">
+                  <strong>🪪 Cedula de identidad:</strong> {apply.User.cedula}
+                </p>
+                <p className="text-gray-600 md:text-1x1">
+                  <strong>📲 Teléfono:</strong> {apply.User.phone}
+                </p>
+                <p className="text-gray-600 md:text-1x1">
+                  <strong>📧 Correo:</strong> {apply.User.mail}
+                </p>
+                <p className="text-gray-600 md:text-1x1">
+                  <strong>📍 Domicilio:</strong> <br />
+                  <mark>Parroquia: {'Cecilio Acosta'}.</mark> {' '} {apply.User.esInfo.address}.
+                </p>
+                <p className="text-gray-600 md:text-1x1">
+                  <strong>🗓️ Fecha de nacimiento:</strong>{" "}
+                  {new Date(
+                    apply.User.birthdate
+                  ).toLocaleDateString()}
+                </p>
+                <p className="text-gray-600 md:text-1x1">
+                  <strong>✔️Edad:</strong>{" "}
+                  {apply.User.birthdate &&
+                    calcularEdad(apply.User.birthdate)}
+                </p>
+              </div>
             </div>
-      </div>
 
       
                 <div>
-                  <h2 className="text-2xl font-medium text-gray-700 mb-1 text-center">
+                  <h2 className="font-bold text-gray-700 mb-1 text-center text-lg md:xl lg:text-2xl">
                       INFORMACION ACADEMICA 📚
                   </h2>
 
-                    <div className="flex flex-col p-2 gap-5 md:flex-row">
+                    <div className="flex flex-col p-2 gap-5 lg:flex-row">
           
                           {/* lado izquierdo */}
-                        <div className="w-[100%] md:w-[50%]">
+                        <div className="w-[100%] lg:w-[50%]">
                             <p>
-                              <span className="font-semibold">Universidad: </span>
-                              {apply.User.esInfo.institution.name}
+                              <span className="font-semibold">Institución Educativa 🏛️ </span>
+                              <br/>
+                              <span className="">
+                                {apply.User.esInfo.institution.name}
+                              </span>
                             </p>
-                            <p>
-                              <span className="font-semibold">Carrera: </span>
-                              {apply.User.esInfo.career.name}
-                            </p>
+
+                            <div>
+                              <p className="font-semibold">Carrera 🧑🏽‍🎓 </p>
+                              <p className="font-bold text-white"> 
+                                <span className="bg-black">{apply.User.esInfo.career.name}</span></p>
+                            </div>
+
                             <h4 className="text-lg font-medium text-gray-700 mb-1">
                               Habilidades 📝
                             </h4>
@@ -304,14 +333,14 @@ export default function InternShipCardReceived({
                               ))}
                             </ul>
                         
-                        </div>
+                        </div >
                         
                         {/* lado derecho */}
-                        <div>
+                        <div className="w-[100%] lg:w-[50%]">
                             <h4 className="text-lg font-medium text-gray-700 mb-1">
                               Descripcion 📋
                             </h4>
-                            <p>{apply.User.esInfo.description}</p>
+                            <p className="text-justify">{apply.User.esInfo.description}</p>
                             <h4 className="text-lg font-medium text-gray-700 mb-1">
                               Curriculum 📄
                             </h4>
@@ -323,6 +352,7 @@ export default function InternShipCardReceived({
                               Ver Curriculum
                             </a>
                         </div>
+
                     </div>
 
                 </div>
@@ -340,14 +370,14 @@ export default function InternShipCardReceived({
                   ? (
                     <>
                       <button
-                        className="w-[100%] bg-green-600 hover:bg-green-900 text-white p-2 rounded-lg md:w-[50%]"
+                        className="w-[100%] bg-green-600 hover:bg-green-900 text-white font-extrabold p-4 rounded-lg md:w-[50%]"
                         onClick={() => updateStatus("aprobado", apply.id)}
                       >
                         Aprobar Solicitud
                       </button>
 
                       <button
-                        className="w-[100%] bg-red-600 hover:bg-red-900 text-white p-2 rounded-lg md:w-[50%]"
+                        className="w-[100%] bg-red-600 hover:bg-red-900 text-white font-extrabold p-4 rounded-lg md:w-[50%]"
                         onClick={() => updateStatus("rechazado", apply.id)}
                       >
                         Rechazar Solicitud

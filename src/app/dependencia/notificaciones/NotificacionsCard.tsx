@@ -21,9 +21,9 @@ export default function NotificationsCard({
 }) {
   const actionDesc: { [key: string]: string } = {
     apply: "Aplicó a",
-    reject: "Rechazaste la solicitud de",
+    reject: "le Rechazaste su solicitud de",
     accept: "Aceptó la solicitud de",
-    approve: "APROBASTE la solicitud de",
+    approve: "Aprobaste la solicitud de",
     proposal: "propuesta de proyecto de",
     delete: "declinó la solicitud de",
   };
@@ -43,17 +43,6 @@ export default function NotificationsCard({
           <div className="flex flex-row">
             <div className="flex-col w-[80%]">
               <div className="flex flex-col">
-                {/* <p className="text-lg text-gray-600 mb-1">
-                  {noti.action !== "reject" && noti.action !== "approve" && 
-                    <strong>El estudiante V{noti.userCedula} </strong>
-                  }
-                  {actionDesc[noti.action]}{" "}
-                  {noti.action === "reject" || noti.action === "approve" && 
-                    <strong>El estudiante V{noti.userCedula} a </strong>
-                  }
-                  <strong>{typeDesc[noti.application.type]}</strong>{" "}
-                  <i>{noti.application.title}</i>
-                </p> */}
 
                                   <p className="text-lg text-gray-600 mb-1">
                                   <span>{`${noti.action === 'create' 
@@ -63,18 +52,19 @@ export default function NotificationsCard({
                                           : noti.action === 'update' 
                                           ?'' 
                                           : noti.action === 'reject' 
-                                          ?''
+                                          ?`A el estudiante con Cedula de Identidad No. ${noti.userCedula}`
                                           : noti.action === 'approve' 
                                           ?''  
-                                          : `El estudiante ${noti.userCedula}`}`}
+                                          : `El estudiante con Cedula de Identidad No. ${noti.userCedula}`}`
+                                          }
                                   </span>{' '}
                                         {actionDesc[noti.action as keyof typeof actionDesc]}
-                                        <strong>{`${noti.action === 'create' 
+                                        {`${noti.action === 'create' 
                                           ? 'Creaste' 
-                                          : noti.action === 'update' ?'Actualizaste' 
+                                          : noti.action === 'update' ?'Actualizaste oferta de' 
                                           : ''}`}
                                       
-                                          {' '}{typeDesc[noti.application.type as keyof typeof typeDesc]} </strong> de <i>{noti.application.title}, en fecha: {new Date(noti.date).toLocaleString()}</i>
+                                         <strong> {' '}{typeDesc[noti.application.type as keyof typeof typeDesc]} </strong> nombrada: <i className="text-green-800 font-bold">{noti.application.title}.</i>
                                     </p>
               </div>
               <div className="flex flex-col">
