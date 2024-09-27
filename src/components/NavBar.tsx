@@ -51,6 +51,12 @@ export default function Navbar() {
           current: false,
         },
         { name: "ESTUDIANTES", href: "/alcaldia/estudiantes", current: false },
+        {
+          name: "INSTITUCIONES",
+          href: "/alcaldia/instituciones",
+          current: false,
+        },
+        { name: "PREREGISTROS", href: "/alcaldia/preregister", current: false },
       ]);
     } else if (session?.user.role === "dependencia") {
       setNavigation([

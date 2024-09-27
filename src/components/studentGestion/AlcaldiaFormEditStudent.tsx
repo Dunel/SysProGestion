@@ -447,7 +447,7 @@ export default function AlcaldiaFormEditStudent({
                 onClick={() => setEstadoOpen(!estadoOpen)}
                 readOnly
                 className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
-                placeholder="Selecciona una institución"
+                placeholder="Selecciona un estado"
               />
               {estadoOpen && (
                 <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">

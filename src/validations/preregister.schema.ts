@@ -1,7 +1,12 @@
 import { z } from "zod";
 
 export const preRegisterSchema = z.object({
-  mail: z.string().min(10).max(75).email(),
+  mail: z
+    .string({ required_error: "Email es quererido" })
+    .min(10, { message: "El correo debe tener minimo 10 caracteres." })
+    .max(75, { message: "El correo debe tener maximo 75 caracteres." })
+    .email({ message: "El correo no es válido" })
+    .transform((val) => val.toLowerCase()),
   cedula: z
     .string({ required_error: "La cedula es requerida" })
     .min(7, { message: "La cedula debe tener minimo 7 caracteres" })
@@ -47,9 +52,8 @@ export const idSchema = z.object({
     .or(z.number().min(1).max(1000000000)),
 });
 
-//merge schemas
 export const fullSchema = preRegisterSchema.extend({
-    id: z
+  id: z
     .string()
     .min(1)
     .max(10)
@@ -65,8 +69,10 @@ export const fullSchema = preRegisterSchema.extend({
 
       return id;
     })
-    .or(z.number().min(1).max(1000000000)),
+    .or(z.number().min(1).max(1000000000))
+    .optional(),
 });
 
 export type PreRegister = z.infer<typeof fullSchema>;
 
+export type insertPreRegister = z.infer<typeof preRegisterSchema>;

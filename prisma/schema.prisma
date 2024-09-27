@@ -203,19 +203,21 @@ enum statusAproved {
 }
 
 model estado {
-  id         Int         @id @default(autoincrement())
-  estado     String
-  municipios municipio[]
-  User       User[]
+  id          Int           @id @default(autoincrement())
+  estado      String
+  municipios  municipio[]
+  User        User[]
+  institution institution[]
 }
 
 model municipio {
-  id         Int         @id @default(autoincrement())
-  estadoId   Int
-  municipio  String
-  parroquias parroquia[]
-  User       User[]
-  estado     estado      @relation(fields: [estadoId], references: [id])
+  id          Int           @id @default(autoincrement())
+  estadoId    Int
+  municipio   String
+  parroquias  parroquia[]
+  User        User[]
+  estado      estado        @relation(fields: [estadoId], references: [id])
+  institution institution[]
 }
 
 model parroquia {
@@ -229,10 +231,14 @@ model parroquia {
 
 model institution {
   id              Int            @id @default(autoincrement())
-  institutionCode String
+  institutionCode String?
   name            String
   parroquiaId     Int
+  municipioId     Int
+  estadoId        Int
   parroquia       parroquia      @relation(fields: [parroquiaId], references: [id])
+  municipio       municipio      @relation(fields: [municipioId], references: [id])
+  estado          estado         @relation(fields: [estadoId], references: [id])
   estudentInfo    estudentInfo[]
 }
 

@@ -1,28 +1,28 @@
 import prisma from "@/db";
-import { codeSchema, roleSchema } from "@/validations/code.schema";
-import { fullSchema } from "@/validations/preregister.schema";
-import { userSchema } from "@/validations/user.schema";
+import {
+  fullSchema,
+  idSchema,
+  preRegisterSchema,
+} from "@/validations/preregister.schema";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 
 export async function POST(req: NextRequest) {
   try {
-    const { mail, role, cedula } = await req.json();
-    const email = codeSchema.shape.mail.parse(mail);
-    const roles = roleSchema.shape.role.parse(role);
-    const cedulaNumber = userSchema.shape.cedula.parse(cedula);
+    const { mail, cedula } = await req.json();
+    const result = preRegisterSchema.parse({ mail, cedula });
 
     const preRegisterFind = await prisma.preRegister.findFirst({
       where: {
         OR: [
           {
             mail: {
-              equals: email,
+              equals: result.mail,
               mode: "insensitive",
             },
           },
           {
-            cedula: cedulaNumber,
+            cedula: result.cedula,
           },
         ],
       },
@@ -31,34 +31,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           error: `Est${
-            preRegisterFind.cedula === cedulaNumber ? "a cedula" : "e correo"
+            preRegisterFind.cedula === result.cedula ? "a cedula" : "e correo"
           } se encuentra en el Pre-registro.`,
-        },
-        { status: 400 }
-      );
-    }
-
-    const findUser = await prisma.user.findFirst({
-      where: {
-        OR: [
-          {
-            mail: {
-              equals: email,
-              mode: "insensitive",
-            },
-          },
-          {
-            cedula: cedulaNumber,
-          },
-        ],
-      },
-    });
-    if (findUser) {
-      return NextResponse.json(
-        {
-          error: `${
-            findUser.mail === email ? "El correo" : "La cedula"
-          } se encuentra en el registro.`,
         },
         { status: 400 }
       );
@@ -66,9 +40,8 @@ export async function POST(req: NextRequest) {
 
     await prisma.preRegister.create({
       data: {
-        mail: email,
-        role: roles,
-        cedula: cedulaNumber,
+        mail: result.mail,
+        cedula: result.cedula,
       },
     });
 
@@ -91,27 +64,23 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    const { mail } = await req.json();
-    const email = codeSchema.shape.mail.parse(mail);
-
+    const { id } = await req.json();
+    const result = idSchema.parse({ id });
     const preRegisterFind = await prisma.preRegister.findFirst({
       where: {
-        mail: {
-          equals: email,
-          mode: "insensitive",
-        },
+        id: result.id,
       },
     });
     if (!preRegisterFind) {
       return NextResponse.json(
-        { error: "Correo no encontrado en el Pre-registro." },
+        { error: "Pre-registro no encontrado." },
         { status: 404 }
       );
     }
 
     await prisma.preRegister.delete({
       where: {
-        mail: email,
+        id: result.id,
       },
     });
 
