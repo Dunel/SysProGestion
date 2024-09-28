@@ -113,6 +113,7 @@ model application {
   description         String?
   imagen              String?
   pay                 Boolean?
+  tutor               String?
   location            String
   type                typeApplication
   skills              Skills[]

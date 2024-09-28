@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Skeleton from "@/components/ui/SkeletonComponent";
-import DependenciaProfileForm from "@/components/perfiles/DependenciaFormActualizarProfile";
-import DependenciaProfileListo from "@/components/perfiles/DependenciaProfileListo";
+import DependenciaProfileForm from "./DependenciaFormActualizarProfile";
+import DependenciaProfileListo from "./DependenciaProfileListo";
 
 export default function EstudianteInfoForm() {
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -30,6 +30,7 @@ export default function EstudianteInfoForm() {
       }
     }
   };
+
   useEffect(() => {
     getProfile();
   }, [session?.user.profile]);
@@ -43,18 +44,20 @@ export default function EstudianteInfoForm() {
         subtitle={
           !session?.user.profile
             ? "Este es tu formulario de registro. Por favor, sigue las indicaciones de las casillas y completa tu información personal y profesional."
-            : "Este es tu perfil personal, el cual podras actualizar mediante el formulario que se abre al presionar el boton 'Actualizar Perfil'. Es muy facil, solo sigue las indicaciones de las casillas y actualiza tu información personal y profesional que ha cambiado."
+            : "Este es tu perfil personal, el cual podrás actualizar mediante el formulario que se abre al presionar el botón 'Actualizar Perfil'. Es muy fácil, solo sigue las indicaciones de las casillas y actualiza tu información personal y profesional que ha cambiado."
         }
       />
 
       {session?.user.profile === false && (
-        <div className="w-[80%] m-4 p-4 mx-auto">
+        <div className="w-[90%] m-2 mx-auto">
           <DependenciaProfileForm
             onToggleForm={toggleFormVisibility}
-            titleForm={"Completa los datos de tu Perfil!"}
+            titleForm={"DATOS DE TU PERFIL"}
           />
         </div>
       )}
+
+      
 
       {!session?.user.dataProfile && session?.user.profile != false ? (
         <Skeleton />
@@ -77,7 +80,7 @@ export default function EstudianteInfoForm() {
             <div className="bg-white mt-6 mx-4">
               <DependenciaProfileForm
                 onToggleForm={toggleFormVisibility}
-                titleForm={"Actualizando tu Perfil!"}
+                titleForm={"ACTUALIZANDO TU PERFIL"}
               />
             </div>
           )}

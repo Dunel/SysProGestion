@@ -67,7 +67,7 @@ const statusFormated: { [key: string]: Array<string> } = {
   aceptado: ["Has sido Aceptado! Puedes empeza!🎉", 'text-green-500'],
   rechazado: ["Rechazado! Intenta con otra oferta!🤓", 'text-red-500'],
   declinado: ["Tu has Declinado⛔",'text-red-500'],
-  aprobado: ["Fuiste Aprobado! ahora acepta!➡️", 'text-yellow-500'],
+  aprobado: ["Fuiste Aprobado! ahora acepta!✅", 'text-yellow-500'],
   active: ["Activo✅", 'text-green-500'],
   inactive: ["Inactivo⚠️", 'text-yellow-500']
 };
@@ -128,8 +128,15 @@ export default function InternshipCards({
               </span> 
         }
 
+      {internship.apply[0].status === "aceptado" && (
+            <div className="text-red-500 font-bold bg-red-100 w-[100%] text-justify md:text-center">
+             <p className="p-2"> 🎉¡Felicidades! Has sido Aceptado en esta oferta. Ponte en contacto con la Institución para comenzar tu proceso.🎉</p>
+            </div>
+          )}
+
+
         {/* //! IMG, title, dependencia, direccion*/}
-        <div className="flex flex-col mt-2 gap-[5%] md:flex-row">
+        <div className="flex flex-col mt-2 gap-[5%] md:flex-row text-justify md:text-center">
               
               {/* //! IMG */}
               <div className="m-1 mx-auto">
@@ -238,7 +245,7 @@ export default function InternshipCards({
    
 
         {/* ACCION BUTTONS */}
-        <div className="flex justify-center">
+        <div className="flex flex-row justify-center">
           {internship.apply[0].status === "aprobado" && (
             <button
               onClick={() =>
@@ -247,7 +254,7 @@ export default function InternshipCards({
                   internship.apply[0].id
                 )
               }
-              className="w-[100%] p-1 m-1 bg-green-500 hover:bg-green-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
+              className={`p-1 m-1 bg-green-500 hover:bg-green-600 text-white font-bold rounded transition duration-300 ${internship.apply[0].status === "aprobado"? 'w-[50%]' : 'w-[100%]'}`}
             >
               Aceptar Oferta
             </button>
@@ -261,12 +268,18 @@ export default function InternshipCards({
                   internship.apply[0].id
                 )
               }
-              className="w-[100%] p-1 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
+              className={`p-1 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 ${internship.apply[0].status === "aprobado"? 'w-[50%]' : 'w-[100%]'}`}
             >
               Retirar aplicación
             </button>
           ) : null}
         </div>
+        {internship.apply[0].status === "aprobado" && (
+            <div className="text-red-500 font-bold bg-red-100 w-[100%] text-justify md:text-center">
+             <p className="p-2">⚠️Si aceptas esta oferta, retirarás automáticamente todas tus aplicaciones⚠️</p>
+            </div>
+          )}
+      
     </div>
   );
 

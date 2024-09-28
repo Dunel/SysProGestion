@@ -375,6 +375,7 @@ export default function EstudianteProfileForm({
             )}
           </LabelInputContainer>
 
+          {/* //!Fecha nacimiento */}
           <LabelInputContainer className=" flex m-2 md:w-[40%]">
             <Label htmlFor="birthdate">Fecha de nacimiento *</Label>
             <Input

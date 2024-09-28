@@ -93,24 +93,6 @@ export default function EstudianteProfileListo({
     }
   };
 
-  function formatDate(date: Date | string): string {
-    // Si se pasa un string, convertirlo a un objeto Date
-    const dateObj = typeof date === "string" ? new Date(date) : date;
-
-    // Asegurarse de que dateObj es un objeto Date válido
-    if (isNaN(dateObj.getTime())) {
-      throw new Error("Invalid date");
-    }
-
-    // Obtener el día, mes y año
-    const day = String(dateObj.getDate()).padStart(2, "0"); // Asegura que el día tenga dos dígitos
-    const month = String(dateObj.getMonth() + 1).padStart(2, "0"); // Los meses son 0-indexados
-    const year = dateObj.getFullYear();
-
-    // Retornar la fecha en formato 'dd/mm/yyyy'
-    return `${day}/${month}/${year}`;
-  }
-
   function calcularEdad(fechaNacimiento: string | Date): string {
     // Convertir a objeto Date si es necesario
     const fechaNacimientoDate =
@@ -132,11 +114,14 @@ export default function EstudianteProfileListo({
 
     return edad.toString() + " años";
   }
+
   return (
     <div className="flex flex-col w-[100%] relative z-20 text-base m-2 p-2 pb-0 mb-0 rounded-lg mt-2 shadow lg:shadow-none md:text-lg">
       {session?.user.profile && (
 
         
+
+
         
         <div className="flex flex-col w-[100%] my-2 mb-2 mt-2 pt-6 bg-white md:sticky md:top-[15vh]">
               <h2 className={`text-xl font-bold text-gray-800 text-center
@@ -150,8 +135,9 @@ export default function EstudianteProfileListo({
           <div className="flex flex-col items-center md:flex-row md:space-x-4">
             
             {/* Foto del Estudiante */}
-            <div className="relative group m-1 p-1 md:w-auto mx-auto">
-              <label htmlFor="profileImageInput" className="cursor-pointer">
+            <div className="relative group m-1 p-1 mx-auto md:w-auto">
+              <label htmlFor="profileImageInput" 
+              className="cursor-pointer">
                 <img
                   className="flex h-40 w-40 rounded-full border-4 border-black-800 object-cover sm:h-60 sm:w-60"
                   src={session?.user?.picture || "/images/no-image.png"}
@@ -219,7 +205,7 @@ export default function EstudianteProfileListo({
                   calcularEdad(session.user.dataProfile.birthdate)}
               </p>
             </div>
-          </div>
+      </div>
 
 
 

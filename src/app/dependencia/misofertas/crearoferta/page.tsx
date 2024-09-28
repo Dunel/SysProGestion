@@ -109,7 +109,8 @@ export default function Page() {
 
   return (
     <>
-      <Header title={"CREAR OFERTA"} subtitle={""} />
+      <Header title={"CREAR OFERTA"} 
+      subtitle={"Aquí podrás crear tus ofertas de Pasantías y Servicio Comunitario, que serán visualizadas por todos los estudiantes. Los estudiantes interesados aplicarán, luego tú podrás elegir el más adecuado."} />
       <ContainerWeb>
         <GridMain>
           <GridContainer>

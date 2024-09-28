@@ -17,9 +17,6 @@ export default function Header({ title, subtitle }: HeaderProps) {
 
   const { data: session, update } = useSession();
 
-
-
-
   useEffect(() => {
     let lastScrollY = 0;
     let ticking = false;
@@ -62,6 +59,7 @@ export default function Header({ title, subtitle }: HeaderProps) {
         isSticky ? 'z-30 shadow scale-80 origin-top color-header h-auto' : ''
       }`}
     >
+       {/* //! ERA ASI <div className="flex flex-col w-[100%] my-2 mb-2 mt-2 pt-6 bg-white md:sticky md:top-[15vh]">  */}
       <div className={`flex mx-auto p-1 transition-all duration-300 px-[5%] ${
         isSticky ? 'mx-auto justify-start gap-[5%]' : 'flex-col'
       }`}>
@@ -74,8 +72,6 @@ export default function Header({ title, subtitle }: HeaderProps) {
             <FaBars size={35} />
           </button>
         </div>
-      
-        {/* <div className={`flex ${isSticky ? 'flex-row' : 'flex-col'}`}> */}
    
           
           <h1 className={`my-auto font-bold tracking-tight text-gray-900 text-justify transition-all duration-300 ${
@@ -99,12 +95,9 @@ export default function Header({ title, subtitle }: HeaderProps) {
                 }
               </p>
             </div>
-          
-     
         
       </div>
-      
-
+    
     </header>
   );
 }

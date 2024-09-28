@@ -1,5 +1,6 @@
 import { useRouter } from "next/navigation";
 import React from "react";
+import { FaMoneyCheckAlt } from "react-icons/fa";
 
 interface Internship {
   handleDeleteApply: Function;
@@ -53,48 +54,93 @@ export default function InternshipCards({
   const router = useRouter();
 
   const InternshipCard: React.FC<{ internship: Internship }> = ({ internship}) => (
-    <div className="flex flex-col justify-center bg-white rounded-lg shadow-md m-4 mb-8 p-2 w-[90%] mx-auto my-5">
-      <div className="flex">
-        {/* //!ESTE CODE DEBERIA VENIR DE UN CAPO DE LA TABLA "ofertas" CUYA NOMENCLATURA SE CREA DE SEGUN EL TIPO DE OFERTA + ANO + ID   */}
-        <span className="flex  ml-auto p-1 text-red-500">
-        Codigo de Oferta de Vacante: {(internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id}
+    <div className="flex flex-col justify-center bg-white mb-8 mx-6 p-4 w-[90%] mx-auto my-1 shadow-md text-base text-justify rounded-lg md:p-8 lg:text-lg">
+   
 
-        </span>
+        
+         {/* //!codigo & num students que han apply  */}
+      <div  className="flex flex-col lg:flex-row text-sm lg:gap-2">    
+          <span className="flex mr-2 text-red-500">
+             <i>
+            Codigo de Oferta de Vacante: {(internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id}
+            </i> 
+          </span>   
+   
+          <span className="flex mr-2 gap-2 text-gray-500 lg:ml-auto">
+          {/* //! Han aplicado {internship._count.apply} 🧑🏽‍🎓 a esta Oferta de {internship.type === "pasantia" */}
+          Han aplicado <mark>{8}</mark> 🧑🏽‍🎓 a esta Oferta de {internship.type === "pasantia"
+                    ? "Pasantias"
+                    : internship.type === "servicio"
+                    ? "Servicio Comunitario"
+                    : internship.type === "proyecto"
+                    ? "Proyecto de Tesis"
+                    : ""}
+          </span> 
       </div>
+
+      {/* //!internship.pay  */}
+      { true &&
+                <span className="flex gap-2 mr-2 text-base font-bold text-green-500 lg:ml-auto">
+                <mark>{'Esta vacante ofrece incentivos'}</mark>
+                <FaMoneyCheckAlt  style={{ color: 'green' }} size={30}/>  
+              </span> 
+        }
+
+      
+              
+      <div className="">
+        <h3 className="text-center font-bold text-gray-800 text-lg md:text-justify sm:text-xl md:text-2xl lg:text-3xl">
+                {(internship.title).toUpperCase()}
+        </h3>
+
       <div className="flex flex-col items-center md:flex-row md:space-x-4">
-        {/* //! IMG */}
-        <div className="flex m-1 p-1 mx-auto h-[40%] md:w-[30%] lg:w-[20%]">
-          <img
-            src={internship.dependencia.User.image}
-            alt={`${internship.dependencia} logo`}
-            className="mx-auto w-60 h-60 object-cover rounded-full border-4 border-black-800 md:w-40 md:h-40"
-          />
-        </div>
-  
+
+          {/* //! IMG */}
+          <div className="relative group m-1 p-1 mx-auto md:w-auto">
+            <img
+              className="flex h-20 w-20 rounded-full border-4 border-black-800 object-cover sm:h-40 sm:w-40"
+              src={internship.dependencia.User.image}
+              alt={`${internship.dependencia} logo`}
+            />
+
+          </div>
+
+              {/* //! INFO */}
+              <div className="m-1 p-1 word-wrap overflow-wrap w-[100%] md:w-[80%] mx-auto">
+              {/* <h3 className="text-center font-extrabold text-gray-800 mb-2 text-lg md:text-justify sm:text-xl md:text-2xl lg:text-3xl">
+                {(internship.title).toUpperCase()}
+              </h3> */}
+                <p className="text-gray-600 mb-1 font-bold text-base sm:text-lg md:text-xl lg:text-2xl">🏦
+                  {" "}
+                  <i>{(internship.dependencia.name).toUpperCase()}</i>
+                </p>
+                  <p className="text-gray-600 text-justify md:text-1x1">
+                    <strong>📍Ubicación de la institución a realizar la pasantia o Servicio Comunitario:</strong>{" "}
+                        <br/>
+                        {internship.location}
+                  </p>
+              </div>
+      </div>
+        
+
+
+
+        
+
         {/* //! INFO */}
         <div className="m-1 p-1 word-wrap overflow-wrap h-[60%] md:w-[80%]">
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">
-            {internship.title}
-          </h3>
-          <p className="text-lg text-gray-600 mb-1">
-            {" "}
-            <i>{internship.dependencia.name}</i>
-          </p>
-          <p className="text-sm text-gray-500">📍{internship.location}</p>
-  
-          <div className="flex my-2 gap-2">
-            <div className="w-[33%]">
+      
+          <div className="flex flex-col my-2 gap-2 md:flex-row">
+            <div className="w-[100%] md:w-[100%]">
               <span className="text-lg font-medium text-gray-700 mb-2">
-                Estado de la Solicitud:
+                Estado de la Oferta:
               </span>
-              <p>{internship.status}</p>
+              <p>{internship.status === 'active' ? 'Activa ✅' : 'Inactiva ⚠️'}</p>
             </div>
-            <div className="w-[33%]">
+            <div className="w-[100%] md:w-[100%]">
               <span className="text-lg font-medium text-gray-700 mb-2">
                 Tipo de Oferta:
               </span>
-              {/* //! ASI QUE NO DEBERIA SER {internship.type} DADO QUE EL TYPO DEL PROCEDIMIENTO LO DEFINE LA OFERTA NO EL QUE UN ESTUDIANTE APLIQUE A ELLA */}
-              {/* //! PROYECTO DE TESIS DEBERIA ESTAR EN OFERTAS? NO LO CREO */}
               <p>
                 {internship.type === "pasantia"
                   ? "Pasantias"
@@ -104,6 +150,12 @@ export default function InternshipCards({
                   ? "Proyecto de Tesis"
                   : ""}
               </p>
+            </div>
+            <div className="w-[100%] md:w-[100%]">
+              <span className="text-lg font-medium text-gray-700 mb-2">
+                Tutor Industrial:
+              </span>
+              <p><mark>{'If .type === pasantia'}</mark></p>
             </div>
           </div>
   
@@ -129,26 +181,27 @@ export default function InternshipCards({
             </div>
           </div>
         </div>
+
       </div>
   
-      <div className="flex justify-center">
+      <div className="flex flex-col items-center justify-center lg:flex-row">
         <button
           onClick={() => router.push("./misofertas/modificar/"+ internship.id)}
-          className="w-[100%] p-1 m-1 bg-green-700 hover:bg-green-800 text-white font-bold rounded transition duration-300 md:w-[50%]"
+          className="w-[100%] p-1 m-1 bg-green-700 hover:bg-green-800 text-white font-bold rounded transition duration-300 md:w-[80%]"
         >
-          Modificar aplicación
+          Modificar Oferta
         </button>
         <button
           onClick={() => router.push("./misofertas/received/"+ internship.id)}
-          className="w-[100%] p-1 m-1 bg-blue-700 hover:bg-blue-900 text-white font-bold rounded transition duration-300 md:w-[50%]"
+          className="w-[100%] p-1 m-1 bg-blue-700 hover:bg-blue-900 text-white font-bold rounded transition duration-300 md:w-[80%]"
         >
-          Solicitudes recibidas
+          Ver Solicitudes recibidas
         </button>
         <button
           onClick={() => internship.handleDeleteApply(internship.id)}
-          className="w-[100%] p-1 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
+          className="w-[100%] p-1 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[80%]"
         >
-          Eliminar aplicación
+          Eliminar Oferta
         </button>
       </div>
     </div>

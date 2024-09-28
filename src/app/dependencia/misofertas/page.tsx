@@ -1,9 +1,7 @@
 "use client";
-import ContainerWeb from "@/components/ContainerWeb";
 import GridContainer from "@/components/GridContainer";
-import GridMain from "@/components/GridMain";
 import Header from "@/components/Header";
-import { Skeleton } from "@mui/material";
+import Skeleton from "@/components/ui/SkeletonComponent";
 import { useEffect, useState } from "react";
 import InternshipCards from "./InternshipCards";
 import axios from "axios";
@@ -91,13 +89,12 @@ export default function Page() {
 
   return (
     <>
-      <Header title={"MIS OFERTAS"} subtitle={""} />
-      <ContainerWeb>
-        <GridMain>
+      <Header title={"MIS OFERTAS DE VACANTES"} 
+      subtitle={"Aquí puedes visualizar todas las ofertas a vacantes de Pasantías y Servicio Comunitario que has creado."} />
+     
           {squeleton ? (
-            <GridContainer>
+       
               <Skeleton />
-            </GridContainer>
           ) : applications && applications.length === 0 ? (
             <GridContainer>
               <p className="m-2 p-2 text-center text-red-500">
@@ -118,14 +115,15 @@ export default function Page() {
           ) : null}
 
           <Modal
-            info={`¿Estás seguro de que deseas retirar su aplicación a la oferta ID: ${codeOferta}`}
+            info={`¿Estás seguro de que deseas Eliminar/Retirar oferta ID: ${codeOferta}`}
+            //! info={`¿Estás seguro de que deseas Eliminar/Retirar oferta ID: ${ Codigo de Oferta de Vacante: {(internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id}}`}
             isLoading={spanRetirar}
             isOpen={isModalOpen}
             onClose={() => setModalOpen(false)}
             onConfirm={handleDeleteApply}
           />
-        </GridMain>
-      </ContainerWeb>
+
+   
     </>
   );
 }

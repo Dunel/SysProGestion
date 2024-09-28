@@ -3,11 +3,11 @@ import ContainerWeb from "@/components/ContainerWeb";
 import GridContainer from "@/components/GridContainer";
 import GridMain from "@/components/GridMain";
 import Header from "@/components/Header";
-import { Skeleton } from "@mui/material";
+import Skeleton from "@/components/ui/SkeletonComponent";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import InternShipCardReceived from "@/components/offerts/InternShipCardReceived";
+import InternShipCardReceived from "@/app/dependencia/misofertas/received/InternShipCardReceived";
 
 interface Internship {
   id: number;

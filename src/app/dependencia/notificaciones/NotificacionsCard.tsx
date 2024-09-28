@@ -4,6 +4,7 @@ import {
   FaTrashAlt,
   FaRegSadCry,
   FaRegLaughSquint,
+  FaRegLaugh
 } from "react-icons/fa";
 
 type Notificaciones = {
@@ -20,7 +21,7 @@ export default function NotificationsCard({
 }) {
   const actionDesc: { [key: string]: string } = {
     apply: "Aplicó a",
-    reject: "Rechazaste la solicitud de",
+    reject: "le Rechazaste su solicitud de",
     accept: "Aceptó la solicitud de",
     approve: "Aprobaste la solicitud de",
     proposal: "propuesta de proyecto de",
@@ -42,17 +43,29 @@ export default function NotificationsCard({
           <div className="flex flex-row">
             <div className="flex-col w-[80%]">
               <div className="flex flex-col">
-                <p className="text-lg text-gray-600 mb-1">
-                  {noti.action !== "reject" && noti.action !== "approve" ? (
-                    <strong>El estudiante V{noti.userCedula} </strong>
-                  ) : null}
-                  {actionDesc[noti.action]}{" "}
-                  {noti.action === "reject" || noti.action === "approve" ? (
-                    <strong>El estudiante V{noti.userCedula} a </strong>
-                  ) : null}
-                  <strong>{typeDesc[noti.application.type]}</strong>{" "}
-                  <i>{noti.application.title}</i>
-                </p>
+
+                                  <p className="text-lg text-gray-600 mb-1">
+                                  <span>{`${noti.action === 'create' 
+                                          ? '' 
+                                          : noti.action === 'update' 
+                                          ? '' 
+                                          : noti.action === 'update' 
+                                          ?'' 
+                                          : noti.action === 'reject' 
+                                          ?`A el estudiante con Cedula de Identidad No. ${noti.userCedula}`
+                                          : noti.action === 'approve' 
+                                          ?''  
+                                          : `El estudiante con Cedula de Identidad No. ${noti.userCedula}`}`
+                                          }
+                                  </span>{' '}
+                                        {actionDesc[noti.action as keyof typeof actionDesc]}
+                                        {`${noti.action === 'create' 
+                                          ? 'Creaste' 
+                                          : noti.action === 'update' ?'Actualizaste oferta de' 
+                                          : ''}`}
+                                      
+                                         <strong> {' '}{typeDesc[noti.application.type as keyof typeof typeDesc]} </strong> nombrada: <i className="text-green-800 font-bold">{noti.application.title}.</i>
+                                    </p>
               </div>
               <div className="flex flex-col">
                 <p className="text-lg text-gray-600 mb-1">
@@ -64,15 +77,15 @@ export default function NotificationsCard({
             <div className="flex justify-center w-[20%]">
               <button className="m-2 text-white hover:text-red-300">
                 {noti.action === "delete" ? (
-                  <FaTrashAlt style={{ color: "red" }} size={40} />
+                  <FaRegSadCry style={{ color: "red" }} size={40} />
                 ) : noti.action === "apply" ? (
                   <FaClipboardCheck style={{ color: "green" }} size={40} />
                 ) : noti.action === "accept" ? (
                   <FaRegLaughSquint style={{ color: "green" }} size={40} />
                 ) : noti.action === "reject" ? (
-                  <FaRegSadCry style={{ color: "red" }} size={40} />
+                  <FaTrashAlt style={{ color: "red" }} size={40} />
                 ) : (
-                  ""
+                  <FaRegLaugh style={{ color: "green" }} size={40} /> //approve
                 )}
               </button>
             </div>
