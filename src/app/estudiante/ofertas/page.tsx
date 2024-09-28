@@ -15,6 +15,7 @@ type Application = {
   location: string;
   status: string;
   pay: boolean | null;
+  tutor: string;
   dependencia: {
     name: string;
     User: {
@@ -41,8 +42,7 @@ type Application = {
 export default function Page() {
   const [applications, setApplications] = useState<Application[]>();
   const [squeleton, setSqueleton] = useState(true);
-
-
+  const [btnactive, setBtnactive] = useState(Number);
 
   const handleApply = async (id: number) => {
     try {
@@ -65,7 +65,8 @@ export default function Page() {
     try {
       const res = await axios.get("/api/estudiante/apply");
       console.log(res.data);
-      setApplications(res.data);
+      setApplications(res.data.applications);
+      setBtnactive(res.data.btn)
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);
@@ -116,6 +117,7 @@ export default function Page() {
             handleApply: handleApply,
            
           }))}
+          btnactive={btnactive}
         />
       ) : null}
 

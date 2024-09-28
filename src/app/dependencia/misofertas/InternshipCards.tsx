@@ -19,6 +19,11 @@ interface Internship {
   date: Date;
   skills: string[];
   status: string;
+  pay: boolean;
+  tutor: string;
+  _count: {
+    apply: number;
+  };
 }
 
 const skillFormated: { [key: string]: string } = {
@@ -53,48 +58,53 @@ export default function InternshipCards({
 }) {
   const router = useRouter();
 
-  const InternshipCard: React.FC<{ internship: Internship }> = ({ internship}) => (
-    <div className="flex flex-col justify-center bg-white mb-8 mx-6 p-4 w-[90%] mx-auto my-1 shadow-md text-base text-justify rounded-lg md:p-8 lg:text-lg">
-   
+  const InternshipCard: React.FC<{ internship: Internship }> = ({
+    internship,
+  }) => (
+    <div className="flex flex-col justify-center bg-white mb-8 p-4 w-[90%] mx-auto my-1 shadow-md text-base text-justify rounded-lg md:p-8 lg:text-lg">
+      {/* //!codigo & num students que han apply  */}
+      <div className="flex flex-col lg:flex-row text-sm lg:gap-2">
+        <span className="flex mr-2 text-red-500">
+          <i>
+            Codigo de Oferta de Vacante:{" "}
+            {internship.type.substring(0, 3).toUpperCase() +
+              "-" +
+              new Date(internship.date).getFullYear() +
+              "-" +
+              internship.dependencia.name.substring(0, 3).toUpperCase() +
+              "-000" +
+              internship.id}
+          </i>
+        </span>
 
-        
-         {/* //!codigo & num students que han apply  */}
-      <div  className="flex flex-col lg:flex-row text-sm lg:gap-2">    
-          <span className="flex mr-2 text-red-500">
-             <i>
-            Codigo de Oferta de Vacante: {(internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id}
-            </i> 
-          </span>   
-   
-          <span className="flex mr-2 gap-2 text-gray-500 lg:ml-auto">
+        <span className="flex mr-2 gap-2 text-gray-500 lg:ml-auto">
           {/* //! Han aplicado {internship._count.apply} 🧑🏽‍🎓 a esta Oferta de {internship.type === "pasantia" */}
-          Han aplicado <mark>{8}</mark> 🧑🏽‍🎓 a esta Oferta de {internship.type === "pasantia"
-                    ? "Pasantias"
-                    : internship.type === "servicio"
-                    ? "Servicio Comunitario"
-                    : internship.type === "proyecto"
-                    ? "Proyecto de Tesis"
-                    : ""}
-          </span> 
+          Han aplicado {internship._count.apply} 🧑🏽‍🎓 a esta Oferta de{" "}
+          {internship.type === "pasantia"
+            ? "Pasantias"
+            : internship.type === "servicio"
+            ? "Servicio Comunitario"
+            : internship.type === "proyecto"
+            ? "Proyecto de Tesis"
+            : ""}
+        </span>
       </div>
 
       {/* //!internship.pay  */}
-      { true &&
-                <span className="flex gap-2 mr-2 text-base font-bold text-green-500 lg:ml-auto">
-                <mark>{'Esta vacante ofrece incentivos'}</mark>
-                <FaMoneyCheckAlt  style={{ color: 'green' }} size={30}/>  
-              </span> 
-        }
+      {true && (
+        <span className="flex gap-2 mr-2 text-base font-bold text-green-500 lg:ml-auto">
+          {`Esta vacante ofrece incentivos`}
+          <FaMoneyCheckAlt style={{ color: "green" }} size={30} />
+          {internship.pay ? "💰" : "❌"}
+        </span>
+      )}
 
-      
-              
       <div className="">
         <h3 className="text-center font-bold text-gray-800 text-lg md:text-justify sm:text-xl md:text-2xl lg:text-3xl">
-                {(internship.title).toUpperCase()}
+          {internship.title.toUpperCase()}
         </h3>
 
-      <div className="flex flex-col items-center md:flex-row md:space-x-4">
-
+        <div className="flex flex-col items-center md:flex-row md:space-x-4">
           {/* //! IMG */}
           <div className="relative group m-1 p-1 mx-auto md:w-auto">
             <img
@@ -102,40 +112,37 @@ export default function InternshipCards({
               src={internship.dependencia.User.image}
               alt={`${internship.dependencia} logo`}
             />
-
           </div>
 
-              {/* //! INFO */}
-              <div className="m-1 p-1 word-wrap overflow-wrap w-[100%] md:w-[80%] mx-auto">
-              {/* <h3 className="text-center font-extrabold text-gray-800 mb-2 text-lg md:text-justify sm:text-xl md:text-2xl lg:text-3xl">
+          {/* //! INFO */}
+          <div className="m-1 p-1 word-wrap overflow-wrap w-[100%] md:w-[80%] mx-auto">
+            {/* <h3 className="text-center font-extrabold text-gray-800 mb-2 text-lg md:text-justify sm:text-xl md:text-2xl lg:text-3xl">
                 {(internship.title).toUpperCase()}
               </h3> */}
-                <p className="text-gray-600 mb-1 font-bold text-base sm:text-lg md:text-xl lg:text-2xl">🏦
-                  {" "}
-                  <i>{(internship.dependencia.name).toUpperCase()}</i>
-                </p>
-                  <p className="text-gray-600 text-justify md:text-1x1">
-                    <strong>📍Ubicación de la institución a realizar la pasantia o Servicio Comunitario:</strong>{" "}
-                        <br/>
-                        {internship.location}
-                  </p>
-              </div>
-      </div>
-        
-
-
-
-        
+            <p className="text-gray-600 mb-1 font-bold text-base sm:text-lg md:text-xl lg:text-2xl">
+              🏦 <i>{internship.dependencia.name.toUpperCase()}</i>
+            </p>
+            <p className="text-gray-600 text-justify md:text-1x1">
+              <strong>
+                📍Ubicación de la institución a realizar la pasantia o Servicio
+                Comunitario:
+              </strong>{" "}
+              <br />
+              {internship.location}
+            </p>
+          </div>
+        </div>
 
         {/* //! INFO */}
         <div className="m-1 p-1 word-wrap overflow-wrap h-[60%] md:w-[80%]">
-      
           <div className="flex flex-col my-2 gap-2 md:flex-row">
             <div className="w-[100%] md:w-[100%]">
               <span className="text-lg font-medium text-gray-700 mb-2">
                 Estado de la Oferta:
               </span>
-              <p>{internship.status === 'active' ? 'Activa ✅' : 'Inactiva ⚠️'}</p>
+              <p>
+                {internship.status === "active" ? "Activa ✅" : "Inactiva ⚠️"}
+              </p>
             </div>
             <div className="w-[100%] md:w-[100%]">
               <span className="text-lg font-medium text-gray-700 mb-2">
@@ -155,10 +162,12 @@ export default function InternshipCards({
               <span className="text-lg font-medium text-gray-700 mb-2">
                 Tutor Industrial:
               </span>
-              <p><mark>{'If .type === pasantia'}</mark></p>
+              <p>
+                {internship.tutor?.length > 0 ? internship.tutor : "No asignado"}
+              </p>
             </div>
           </div>
-  
+
           {/* //! CONTAINER FLEX: OF SKILLS AND DESCRIPTION */}
           <div className="flex flex-col justify-center gap-2 my-2 lg:flex-row">
             <div className="m-1 w-[100%] lg:w-[40%]">
@@ -181,18 +190,17 @@ export default function InternshipCards({
             </div>
           </div>
         </div>
-
       </div>
-  
+
       <div className="flex flex-col items-center justify-center lg:flex-row">
         <button
-          onClick={() => router.push("./misofertas/modificar/"+ internship.id)}
+          onClick={() => router.push("./misofertas/modificar/" + internship.id)}
           className="w-[100%] p-1 m-1 bg-green-700 hover:bg-green-800 text-white font-bold rounded transition duration-300 md:w-[80%]"
         >
           Modificar Oferta
         </button>
         <button
-          onClick={() => router.push("./misofertas/received/"+ internship.id)}
+          onClick={() => router.push("./misofertas/received/" + internship.id)}
           className="w-[100%] p-1 m-1 bg-blue-700 hover:bg-blue-900 text-white font-bold rounded transition duration-300 md:w-[80%]"
         >
           Ver Solicitudes recibidas
@@ -206,7 +214,7 @@ export default function InternshipCards({
       </div>
     </div>
   );
-  
+
   return (
     <>
       <div className="relative z-20 mx-auto py-2 rounded shadow w-[90%]">

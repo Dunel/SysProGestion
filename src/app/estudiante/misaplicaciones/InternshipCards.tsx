@@ -26,6 +26,7 @@ interface Internship {
   skills: string[];
   status: string;
   pay: boolean | null;
+  tutor: string;
   apply: [
     {
       id: number;
@@ -92,7 +93,7 @@ export default function InternshipCards({
   const InternshipCard: React.FC<{ internship: Internship }> = ({
     internship,
   }) => (
-    <div className="flex flex-col justify-center bg-white mb-8 mx-6 p-4 w-[90%] mx-auto my-1 shadow-md text-base text-justify rounded-lg md:p-8 lg:text-lg">
+    <div className="flex flex-col justify-center bg-white mb-8 p-4 w-[90%] mx-auto my-1 shadow-md text-base text-justify rounded-lg md:p-8 lg:text-lg">
       
       {/* //!codigo & num students apply  */}
       <div className="flex flex-col lg:flex-row text-sm lg:gap-2">
@@ -165,6 +166,11 @@ export default function InternshipCards({
                           Parroquia {(internship.dependencia.User.parroquia?.parroquia)},{" "}
                         </strong>
                         {internship.location}
+                  </p>
+                  <p className="text-gray-600 text-justify md:text-1x1">
+                    <strong>📍tutor o responsable:</strong>{" "}
+                        <br/>
+                        {internship.tutor ? internship.tutor : "No especificado"}
                   </p>
 
               </div>

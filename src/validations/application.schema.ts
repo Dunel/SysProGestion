@@ -81,18 +81,24 @@ export const applyUpdateSchema = z.object({
     .string({ required_error: "La descripcion es requerida" })
     .min(1, { message: "La descripcion debe tener minimo 1 caracteres" })
     .max(2000, { message: "La descripcion debe tener maximo 2000 caracteres" }),
-  pay: z 
+  pay: z
     .string()
-    .transform( (value, ctx) => {
+    .transform((value, ctx) => {
       let newvalue;
-      if (value === "true"){
-        newvalue =  true;
-      }else if (value === "false"){
+      if (value === "true") {
+        newvalue = true;
+      } else if (value === "false") {
         newvalue = false;
       }
       return newvalue;
-    }).or(z.boolean()).optional()
-    ,
+    })
+    .or(z.boolean())
+    .optional(),
+  tutor: z
+    .string({ required_error: "El tutor es requerido" })
+    .max(100, { message: "El tutor debe tener maximo 100 caracteres" })
+    .or(z.literal(""))
+    .optional(),
   location: z
     .string({ required_error: "La ubicacion es requerida" })
     .min(1, { message: "La ubicacion debe tener minimo 1 caracteres" })
@@ -149,17 +155,24 @@ export const applyCreateSchema = z.object({
     .string({ required_error: "La descripcion es requerida" })
     .min(1, { message: "La descripcion debe tener minimo 1 caracteres" })
     .max(2000, { message: "La descripcion debe tener maximo 2000 caracteres" }),
-  pay: z 
+  pay: z
     .string()
-    .transform( (value, ctx) => {
+    .transform((value, ctx) => {
       let newvalue;
-      if (value === "true"){
-        newvalue =  true;
-      }else if (value === "false"){
+      if (value === "true") {
+        newvalue = true;
+      } else if (value === "false") {
         newvalue = false;
       }
       return newvalue;
-    }).or(z.boolean()).optional(),
+    })
+    .or(z.boolean())
+    .optional(),
+  tutor: z
+    .string({ required_error: "El tutor es requerido" })
+    .max(100, { message: "El tutor debe tener maximo 100 caracteres" })
+    .or(z.literal(""))
+    .optional(),
   location: z
     .string({ required_error: "La ubicacion es requerida" })
     .min(1, { message: "La ubicacion debe tener minimo 1 caracteres" })
@@ -200,7 +213,8 @@ export const applyCreateSchema = z.object({
           },
         }
       )
-    ).optional(),
+    )
+    .optional(),
   status: z.enum(["active", "inactive"], {
     message: "El estado de la oferta no es valido",
   }),
@@ -215,18 +229,24 @@ export const applyUpdateFormSchema = z.object({
     .string({ required_error: "La descripcion es requerida" })
     .min(1, { message: "La descripcion debe tener minimo 1 caracteres" })
     .max(2000, { message: "La descripcion debe tener maximo 2000 caracteres" }),
-  pay: z 
+  pay: z
     .string()
-    .transform( (value, ctx) => {
+    .transform((value, ctx) => {
       let newvalue;
-      if (value === "true"){
-        newvalue =  true;
-      }else if (value === "false"){
+      if (value === "true") {
+        newvalue = true;
+      } else if (value === "false") {
         newvalue = false;
       }
       return newvalue;
-    }).or(z.boolean()).optional()
-    ,
+    })
+    .or(z.boolean())
+    .optional(),
+  tutor: z
+    .string({ required_error: "El tutor es requerido" })
+    .max(100, { message: "El tutor debe tener maximo 100 caracteres" })
+    .or(z.literal(""))
+    .optional(),
   location: z
     .string({ required_error: "La ubicacion es requerida" })
     .min(1, { message: "La ubicacion debe tener minimo 1 caracteres" })

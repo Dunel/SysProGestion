@@ -9,6 +9,8 @@ interface Internship {
   date: Date;
   skills: string[];
   status: string;
+  pay: boolean | null;
+  tutor: string;
   dependencia: {
     name: string;
     User: {
@@ -27,6 +29,9 @@ interface Internship {
         birthdate: string;
         phone: string;
         image: string;
+        parroquia: {
+          parroquia: string;
+        };
         esInfo: {
           institution: {
             institutionCode: string;
@@ -78,13 +83,33 @@ const ofertsType = [
 ];
 
 const ofertsStatus = [
-  { key: "active", name: "Activa✅", color:'green'},
-  { key: "inactive", name: "Inactiva⚠️", color:'yellow' },
-  { key: "aceptado", name: "El estudiante ha Aceptado esta oferta🎉 Contactalo y comiencen el proceso.", color:'green' },
-  { key: "pendiente", name: "Pendiente⌚, debes Aprobar o Rechazar solicitud de estudiante", color:'blue'},
-  { key: "aprobado", name: "Haz Aprobadó a este estudiante, espera que él acepte⌚", color:'blue'},
-  { key: "rechazado", name: "Has Rechazado a este estudiente ⛔", color:'red' },
-  { key: "declinado", name: "El estudiante ha Declinado esta Oferta⛔", color:'red' },
+  { key: "active", name: "Activa✅", color: "green" },
+  { key: "inactive", name: "Inactiva⚠️", color: "yellow" },
+  {
+    key: "aceptado",
+    name: "El estudiante ha Aceptado esta oferta🎉 Contactalo y comiencen el proceso.",
+    color: "green",
+  },
+  {
+    key: "pendiente",
+    name: "Pendiente⌚, debes Aprobar o Rechazar solicitud de estudiante",
+    color: "blue",
+  },
+  {
+    key: "aprobado",
+    name: "Haz Aprobadó a este estudiante, espera que él acepte⌚",
+    color: "blue",
+  },
+  {
+    key: "rechazado",
+    name: "Has Rechazado a este estudiente ⛔",
+    color: "red",
+  },
+  {
+    key: "declinado",
+    name: "El estudiante ha Declinado esta Oferta⛔",
+    color: "red",
+  },
 ];
 
 export default function InternShipCardReceived({
@@ -94,7 +119,6 @@ export default function InternShipCardReceived({
   internship: Internship | undefined;
   getApplication: () => void;
 }) {
-
   const updateStatus = async (status: string, id: number) => {
     try {
       const res = await axios.post(`/api/dependencia/apply/myapply/received`, {
@@ -143,20 +167,14 @@ export default function InternShipCardReceived({
             </span>
           </div>
 
-
           <h2 className="font-bold text-gray-800 mb-2 text-center text-2xl md:text-3xl lg:text-4xl">
-                {(internship.title).toUpperCase()}
+            {internship.title.toUpperCase()}
           </h2>
-          
-          
+
           <div className="flex flex-col items-center md:flex-row md:space-x-4">
-
-            
-          <div className="w-[95%] m-1 p-1 word-wrap overflow-wrap">
-
-            <div className="flex flex-col gap-2 mx-auto md:flex-row md:justify-start">
-
-              {/* lado izquierdo - La foto */}
+            <div className="w-[95%] m-1 p-1 word-wrap overflow-wrap">
+              <div className="flex flex-col gap-2 mx-auto md:flex-row md:justify-start">
+                {/* lado izquierdo - La foto */}
                 <div className="relative group m-1 p-1 mx-auto md:w-auto">
                   <img
                     src={internship.dependencia.User.image}
@@ -165,22 +183,35 @@ export default function InternShipCardReceived({
                   />
                 </div>
 
-              {/* lado derecho foto */}
-              <div className="w-[100%] m-1 p-1 md:w-[70%]">
+                {/* lado derecho foto */}
+                <div className="w-[100%] m-1 p-1 md:w-[70%]">
                   <p className="text-gray-600 mb-1 font-bold text-lg md:text-xl lg:text-2xl">
                     {" "}
                     <i>{internship.dependencia.name}</i>
                   </p>
-                  
+
                   <p className="text-gray-500">📍{internship.location}</p>
+                  <p className="text-gray-500">
+                    {" "}
+                    tutor o responsable:{" "}
+                    {internship.tutor ? internship.tutor : "No asignado"}
+                  </p>
+                  <p className="text-gray-500">
+                    {" "}
+                    🤑 {internship.pay ? "si" : "no"}
+                  </p>
 
                   <div className="flex flex-col my-2 gap-2 sm:flex-row">
-                  
                     <div className="w-[50%]">
                       <span className="font-medium text-gray-700 mb-2 text-sm md:text-lg">
                         Estado de la Solicitud:
                       </span>
-                      <p className={`text-${ofertsStatus.find((e) => e.key === internship.status)?.color}-500 font-extrabold p-2`}>
+                      <p
+                        className={`text-${
+                          ofertsStatus.find((e) => e.key === internship.status)
+                            ?.color
+                        }-500 font-extrabold p-2`}
+                      >
                         {
                           ofertsStatus.find((e) => e.key === internship.status)
                             ?.name
@@ -194,18 +225,15 @@ export default function InternShipCardReceived({
                       </span>
                       <p>
                         {
-                          ofertsType.find((type) => type.key === internship.type)
-                            ?.name
+                          ofertsType.find(
+                            (type) => type.key === internship.type
+                          )?.name
                         }
                       </p>
                     </div>
-
                   </div>
+                </div>
               </div>
-            </div>
-
-
-
 
               <div className="flex flex-col justify-center gap-2 my-2 lg:flex-row">
                 <div className="m-1 w-[100%] lg:w-[40%]">
@@ -227,147 +255,149 @@ export default function InternShipCardReceived({
                   <p>{internship.description}</p>
                 </div>
               </div>
-
             </div>
           </div>
 
           <div className="flex flex-col items-center gap-1">
-            
             <h3 className="font-bold text-gray-800 mb-4 text-xl underline md:text-2xl lg:text-3xl">
               {internship.apply.length > 0
                 ? "SOLICITUDES RECIBIDAS"
-                : "NO HAS RECIBIDo SOLICITUDES"}
+                : "NO HAS RECIBIDO SOLICITUDES"}
             </h3>
-
 
             {internship.apply.map((apply, index) => (
               <div
                 key={index}
                 className="bg-white flex flex-col w-full my-2 p-2 border-2 border-gray-300 rounded-lg 
                 h-autotext-lg sm:sticky sm:top-[-45vh] text-sm md:text-base lg:text-lg"
+              >
+                <h2
+                  className={`text-xl font-bold text-gray-800 text-center sm:text-2xl md:text-3xl lg:text-4xl`}
                 >
+                  {apply.User.names} {apply.User.lastnames}
+                </h2>
 
+                {/* //!foto + info personal */}
+                <div className="flex flex-col items-center md:flex-row md:space-x-4">
+                  {/* Foto del Estudiante */}
+                  <div className="relative group m-1 p-1 mx-auto md:w-auto">
+                    <img
+                      className="flex h-40 w-40 rounded-full border-4 border-black-800 object-cover sm:h-60 sm:w-60"
+                      src={apply.User.image || "/images/no-image.png"}
+                      alt="Foto del estudiante"
+                    />
+                  </div>
 
+                  {/* !Información del Estudiente */}
+                  {/* //! parrokia */}
+                  <div className="m-1 p-1 word-wrap overflow-wrap w-[100%] md:w-[80%] mx-auto">
+                    <p className="text-gray-600 md:text-1x1">
+                      <strong>🪪 Cedula de identidad:</strong>{" "}
+                      {apply.User.cedula}
+                    </p>
+                    <p className="text-gray-600 md:text-1x1">
+                      <strong>📲 Teléfono:</strong> {apply.User.phone}
+                    </p>
+                    <p className="text-gray-600 md:text-1x1">
+                      <strong>📧 Correo:</strong> {apply.User.mail}
+                    </p>
+                    <p className="text-gray-600 md:text-1x1">
+                      <strong>📍 Domicilio:</strong> <br />
+                      Parroquia: {apply.User.parroquia.parroquia}.{" "}
+                      {apply.User.esInfo.address}.
+                    </p>
+                    <p className="text-gray-600 md:text-1x1">
+                      <strong>🗓️ Fecha de nacimiento:</strong>{" "}
+                      {new Date(apply.User.birthdate).toLocaleDateString()}
+                    </p>
+                    <p className="text-gray-600 md:text-1x1">
+                      <strong>✔️Edad:</strong>{" "}
+                      {apply.User.birthdate &&
+                        calcularEdad(apply.User.birthdate)}
+                    </p>
+                  </div>
+                </div>
 
-          <h2 className={`text-xl font-bold text-gray-800 text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl`}>
-                {apply.User.names}{" "}
-                {apply.User.lastnames}
-          </h2>
-
-                  {/* //!foto + info personal */}
-            <div className="flex flex-col items-center md:flex-row md:space-x-4">
-              
-              {/* Foto del Estudiante */}
-              <div className="relative group m-1 p-1 mx-auto md:w-auto">
-                  <img
-                    className="flex h-40 w-40 rounded-full border-4 border-black-800 object-cover sm:h-60 sm:w-60"
-                    src={apply.User.image || "/images/no-image.png"}
-                    alt="Foto del estudiante" />
-              </div>
-
-
-              {/* !Información del Estudiente */}
-              {/* //! parrokia */}
-              <div className="m-1 p-1 word-wrap overflow-wrap w-[100%] md:w-[80%] mx-auto">
-              
-              
-                <p className="text-gray-600 md:text-1x1">
-                  <strong>🪪 Cedula de identidad:</strong> {apply.User.cedula}
-                </p>
-                <p className="text-gray-600 md:text-1x1">
-                  <strong>📲 Teléfono:</strong> {apply.User.phone}
-                </p>
-                <p className="text-gray-600 md:text-1x1">
-                  <strong>📧 Correo:</strong> {apply.User.mail}
-                </p>
-                <p className="text-gray-600 md:text-1x1">
-                  <strong>📍 Domicilio:</strong> <br />
-                  <mark>Parroquia: {'Cecilio Acosta'}.</mark> {' '} {apply.User.esInfo.address}.
-                </p>
-                <p className="text-gray-600 md:text-1x1">
-                  <strong>🗓️ Fecha de nacimiento:</strong>{" "}
-                  {new Date(
-                    apply.User.birthdate
-                  ).toLocaleDateString()}
-                </p>
-                <p className="text-gray-600 md:text-1x1">
-                  <strong>✔️Edad:</strong>{" "}
-                  {apply.User.birthdate &&
-                    calcularEdad(apply.User.birthdate)}
-                </p>
-              </div>
-            </div>
-
-      
                 <div>
                   <h2 className="font-bold text-gray-700 mb-1 text-center text-lg md:xl lg:text-2xl">
-                      INFORMACION ACADEMICA 📚
+                    INFORMACION ACADEMICA 📚
                   </h2>
 
-                    <div className="flex flex-col p-2 gap-5 lg:flex-row">
-          
-                          {/* lado izquierdo */}
-                        <div className="w-[100%] lg:w-[50%]">
-                            <p>
-                              <span className="font-semibold">Institución Educativa 🏛️ </span>
-                              <br/>
-                              <span className="">
-                                {apply.User.esInfo.institution.name}
-                              </span>
-                            </p>
+                  <div className="flex flex-col p-2 gap-5 lg:flex-row">
+                    {/* lado izquierdo */}
+                    <div className="w-[100%] lg:w-[50%]">
+                      <p>
+                        <span className="font-semibold">
+                          Institución Educativa 🏛️{" "}
+                        </span>
+                        <br />
+                        <span className="">
+                          {apply.User.esInfo.institution.name}
+                        </span>
+                      </p>
 
-                            <div>
-                              <p className="font-semibold">Carrera 🧑🏽‍🎓 </p>
-                              <p className="font-bold text-white"> 
-                                <span className="bg-black">{apply.User.esInfo.career.name}</span></p>
-                            </div>
+                      <div>
+                        <p className="font-semibold">Carrera 🧑🏽‍🎓 </p>
+                        <p className="font-bold text-white">
+                          <span className="bg-black">
+                            {apply.User.esInfo.career.name}
+                          </span>
+                        </p>
+                      </div>
 
-                            <h4 className="text-lg font-medium text-gray-700 mb-1">
-                              Habilidades 📝
-                            </h4>
-                            <ul className="list-disc list-inside">
-                              {apply.User.esInfo.skills.map((skill, index) => (
-                                <li key={index} className="text-gray-600">
-                                  {skillFormated[skill]}
-                                </li>
-                              ))}
-                            </ul>
-                        
-                        </div >
-                        
-                        {/* lado derecho */}
-                        <div className="w-[100%] lg:w-[50%]">
-                            <h4 className="text-lg font-medium text-gray-700 mb-1">
-                              Descripcion 📋
-                            </h4>
-                            <p className="text-justify">{apply.User.esInfo.description}</p>
-                            <h4 className="text-lg font-medium text-gray-700 mb-1">
-                              Curriculum 📄
-                            </h4>
-                            <a
-                              href={apply.User.esInfo.curriculum}
-                              target="_blank"
-                              className="text-blue-500"
-                              >
-                              Ver Curriculum
-                            </a>
-                        </div>
-
+                      <h4 className="text-lg font-medium text-gray-700 mb-1">
+                        Habilidades 📝
+                      </h4>
+                      <ul className="list-disc list-inside">
+                        {apply.User.esInfo.skills.map((skill, index) => (
+                          <li key={index} className="text-gray-600">
+                            {skillFormated[skill]}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
 
+                    {/* lado derecho */}
+                    <div className="w-[100%] lg:w-[50%]">
+                      <h4 className="text-lg font-medium text-gray-700 mb-1">
+                        Descripcion 📋
+                      </h4>
+                      <p className="text-justify">
+                        {apply.User.esInfo.description}
+                      </p>
+                      <h4 className="text-lg font-medium text-gray-700 mb-1">
+                        Curriculum 📄
+                      </h4>
+                      <a
+                        href={apply.User.esInfo.curriculum}
+                        target="_blank"
+                        className="text-blue-500"
+                      >
+                        Ver Curriculum
+                      </a>
+                    </div>
+                  </div>
                 </div>
 
-                <div className={`p-2 m-2 text-center mx-auto bg-${ofertsStatus.find((e) => e.key === apply.status)?.color}-100 w-[100%]`}> 
-                      <p className={`text-${ofertsStatus.find((e) => e.key === apply.status)?.color}-500 font-extrabold p-2`}>{'Estado de la Oferta: '}
-                      {ofertsStatus.find((e) => e.key === apply.status)?.name}
-                     </p>
+                <div
+                  className={`p-2 m-2 text-center mx-auto bg-${
+                    ofertsStatus.find((e) => e.key === apply.status)?.color
+                  }-100 w-[100%]`}
+                >
+                  <p
+                    className={`text-${
+                      ofertsStatus.find((e) => e.key === apply.status)?.color
+                    }-500 font-extrabold p-2`}
+                  >
+                    {"Estado de la Oferta: "}
+                    {ofertsStatus.find((e) => e.key === apply.status)?.name}
+                  </p>
                 </div>
 
-              {/* //!BOTONES  */}
-                
+                {/* //!BOTONES  */}
+
                 <div className="flex flex-row items-center gap-2">
-                  {apply.status === "pendiente" 
-                  ? (
+                  {apply.status === "pendiente" ? (
                     <>
                       <button
                         className="w-[100%] bg-green-600 hover:bg-green-900 text-white font-extrabold p-4 rounded-lg md:w-[50%]"
@@ -383,13 +413,10 @@ export default function InternShipCardReceived({
                         Rechazar Solicitud
                       </button>
                     </>
-                    ) 
-                  : (
-                    ''
-                    )}
+                  ) : (
+                    ""
+                  )}
                 </div>
-
-                
               </div>
             ))}
           </div>

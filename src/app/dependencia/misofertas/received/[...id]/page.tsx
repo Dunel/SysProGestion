@@ -18,6 +18,8 @@ interface Internship {
   date: Date;
   skills: string[];
   status: string;
+  pay: boolean | null;
+  tutor: string;
   dependencia: {
     name: string;
     User: {
@@ -36,6 +38,9 @@ interface Internship {
         birthdate: string;
         phone: string;
         image: string;
+        parroquia: {
+          parroquia: string;
+        }
         esInfo: {
           institution: {
             institutionCode: string;

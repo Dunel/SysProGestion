@@ -3,7 +3,7 @@ import ContainerWeb from "@/components/ContainerWeb";
 import GridContainer from "@/components/GridContainer";
 import GridMain from "@/components/GridMain";
 import Header from "@/components/Header";
-import { useState } from "react";
+import { use, useState } from "react";
 import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -109,8 +109,12 @@ export default function Page() {
 
   return (
     <>
-      <Header title={"CREAR OFERTA"} 
-      subtitle={"Aquí podrás crear tus ofertas de Pasantías y Servicio Comunitario, que serán visualizadas por todos los estudiantes. Los estudiantes interesados aplicarán, luego tú podrás elegir el más adecuado."} />
+      <Header
+        title={"CREAR OFERTA"}
+        subtitle={
+          "Aquí podrás crear tus ofertas de Pasantías y Servicio Comunitario, que serán visualizadas por todos los estudiantes. Los estudiantes interesados aplicarán, luego tú podrás elegir el más adecuado."
+        }
+      />
       <ContainerWeb>
         <GridMain>
           <GridContainer>
@@ -189,6 +193,10 @@ export default function Page() {
                           onClick={() => {
                             setSelectedType(e.key);
                             setValue("type", e.key as "pasantia" | "servicio");
+                            setValue(
+                              "pay",
+                              e.key === "pasantia" ? false : undefined
+                            );
                             setIsOpen(false);
                           }}
                           className="cursor-pointer hover:bg-blue-100 py-2 px-3"
@@ -235,6 +243,22 @@ export default function Page() {
                     )}
                   </div>
                 )}
+
+                <div className="mt-2">
+                  <Label>Tutor o responsable</Label>
+                  <Input
+                    {...register("tutor")}
+                    id="tutor"
+                    name="tutor"
+                    type="text"
+                    placeholder="Tutor o responsable"
+                  />
+                  {errors.tutor && (
+                    <p className="text-red-500 text-sm">
+                      {errors.tutor.message}
+                    </p>
+                  )}
+                </div>
 
                 <div className="mt-2">
                   <Label>Habilidades deseadas en el estudiente</Label>

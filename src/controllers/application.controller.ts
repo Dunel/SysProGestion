@@ -23,6 +23,7 @@ export async function getApplication(req: NextRequest) {
         skills: true,
         date: true,
         pay: true,
+        tutor: true,
         location: true,
         status: true,
         dependencia: {
@@ -61,7 +62,18 @@ export async function getApplication(req: NextRequest) {
         },
       },
     });
-    return NextResponse.json(applications, { status: 200 });
+
+    const applicationsApproved = await prisma.applicationApproved.count({
+      where: {
+        userCedula: token.cedula,
+        status: "enproceso",
+      },
+    });
+
+    return NextResponse.json(
+      { applications, btn: applicationsApproved },
+      { status: 200 }
+    );
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(
@@ -105,11 +117,11 @@ export async function apply(req: NextRequest) {
     }
 
     const appProccessing = await prisma.applicationApproved.findFirst({
-      where:{
+      where: {
         userCedula: token.cedula,
-        status: "enproceso"
-      }
-    })
+        status: "enproceso",
+      },
+    });
     if (appProccessing) {
       return NextResponse.json(
         { error: "Tienes un aplicación activa" },
@@ -253,6 +265,7 @@ export async function getMyApplication(req: NextRequest) {
         title: true,
         description: true,
         pay: true,
+        tutor: true,
         location: true,
         status: true,
         imagen: true,
@@ -331,6 +344,7 @@ export async function getMyApplicationDepend(req: NextRequest) {
         title: true,
         description: true,
         pay: true,
+        tutor: true,
         location: true,
         status: true,
         imagen: true,
@@ -345,6 +359,11 @@ export async function getMyApplicationDepend(req: NextRequest) {
                 image: true,
               },
             },
+          },
+        },
+        _count: {
+          select: {
+            apply: true,
           },
         },
       },
@@ -435,6 +454,7 @@ export async function getApplicationById(req: NextRequest) {
         type: true,
         skills: true,
         date: true,
+        tutor: true,
       },
     });
     if (!application) {
@@ -466,8 +486,17 @@ export async function updateApplicationById(req: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
     const result = applyUpdateSchema.parse(await req.json());
-    const { id, title, description, pay, location, type, skills, status } =
-      result;
+    const {
+      id,
+      title,
+      description,
+      pay,
+      location,
+      type,
+      skills,
+      status,
+      tutor,
+    } = result;
     const application = await prisma.application.findFirst({
       where: {
         id,
@@ -490,6 +519,7 @@ export async function updateApplicationById(req: NextRequest) {
         title,
         description,
         pay,
+        tutor,
         location,
         type,
         skills,
@@ -528,7 +558,8 @@ export async function createAppDepend(req: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
     const result = applyCreateSchema.parse(await req.json());
-    const { title, description, location, type, skills, status, pay } = result;
+    const { title, description, location, type, skills, status, pay, tutor } =
+      result;
     await prisma.application.create({
       data: {
         title,
@@ -538,6 +569,7 @@ export async function createAppDepend(req: NextRequest) {
         skills,
         status,
         pay,
+        tutor,
         dependencia: {
           connect: {
             userCedula: token.cedula,
@@ -588,6 +620,7 @@ export async function getApplicationDepend(req: NextRequest) {
         title: true,
         description: true,
         pay: true,
+        tutor: true,
         location: true,
         status: true,
         type: true,
@@ -616,6 +649,11 @@ export async function getApplicationDepend(req: NextRequest) {
                 birthdate: true,
                 phone: true,
                 image: true,
+                parroquia: {
+                  select: {
+                    parroquia: true,
+                  },
+                },
                 esInfo: {
                   select: {
                     institution: {
@@ -732,7 +770,6 @@ export async function updateApplyDepend(req: NextRequest) {
     );
   }
 }
-
 
 ////////ALCALDIA
 export async function acceptApplyStudent(req: NextRequest) {
@@ -860,6 +897,7 @@ export async function getMyAppAlcaldia(req: NextRequest) {
         title: true,
         description: true,
         pay: true,
+        tutor: true,
         location: true,
         status: true,
         imagen: true,
@@ -912,6 +950,7 @@ export async function getAppAlcaldia(req: NextRequest) {
         title: true,
         description: true,
         pay: true,
+        tutor: true,
         location: true,
         status: true,
         type: true,

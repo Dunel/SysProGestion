@@ -17,6 +17,7 @@ type Application = {
   skills: string[];
   status: string;
   pay: boolean | null;
+  tutor: string;
   dependencia: {
     name: string;
     User: {

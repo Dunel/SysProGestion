@@ -17,6 +17,11 @@ type Application = {
   date: Date;
   skills: string[];
   status: string;
+  pay: boolean;
+  tutor: string;
+  _count: {
+    apply: number;
+  };
   dependencia: {
     name: string;
     User: {
