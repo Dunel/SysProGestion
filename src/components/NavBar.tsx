@@ -57,6 +57,7 @@ export default function Navbar() {
           current: false,
         },
         { name: "PREREGISTROS", href: "/alcaldia/preregister", current: false },
+        {name: "CARRERAS", href: "/alcaldia/career", current: false},
       ]);
     } else if (session?.user.role === "dependencia") {
       setNavigation([
