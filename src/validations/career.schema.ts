@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const careerSchema = z.object({
   name: z.string({ required_error: "el nombre es requerido" })
-  .min(10, { message: "El nombre debe tener minimo 10 caracteres." })
+  .min(5, { message: "El nombre debe tener minimo 5 caracteres." })
   .max(50 , { message: "El nombre debe tener maximo 50 caracteres." })
   .transform((val) => val.toUpperCase()),
   short: z
