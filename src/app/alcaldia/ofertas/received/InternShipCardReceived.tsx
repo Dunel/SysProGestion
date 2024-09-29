@@ -121,7 +121,7 @@ export default function InternShipCardReceived({
 }) {
   const updateStatus = async (status: string, id: number) => {
     try {
-      const res = await axios.post(`/api/dependencia/apply/myapply/received`, {
+      const res = await axios.post(`/api/alcaldia/apply/myapply/received`, {
         id,
         status,
       });

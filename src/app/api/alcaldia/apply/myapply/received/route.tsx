@@ -1,4 +1,4 @@
-import { getAppAlcaldia, updateApplyDepend } from "@/controllers/application.controller";
+import { getAppAlcaldia, updateApplyAlcaldia } from "@/controllers/application.controller";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -6,5 +6,5 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-    return await updateApplyDepend(req);
+    return await updateApplyAlcaldia(req);
 }

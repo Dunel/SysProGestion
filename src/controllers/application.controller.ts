@@ -1044,29 +1044,75 @@ export async function updateApplyAlcaldia(req: NextRequest) {
       );
     }
 
+    const acceptFound = await prisma.applicationApproved.findFirst({
+      where: {
+        userCedula: apply.userCedula,
+        status: "enproceso",
+      },
+    });
+    if (acceptFound) {
+      return NextResponse.json(
+        { error: "El estudiante ya tiene una aplicación activa" },
+        { status: 400 }
+      );
+    }
+
+    await prisma.apply.updateMany({
+      where: {
+        AND: [
+          {
+            userCedula: apply.userCedula,
+          },
+          {
+            NOT: {
+              id: idApply,
+            },
+          },
+          {
+            NOT: {
+              status: "rechazado",
+            },
+          },
+        ],
+      },
+      data: {
+        status: "declinado",
+      },
+    });
+
     await prisma.apply.update({
       where: {
         id: idApply,
-        application: {
-          dependencia: {
-            userCedula: token.cedula,
-          },
-        },
       },
       data: {
-        status: statusApply,
-        User: {
+        status: "aceptado",
+        application: {
           update: {
             notification: {
               create: {
-                action: statusApply === "aprobado" ? "approve" : "reject",
-                application: {
+                action: "accept",
+                User: {
                   connect: {
-                    id: apply.applicationId,
+                    cedula: apply.userCedula,
                   },
                 },
               },
             },
+          },
+        },
+      },
+    });
+
+    await prisma.applicationApproved.create({
+      data: {
+        application: {
+          connect: {
+            id: apply.applicationId,
+          },
+        },
+        esInfo: {
+          connect: {
+            userCedula: apply.userCedula,
           },
         },
       },

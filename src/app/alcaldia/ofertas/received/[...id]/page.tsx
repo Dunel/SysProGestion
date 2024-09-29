@@ -7,7 +7,7 @@ import { Skeleton } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import InternShipCardReceived from "@/app/dependencia/misofertas/received/InternShipCardReceived";
+import InternShipCardReceived from "../InternShipCardReceived";
 
 interface Internship {
   id: number;
@@ -72,7 +72,6 @@ export default function Page({ params }: { params: { id: string } }) {
       const res = await axios.get(
         "/api/alcaldia/apply/myapply/received?id=" + params.id
       );
-      //console.log(res.data);
       setApplications(res.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -80,7 +79,7 @@ export default function Page({ params }: { params: { id: string } }) {
       } else {
         console.error("error:", error);
       }
-      router.push("/dependencia/misofertas");
+      router.push("/alcaldia/misofertas");
     } finally {
       setSqueleton(false);
     }

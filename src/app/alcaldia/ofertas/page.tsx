@@ -42,10 +42,9 @@ export default function Page() {
       const { id } = applicationToDelete;
       try {
         setSpanRetirar(true);
-        const res = await axios.delete("/api/dependencia/apply/myapply", {
+        const res = await axios.delete("/api/alcaldia/apply/myapply", {
           data: { id },
         });
-        console.log(res.data);
         getApplications();
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -85,6 +84,32 @@ export default function Page() {
     }
   };
 
+  const handleOficio = async (id: number) => {
+    try {
+      const res = await axios.post(
+        `/api/alcaldia/doc`,
+        { id },
+        {
+          responseType: "blob",
+        }
+      );
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `oficio${id}_modificado.docx`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error lanzado:", error.response?.data.error);
+      } else {
+        console.error("error:", error);
+      }
+    }
+  };
+
   useEffect(() => {
     getApplications();
   }, []);
@@ -113,6 +138,7 @@ export default function Page() {
               internships={applications.map((internship) => ({
                 ...internship,
                 handleDeleteApply: confirmDelete,
+                handleOficio,
               }))}
             />
           ) : null}

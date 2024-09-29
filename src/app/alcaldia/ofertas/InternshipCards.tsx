@@ -3,6 +3,7 @@ import React from "react";
 
 interface Internship {
   handleDeleteApply: Function;
+  handleOficio: Function;
   dependencia: {
     name: string;
     User: {
@@ -149,6 +150,12 @@ export default function InternshipCards({
           className="w-[100%] p-1 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
         >
           Eliminar aplicación
+        </button>
+        <button
+          onClick={() => internship.handleOficio(internship.id)}
+          className="w-[100%] p-1 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
+        >
+          Oficio aplicación
         </button>
       </div>
     </div>
