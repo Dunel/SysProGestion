@@ -148,7 +148,7 @@ export default function ListCareer() {
   };
   return (
     <>
-      <h1 className="text-2xl font-bold mb-4">Lista de Preregistros</h1>
+      <h1 className="text-2xl font-bold mb-4">Lista de Carreras</h1>
       <Button onClick={handleInsert} className="mb-4">
         <Plus className="mr-2 h-4 w-4" /> Insertar Nuevo
       </Button>
@@ -227,7 +227,7 @@ export default function ListCareer() {
                   <>
                     <Input
                       {...register("name")}
-                      name="mail"
+                      name="name"
                       value={watch("name") || ""}
                       onChange={handleChange}
                       className={cn(
