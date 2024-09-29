@@ -168,6 +168,11 @@ export default function DependenciaProfileListo({
                   {session.user.dataProfile.lastnames}
               </p>
               <p className="text-gray-600 md:text-1x1">
+                  <strong>Carrera:</strong>{" "}
+                  {session.user.dataProfile.career.name}
+              </p>
+
+              <p className="text-gray-600 md:text-1x1">
                   <strong>🪪Cedula de Identidad:</strong>{" "}
                   {session.user.cedula}
               </p>

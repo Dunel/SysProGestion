@@ -176,6 +176,7 @@ model dependenciaInfo {
   id          Int           @id @default(autoincrement())
   userCedula  Int           @unique
   name        String
+  careerId    Int?
   rif         Int?
   description String?
   address     String?
@@ -184,6 +185,7 @@ model dependenciaInfo {
   phone       String?
   updatedAt   DateTime      @updatedAt
   User        User          @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
+  career      career?       @relation(fields: [careerId], references: [id])
   application application[]
 }
 
@@ -244,10 +246,12 @@ model institution {
 }
 
 model career {
-  id         Int            @id @default(autoincrement())
-  careerCode String
-  name       String
-  esInfo     estudentInfo[]
+  id              Int               @id @default(autoincrement())
+  careerCode      String?
+  name            String
+  short           String
+  esInfo          estudentInfo[]
+  dependenciaInfo dependenciaInfo[]
 }
 
 model alcaldiaInfo {

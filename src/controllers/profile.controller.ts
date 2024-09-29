@@ -224,6 +224,7 @@ export async function ProfileDependenciaUpdate(req: NextRequest) {
       estadoId,
       municipioId,
       parroquiaId,
+      careerId
     } = await req.json();
 
     const result = profileDepenSchema.parse({
@@ -239,6 +240,7 @@ export async function ProfileDependenciaUpdate(req: NextRequest) {
       estadoId,
       municipioId,
       parroquiaId,
+      careerId
     });
     const cedula = token.cedula;
 
@@ -252,6 +254,7 @@ export async function ProfileDependenciaUpdate(req: NextRequest) {
         email: result.email,
         social: result.social,
         rif: result.rif,
+        careerId: result.careerId
       },
       create: {
         userCedula: cedula,
@@ -262,6 +265,7 @@ export async function ProfileDependenciaUpdate(req: NextRequest) {
         email: result.email,
         social: result.social,
         rif: result.rif,
+        careerId: result.careerId
       },
     });
 
@@ -313,6 +317,7 @@ export async function ProfileDepenGet(req: NextRequest) {
         email: true,
         social: true,
         rif: true,
+        career: true,
         User: {
           select: {
             names: true,
@@ -342,6 +347,7 @@ export async function ProfileDepenGet(req: NextRequest) {
       parroquia: profile?.User.parroquia?.parroquia,
       parroquiaId: profile?.User.parroquia?.id,
       birthdate: profile?.User.birthdate,
+      career: profile?.career,
     };
     return NextResponse.json({ object }, { status: 200 });
   } catch (error) {

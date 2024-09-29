@@ -466,7 +466,7 @@ export default function EstudianteProfileForm({
 
           {/* //! municipio */}
           <LabelInputContainer className="mb-8">
-            <Label htmlFor="municipio">Municipio del estudiente</Label>
+            <Label htmlFor="municipio">Municipio del estudiante</Label>
             <div className="relative">
               <Input
                 id="municipioId"
@@ -509,7 +509,7 @@ export default function EstudianteProfileForm({
 
           {/*//! Parroquia */}
           <LabelInputContainer className="mb-8">
-            <Label htmlFor="parroquia">Parroquia del estudiente</Label>
+            <Label htmlFor="parroquia">Parroquia del estudiante</Label>
             <div className="relative">
               <Input
                 id="parroquiaId"
