@@ -25,6 +25,10 @@ type Application = {
       image: string;
     };
   };
+  _count: {
+    apply: number;
+    applicationApproved: number;
+  }
 };
 
 export default function Page() {
@@ -35,6 +39,7 @@ export default function Page() {
   const [codeOferta, setCodeOferta] = useState(0);
   const [applicationToDelete, setApplicationToDelete] = useState<{
     id: number;
+    code: string;
   } | null>(null);
 
   const handleDeleteApply = async () => {
@@ -60,8 +65,8 @@ export default function Page() {
     }
   };
 
-  const confirmDelete = (id: number) => {
-    setApplicationToDelete({ id });
+  const confirmDelete = (id: number, code: string) => {
+    setApplicationToDelete({ id, code });
     setCodeOferta(id);
     setModalOpen(true);
   };
@@ -69,7 +74,6 @@ export default function Page() {
   const getApplications = async () => {
     try {
       setSqueleton(true);
-
       const res = await axios.get("/api/alcaldia/apply/myapply");
       //console.log("data: ", res.data.applications);
       setApplications(res.data.applications);
@@ -144,7 +148,7 @@ export default function Page() {
           ) : null}
 
           <Modal
-            info={`¿Estás seguro de que deseas retirar su aplicación a la oferta ID: ${codeOferta}`}
+            info={`¿Estás seguro de que deseas retirar su aplicación a la oferta ID: ${applicationToDelete?.code}`}
             isLoading={spanRetirar}
             isOpen={isModalOpen}
             onClose={() => setModalOpen(false)}

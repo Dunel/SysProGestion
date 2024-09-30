@@ -94,7 +94,6 @@ export default function Page({ params }: { params: { id: string } }) {
       <Header title={"Solicitudes Recibidas"} subtitle={""} />
       <ContainerWeb>
         <GridMain>
-          <GridContainer>
             {squeleton ? (
               <Skeleton />
             ) : (
@@ -105,7 +104,6 @@ export default function Page({ params }: { params: { id: string } }) {
                 />
               </>
             )}
-          </GridContainer>
         </GridMain>
       </ContainerWeb>
     </>

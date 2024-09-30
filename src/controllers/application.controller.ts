@@ -914,9 +914,77 @@ export async function getMyAppAlcaldia(req: NextRequest) {
             },
           },
         },
-      },
+        _count:{
+          select:{
+            applicationApproved:true,
+            apply: {
+              where: {
+                OR:[
+                  {
+                    status: "pendiente"
+                  },
+                  {
+                    status: "aprobado"                    
+                  },
+                  {
+                    status: "aceptado"
+                  }
+                ]
+              },
+            }
+          },
+        }
+      }
     });
     return NextResponse.json({ applications }, { status: 200 });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function getAppAlcaldiaById(req: NextRequest) {
+  try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const result = idApplySchema.shape.idApplication.parse(
+      req.nextUrl.searchParams.get("id")
+    );
+    const application = await prisma.application.findFirst({
+      where: {
+        id: result,
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        pay: true,
+        location: true,
+        status: true,
+        type: true,
+        skills: true,
+        date: true,
+        tutor: true,
+      },
+    });
+    if (!application) {
+      return NextResponse.json(
+        { error: "No se encontró la oferta" },
+        { status: 404 }
+      );
+    }
+    return NextResponse.json(application, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(
@@ -1163,6 +1231,75 @@ export async function deleteApplicationAlcaldia(req: NextRequest) {
       },
     });
     return NextResponse.json({ message: "Oferta eliminada" }, { status: 200 });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function updateAppAlcaldiaById(req: NextRequest) {
+  try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const result = applyUpdateSchema.parse(await req.json());
+    const {
+      id,
+      title,
+      description,
+      pay,
+      location,
+      type,
+      skills,
+      status,
+      tutor,
+    } = result;
+    const application = await prisma.application.findFirst({
+      where: {
+        id,
+      },
+    });
+    if (!application) {
+      return NextResponse.json(
+        { error: "No se encontró la oferta" },
+        { status: 404 }
+      );
+    }
+    await prisma.application.update({
+      where: {
+        id,
+      },
+      data: {
+        title,
+        description,
+        pay,
+        tutor,
+        location,
+        type,
+        skills,
+        status,
+        notification: {
+          create: {
+            action: "update",
+            userCedula: token.cedula,
+          },
+        },
+      },
+    });
+    return NextResponse.json(
+      { message: "Oferta actualizada" },
+      { status: 200 }
+    );
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(

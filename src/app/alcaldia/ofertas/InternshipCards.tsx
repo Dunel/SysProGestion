@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -19,6 +20,10 @@ interface Internship {
   date: Date;
   skills: string[];
   status: string;
+  _count: {
+    apply: number;
+    applicationApproved: number;
+  }
 }
 
 const skillFormated: { [key: string]: string } = {
@@ -144,18 +149,24 @@ export default function InternshipCards({
           className="w-[100%] p-1 m-1 bg-blue-700 hover:bg-blue-900 text-white font-bold rounded transition duration-300 md:w-[50%]"
         >
           Solicitudes recibidas
+          o
+          Añadir Estudiantes
         </button>
         <button
-          onClick={() => internship.handleDeleteApply(internship.id)}
+          onClick={() => internship.handleDeleteApply(internship.id, (internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id)}
           className="w-[100%] p-1 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
         >
           Eliminar aplicación
         </button>
         <button
           onClick={() => internship.handleOficio(internship.id)}
-          className="w-[100%] p-1 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
+          className={cn("w-[100%] p-1 m-1 text-white font-bold rounded transition duration-300 md:w-[50%]",
+            internship._count.applicationApproved === 0 ? "bg-gray-500" : "bg-yellow-700 hover:bg-yellow-900"
+          )
+          }
+          disabled={internship._count.applicationApproved === 0}
         >
-          Oficio aplicación
+          Descargar Oficio
         </button>
       </div>
     </div>

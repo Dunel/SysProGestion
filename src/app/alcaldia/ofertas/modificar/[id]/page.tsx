@@ -15,6 +15,7 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import Loader from "@/components/Loader";
 
 type Application = {
   id: number;
@@ -25,6 +26,8 @@ type Application = {
   date: Date;
   skills: string[];
   status: string;
+  pay: boolean;
+  tutor: string;
   dependencia: {
     name: string;
     User: {
@@ -39,6 +42,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const [selectedType, setSelectedType] = useState<string | undefined>();
   const [selectedStatus, setSelectedStatus] = useState<string | undefined>();
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const router = useRouter();
@@ -56,7 +60,7 @@ export default function Page({ params }: { params: { id: string } }) {
     try {
       setSqueleton(true);
       const res = await axios.get(
-        "/api/dependencia/apply/myapply/edit?id=" + params.id
+        "/api/alcaldia/apply/myapply/edit?id=" + params.id
       );
       setApplications(res.data);
       setSelectedType(res.data.type);
@@ -71,7 +75,7 @@ export default function Page({ params }: { params: { id: string } }) {
       } else {
         console.error("error:", error);
       }
-      router.push("/dependencia/misofertas");
+      router.push("/alcaldia/ofertas");
     } finally {
       setSqueleton(false);
     }
@@ -139,12 +143,12 @@ export default function Page({ params }: { params: { id: string } }) {
 
   const updateOfert = async (data: ApplyFormUpdate) => {
     try {
-      const res = await axios.put("/api/dependencia/apply/myapply/edit", {
+      const res = await axios.put("/api/alcaldia/apply/myapply/edit", {
         ...data,
         id: params.id,
       });
       //console.log("data: ", res.data);
-      router.push("/dependencia/misofertas");
+      router.push("/alcaldia/ofertas");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data);
@@ -160,7 +164,12 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <Header title={"MODIFICAR OFERTA"} subtitle={"Aqui podrás modificar las ofertas del Pasantias y Servicio Comunitario que hayas publicado."} />
+      <Header
+        title={"MODIFICAR OFERTA"}
+        subtitle={
+          "Aqui podrás modificar las ofertas del Pasantías y Servicio Comunitario que hayas publicado."
+        }
+      />
       <ContainerWeb>
         <GridMain>
           <GridContainer>
@@ -189,7 +198,9 @@ export default function Page({ params }: { params: { id: string } }) {
                     )}
                   </div>
                   <div className="mt-2">
-                    <Label>Descripción del perfil del estudiante y de la oferta</Label>
+                    <Label>
+                      Descripción del perfil del estudiante y de la oferta
+                    </Label>
                     <Input
                       {...register("description")}
                       id="description"
@@ -205,7 +216,10 @@ export default function Page({ params }: { params: { id: string } }) {
                     )}
                   </div>
                   <div className="mt-2">
-                    <Label>Dirección del lugar de se realizará la Pasantia ó Servicio Comunitario</Label>
+                    <Label>
+                      Dirección del lugar de se realizará la Pasantia ó Servicio
+                      Comunitario
+                    </Label>
                     <Input
                       {...register("location")}
                       id="location"
@@ -260,43 +274,52 @@ export default function Page({ params }: { params: { id: string } }) {
                     )}
                   </div>
 
-                  {selectedType === 'pasantia' &&
+                  {selectedType === "pasantia" && (
                     <div>
-                    <Label>Tipo de Incentivo</Label>
-                    <div className="flex items-center">
+                      <Label>Tipo de Incentivo</Label>
+                      <div className="flex items-center">
                         <Input
-                            {...register("pay")}
-                            id="pay"
-                            name="pay"
-                            type="radio"
-                            value="true"
-                        
-                            className="mr-2"
+                          {...register("pay")}
+                          id="pay"
+                          name="pay"
+                          type="radio"
+                          value="true"
+                          className="mr-2"
                         />
                         <Label>Con Incentivo</Label>
-            
+
                         <Input
-                            type="radio"
-                            id="pay"
-                            {...register("pay")}
-                            value="false"
-                     
-                            className="mr-2"
+                          type="radio"
+                          id="pay"
+                          {...register("pay")}
+                          value="false"
+                          className="mr-2"
                         />
                         <Label>Sin Insentivo</Label>
+                      </div>
+                      {errors.pay && (
+                        <p className="text-red-500 text-sm">
+                          {errors.pay.message}
+                        </p>
+                      )}
                     </div>
-                    {errors.pay && (
-                    <p className="text-red-500 text-sm">
-                        {errors.pay.message}
-                    </p>
                   )}
-                </div>
-          }
-
-
-
-
-
+                  <div className="mt-2">
+                    <Label>Tutor o responsable de la Oferta</Label>
+                    <Input
+                      {...register("tutor")}
+                      id="tutor"
+                      name="tutor"
+                      type="text"
+                      placeholder="Nombre del tutor o responsable"
+                      defaultValue={applications?.tutor || ""}
+                    />
+                    {errors.tutor && (
+                      <p className="text-red-500 text-sm">
+                        {errors.tutor.message}
+                      </p>
+                    )}
+                  </div>
 
                   <div className="mt-2">
                     <Label>Habilidades Necesarias</Label>
@@ -395,6 +418,11 @@ export default function Page({ params }: { params: { id: string } }) {
                     </button>
                   </div>
                 </form>
+                {loading && (
+                  <div>
+                    <Loader />
+                  </div>
+                )}
               </>
             )}
           </GridContainer>
