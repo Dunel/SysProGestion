@@ -91,11 +91,10 @@ export default function InternshipCards({
       </div>
 
       {/* //!internship.pay  */}
-      {true && (
+      {internship.pay  && (
         <span className="flex gap-2 mr-2 text-base font-bold text-green-500 lg:ml-auto">
           {`Esta vacante ofrece incentivos`}
           <FaMoneyCheckAlt style={{ color: "green" }} size={30} />
-          {internship.pay ? "💰" : "❌"}
         </span>
       )}
 
@@ -160,7 +159,7 @@ export default function InternshipCards({
             </div>
             <div className="w-[100%] md:w-[100%]">
               <span className="text-lg font-medium text-gray-700 mb-2">
-                Tutor Industrial:
+              {internship.type === "pasantia" ? 'Tutor Industrial:' : 'Responsable'}
               </span>
               <p>
                 {internship.tutor?.length > 0 ? internship.tutor : "No asignado"}

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { FaMoneyCheckAlt } from "react-icons/fa";
 
 interface Internship {
   id: number;
@@ -161,10 +162,18 @@ export default function InternShipCardReceived({
     <>
       {internship ? (
         <div className="flex flex-col justify-center mb-8 w-[90%] mx-auto text-sm md:text-base lg:text-lg">
-          <div className="flex">
-            <span className="flex  ml-auto p-1 text-red-500">
+         
+          <div className="flex flex-col items-start md:items-end">
+            <span className="flex p-1 text-red-500">
               Codigo de Oferta de Vacante: {"P-2024-000" + internship.id}
             </span>
+            {/* //!internship.pay  */}
+            {internship.pay  && (
+              <span className="flex gap-2 mr-2 text-base font-bold text-green-500">
+                {`Esta vacante ofrece incentivos`}
+                <FaMoneyCheckAlt style={{ color: "green" }} size={30} />
+              </span>
+            )}
           </div>
 
           <h2 className="font-bold text-gray-800 mb-2 text-center text-2xl md:text-3xl lg:text-4xl">
@@ -173,7 +182,7 @@ export default function InternShipCardReceived({
 
           <div className="flex flex-col items-center md:flex-row md:space-x-4">
             <div className="w-[95%] m-1 p-1 word-wrap overflow-wrap">
-              <div className="flex flex-col gap-2 mx-auto md:flex-row md:justify-start">
+              <div className="flex flex-col gap-2 mx-auto items-center md:flex-row">
                 {/* lado izquierdo - La foto */}
                 <div className="relative group m-1 p-1 mx-auto md:w-auto">
                   <img
@@ -191,19 +200,11 @@ export default function InternShipCardReceived({
                   </p>
 
                   <p className="text-gray-500">📍{internship.location}</p>
-                  <p className="text-gray-500">
-                    {" "}
-                    tutor o responsable:{" "}
-                    {internship.tutor ? internship.tutor : "No asignado"}
-                  </p>
-                  <p className="text-gray-500">
-                    {" "}
-                    🤑 {internship.pay ? "si" : "no"}
-                  </p>
+                  
 
-                  <div className="flex flex-col my-2 gap-2 sm:flex-row">
+                  <div className="flex flex-col my-1 gap-2 sm:flex-row">
                     <div className="w-[50%]">
-                      <span className="font-medium text-gray-700 mb-2 text-sm md:text-lg">
+                      <span className="font-medium text-gray-700 mb-2">
                         Estado de la Solicitud:
                       </span>
                       <p
@@ -220,7 +221,7 @@ export default function InternShipCardReceived({
                     </div>
 
                     <div className="w-[50%]">
-                      <span className="font-medium text-gray-700 mb-2 text-sm md:text-lg">
+                      <span className="font-medium text-gray-700 mb-2">
                         Tipo de Oferta:
                       </span>
                       <p>
@@ -231,13 +232,21 @@ export default function InternShipCardReceived({
                         }
                       </p>
                     </div>
+                    
                   </div>
+                  
+                  <div className="text-gray-600">
+                    <p> <b>Tutor Industrial o Responsable:</b>{' '}
+                    {internship.tutor ? internship.tutor : "No asignado"}
+                    </p>
+                  </div>
+
                 </div>
               </div>
 
               <div className="flex flex-col justify-center gap-2 my-2 lg:flex-row">
                 <div className="m-1 w-[100%] lg:w-[40%]">
-                  <h4 className="text-lg font-medium text-gray-700 mb-2">
+                  <h4 className="font-bold text-gray-700 mb-2">
                     Habilidades requeridas 📝
                   </h4>
                   <ul className="list-disc list-inside">
@@ -248,8 +257,8 @@ export default function InternShipCardReceived({
                     ))}
                   </ul>
                 </div>
-                <div className="m-1 w-[100%] lg:w-[60%]">
-                  <h4 className="text-lg font-medium text-gray-700 mb-2">
+                <div className="m-1 w-[100%] text-justify lg:w-[60%]">
+                  <h4 className="font-bold text-gray-700 mb-2">
                     Descripcion de la Vacante 📋
                   </h4>
                   <p>{internship.description}</p>

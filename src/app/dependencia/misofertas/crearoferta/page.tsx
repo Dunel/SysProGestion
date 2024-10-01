@@ -240,12 +240,12 @@ export default function Page() {
                       <p className="text-red-500 text-sm">
                         {errors.pay.message}
                       </p>
-                    )}
+                    )} 
                   </div>
                 )}
 
                 <div className="mt-2">
-                  <Label>Tutor o responsable</Label>
+                  <Label>Tutor Industrial o responsable</Label>
                   <Input
                     {...register("tutor")}
                     id="tutor"

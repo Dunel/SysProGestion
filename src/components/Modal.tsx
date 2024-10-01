@@ -30,7 +30,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, isLoading, in
                             onClick={onClose}>Cancelar</button>
                     </div>
                
-                : <span className='m-10 text-center text-red-500'><i>Retirando aplicación...</i></span>
+                : <span className='m-10 text-center font-extrabold text-red-500'><i>ELIMINANDO OFERTA...</i></span>
                 }
             </div>
 
