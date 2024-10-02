@@ -115,6 +115,14 @@ export default function EstudianteProfileListo({
     return edad.toString() + " años";
   }
 
+  function formatearFecha(fecha: Date): string {
+    const dia = fecha.getDate().toString().padStart(2, '0'); // Obtiene el día y lo formatea a dos dígitos
+    const mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Obtiene el mes (0-11) y lo formatea a dos dígitos
+    const anio = fecha.getFullYear(); // Obtiene el año
+  
+    return `${dia}/${mes}/${anio}`; // Retorna la fecha en formato dd/mm/yyyy
+  }
+
   return (
     <div className="flex flex-col w-[100%] relative z-20 text-base m-2 p-2 pb-0 mb-0 rounded-lg mt-2 shadow lg:shadow-none md:text-lg">
       {session?.user.profile && (
@@ -195,9 +203,10 @@ export default function EstudianteProfileListo({
               </p>
               <p className="text-gray-600 md:text-1x1">
                 <strong>🗓️ Fecha de nacimiento:</strong>{" "}
-                {
-                new Date(session.user.dataProfile.birthdate).toLocaleDateString('en-GB')
-                }
+                <p className="text-gray-600 md:text-1x1">
+            <strong>🗓️ Fecha de nacimiento:</strong>{" "}
+            {formatearFecha(session.user.dataProfile.birthdate)}
+          </p>
 
               </p>
               <p className="text-gray-600 md:text-1x1">
