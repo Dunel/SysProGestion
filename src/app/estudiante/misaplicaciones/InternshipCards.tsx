@@ -168,7 +168,7 @@ export default function InternshipCards({
                         {internship.location}
                   </p>
                   <p className="text-gray-600 text-justify md:text-1x1">
-                    <strong>📍tutor o responsable:</strong>{" "}
+                    <strong>🧑🏽‍🏫tutor o responsable:</strong>{" "}
                         <br/>
                         {internship.tutor ? internship.tutor : "No especificado"}
                   </p>
