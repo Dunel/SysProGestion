@@ -148,7 +148,7 @@ export default function Page() {
           ) : null}
 
           <Modal
-            info={`¿Estás seguro de que deseas retirar su aplicación a la oferta ID: ${applicationToDelete?.code}`}
+            info={`¿Estás seguro de que deseas ELIMINAR la oferta ID: ${applicationToDelete?.code}`}
             isLoading={spanRetirar}
             isOpen={isModalOpen}
             onClose={() => setModalOpen(false)}

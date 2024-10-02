@@ -24,7 +24,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, isLoading, in
                     <div className=' m-2 w-[100%] flex flex-col justify-center items-center'>
                         <button 
                             className="w-[80%] p-1 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
-                            onClick={onConfirm}>Sí, retirar</button>
+                            onClick={onConfirm}>Si, eliminar</button>
+                            {/* onClick={onConfirm}>Sí, retirar</button> */}
                         <button 
                             className="w-[80%] p-1 m-1 bg-green-500 hover:bg-green-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
                             onClick={onClose}>Cancelar</button>
