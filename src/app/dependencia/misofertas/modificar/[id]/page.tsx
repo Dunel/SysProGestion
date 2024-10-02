@@ -202,7 +202,7 @@ export default function Page({ params }: { params: { id: string } }) {
                   </div>
                   <div className="mt-2">
                     <Label>
-                      Descripción del perfil del estudiante y de la oferta
+                      Descripción de la oferta
                     </Label>
                     <Input
                       {...register("description")}

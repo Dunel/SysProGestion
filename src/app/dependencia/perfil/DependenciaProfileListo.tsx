@@ -120,7 +120,7 @@ export default function DependenciaProfileListo({
                 </p>
                 <p className="text-gray-600 md:text-xl">
                   <strong>🤳🏽Red Social:</strong> 
-                  <Link href={session.user.dataProfile.social}>   {' '}
+                  <Link target="_blank" href={session.user.dataProfile.social}>   {' '}
                       <span className="inline-block w-1/2 text-blue-500 hover:text-blue-700 underline overflow-hidden whitespace-nowrap truncate">
                         {session.user.dataProfile.social}
                       </span>
@@ -167,9 +167,9 @@ export default function DependenciaProfileListo({
                   {session.user.dataProfile.names}{" "}
                   {session.user.dataProfile.lastnames}
               </p>
-              <p>
-  <strong>Carrera:</strong> {session.user?.dataProfile?.career?.name || 'Carrera no disponible'}
-</p>
+              <p className="text-gray-600 md:text-1x1">
+                <strong>💼 Carrera:</strong> {session.user?.dataProfile?.career?.name || 'Carrera no disponible'}
+              </p>
 
               <p className="text-gray-600 md:text-1x1">
                   <strong>🪪Cedula de Identidad:</strong>{" "}

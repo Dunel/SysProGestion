@@ -139,7 +139,7 @@ export default function InternshipCards({
               <span className="text-lg font-medium text-gray-700 mb-2">
                 Estado de la Oferta:
               </span>
-              <p>
+              <p className={`font-bold ${internship.status === "active" ? 'text-green-500':'text-yellow-500'}`}>
                 {internship.status === "active" ? "Activa ✅" : "Inactiva ⚠️"}
               </p>
             </div>

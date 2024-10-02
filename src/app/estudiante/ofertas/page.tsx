@@ -49,7 +49,7 @@ export default function Page() {
       const res = await axios.post("/api/estudiante/apply", { id });
       console.log(res.data);
       getApplications();
-      alert("Solicitud enviada");
+      //alert("Solicitud enviada");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);
@@ -64,7 +64,7 @@ export default function Page() {
   const getApplications = async () => {
     try {
       const res = await axios.get("/api/estudiante/apply");
-      console.log(res.data);
+      //console.log(res.data);
       setApplications(res.data.applications);
       setBtnactive(res.data.btn)
     } catch (error) {
