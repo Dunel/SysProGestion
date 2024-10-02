@@ -4,6 +4,7 @@ import GridContainer from "@/components/GridContainer";
 import GridMain from "@/components/GridMain";
 import Header from "@/components/Header";
 import { use, useState } from "react";
+import { Oval } from "react-loader-spinner";
 import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -91,8 +92,11 @@ export default function Page() {
     createOfert(formData as ApplyFormCreate);
   };
 
+  const [loading, setLoading] = useState(false);
+
   const createOfert = async (data: ApplyFormCreate) => {
     try {
+      setLoading(true);
       const res = await axios.post("/api/dependencia/apply/myapply", {
         ...data,
       });
@@ -104,6 +108,8 @@ export default function Page() {
       } else {
         console.error("error:", error);
       }
+    }finally {
+      setLoading(false)
     }
   };
 
@@ -343,12 +349,25 @@ export default function Page() {
                 <div className="mt-2 flex justify-center">
                   <button
                     type="submit"
-                    className="w-[100%] bg-black hover:bg-gray-800 text-white text-sm font-bold py-2 px-2 mt-2 rounded focus:shadow-outline"
+                    className="w-[100%] bg-black hover:bg-gray-800 text-white text-sm font-bold py-4 px-2 mt-2 rounded focus:shadow-outline"
                   >
                     REGISTRAR OFERTA
                   </button>
                 </div>
               </form>
+              {loading && ( // Muestra el loader si está cargando
+                <div className="flex justify-center items-center flex-col">
+                  <Oval
+                    color="#000000"
+                    secondaryColor="#FFFFFF" // Color de fondo blanco
+                    height={50}
+                    width={50}
+                    strokeWidth={5}
+                  />
+                  <br />
+                  <span>Espere por favor...</span>
+                </div>
+              )}
             </>
           </GridContainer>
         </GridMain>
