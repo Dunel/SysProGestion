@@ -101,18 +101,18 @@ export default function Page() {
                 </form>
 
                 {loading && ( // Muestra el loader si está cargando
-                <div className="flex justify-center items-center flex-col mt-4">
-                  <Oval
-                    color="#000000"
-                    secondaryColor="#FFFFFF" // Color de fondo blanco
-                    height={50}
-                    width={50}
-                    strokeWidth={5}
-                  />
-                  <br />
-                  <span>Espere por favor...</span>
-                </div>
-              )}
+                  <div className="flex justify-center items-center flex-col mt-4">
+                    <Oval
+                      color="#000000"
+                      secondaryColor="#FFFFFF" // Color de fondo blanco
+                      height={50}
+                      width={50}
+                      strokeWidth={5}
+                    />
+                    <br />
+                    <span>Espere por favor...</span>
+                  </div>
+                )}
               </>
             ) : (
               <>
