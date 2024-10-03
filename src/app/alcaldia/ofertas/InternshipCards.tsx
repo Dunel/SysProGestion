@@ -142,21 +142,20 @@ export default function InternshipCards({
           onClick={() => router.push("./ofertas/modificar/"+ internship.id)}
           className="w-[100%] p-1 m-1 bg-green-700 hover:bg-green-800 text-white font-bold rounded transition duration-300 md:w-[50%]"
         >
-          Modificar aplicación
+          Modificar Oferta
         </button>
         <button
           onClick={() => router.push("./ofertas/received/"+ internship.id)}
           className="w-[100%] p-1 m-1 bg-blue-700 hover:bg-blue-900 text-white font-bold rounded transition duration-300 md:w-[50%]"
         >
-          Solicitudes recibidas
-          o
-          Añadir Estudiantes
+          Solicitudes Recibidas y
+          <span className="block">Añadir o retirar Estudiante</span>
         </button>
         <button
           onClick={() => internship.handleDeleteApply(internship.id, (internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id)}
           className="w-[100%] p-1 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
         >
-          Eliminar aplicación
+          Eliminar Oferta
         </button>
         <button
           onClick={() => internship.handleOficio(internship.id)}

@@ -355,8 +355,9 @@ export default function Page() {
                   </button>
                 </div>
               </form>
+              
               {loading && ( // Muestra el loader si está cargando
-                <div className="flex justify-center items-center flex-col">
+                <div className="flex justify-center items-center flex-col mt-4">
                   <Oval
                     color="#000000"
                     secondaryColor="#FFFFFF" // Color de fondo blanco

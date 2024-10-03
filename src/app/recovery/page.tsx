@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import { cn } from "@/components/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Oval } from "react-loader-spinner";
 import {
   emailFormRecovery,
   emailRecoverySchema,
@@ -26,8 +27,11 @@ export default function Page() {
     mode: "onChange",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const sendMail = async (data: emailFormRecovery) => {
     try {
+      setLoading(true);
       const res = await axios.post("/api/recovery", {
         email: data.email,
       });
@@ -41,6 +45,8 @@ export default function Page() {
       }
       console.error("Error al validar el código:", error);
       alert((error as Error).message);
+    }finally {
+      setLoading(false)
     }
   };
 
@@ -93,6 +99,20 @@ export default function Page() {
                     </button>
                   </div>
                 </form>
+
+                {loading && ( // Muestra el loader si está cargando
+                <div className="flex justify-center items-center flex-col mt-4">
+                  <Oval
+                    color="#000000"
+                    secondaryColor="#FFFFFF" // Color de fondo blanco
+                    height={50}
+                    width={50}
+                    strokeWidth={5}
+                  />
+                  <br />
+                  <span>Espere por favor...</span>
+                </div>
+              )}
               </>
             ) : (
               <>

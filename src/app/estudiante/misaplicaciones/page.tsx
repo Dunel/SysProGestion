@@ -49,6 +49,7 @@ export default function Page() {
   const [codeOferta, setCodeOferta] = useState(0);
   const [applicationToDelete, setApplicationToDelete] = useState<{
     id: number;
+    code: string;
     applyId: number;
   } | null>(null);
 
@@ -78,11 +79,15 @@ export default function Page() {
     }
   };
 
-  const confirmDelete = (id: number, applyId: number) => {
-    setApplicationToDelete({ id, applyId });
+  const confirmDelete = (id: number, applyId: number, code: string) => {
+    setApplicationToDelete({ id, applyId, code });
     setCodeOferta(id);
     setModalOpen(true);
   };
+
+
+  
+
 
   const getApplications = async () => {
     try {
@@ -155,7 +160,7 @@ export default function Page() {
       ) : null}
 
       <Modal
-        info={`¿Estás seguro de que deseas retirar su aplicación a la oferta ID: ${codeOferta}`}
+        info={`¿Estás seguro de que deseas ELIMINAR la oferta ID: ${applicationToDelete?.code}`}
         isLoading={spanRetirar}
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}

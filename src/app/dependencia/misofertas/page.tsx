@@ -38,6 +38,7 @@ export default function Page() {
   const [codeOferta, setCodeOferta] = useState(0);
   const [applicationToDelete, setApplicationToDelete] = useState<{
     id: number;
+    code: string;
   } | null>(null);
 
   const handleDeleteApply = async () => {
@@ -64,8 +65,8 @@ export default function Page() {
     }
   };
 
-  const confirmDelete = (id: number) => {
-    setApplicationToDelete({ id });
+  const confirmDelete = (id: number, code: string) => {
+    setApplicationToDelete({ id, code });
     setCodeOferta(id);
     setModalOpen(true);
   };
@@ -120,8 +121,7 @@ export default function Page() {
           ) : null}
 
           <Modal
-            info={`¿Estás seguro de que deseas Eliminar/Retirar oferta ID: ${codeOferta}`}
-            //! info={`¿Estás seguro de que deseas Eliminar/Retirar oferta ID: ${ Codigo de Oferta de Vacante: {(internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id}}`}
+            info={`¿Estás seguro de que deseas ELIMINAR la oferta ID: ${applicationToDelete?.code}`}
             isLoading={spanRetirar}
             isOpen={isModalOpen}
             onClose={() => setModalOpen(false)}

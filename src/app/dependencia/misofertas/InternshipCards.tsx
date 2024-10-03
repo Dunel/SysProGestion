@@ -194,21 +194,21 @@ export default function InternshipCards({
       <div className="flex flex-col items-center justify-center lg:flex-row">
         <button
           onClick={() => router.push("./misofertas/modificar/" + internship.id)}
-          className="w-[100%] p-1 m-1 bg-green-700 hover:bg-green-800 text-white font-bold rounded transition duration-300 md:w-[80%]"
+          className="w-[100%] p-4 m-1 bg-green-700 hover:bg-green-800 text-white font-bold rounded transition duration-300 md:w-[80%]"
         >
-          Modificar Oferta
+          MODIFICAR OFERTA
         </button>
         <button
           onClick={() => router.push("./misofertas/received/" + internship.id)}
-          className="w-[100%] p-1 m-1 bg-blue-700 hover:bg-blue-900 text-white font-bold rounded transition duration-300 md:w-[80%]"
+          className="w-[100%] p-4 m-1 bg-blue-700 hover:bg-blue-900 text-white font-bold rounded transition duration-300 md:w-[80%]"
         >
-          Ver Solicitudes recibidas
+          VER SOLICITUDES RECIBIDAS
         </button>
         <button
-          onClick={() => internship.handleDeleteApply(internship.id)}
-          className="w-[100%] p-1 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[80%]"
+          onClick={() => internship.handleDeleteApply(internship.id, (internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id)}
+          className="w-[100%] p-4 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[80%]"
         >
-          Eliminar Oferta
+          ELIMINAR OFERTA
         </button>
       </div>
     </div>
