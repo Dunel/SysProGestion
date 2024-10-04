@@ -1,5 +1,5 @@
 // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// import { Input } from "../ui/input";
+// import { Input } from "@/components/ui/input";
 
 // type CardSearch = {
 //   searchTerm: string;

@@ -460,10 +460,11 @@ export default function InternShipCardReceived({
                 : "NO HAS RECIBIDO SOLICITUDES"}
             </h3>
 
+                {/* //! ESTO ES LAS CARD POR ESTUDIANTEeeeeeeeeeeeeeeee */}
             {internship.apply.map((apply, index) => (
               <div
                 key={index}
-                className="bg-white flex flex-col w-full my-2 p-2 border-2 border-gray-300 rounded-lg 
+                className="bg-white shadow-[0px_0px_10px_rgba(0,0,0,0.5)] flex flex-col w-full my-2 p-2 border-2 border-gray-300 rounded-lg 
                 h-autotext-lg sm:sticky sm:top-[-45vh] text-sm md:text-base lg:text-lg"
               >
                 <h2
@@ -614,6 +615,11 @@ export default function InternShipCardReceived({
                 </div>
               </div>
             ))}
+
+
+
+
+
           </div>
         </>
       ) : (

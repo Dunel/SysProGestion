@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import Loader from "../Loader";
+import Loader from "@/components/Loader";
 import { Link } from "@mui/material";
 
 interface AlcaldiaProfileProps {
