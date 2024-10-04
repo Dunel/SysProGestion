@@ -39,6 +39,7 @@ interface EstudianteFormProfileProps {
   } | null;
   regForm: boolean;
   handleReset: () => void;
+  searchUser: Function;
 }
 
 interface Estados {
@@ -72,6 +73,7 @@ interface Career {
 
 export default function AlcaldiaFormEditStudent({
   data,
+  searchUser,
   regForm,
   handleReset
 }: EstudianteFormProfileProps) {
@@ -310,10 +312,12 @@ export default function AlcaldiaFormEditStudent({
   return (
     <>
       <div className="flex flex-col my-2 md:space-x-4">
-        <h2 className="text-2xl font-bold text-gray-800 text-center md:text-3xl">
-          {regForm ? "Registrar" : "Actualizar"} Estudiante
+        <h2 className="text-3xl text-center font-extrabold my-2">
+          {regForm ? " REGISTRAR NUEVO ESTUDIANTE" : "ACTUALIZAR DATOS"}
         </h2>
       </div>
+      
+      
       <div className="flex flex-col m-2 my-2 p-2 rounded-lg shadow-lg">
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -799,7 +803,7 @@ export default function AlcaldiaFormEditStudent({
           <div className="flex justify-center mb-8">
             <button
               type="submit"
-              className="w-[100%] bg-black hover:bg-gray-800 text-white font-bold py-3 px-3 mt-4 rounded focus:shadow-outline md:w-[80%]"
+              className="w-[80%] bg-black hover:bg-gray-800 text-white font-bold py-3 px-3 mt-4 rounded focus:shadow-outline md:w-[80%]"
             >
               GUARDAR DATOS
             </button>

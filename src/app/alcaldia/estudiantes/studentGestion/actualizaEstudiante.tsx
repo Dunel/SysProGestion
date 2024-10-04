@@ -1,6 +1,80 @@
+"use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Oval } from "react-loader-spinner";
+
+import axios from "axios";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/components/lib/utils";
+import {
+  profileSchemaEdit,
+  ProfileFormDataEdit,
+} from "@/validations/profile.schema";
+import { useForm } from "react-hook-form";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+
+
+interface EstudianteFormProfileProps {
+  data: {
+    cedula: number;
+    address: string;
+    institution: {
+      id: number;
+    };
+    career: {
+      id: number;
+    };
+    skills: string[];
+    interests: string;
+    description: string;
+    names: string;
+    lastnames: string;
+    dateStart: Date;
+    dateEnd: Date;
+    estadoId: number;
+    municipioId: number;
+    parroquiaId: number;
+    birthdate: Date;
+    phone: string;
+    mail: string;
+  } | null;
+  regForm: boolean;
+  handleReset: () => void;
+}
+
+interface Estados {
+  id: number;
+  estado: string;
+}
+
+interface Municipios {
+  id: number;
+  estadoId: number;
+  municipio: string;
+}
+
+interface Parroquias {
+  id: number;
+  municipioId: number;
+  parroquia: string;
+}
+
+interface Institutions {
+  id: number;
+  institutionsCode: string;
+  name: string;
+}
+
+interface Career {
+  id: number;
+  careerCode: string;
+  name: string;
+}
+
+// OTRAS
 
 type CardSearch = {
   loading: boolean;
@@ -44,7 +118,7 @@ type Estudiante = {
 };
 
 
-export default function SearchStudents({
+export default function ActualizaEstudiante({
   loading,
   searchTerm,
   setSearchTerm,
@@ -54,8 +128,6 @@ export default function SearchStudents({
   user,
   handleDelete,
 }: CardSearch) {
-
-
 
   const skillFormated: { [key: string]: string } = {
     resoluciondeproblemas: "Resolucion de problemas",

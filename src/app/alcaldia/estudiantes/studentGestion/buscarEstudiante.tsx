@@ -1,9 +1,12 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Oval } from "react-loader-spinner";
 
 type CardSearch = {
   loading: boolean;
+  setIsOpen:Function;
+  isOpen: boolean;
+  titleAction:string;
   searchTerm: string;
   setSearchTerm: Function;
   searchUser: Function;
@@ -46,6 +49,9 @@ type Estudiante = {
 
 export default function SearchStudents({
   loading,
+  setIsOpen,
+  titleAction,
+  isOpen,
   searchTerm,
   setSearchTerm,
   searchUser,
@@ -102,11 +108,20 @@ export default function SearchStudents({
     lenguajesdeprogramacion: "Lenguajes de programación",
   };
 
- 
+  const handleReset = () => {
+    setUser(null);
+    setIsRegistering(false);
+  } 
+
+
+  const handleToggle = () => {
+    setIsOpen(!isOpen); // Cambia el estado a su valor opuesto
+  };
+
   return (
     <Card>
       <CardHeader>
-        <h2 className="text-3xl text-center font-extrabold my-2">BUSCAR ESTUDIANTE</h2>
+        <h2 className="text-3xl text-center font-extrabold my-2">{titleAction}</h2>
       </CardHeader>
       
       <CardContent>
@@ -149,18 +164,18 @@ export default function SearchStudents({
           }
         </div>
 
+        {/* CARD del Estudiante */}
           {
             user && (
               <div
                 className="bg-white p-6 shadow-[0px_0px_10px_rgba(0,0,0,0.5)] flex flex-col w-full my-2 p-2 border-2 border-gray-300 rounded-lg 
                 h-autotext-lg sm:sticky sm:top-[-45vh] text-sm md:text-base lg:text-lg"
-              >
+                >
                 <h2
                   className={`text-xl font-bold text-gray-800 text-center sm:text-2xl md:text-3xl lg:text-4xl`}
                 >
                   {user.names} {user.lastnames}
                 </h2>
-
                 {/* //!foto + info personal */}
                 <div className="flex flex-col items-center md:flex-row md:space-x-4">
                   {/* Foto del Estudiante */}
@@ -208,7 +223,7 @@ export default function SearchStudents({
                   </div>
 
                 </div>
-
+                {/* //!info academica */}
                 <div>
                   <h2 className="font-bold text-gray-700 mb-1 text-center text-lg md:xl lg:text-2xl">
                     INFORMACION ACADEMICA 📚
@@ -273,13 +288,21 @@ export default function SearchStudents({
                   </div>
                   
                 </div>
-
-
+                
+                <button
+                    onClick={handleToggle}
+                    className="inline-flex mx-auto justify-center text-center rounded-md px-6 py-4 text-xl font-medium text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                  {isOpen ? 'DESCARTAR ACTIALIZACION' : 'ACTUALIZAR DATOS'} 
+                </button>
+                  
               </div>
+
             )
           }
 
       </CardContent>
+
 
     </Card>
   );

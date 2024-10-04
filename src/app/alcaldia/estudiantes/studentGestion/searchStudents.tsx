@@ -32,6 +32,8 @@
 //         <CardTitle>Buscar Estudiante</CardTitle>
 //       </CardHeader>
 //       <CardContent>
+        
+//         {/* BUSCAR */}
 //         <div className="flex space-x-2 py-4">
 //           <Input
 //             placeholder="Buscar estudiante por su número de cédula de identidad"
@@ -50,6 +52,9 @@
 //           </button>
 //         </div>
 
+
+
+//         {/* REGISTRAR */}
 //         <button
 //           onClick={() => {
 //             setIsRegistering(true);
@@ -60,6 +65,8 @@
 //           Registrar Estudiante
 //         </button>
 
+
+//           {/* ELIMINA */}
 //         <ul className="space-y-2">
 //           {user && (
 //             <li className="flex justify-between items-center p-2 bg-gray-100 rounded">

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Header from "@/components/Header";
 import axios from "axios";
-import SearchStudents from "@/app/alcaldia/estudiantes/studentGestion/buscarEstudiante";
+import BuscarEstudiante from "@/app/alcaldia/estudiantes/studentGestion/buscarEstudiante";
 import ActualizaEstudiante from "@/app/alcaldia/estudiantes/studentGestion/actualizaEstudiante";
 import AlcaldiaFormEditStudent from "@/app/alcaldia/estudiantes/studentGestion/AlcaldiaFormEditStudent";
 import { useRouter } from "next/navigation";
@@ -43,6 +43,8 @@ export default function EstudentManagement() {
   const [isRegistering, setIsRegistering] = useState(false);
   const router = useRouter();
 
+  const [isOpen, setIsOpen] = useState(false); //!PARA EL FORM
+
   const [loading, setLoading] = useState(false);
   const handleEliminarUser = async () => {
     try {
@@ -81,7 +83,6 @@ export default function EstudentManagement() {
       }
       const res = await axios.get("/api/alcaldia/users?ci=" + searchTerm);
       setUser(res.data);
-      //console.log(res.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);
@@ -98,33 +99,6 @@ export default function EstudentManagement() {
   const [componente, setComponente] = useState('');
 
   const arrayActiones = ['registrar', 'buscar', 'actualizar', 'eliminar']
-
-  // const renderComponente = (tipo: string) => {
-  //   switch (tipo) {
-  //     case 'registrar':
-  //       setComponente(<Registrar />);
-  //       break;
-  //     case 'buscar':
-  //       setComponente(<SearchStudents
-  //         searchTerm={searchTerm}
-  //         setSearchTerm={setSearchTerm}
-  //         searchUser={searchUser}
-  //         setIsRegistering={setIsRegistering}
-  //         setUser={setUser}
-  //         user={user}
-  //         handleDelete={handleEliminarUser}
-  //       />);
-  //       break;
-  //     // case 'actualizar':
-  //     //   setComponente(<Actualizar />);
-  //     //   break;
-  //     // case 'eliminar':
-  //     //   setComponente(<Eliminar />);
-  //     //   break;
-  //     default:
-  //       setComponente(null);
-  //   }
-  // }; 
   
   return (
     <>
@@ -137,6 +111,7 @@ export default function EstudentManagement() {
       <div>
           <h2 className="text-3xl text-center font-extrabold my-8">ELIGE LA ACCION</h2>
           <div className="flex flex-col w-[80%] justify-center my-4 mx-auto gap-5 md:flex-row md:w-[100%]">
+            {/* Botones de accion */}
             {
               arrayActiones.map( action => (
                 <button
@@ -144,39 +119,62 @@ export default function EstudentManagement() {
                   className={`bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-md focus:outline-none ${
                     componente.toLowerCase() === action ? 'border-gray-900' : ''
                   }`}
-                  onClick={() => setComponente(action)}
+                  onClick={() => {
+                    handleReset()
+                    setIsOpen(false)
+                    setComponente(action)
+                    
+                  }}
                 >
                   {`${action.toUpperCase()} ESTUDIANTE`}
                 </button>
               ))
             }
-            
           </div>
 
     </div>
 
-    { componente === 'buscar' &&
-        <>
-          <SearchStudents
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-              searchUser={searchUser}
-              setIsRegistering={setIsRegistering}
-              setUser={setUser}
-              user={user}
-              handleDelete={handleEliminarUser}
-              loading={loading}
-          />
-        </>
-    }
+      { componente === 'buscar' &&
+          <>
+            <BuscarEstudiante
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                searchUser={searchUser}
+                setIsRegistering={setIsRegistering}
+                setUser={setUser}
+                user={user}
+                handleDelete={handleEliminarUser}
+                loading={loading}
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                titleAction={'BUSCAR ESTUDIANTE'}
+            />
+
+              {/* FORMULARIO DE ACTUALIZAR */}
+              { isOpen && (
+                <div className="w-[100%] px-4 mt-2 bg-white mx-4 rounded-lg border gap-2 lg:w-[90%]">
+                  <AlcaldiaFormEditStudent
+                    regForm={false}
+                    data={user}
+                    handleReset={handleReset}
+                  searchUser={searchUser}
+                  />
+                </div>
+               )
+              }
+
+
+          </>
+      }
 
               {componente === 'registrar' && 
                  (
-                  <div className="bg-white mx-4 rounded-lg border gap-2">
+                  <div className="w-[100%] px-4 mt-2 bg-white mx-4 rounded-lg border gap-2 lg:w-[90%]">
                     <AlcaldiaFormEditStudent
                       regForm={true}
                       data={null}
                       handleReset={handleReset}
+                      searchUser={searchUser}
                     />
                   </div>
                   ) 
@@ -184,24 +182,42 @@ export default function EstudentManagement() {
 
 
               {componente === 'actualizar' && 
-                      // <div className="bg-white mx-4 rounded-lg border gap-2">
-                      //   <AlcaldiaFormEditStudent
-                      //     regForm={false}
-                      //     data={user}
-                      //     handleReset={handleReset}
-                      //   />
-                      // </div>
-                  <ActualizaEstudiante
-                  searchTerm={searchTerm}
-                  setSearchTerm={setSearchTerm}
-                  searchUser={searchUser}
-                  setIsRegistering={setIsRegistering}
-                  setUser={setUser}
-                  user={user}
-                  handleDelete={handleEliminarUser}
-                  loading={loading}
+                  <>
+                  <BuscarEstudiante
+                      searchTerm={searchTerm}
+                      setSearchTerm={setSearchTerm}
+                      searchUser={searchUser}
+                      setIsRegistering={setIsRegistering}
+                      setUser={setUser}
+                      user={user}
+                      handleDelete={handleEliminarUser}
+                      loading={loading}
+                      isOpen={isOpen}
+                      setIsOpen={setIsOpen}
+                      titleAction={'ACTUALIZAR DATOS DEL ESTUDIANTE'}
+
+
+                      
                   />
-} 
+                  
+      
+                    {/* FORMULARIO DE ACTUALIZAR */}
+                    {  (user || isOpen) && (
+                      <div className={`w-[100%] px-4 mx-auto mt-2 bg-white mx-4 rounded-lg border gap-2 ${!isOpen ? 'hidden' : ''} lg:w-[90%]`}>
+                        <AlcaldiaFormEditStudent
+                          regForm={false}
+                          data={user}
+                          handleReset={handleReset}
+                          searchUser={searchUser}
+                        />
+                      </div>
+                     )
+                    }
+      
+      
+                </>
+                  
+              } 
      
     </>
   );
