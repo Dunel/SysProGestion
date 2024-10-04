@@ -30,7 +30,7 @@ type Estudiante = {
   municipioId: number;
   municipio: string;
   parroquiaId: number;
-  parroquia:string;
+  parroquia: string;
   phone: string;
   mail: string;
   birthdate: Date;
@@ -65,7 +65,7 @@ export default function EstudentManagement() {
       } else {
         console.error("error:", error);
       }
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -73,14 +73,11 @@ export default function EstudentManagement() {
   const handleReset = () => {
     setUser(null);
     setIsRegistering(false);
-  }
+  };
 
   const searchUser = async () => {
     try {
       setLoading(true);
-      if (searchTerm === user?.cedula.toString()) {
-        return;
-      }
       const res = await axios.get("/api/alcaldia/users?ci=" + searchTerm);
       setUser(res.data);
     } catch (error) {
@@ -90,16 +87,16 @@ export default function EstudentManagement() {
       } else {
         console.error("error:", error);
       }
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
 
   //const [componente, setComponente] = useState<JSX.Element | null>(null);
-  const [componente, setComponente] = useState('');
+  const [componente, setComponente] = useState("");
 
-  const arrayActiones = ['registrar', 'buscar', 'actualizar', 'eliminar']
-  
+  const arrayActiones = ["registrar", "buscar", "actualizar", "eliminar"];
+
   return (
     <>
       <Header
@@ -109,116 +106,103 @@ export default function EstudentManagement() {
           cédula de identidad.`}
       />
       <div>
-          <h2 className="text-3xl text-center font-extrabold my-8">ELIGE LA ACCION</h2>
-          <div className="flex flex-col w-[80%] justify-center my-4 mx-auto gap-5 md:flex-row md:w-[100%]">
-            {/* Botones de accion */}
-            {
-              arrayActiones.map( action => (
-                <button
-                  key={action}
-                  className={`bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-md focus:outline-none ${
-                    componente.toLowerCase() === action ? 'border-gray-900' : ''
-                  }`}
-                  onClick={() => {
-                    handleReset()
-                    setIsOpen(false)
-                    setComponente(action)
-                    
-                  }}
-                >
-                  {`${action.toUpperCase()} ESTUDIANTE`}
-                </button>
-              ))
-            }
-          </div>
+        <h2 className="text-3xl text-center font-extrabold my-8">
+          ELIGE LA ACCION
+        </h2>
+        <div className="flex flex-col w-[80%] justify-center my-4 mx-auto gap-5 md:flex-row md:w-[100%]">
+          {/* Botones de accion */}
+          {arrayActiones.map((action) => (
+            <button
+              key={action}
+              className={`bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-md focus:outline-none ${
+                componente.toLowerCase() === action ? "border-gray-900" : ""
+              }`}
+              onClick={() => {
+                handleReset();
+                setIsOpen(false);
+                setComponente(action);
+              }}
+            >
+              {`${action.toUpperCase()} ESTUDIANTE`}
+            </button>
+          ))}
+        </div>
+      </div>
 
-    </div>
+      {componente === "buscar" && (
+        <>
+          <BuscarEstudiante
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            searchUser={searchUser}
+            setIsRegistering={setIsRegistering}
+            setUser={setUser}
+            user={user}
+            handleDelete={handleEliminarUser}
+            loading={loading}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            titleAction={"BUSCAR ESTUDIANTE"}
+          />
 
-      { componente === 'buscar' &&
-          <>
-            <BuscarEstudiante
-                searchTerm={searchTerm}
-                setSearchTerm={setSearchTerm}
+          {/* FORMULARIO DE ACTUALIZAR */}
+          {isOpen && (
+            <div className="w-[100%] px-4 mt-2 bg-white mx-4 rounded-lg border gap-2 lg:w-[90%]">
+              <AlcaldiaFormEditStudent
+                regForm={false}
+                data={user}
+                handleReset={handleReset}
                 searchUser={searchUser}
-                setIsRegistering={setIsRegistering}
-                setUser={setUser}
-                user={user}
-                handleDelete={handleEliminarUser}
-                loading={loading}
-                isOpen={isOpen}
-                setIsOpen={setIsOpen}
-                titleAction={'BUSCAR ESTUDIANTE'}
-            />
+              />
+            </div>
+          )}
+        </>
+      )}
 
-              {/* FORMULARIO DE ACTUALIZAR */}
-              { isOpen && (
-                <div className="w-[100%] px-4 mt-2 bg-white mx-4 rounded-lg border gap-2 lg:w-[90%]">
-                  <AlcaldiaFormEditStudent
-                    regForm={false}
-                    data={user}
-                    handleReset={handleReset}
-                  searchUser={searchUser}
-                  />
-                </div>
-               )
-              }
+      {componente === "registrar" && (
+        <div className="w-[100%] px-4 mt-2 bg-white mx-4 rounded-lg border gap-2 lg:w-[90%]">
+          <AlcaldiaFormEditStudent
+            regForm={true}
+            data={null}
+            handleReset={handleReset}
+            searchUser={searchUser}
+          />
+        </div>
+      )}
 
+      {componente === "actualizar" && (
+        <>
+          <BuscarEstudiante
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            searchUser={searchUser}
+            setIsRegistering={setIsRegistering}
+            setUser={setUser}
+            user={user}
+            handleDelete={handleEliminarUser}
+            loading={loading}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            titleAction={"ACTUALIZAR DATOS DEL ESTUDIANTE"}
+          />
 
-          </>
-      }
-
-              {componente === 'registrar' && 
-                 (
-                  <div className="w-[100%] px-4 mt-2 bg-white mx-4 rounded-lg border gap-2 lg:w-[90%]">
-                    <AlcaldiaFormEditStudent
-                      regForm={true}
-                      data={null}
-                      handleReset={handleReset}
-                      searchUser={searchUser}
-                    />
-                  </div>
-                  ) 
-              }
-
-
-              {componente === 'actualizar' && 
-                  <>
-                  <BuscarEstudiante
-                      searchTerm={searchTerm}
-                      setSearchTerm={setSearchTerm}
-                      searchUser={searchUser}
-                      setIsRegistering={setIsRegistering}
-                      setUser={setUser}
-                      user={user}
-                      handleDelete={handleEliminarUser}
-                      loading={loading}
-                      isOpen={isOpen}
-                      setIsOpen={setIsOpen}
-                      titleAction={'ACTUALIZAR DATOS DEL ESTUDIANTE'}
-
-
-                      
-                  />
-                  
-      
-                    {/* FORMULARIO DE ACTUALIZAR */}
-                    {  (user || isOpen) && (
-                      <div className={`w-[100%] px-4 mx-auto mt-2 bg-white mx-4 rounded-lg border gap-2 ${!isOpen ? 'hidden' : ''} lg:w-[90%]`}>
-                        <AlcaldiaFormEditStudent
-                          regForm={false}
-                          data={user}
-                          handleReset={handleReset}
-                          searchUser={searchUser}
-                        />
-                      </div>
-                     )
-                    }
-      
-      
-                </>
-                  
-              } 
-     
+          {/* FORMULARIO DE ACTUALIZAR */}
+          {(user || isOpen) && (
+            <div
+              className={`w-[100%] px-4 mx-auto mt-2 bg-white rounded-lg border gap-2 ${
+                !isOpen ? "hidden" : ""
+              } lg:w-[90%]`}
+            >
+              <AlcaldiaFormEditStudent
+                regForm={false}
+                data={user}
+                handleReset={handleReset}
+                searchUser={searchUser}
+              />
+            </div>
+          )}
+        </>
+      )}
     </>
   );
 }
