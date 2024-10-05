@@ -202,7 +202,7 @@ export default function InternshipCards({
           onClick={() => router.push("./misofertas/received/" + internship.id)}
           className="w-[100%] p-4 m-1 bg-blue-700 hover:bg-blue-900 text-white font-bold rounded transition duration-300 md:w-[80%]"
         >
-          VER SOLICITUDES RECIBIDAS
+          GESTIONAR SOLICITUDES RECIBIDAS
         </button>
         <button
           onClick={() => internship.handleDeleteApply(internship.id, (internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id)}

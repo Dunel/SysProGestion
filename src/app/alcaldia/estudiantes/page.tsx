@@ -219,16 +219,16 @@ export default function EstudentManagement() {
         </> 
       )}
 
-      <Modal
-            info={`¿Estás seguro de que deseas ELIMINAR el estudiante con cedula de identidad: ${applicationToDelete?.cedula}`}
+        <Modal
+          info={`¿Estás seguro de que deseas ELIMINAR el estudiante con cedula de identidad: ${applicationToDelete?.cedula}`}
             isLoading={spanRetirar}
             isOpen={isModalOpen}
             onClose={() => setModalOpen(false)}
-            onConfirm={handleEliminarUser}
+          onConfirm={handleEliminarUser}
           />
 
           {
-            isNotFoundError &&
+          isNotFoundError &&
             <div>
               <div className="flex justify-center items-center">
                 <div className="text-center">
