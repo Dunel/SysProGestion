@@ -917,21 +917,7 @@ export async function getMyAppAlcaldia(req: NextRequest) {
         _count:{
           select:{
             applicationApproved:true,
-            apply: {
-              where: {
-                OR:[
-                  {
-                    status: "pendiente"
-                  },
-                  {
-                    status: "aprobado"                    
-                  },
-                  {
-                    status: "aceptado"
-                  }
-                ]
-              },
-            }
+            apply: true,
           },
         }
       }
