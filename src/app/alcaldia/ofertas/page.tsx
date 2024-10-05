@@ -127,7 +127,7 @@ export default function Page() {
 
   return (
     <>
-      <Header title={"MIS OFERTAS"} subtitle={""} />
+      <Header title={"MIS OFERTAS"} subtitle={"Aquí puedes visualizar todas las ofertas a vacantes de Pasantías y Servicio Comunitario que han sido creadas."} />
       <ContainerWeb>
         <GridMain>
           {squeleton ? (

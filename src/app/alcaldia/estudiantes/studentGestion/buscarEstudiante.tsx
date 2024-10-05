@@ -13,7 +13,9 @@ type CardSearch = {
   setIsRegistering: Function;
   setUser: Function;
   user: Estudiante | null;
-  handleDelete: () => void;
+  confirmDelete: Function;
+  setIsNotFoundError: Function;
+  isDelete: boolean;
 };
 
 type Estudiante = {
@@ -50,6 +52,7 @@ type Estudiante = {
 export default function SearchStudents({
   loading,
   setIsOpen,
+  isDelete,
   titleAction,
   isOpen,
   searchTerm,
@@ -58,7 +61,8 @@ export default function SearchStudents({
   setIsRegistering,
   setUser,
   user,
-  handleDelete,
+  confirmDelete,
+  setIsNotFoundError
 }: CardSearch) {
 
   function calcularEdad(fechaNacimiento: string | Date): string {
@@ -121,7 +125,7 @@ export default function SearchStudents({
   return (
     <Card>
       <CardHeader>
-        <h2 className="text-3xl text-center font-extrabold my-2">{titleAction}</h2>
+        <h2 className="text-xl text-center font-extrabold my-2 md:text-3xl">{titleAction}</h2>
       </CardHeader>
       
       <CardContent>
@@ -140,6 +144,9 @@ export default function SearchStudents({
               onClick={() => {
                 setIsRegistering(false)
                 searchUser(searchTerm)
+                handleReset()
+                setIsNotFoundError(false)
+
               }}
               className="w-[20%] inline-flex items-center justify-center rounded-md px-6 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -289,13 +296,33 @@ export default function SearchStudents({
                   
                 </div>
                 
-                <button
+                
+                
+              { isDelete 
+                  ?
+                  <button
+                      onClick={() => {
+                      confirmDelete(user.cedula) 
+                      }}
+                      className="inline-flex mx-auto justify-center text-center rounded-md px-6 py-4 text-xl font-medium text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                    {
+                    
+                      "ELIMINAR ESTUDIANTE DEL SISTEMA"
+                        
+                    } 
+                  </button>
+                  :
+                  <button
                     onClick={handleToggle}
                     className="inline-flex mx-auto justify-center text-center rounded-md px-6 py-4 text-xl font-medium text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                   {isOpen ? 'DESCARTAR ACTIALIZACION' : 'ACTUALIZAR DATOS'} 
                 </button>
+              }
                   
+
+
               </div>
 
             )
