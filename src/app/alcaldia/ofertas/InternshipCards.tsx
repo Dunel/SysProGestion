@@ -77,6 +77,7 @@ export default function InternshipCards({
               internship.dependencia.name.substring(0, 3).toUpperCase() +
               "-000" +
               internship.id}
+              
           </i>
         </span>
 
