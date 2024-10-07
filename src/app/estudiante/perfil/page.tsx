@@ -1,7 +1,7 @@
 "use client";
 import Header from "@/components/Header";
-import EstudianteProfileListo from "@/components/perfiles/EstudianteProfileListo";
-import EstudianteFormActualizarProfile from "@/components/perfiles/EstudianteFormActualizarProfile";
+import EstudianteProfileListo from "@/app/estudiante/perfil/EstudianteProfileListo";
+import EstudianteFormActualizarProfile from "@/app/estudiante/perfil/EstudianteFormActualizarProfile";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";

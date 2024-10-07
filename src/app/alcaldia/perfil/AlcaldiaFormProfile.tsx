@@ -10,8 +10,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  ProfileDepenFormData,
-  profileDepenSchema,
+  ProfileAlcaldiaFormData,
+  profileAlcaldiaSchema,
 } from "@/validations/profile.schema";
 
 interface ProfileProps {
@@ -56,8 +56,8 @@ export default function AlcaldiaProfileForm({
     formState: { errors },
     setValue,
     watch,
-  } = useForm<ProfileDepenFormData>({
-    resolver: zodResolver(profileDepenSchema),
+  } = useForm<ProfileAlcaldiaFormData>({
+    resolver: zodResolver(profileAlcaldiaSchema),
     mode: "onChange",
   });
 
@@ -65,10 +65,10 @@ export default function AlcaldiaProfileForm({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setValue(name as keyof ProfileDepenFormData, value);
+    setValue(name as keyof ProfileAlcaldiaFormData, value);
   };
 
-  const profileUpdate = async (data: ProfileDepenFormData) => {
+  const profileUpdate = async (data: ProfileAlcaldiaFormData) => {
     try {
       setLoading(true);
       const res = await axios.post("/api/alcaldia/perfil", data);
@@ -98,16 +98,21 @@ export default function AlcaldiaProfileForm({
     }
   };
 
-  const onSubmit = (data: ProfileDepenFormData) => {
+  console.log('antes onsubmit');
+  const onSubmit = (data: ProfileAlcaldiaFormData) => {
+    console.log('dentro onsubmit', data);
+
+    
     const formData = {
       ...data,
     };
-    const validate = profileDepenSchema.safeParse(formData);
+    const validate = profileAlcaldiaSchema.safeParse(formData);
     if (!validate.success) {
       console.error(validate.error);
       return;
     }
-    profileUpdate(formData as ProfileDepenFormData);
+    console.log('hola2')
+    profileUpdate(formData as ProfileAlcaldiaFormData);
   };
 
   const getEstados = async () => {
@@ -410,23 +415,7 @@ export default function AlcaldiaProfileForm({
             )}
           </LabelInputContainer>
 
-          {/*<LabelInputContainer className="mb-4">
-            <Label htmlFor="rif">Numero de RIF de la Alcaldia</Label>
-            <Input
-              {...register("rif")}
-              defaultValue={session?.user.dataProfile?.rif || ""}
-              onChange={handleInputChange}
-              id="rif"
-              name="rif"
-              placeholder="808021441"
-              type="text"
-              className={cn(errors.rif && "bg-red-100 focus:bg-red-100")}
-            />
-            {errors.rif && (
-              <p className="text-red-500 text-sm">{errors.rif.message}</p>
-            )}
-          </LabelInputContainer>*/}
-
+          
           <LabelInputContainer className="mb-4">
             <Label htmlFor="social">
               Link de la Red Social de la Alcaldia

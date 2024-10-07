@@ -85,6 +85,8 @@ const colorStatys = (status: string) => {
 
   return colorText;
 };
+
+
 export default function InternshipCards({
   internships,
 }: {
@@ -130,8 +132,8 @@ export default function InternshipCards({
         }
 
       {internship.apply[0].status === "aceptado" && (
-            <div className="text-red-500 font-bold bg-red-100 w-[100%] text-justify md:text-center">
-             <p className="p-2"> 🎉¡Felicidades! Has sido Aceptado en esta oferta. Ponte en contacto con la Institución para comenzar tu proceso.🎉</p>
+            <div className="text-red-500 bg-red-100 w-[100%] text-justify">
+             <p className="p-2"> 🎉¡Felicidades! Has sido Aceptado en esta oferta. Ponte en contacto con la <b>Dirección de Educación y Asuntos Universitarios de la Alcaldía</b>, para retirar el <b>Oficio de tu Postulación</b> dirigido a la Dependencia, y así comenzar tu proceso.🎉</p>
             </div>
           )}
 
@@ -168,7 +170,7 @@ export default function InternshipCards({
                         {internship.location}
                   </p>
                   <p className="text-gray-600 text-justify md:text-1x1">
-                    <strong>📍tutor o responsable:</strong>{" "}
+                    <strong>🧑🏽‍🏫tutor o responsable:</strong>{" "}
                         <br/>
                         {internship.tutor ? internship.tutor : "No especificado"}
                   </p>
@@ -260,29 +262,26 @@ export default function InternshipCards({
                   internship.apply[0].id
                 )
               }
-              className={`p-1 m-1 bg-green-500 hover:bg-green-600 text-white font-bold rounded transition duration-300 ${internship.apply[0].status === "aprobado"? 'w-[50%]' : 'w-[100%]'}`}
+              className={`p-2 m-1 bg-green-500 hover:bg-green-600 text-white font-bold rounded transition duration-300 ${internship.apply[0].status === "aprobado"? 'w-[50%]' : 'w-[100%]'}`}
             >
-              Aceptar Oferta
+              ACEPTAR OFERTA
             </button>
           )}
           {internship.apply[0].status === "aprobado" ||
           internship.apply[0].status === "pendiente" ? (
             <button
-              onClick={() =>
-                internship.handleDeleteApply(
-                  internship.id,
-                  internship.apply[0].id
-                )
-              }
-              className={`p-1 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 ${internship.apply[0].status === "aprobado"? 'w-[50%]' : 'w-[100%]'}`}
+            onClick={() => internship.handleDeleteApply(internship.id,  internship.apply[0].id, 
+              `${internship.type.substring(0,3).toUpperCase()}-${new Date(internship.date).getFullYear()}-${ internship.dependencia.name.substring(0, 3).toUpperCase()}-000-${internship.id}`
+            )}
+              className={`p-2 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 ${internship.apply[0].status === "aprobado"? 'w-[50%]' : 'w-[100%]'}`}
             >
-              Retirar aplicación
+              RETIRAR APLICACIÓN
             </button>
           ) : null}
         </div>
         {internship.apply[0].status === "aprobado" && (
             <div className="text-red-500 font-bold bg-red-100 w-[100%] text-justify md:text-center">
-             <p className="p-2">⚠️Si aceptas esta oferta, retirarás automáticamente todas tus aplicaciones⚠️</p>
+             <p className="p-2">⚠️Si aceptas esta oferta, <b>Retirarás automáticamente todas tus aplicaciones a ofertas anteriores</b>. Solo si esta oferta es eliminada por la Dependencia, tendrás oportunidad de seguir aplicando. ⚠️</p>
             </div>
           )}
       

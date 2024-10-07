@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Skeleton from "@/components/ui/SkeletonComponent";
-import AlcaldiaProfileForm from "@/components/perfiles/AlcaldiaFormProfile";
-import AlcaldiaProfile from "@/components/perfiles/AlcaldiaProfile";
+import AlcaldiaProfileForm from "@/app/alcaldia/perfil/AlcaldiaFormProfile";
+import AlcaldiaProfile from "@/app/alcaldia/perfil/AlcaldiaProfile";
 
 export default function AlcaldiaInfoForm() {
   const [isFormVisible, setIsFormVisible] = useState(false);

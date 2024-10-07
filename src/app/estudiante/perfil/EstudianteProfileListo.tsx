@@ -2,9 +2,9 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import Loader from "../Loader";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import Loader from "@/components/Loader";
 
 interface EstudianteProfileListoProps {
   onToggleForm: () => void;
@@ -118,10 +118,6 @@ export default function EstudianteProfileListo({
   return (
     <div className="flex flex-col w-[100%] relative z-20 text-base m-2 p-2 pb-0 mb-0 rounded-lg mt-2 shadow lg:shadow-none md:text-lg">
       {session?.user.profile && (
-
-        
-
-
         
         <div className="flex flex-col w-[100%] my-2 mb-2 mt-2 pt-6 bg-white md:sticky md:top-[15vh]">
               <h2 className={`text-xl font-bold text-gray-800 text-center
@@ -194,11 +190,12 @@ export default function EstudianteProfileListo({
                 {session.user.dataProfile.address}
               </p>
               <p className="text-gray-600 md:text-1x1">
-                <strong>🗓️ Fecha de nacimiento:</strong>{" "}
-                {new Date(
-                  session.user.dataProfile.birthdate
-                ).toLocaleDateString()}
+                
+                <strong>🗓️ Fecha de nacimientosss:</strong>{" "}
+               {new Date(session.user.dataProfile.birthdate).toLocaleDateString('en-GB')}
               </p>
+
+              
               <p className="text-gray-600 md:text-1x1">
                 <strong>✔️Edad:</strong>{" "}
                 {session.user.dataProfile.birthdate &&

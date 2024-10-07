@@ -5,9 +5,10 @@ import GridMain from "@/components/GridMain";
 import Header from "@/components/Header";
 import { Skeleton } from "@mui/material";
 import { useEffect, useState } from "react";
-import InternshipCards from "./InternshipCards";
+import InternshipCards from "@/app/alcaldia/ofertas/InternshipCards";
 import axios from "axios";
 import Modal from "@/components/Modal";
+import { Oval } from "react-loader-spinner";
 
 type Application = {
   id: number;
@@ -19,6 +20,8 @@ type Application = {
   date: Date;
   skills: string[];
   status: string;
+  pay: boolean;
+  tutor: string;
   dependencia: {
     name: string;
     User: {
@@ -88,8 +91,10 @@ export default function Page() {
     }
   };
 
+  const [loading, setLoading] = useState(false);
   const handleOficio = async (id: number) => {
     try {
+      setLoading(true);
       const res = await axios.post(
         `/api/alcaldia/doc`,
         { id },
@@ -111,6 +116,8 @@ export default function Page() {
       } else {
         console.error("error:", error);
       }
+    }finally {
+      setLoading(false)
     }
   };
 
@@ -120,7 +127,7 @@ export default function Page() {
 
   return (
     <>
-      <Header title={"MIS OFERTAS"} subtitle={""} />
+      <Header title={"MIS OFERTAS"} subtitle={"Aquí puedes visualizar todas las ofertas a vacantes de Pasantías y Servicio Comunitario que han sido creadas."} />
       <ContainerWeb>
         <GridMain>
           {squeleton ? (
@@ -138,17 +145,21 @@ export default function Page() {
               </p>
             </GridContainer>
           ) : applications && applications.length > 0 ? (
-            <InternshipCards
-              internships={applications.map((internship) => ({
-                ...internship,
-                handleDeleteApply: confirmDelete,
-                handleOficio,
-              }))}
-            />
+ 
+              <InternshipCards
+                internships={applications.map((internship) => ({
+                  ...internship,
+                  handleDeleteApply: confirmDelete,
+                  handleOficio,
+                  loading:loading
+                }))}
+              />
+
           ) : null}
+            
 
           <Modal
-            info={`¿Estás seguro de que deseas retirar su aplicación a la oferta ID: ${applicationToDelete?.code}`}
+            info={`¿Estás seguro de que deseas ELIMINAR la oferta ID: ${applicationToDelete?.code}`}
             isLoading={spanRetirar}
             isOpen={isModalOpen}
             onClose={() => setModalOpen(false)}

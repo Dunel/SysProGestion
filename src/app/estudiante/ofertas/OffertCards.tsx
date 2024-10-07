@@ -5,6 +5,7 @@ import {
   FaRegThumbsUp,
   FaRegThumbsDown,
   FaMoneyCheckAlt,
+  FaRegLaughSquint
 } from "react-icons/fa";
 
 type Internship = {
@@ -244,57 +245,81 @@ export default function InternshipCards({
         </div>
       </div>
 
+  {/* BUTTON TO APPLY TO THE OFFERT */}
       <div className="flex justify-center w-[100%]">
-        {internship.apply.length > 0 ? (
-          <button
-            className="w-full bg-gray-500 text-white font-bold py-2 rounded md:w-[50%]"
-            disabled
-          >
-            {internship.status === "inactive" ? (
-              <div className="flex gap-2 justify-center">
-                <span>OFERTA INACTIVA</span>
-                <FaExclamation style={{ color: "white" }} size={30} />
-              </div>
-            ) : internship.apply.length > 0 &&
-              internship.apply[0]?.status != "declinado" ? (
-              <div className="flex gap-2 justify-center">
-                <span>YA HAS APLICADO A ESTA OFERTA</span>
-                <FaRegThumbsUp style={{ color: "white" }} size={30} />
-              </div>
-            ) : internship.apply[0]?.status === "declinado" ? (
-              <div className="flex gap-2 justify-center">
-                <span>HAS DECLINADO ESTA OFERTA</span>
-                <FaRegThumbsDown style={{ color: "white" }} size={30} />
-              </div>
-            ) : null}
-          </button>
-        ) : internship.status !== "inactive" ? (
-          <button
-            className="bg-green-400 relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] lg:w-[50%]"
-            onClick={() => internship.handleApply(internship.id)}
-          >
-            <div className="flex gap-2 justify-center">
-              <span>
-                APLICA A ESTA OFERTA!! {btnactive === 0 ? "true" : "false"}
-              </span>
-              <FaFire style={{ color: "white" }} size={30} />
-            </div>
-
-            <BottomGradient />
-          </button>
-        ) : (
-          internship.status === "inactive" && (
+        {internship.apply.length > 0 
+        ? 
+          (
             <button
-              className="w-full bg-gray-500 text-white font-bold py-2 px-4 rounded md:w-[50%]"
+              className="w-full bg-gray-500 text-white font-bold py-2 rounded md:w-[50%] cursor-not-allowed"
               disabled
-            >
-              <div className="flex gap-2 justify-center">
-                <span>OFERTA INACTIVA</span>
-                <FaExclamation style={{ color: "white" }} size={30} />
-              </div>
+              >
+                
+              {
+                internship.status === "inactive" 
+                ? (
+                  <div className="flex gap-2 justify-center">
+                    <span>OFERTA INACTIVA</span>
+                    <FaExclamation style={{ color: "white" }} size={30} />
+                  </div>
+                ) : internship.apply.length > 0 &&
+                  internship.apply[0]?.status != "declinado" 
+                  ? (
+                  <div className="flex gap-2 justify-center">
+                    <span>YA HAS APLICADO A ESTA OFERTA</span>
+                    <FaRegThumbsUp style={{ color: "white" }} size={30} />
+                  </div>
+                ) : internship.apply[0]?.status === "declinado" 
+                  ? (
+                  <div className="flex gap-2 justify-center">
+                    <span>HAS DECLINADO ESTA OFERTA</span>
+                    <FaRegThumbsDown style={{ color: "white" }} size={30} />
+                  </div>
+                ) : null
+              }
             </button>
-          )
-        )}
+
+          ) : internship.status !== "inactive" 
+            ? (
+                <button
+                  className={`relative group/btn from-black dark:from-zinc-900 
+                    dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white 
+                    rounded-md h-10 font-medium 
+                    shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] 
+                    lg:w-[50%]
+                    ${btnactive === 0 ? 'bg-green-400' : 'bg-gray-400 disabled:opacity-50 cursor-not-allowed'}
+                    `}
+                  onClick={() => internship.handleApply(internship.id)}
+                  
+                >
+                  <div className="flex gap-2 justify-center">
+                    <span>
+                      {btnactive === 0 ? " APLICA A ESTA OFERTA!!" : "YA HAZ ACEPTADO OTRA OFERTA"}
+                    </span>
+                    {(btnactive === 0) 
+                      ? <FaFire style={{ color: "white" }} size={30} /> 
+                      : <FaRegLaughSquint style={{ color: 'white' }} size={30}/>
+                    }
+                  </div>
+
+                  <BottomGradient />
+                </button>
+              ) 
+              : 
+              (
+                internship.status === "inactive" && (
+                  <button
+                    className="w-full bg-gray-500 text-white font-bold py-2 px-4 rounded md:w-[50%]"
+                    disabled
+                  >
+                    <div className="flex gap-2 justify-center">
+                      <span>OFERTA INACTIVA</span>
+                      <FaExclamation style={{ color: "white" }} size={30} />
+                    </div>
+                  </button>)
+              )
+        }
+
       </div>
     </div>
   );

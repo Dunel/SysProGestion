@@ -91,11 +91,10 @@ export default function InternshipCards({
       </div>
 
       {/* //!internship.pay  */}
-      {true && (
+      {internship.pay  && (
         <span className="flex gap-2 mr-2 text-base font-bold text-green-500 lg:ml-auto">
           {`Esta vacante ofrece incentivos`}
           <FaMoneyCheckAlt style={{ color: "green" }} size={30} />
-          {internship.pay ? "💰" : "❌"}
         </span>
       )}
 
@@ -140,7 +139,7 @@ export default function InternshipCards({
               <span className="text-lg font-medium text-gray-700 mb-2">
                 Estado de la Oferta:
               </span>
-              <p>
+              <p className={`font-bold ${internship.status === "active" ? 'text-green-500':'text-yellow-500'}`}>
                 {internship.status === "active" ? "Activa ✅" : "Inactiva ⚠️"}
               </p>
             </div>
@@ -160,7 +159,7 @@ export default function InternshipCards({
             </div>
             <div className="w-[100%] md:w-[100%]">
               <span className="text-lg font-medium text-gray-700 mb-2">
-                Tutor Industrial:
+              {internship.type === "pasantia" ? 'Tutor Industrial:' : 'Responsable'}
               </span>
               <p>
                 {internship.tutor?.length > 0 ? internship.tutor : "No asignado"}
@@ -195,21 +194,21 @@ export default function InternshipCards({
       <div className="flex flex-col items-center justify-center lg:flex-row">
         <button
           onClick={() => router.push("./misofertas/modificar/" + internship.id)}
-          className="w-[100%] p-1 m-1 bg-green-700 hover:bg-green-800 text-white font-bold rounded transition duration-300 md:w-[80%]"
+          className="w-[100%] p-4 m-1 bg-green-700 hover:bg-green-800 text-white font-bold rounded transition duration-300 md:w-[80%]"
         >
-          Modificar Oferta
+          MODIFICAR OFERTA
         </button>
         <button
           onClick={() => router.push("./misofertas/received/" + internship.id)}
-          className="w-[100%] p-1 m-1 bg-blue-700 hover:bg-blue-900 text-white font-bold rounded transition duration-300 md:w-[80%]"
+          className="w-[100%] p-4 m-1 bg-blue-700 hover:bg-blue-900 text-white font-bold rounded transition duration-300 md:w-[80%]"
         >
-          Ver Solicitudes recibidas
+          GESTIONAR SOLICITUDES RECIBIDAS
         </button>
         <button
-          onClick={() => internship.handleDeleteApply(internship.id)}
-          className="w-[100%] p-1 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[80%]"
+          onClick={() => internship.handleDeleteApply(internship.id, (internship.type).substring(0, 3).toUpperCase()+ "-"+ new Date(internship.date).getFullYear() +"-" +(internship.dependencia.name).substring(0, 3).toUpperCase() +"-000"+ internship.id)}
+          className="w-[100%] p-4 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[80%]"
         >
-          Eliminar Oferta
+          ELIMINAR OFERTA
         </button>
       </div>
     </div>

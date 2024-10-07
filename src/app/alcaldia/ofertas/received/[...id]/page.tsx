@@ -1,13 +1,12 @@
 "use client";
 import ContainerWeb from "@/components/ContainerWeb";
-import GridContainer from "@/components/GridContainer";
 import GridMain from "@/components/GridMain";
 import Header from "@/components/Header";
 import { Skeleton } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import InternShipCardReceived from "../InternShipCardReceived";
+import InternShipCardReceived from "../InternShipCardReceivedReady";
 
 interface Internship {
   id: number;

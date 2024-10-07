@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/db";
 import { ZodError } from "zod";
 import {
+  profileAlcaldiaSchema,
   profileDepenSchema,
   profileSchema,
 } from "@/validations/profile.schema";
@@ -386,7 +387,7 @@ export async function ProfileAlcaldiaUpdate(req: NextRequest) {
       parroquiaId,
     } = await req.json();
 
-    const result = profileDepenSchema.parse({
+    const result = profileAlcaldiaSchema.parse({
       name,
       names,
       lastnames,
