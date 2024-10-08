@@ -29,7 +29,8 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
       estadoId,
       municipioId,
       parroquiaId,
-      birthdate
+      birthdate,
+      gender
     } = await req.json();
 
     const result = profileSchema.parse({
@@ -47,7 +48,8 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
       estadoId,
       municipioId,
       parroquiaId,
-      birthdate
+      birthdate,
+      gender
     });
     const cedula = token.cedula;
 
@@ -62,6 +64,7 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
         address: result.address,
         dateStart: result.dateStart,
         dateEnd: result.dateEnd,
+        gender: result.gender
       },
       create: {
         userCedula: cedula,
@@ -73,6 +76,7 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
         address: result.address,
         dateStart: result.dateStart,
         dateEnd: result.dateEnd,
+        gender: result.gender
       },
     });
 
@@ -141,6 +145,12 @@ export async function ProfileEstudentGet(req: NextRequest) {
         description: true,
         address: true,
         curriculum: true,
+        gender: true,
+        bankName: true,
+        bankAccount: true,
+        cneRegister: true,
+        cneCentroName: true,
+        cneParroquia: true,
         User: {
           select: {
             names: true,
@@ -189,6 +199,12 @@ export async function ProfileEstudentGet(req: NextRequest) {
       dateStart: profile?.dateStart,
       dateEnd: profile?.dateEnd,
       birthdate: profile?.User.birthdate,
+      gender: profile?.gender,
+      bankName: profile?.bankName,
+      bankAccount: profile?.bankAccount,
+      cneRegister: profile?.cneRegister,
+      cneCentroName: profile?.cneCentroName,
+      cneParroquia: profile?.cneParroquia,
     };
     return NextResponse.json({ object }, { status: 200 });
   } catch (error) {

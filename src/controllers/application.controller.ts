@@ -917,7 +917,7 @@ export async function getMyAppAlcaldia(req: NextRequest) {
         _count:{
           select:{
             applicationApproved:true,
-            apply: true,
+            apply: true
           },
         }
       }

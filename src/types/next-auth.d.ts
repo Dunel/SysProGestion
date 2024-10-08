@@ -41,6 +41,12 @@ declare module "next-auth" {
         lastnames: string;
         phone: string;
         curriculum: string;
+        gender: "M" | "F";
+        bankName: string;
+        bankAccount: string;
+        cneRegister: boolean;
+        cneCentroName: string;
+        cneParroquia: string;
       };
     };
   }
@@ -83,6 +89,12 @@ declare module "next-auth" {
       lastnames: string;
       phone: string;
       curriculum: string;
+      gender: "M" | "F";
+      bankName: string;
+      bankAccount: string;
+      cneRegister: boolean;
+      cneCentroName: string;
+      cneParroquia: string;
     };
   }
 }
@@ -126,6 +138,12 @@ declare module "next-auth/jwt" {
       lastnames: string;
       phone: string;
       curriculum: string;
+      gender: "M" | "F";
+      bankName: string;
+      bankAccount: string;
+      cneRegister: boolean;
+      cneCentroName: string;
+      cneParroquia: string;
     };
   }
 }

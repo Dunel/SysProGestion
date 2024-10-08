@@ -33,7 +33,7 @@ class EmailService {
           from: process.env.EMAIL,
           to: mail,
           subject: subject,
-          html: `conn<p>${text}</p>`,
+          html: `<p>${text}</p>`,
         };
       }
 

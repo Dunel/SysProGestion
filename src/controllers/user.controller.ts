@@ -268,6 +268,12 @@ export async function updateUser(req: NextRequest) {
       mail,
       birthdate,
       cedula,
+      gender,
+      bankName,
+      bankAccount,
+      cneRegister,
+      cneCentroName,
+      cneParroquia,
     } = await req.json();
     const result = profileSchemaEdit.parse({
       names,
@@ -287,6 +293,12 @@ export async function updateUser(req: NextRequest) {
       mail,
       birthdate,
       cedula,
+      gender,
+      bankName,
+      bankAccount,
+      cneRegister,
+      cneCentroName,
+      cneParroquia,
     });
 
     const userFound = await prisma.user.findFirst({
@@ -320,6 +332,12 @@ export async function updateUser(req: NextRequest) {
         address: result.address,
         dateStart: result.dateStart,
         dateEnd: result.dateEnd,
+        gender: result.gender,
+        bankName: result.bankName,
+        bankAccount: result.bankAccount,
+        cneRegister: result.cneRegister,
+        cneCentroName: result.cneCentroName,
+        cneParroquia: result.cneParroquia,
       },
       create: {
         userCedula: result.cedula,
@@ -331,6 +349,12 @@ export async function updateUser(req: NextRequest) {
         address: result.address,
         dateStart: result.dateStart,
         dateEnd: result.dateEnd,
+        gender: result.gender,
+        bankName: result.bankName,
+        bankAccount: result.bankAccount,
+        cneRegister: result.cneRegister,
+        cneCentroName: result.cneCentroName,
+        cneParroquia: result.cneParroquia,
       },
     });
 
@@ -400,6 +424,12 @@ export async function createUserAlcaldia(req: NextRequest) {
       mail,
       birthdate,
       cedula,
+      gender,
+      bankName,
+      bankAccount,
+      cneRegister,
+      cneCentroName,
+      cneParroquia
     } = await req.json();
     const result = profileSchemaEdit.parse({
       names,
@@ -419,6 +449,12 @@ export async function createUserAlcaldia(req: NextRequest) {
       mail,
       birthdate,
       cedula,
+      gender,
+      bankName,
+      bankAccount,
+      cneRegister,
+      cneCentroName,
+      cneParroquia
     });
 
     const userFound = await prisma.user.findFirst({
@@ -463,6 +499,12 @@ export async function createUserAlcaldia(req: NextRequest) {
             address: result.address,
             dateStart: result.dateStart,
             dateEnd: result.dateEnd,
+            gender: result.gender,
+            bankName: result.bankName,
+            bankAccount: result.bankAccount,
+            cneRegister: result.cneRegister,
+            cneCentroName: result.cneCentroName,
+            cneParroquia: result.cneParroquia
           },
         },
       },
