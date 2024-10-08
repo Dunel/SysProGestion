@@ -277,6 +277,9 @@ export default function ReportGenerator() {
     getInstitucion();
     getDependencias();
   }, []);
+
+  console.log('EL REPORTE', report);
+  
   return (
     <>
       <Header title={"REPORTES"} subtitle={"..."} />

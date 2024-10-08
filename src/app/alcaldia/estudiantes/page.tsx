@@ -212,7 +212,7 @@ export default function EstudentManagement() {
             isOpen={isOpen}
             setIsOpen={setIsOpen}
             titleAction={"ELIMINAR ESTUDIANTE DEL SISTEMA"}
-            isDelete={isDelete}
+            isDelete={true}
             setIsNotFoundError={setIsNotFoundError}
           />
 
