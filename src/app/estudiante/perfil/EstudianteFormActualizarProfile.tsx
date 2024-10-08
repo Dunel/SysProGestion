@@ -90,6 +90,8 @@ export default function EstudianteProfileForm({
   });
   const [isUniversityOpen, setUniversityOpen] = useState(false);
   const [isCareerOpen, setCareerOpen] = useState(false);
+  const [genderIsOpen, setGenderIsOpen] = useState(false);
+  const gender = [{ name: "M" as "M" | "F" }, { name: "F" as "M" | "F" }];
   const {
     register,
     handleSubmit,
@@ -308,6 +310,7 @@ export default function EstudianteProfileForm({
       setValue("dateStart", session.user.dataProfile.dateStart);
       setValue("dateEnd", session.user.dataProfile.dateEnd);
       setValue("birthdate", session.user.dataProfile.birthdate);
+      setValue("gender", session.user.dataProfile.gender);
     }
   }, []);
 
@@ -372,6 +375,40 @@ export default function EstudianteProfileForm({
             />
             {errors.lastnames && (
               <p className="text-red-500 text-sm">{errors.lastnames.message}</p>
+            )}
+          </LabelInputContainer>
+
+          <LabelInputContainer className="mb-8">
+            <Label htmlFor="gender">Genero *</Label>
+            <div className="relative">
+              <Input
+                id="gender"
+                type="text"
+                value={watch("gender")}
+                onClick={() => setGenderIsOpen(!genderIsOpen)}
+                readOnly
+                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                placeholder="Selecciona un Genero"
+              />
+              {genderIsOpen && (
+                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
+                  {gender.map((e, index) => (
+                    <div
+                      key={index}
+                      onClick={() => {
+                        setValue("gender", e.name);
+                        setGenderIsOpen(false);
+                      }}
+                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {e.name}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            {errors.gender && (
+              <p className="text-red-500 text-sm">{errors.gender.message}</p>
             )}
           </LabelInputContainer>
 
@@ -735,6 +772,107 @@ export default function EstudianteProfileForm({
             />
             {errors.interests && (
               <p className="text-red-500 text-sm">{errors.interests.message}</p>
+            )}
+          </LabelInputContainer>
+
+          <LabelInputContainer className="mb-8">
+            <Label htmlFor="bankName">Nombre del Banco</Label>
+            <Input
+              {...register("bankName")}
+              defaultValue={session?.user.dataProfile?.bankName || ""}
+              onChange={handleInputChange}
+              id="bankName"
+              name="bankName"
+              placeholder="Banco de Venezuela"
+              type="text"
+              className={cn(errors.bankName && "bg-red-100 focus:bg-red-100")}
+            />
+            {errors.bankName && (
+              <p className="text-red-500 text-sm">{errors.bankName.message}</p>
+            )}
+          </LabelInputContainer>
+
+          <LabelInputContainer className="mb-8">
+            <Label htmlFor="bankAccount">Número de cuenta</Label>
+            <Input
+              {...register("bankAccount")}
+              defaultValue={session?.user.dataProfile?.bankAccount || ""}
+              onChange={handleInputChange}
+              id="bankAccount"
+              name="bankAccount"
+              placeholder="0102-1234-56-7890123456"
+              type="text"
+              className={cn(
+                errors.bankAccount && "bg-red-100 focus:bg-red-100"
+              )}
+            />
+            {errors.bankAccount && (
+              <p className="text-red-500 text-sm">
+                {errors.bankAccount.message}
+              </p>
+            )}
+          </LabelInputContainer>
+
+          <LabelInputContainer className="mb-8">
+            <Label htmlFor="cneRegister">¿Estas registrado en el cne?</Label>
+            <Input
+              {...register("cneRegister")}
+              type="checkbox"
+              defaultChecked={session?.user.dataProfile?.cneRegister || false}
+              id="cneRegister"
+              name="cneRegister"
+              className={cn(
+                errors.cneRegister && "bg-red-100 focus:bg-red-100"
+              )}
+            />
+            {errors.cneRegister && (
+              <p className="text-red-500 text-sm">
+                {errors.cneRegister.message}
+              </p>
+            )}
+          </LabelInputContainer>
+
+          <LabelInputContainer className="mb-8">
+            <Label htmlFor="cneCentroName">Nombre del centro de votación</Label>
+            <Input
+              {...register("cneCentroName")}
+              defaultValue={session?.user.dataProfile?.cneCentroName || ""}
+              onChange={handleInputChange}
+              id="cneCentroName"
+              name="cneCentroName"
+              placeholder="Centro de votación"
+              type="text"
+              className={cn(
+                errors.cneCentroName && "bg-red-100 focus:bg-red-100"
+              )}
+            />
+            {errors.cneCentroName && (
+              <p className="text-red-500 text-sm">
+                {errors.cneCentroName.message}
+              </p>
+            )}
+          </LabelInputContainer>
+
+          <LabelInputContainer className="mb-8">
+            <Label htmlFor="cneParroquia">
+              Parroquia del centro de votación
+            </Label>
+            <Input
+              {...register("cneParroquia")}
+              defaultValue={session?.user.dataProfile?.cneParroquia || ""}
+              onChange={handleInputChange}
+              id="cneParroquia"
+              name="cneParroquia"
+              placeholder="Parroquia del centro de votación"
+              type="text"
+              className={cn(
+                errors.cneParroquia && "bg-red-100 focus:bg-red-100"
+              )}
+            />
+            {errors.cneParroquia && (
+              <p className="text-red-500 text-sm">
+                {errors.cneParroquia.message}
+              </p>
             )}
           </LabelInputContainer>
 

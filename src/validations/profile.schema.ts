@@ -282,6 +282,37 @@ export const profileSchema = z.object({
     .string({ required_error: "La descripción es requerida" })
     .min(7, { message: "La descripción debe tener minimo 7 caracteres" })
     .max(100, { message: "La descripción debe tener maximo 100 caracteres" }),
+  gender: z.enum(["M", "F"]),
+  bankName: z
+    .string({ required_error: "El nombre del banco es requerido" })
+    .min(3, { message: "El nombre del banco debe tener minimo 3 caracteres" })
+    .max(50, {
+      message: "El nombre del banco debe tener maximo 50 caracteres",
+    })
+    .optional()
+    .or(z.literal("")),
+  bankAccount: z
+    .string({ required_error: "El número de cuenta es requerido" })
+    .min(20, { message: "El número de cuenta debe tener minimo 20 caracteres" })
+    .max(20, { message: "El número de cuenta debe tener maximo 20 caracteres" })
+    .regex(numericRegex, { message: "Solo se permiten números" })
+    .optional()
+    .or(z.literal("")),
+  cneRegister: z.boolean().optional(),
+  cneCentroName: z.string({
+    required_error: "El nombre del centro de votación es requerido",
+  })
+  .min(3, { message: "El nombre del centro de votación debe tener minimo 3 caracteres" })
+  .max(50, { message: "El nombre del centro de votación debe tener maximo 50 caracteres" })
+  .optional()
+  .or(z.literal("")),
+  cneParroquia: z.string({
+    required_error: "La parroquia es requerida",
+  })
+  .min(3, { message: "La parroquia debe tener minimo 3 caracteres" })
+  .max(50, { message: "La parroquia debe tener maximo 50 caracteres" })
+  .optional()
+  .or(z.literal("")),
 });
 
 export const profileFrontSchema = z.object({
@@ -1135,6 +1166,37 @@ export const profileSchemaEdit = z.object({
     .max(100, { message: "La descripción debe tener maximo 100 caracteres" })
     .optional()
     .or(z.literal("")),
+    gender: z.enum(["M", "F"]),
+  bankName: z
+    .string({ required_error: "El nombre del banco es requerido" })
+    .min(3, { message: "El nombre del banco debe tener minimo 3 caracteres" })
+    .max(50, {
+      message: "El nombre del banco debe tener maximo 50 caracteres",
+    })
+    .optional()
+    .or(z.literal("")),
+  bankAccount: z
+    .string({ required_error: "El número de cuenta es requerido" })
+    .min(20, { message: "El número de cuenta debe tener minimo 20 caracteres" })
+    .max(20, { message: "El número de cuenta debe tener maximo 20 caracteres" })
+    .regex(numericRegex, { message: "Solo se permiten números" })
+    .optional()
+    .or(z.literal("")),
+  cneRegister: z.boolean().optional(),
+  cneCentroName: z.string({
+    required_error: "El nombre del centro de votación es requerido",
+  })
+  .min(3, { message: "El nombre del centro de votación debe tener minimo 3 caracteres" })
+  .max(50, { message: "El nombre del centro de votación debe tener maximo 50 caracteres" })
+  .optional()
+  .or(z.literal("")),
+  cneParroquia: z.string({
+    required_error: "La parroquia es requerida",
+  })
+  .min(3, { message: "La parroquia debe tener minimo 3 caracteres" })
+  .max(50, { message: "La parroquia debe tener maximo 50 caracteres" })
+  .optional()
+  .or(z.literal("")),
 });
 
 export type ProfileDepenFormData = z.infer<typeof profileDepenSchema>;

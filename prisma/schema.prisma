@@ -81,6 +81,11 @@ enum Skills {
   lenguajesdeprogramacion
 }
 
+enum gender {
+  M
+  F
+}
+
 model estudentInfo {
   id                  Int                   @id @default(autoincrement())
   userCedula          Int                   @unique
@@ -93,6 +98,12 @@ model estudentInfo {
   description         String?
   address             String?
   curriculum          String?
+  gender              gender
+  bankName            String?
+  bankAccount         String?
+  cneRegister         Boolean               @default(false)
+  cneCentroName       String?
+  cneParroquia        String?
   updatedAt           DateTime              @updatedAt
   User                User                  @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
   applicationApproved applicationApproved[]

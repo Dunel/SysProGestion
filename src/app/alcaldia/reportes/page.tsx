@@ -1,20 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -24,14 +10,21 @@ import GridMain from "@/components/GridMain";
 import ContainerWeb from "@/components/ContainerWeb";
 import axios from "axios";
 
-export type Students = {
+type Students = {
   date: string;
   application: {
+    tutor: string;
     dependencia: {
       name: string;
     };
   };
   esInfo: {
+    gender: "M" | "F";
+    bankName: string;
+    bankAccount: string;
+    cneRegister: boolean;
+    cneCentroName: string;
+    cneParroquia: string;
     institution: {
       name: string;
     };
@@ -59,22 +52,22 @@ export type Students = {
   };
 };
 
-export type Careers = {
+type Careers = {
   id: number;
   name: string;
 };
 
-export type Institutions = {
+type Institutions = {
   id: number;
   name: string;
 };
 
-export type Dependencia = {
+type Dependencia = {
   id: number;
   name: string;
 };
 
-export type Parroquia = {
+type Parroquia = {
   id: number;
   municipioId: number;
   parroquia: string;
@@ -187,22 +180,20 @@ export default function ReportGenerator() {
 
   const handleDownloadReport = async (report: Students[]) => {
     try {
-      // Configura Axios para recibir datos binarios
       const res = await axios.post("/api/alcaldia/doc/reports", {
         students: report,
       }, {
-        responseType: "blob", // Esto es importante para recibir el archivo como un blob
+        responseType: "blob",
       });
   
-      // Crear un URL para el blob recibido
       const url = window.URL.createObjectURL(new Blob([res.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.download = "reporte.xlsx"; // Nombre del archivo de descarga
+      link.download = "reporte.xlsx";
       document.body.appendChild(link);
-      link.click(); // Simula un clic para iniciar la descarga
-      link.remove(); // Limpia el DOM
-      window.URL.revokeObjectURL(url); // Libera la memoria
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);

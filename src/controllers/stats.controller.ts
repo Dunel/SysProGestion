@@ -191,6 +191,8 @@ export async function getStudents(req: NextRequest) {
         date: true,
         application:{
           select:{
+            tutor: true,
+            date: true,
             dependencia:{
               select:{
                 name: true,
@@ -200,6 +202,12 @@ export async function getStudents(req: NextRequest) {
         },
         esInfo:{
           select: {
+            gender: true,
+            bankName: true,
+            bankAccount: true,
+            cneRegister: true,
+            cneCentroName: true,
+            cneParroquia: true,
             institution:{
               select: {
                 name: true,
@@ -239,15 +247,6 @@ export async function getStudents(req: NextRequest) {
           }
         }
       },
-      orderBy:{
-        esInfo:{
-          User:{
-            parroquia:{
-              parroquia: 'asc'
-            }
-          }
-        }
-      }
     });
 
     return NextResponse.json(students, { status: 200 });
