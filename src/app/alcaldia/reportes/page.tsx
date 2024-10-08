@@ -9,6 +9,15 @@ import Header from "@/components/Header";
 import GridMain from "@/components/GridMain";
 import ContainerWeb from "@/components/ContainerWeb";
 import axios from "axios";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { boolean } from "zod";
 
 type Students = {
   date: string;
@@ -102,6 +111,7 @@ export default function ReportGenerator() {
   const [edadRangoInicio, setEdadRangoInicio] = useState("");
   const [edadRangoFin, setEdadRangoFin] = useState("");
   const [report, setReport] = useState<Students[]>([]);
+  const [notFound, setNotFound] = useState(false);
 
   const handleGenerateReport = () => {
     const filteredStudents = filtrarEstudiantes(students, {
@@ -194,6 +204,7 @@ export default function ReportGenerator() {
       link.click();
       link.remove();
       window.URL.revokeObjectURL(url);
+     
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);
@@ -278,7 +289,6 @@ export default function ReportGenerator() {
     getDependencias();
   }, []);
 
-  console.log('EL REPORTE', report);
   
   return (
     <>
@@ -491,8 +501,10 @@ export default function ReportGenerator() {
               )}
             </div>
             <Button
-              onClick={handleGenerateReport}
-              className="w-full mt-6 bg-black text-white"
+              onClick={
+                handleGenerateReport
+              }
+              className="w-full mt-6 bg-black text-white p-6"
             >
               GENERAR REPORTE
             </Button>
@@ -501,14 +513,59 @@ export default function ReportGenerator() {
                 onClick={() => {
                   handleDownloadReport(report);
                 }}
-                className="w-full mt-6 bg-red-500 text-white"
+                className="w-full mt-6 bg-green-800 text-white p-6"
               >
-                Descargar Reporte
+                DESCARGAR REPORTE FORMATO EXCEL
               </Button>
             )}
           </GridContainer>
-        </GridMain>
-      </ContainerWeb>
+
+          {
+            report.length === 0 
+            ? <>NO EXISTEN REGISTRO CON ESE CRITERIO DE BUSQUEDA</>
+            : <div className="bg-white">
+              <h1 className="text-xl text-center font-extrabold my-6 md:text-3xl">
+                REPORTE GENERADO
+              </h1>
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-black text-white">
+                    <TableHead>No.</TableHead>
+                    <TableHead>Cedula</TableHead>
+                    <TableHead>Nombres</TableHead>
+                    <TableHead>Apellidos</TableHead>
+                    <TableHead>Genero</TableHead>
+                    <TableHead>Edad</TableHead>
+                    <TableHead>Parroquia</TableHead>
+                    <TableHead>Carrera</TableHead>
+                    <TableHead>Institucion</TableHead>
+                    <TableHead>Dependencia</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                {report.map((e, index) => (
+                  <TableRow key={index} className={`text-xs ${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{e.esInfo.User.cedula}</TableCell>
+                    <TableCell>{e.esInfo.User.names}</TableCell>
+                    <TableCell>{e.esInfo.User.lastnames}</TableCell>
+                    <TableCell>{e.esInfo.gender === 'M'? 'Hombre' : 'Mujer'}</TableCell>
+                    <TableCell>{calcularEdad(e.esInfo.User.birthdate)}</TableCell>
+                    <TableCell>{e.esInfo.User.parroquia.parroquia}</TableCell>
+                    <TableCell>{e.esInfo.career.name}</TableCell>
+                    <TableCell>{e.esInfo.institution.name}</TableCell>
+                    <TableCell>{e.application.dependencia.name}</TableCell>
+                  </TableRow>
+                  ))
+                }
+                  
+                    
+                </TableBody>
+              </Table>
+            </div>
+          }
+          </GridMain>
+        </ContainerWeb>
     </>
   );
 }

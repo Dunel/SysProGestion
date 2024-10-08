@@ -132,9 +132,8 @@ export default function EstudentManagement() {
           {arrayActiones.map((action) => (
             <button
               key={action}
-              className={`bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-md focus:outline-none ${
-                componente.toLowerCase() === action ? "border-gray-900" : ""
-              }`}
+              className={`bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-md focus:outline-none
+                 ${componente.toLowerCase() === action ? "border-gray-900" : ""}`}
               onClick={() => {
                 componente === "eliminar" && setIsDelete(true)
                 handleReset();

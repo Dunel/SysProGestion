@@ -274,6 +274,7 @@ export default function ListInstituciones() {
         <TableBody>
           {insert && (
             <TableRow>
+
               <TableCell>
                 <>
                   <Input
@@ -293,6 +294,7 @@ export default function ListInstituciones() {
                   )}
                 </>
               </TableCell>
+              
               <TableCell className="relative">
                   <>
                     <Input
@@ -415,6 +417,7 @@ export default function ListInstituciones() {
                     )}
                   </>
               </TableCell>
+
               <TableCell>
                 <Button
                   variant="outline"
@@ -428,6 +431,7 @@ export default function ListInstituciones() {
                   <X className="h-4 w-4" />
                 </Button>
               </TableCell>
+
             </TableRow>
           )}
           {institution.map((insttt) => (
