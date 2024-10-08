@@ -127,7 +127,13 @@ export default function Page() {
 
   return (
     <>
-      <Header title={"MIS OFERTAS"} subtitle={"Aquí puedes visualizar todas las ofertas a vacantes de Pasantías y Servicio Comunitario que han sido creadas."} />
+      <Header 
+        title={"TODAS LAS OFERTAS DE VACANTES"} 
+        subtitle={`Aquí puedes visualizar, actualizar y eliminar todas las ofertas a vacantes de Pasantías 
+          y Servicio Comunitario que han sido creadas. Igualmente, podrás gestionarlas, agregando, 
+          aceptando o eliminando estudiantes a las ofertas. Finalmente, podrás descargar los oficios de asignación 
+          de pasantes y prestadores de servicio comunitario a la Dependencia, una vez que el o los estudiantes 
+          hayan sido aceptados.`} />
       <ContainerWeb>
         <GridMain>
           {squeleton ? (

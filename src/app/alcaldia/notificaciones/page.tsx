@@ -45,7 +45,7 @@ export default function Page() {
       <Header
         title={"NOTIFICACIONES"}
         subtitle={
-          "Aqui podras visualizar todas las notificaciones relacionadas con los procesos a los que aplicaste y eres parte interesada. Mantente informado!"
+          "Aquí podrás visualizar todas las acciones más importantes relacionadas con los procesos de Pasantías y Servicios Comunitarios gestionados por el sistema. ¡Mantente informado!"
         }
       />
       <ContainerWeb>
