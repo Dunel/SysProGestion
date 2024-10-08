@@ -17,7 +17,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { boolean } from "zod";
 
 type Students = {
   date: string;
@@ -111,7 +110,7 @@ export default function ReportGenerator() {
   const [edadRangoInicio, setEdadRangoInicio] = useState("");
   const [edadRangoFin, setEdadRangoFin] = useState("");
   const [report, setReport] = useState<Students[]>([]);
-  const [notFound, setNotFound] = useState(false);
+  const [notFound, setNotFound] = useState(null as boolean | null);
 
   const handleGenerateReport = () => {
     const filteredStudents = filtrarEstudiantes(students, {
@@ -123,7 +122,7 @@ export default function ReportGenerator() {
       edadMin: edadTipo === "rango" ? Number(edadRangoInicio) : undefined,
       edadMax: edadTipo === "rango" ? Number(edadRangoFin) : undefined,
     });
-
+    setNotFound(filteredStudents.length > 0);
     setReport(filteredStudents);
   };
 
@@ -190,12 +189,16 @@ export default function ReportGenerator() {
 
   const handleDownloadReport = async (report: Students[]) => {
     try {
-      const res = await axios.post("/api/alcaldia/doc/reports", {
-        students: report,
-      }, {
-        responseType: "blob",
-      });
-  
+      const res = await axios.post(
+        "/api/alcaldia/doc/reports",
+        {
+          students: report,
+        },
+        {
+          responseType: "blob",
+        }
+      );
+
       const url = window.URL.createObjectURL(new Blob([res.data]));
       const link = document.createElement("a");
       link.href = url;
@@ -204,7 +207,6 @@ export default function ReportGenerator() {
       link.click();
       link.remove();
       window.URL.revokeObjectURL(url);
-     
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data.error);
@@ -212,7 +214,7 @@ export default function ReportGenerator() {
         console.error("error:", error);
       }
     }
-  };  
+  };
 
   const getEstudiantes = async () => {
     try {
@@ -289,7 +291,6 @@ export default function ReportGenerator() {
     getDependencias();
   }, []);
 
-  
   return (
     <>
       <Header title={"REPORTES"} subtitle={"..."} />
@@ -501,9 +502,7 @@ export default function ReportGenerator() {
               )}
             </div>
             <Button
-              onClick={
-                handleGenerateReport
-              }
+              onClick={handleGenerateReport}
               className="w-full mt-6 bg-black text-white p-6"
             >
               GENERAR REPORTE
@@ -520,52 +519,62 @@ export default function ReportGenerator() {
             )}
           </GridContainer>
 
-          {
-            report.length === 0 
-            ? <>NO EXISTEN REGISTRO CON ESE CRITERIO DE BUSQUEDA</>
-            : <div className="bg-white">
-              <h1 className="text-xl text-center font-extrabold my-6 md:text-3xl">
-                REPORTE GENERADO
-              </h1>
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-black text-white">
-                    <TableHead>No.</TableHead>
-                    <TableHead>Cedula</TableHead>
-                    <TableHead>Nombres</TableHead>
-                    <TableHead>Apellidos</TableHead>
-                    <TableHead>Genero</TableHead>
-                    <TableHead>Edad</TableHead>
-                    <TableHead>Parroquia</TableHead>
-                    <TableHead>Carrera</TableHead>
-                    <TableHead>Institucion</TableHead>
-                    <TableHead>Dependencia</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                {report.map((e, index) => (
-                  <TableRow key={index} className={`text-xs ${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{e.esInfo.User.cedula}</TableCell>
-                    <TableCell>{e.esInfo.User.names}</TableCell>
-                    <TableCell>{e.esInfo.User.lastnames}</TableCell>
-                    <TableCell>{e.esInfo.gender === 'M'? 'Hombre' : 'Mujer'}</TableCell>
-                    <TableCell>{calcularEdad(e.esInfo.User.birthdate)}</TableCell>
-                    <TableCell>{e.esInfo.User.parroquia.parroquia}</TableCell>
-                    <TableCell>{e.esInfo.career.name}</TableCell>
-                    <TableCell>{e.esInfo.institution.name}</TableCell>
-                    <TableCell>{e.application.dependencia.name}</TableCell>
-                  </TableRow>
-                  ))
-                }
-                  
-                    
-                </TableBody>
-              </Table>
-            </div>
-          }
-          </GridMain>
-        </ContainerWeb>
+          {notFound === false ? (
+            <>NO EXISTEN REGISTRO CON ESE CRITERIO DE BUSQUEDA</>
+          ) : (
+            notFound && (
+              <div className="bg-white">
+                <h1 className="text-xl text-center font-extrabold my-6 md:text-3xl">
+                  REPORTE GENERADO
+                </h1>
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-black text-white">
+                      <TableHead>No.</TableHead>
+                      <TableHead>Cedula</TableHead>
+                      <TableHead>Nombres</TableHead>
+                      <TableHead>Apellidos</TableHead>
+                      <TableHead>Genero</TableHead>
+                      <TableHead>Edad</TableHead>
+                      <TableHead>Parroquia</TableHead>
+                      <TableHead>Carrera</TableHead>
+                      <TableHead>Institucion</TableHead>
+                      <TableHead>Dependencia</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {report.map((e, index) => (
+                      <TableRow
+                        key={index}
+                        className={`text-xs ${
+                          index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                        }`}
+                      >
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>{e.esInfo.User.cedula}</TableCell>
+                        <TableCell>{e.esInfo.User.names}</TableCell>
+                        <TableCell>{e.esInfo.User.lastnames}</TableCell>
+                        <TableCell>
+                          {e.esInfo.gender === "M" ? "Hombre" : "Mujer"}
+                        </TableCell>
+                        <TableCell>
+                          {calcularEdad(e.esInfo.User.birthdate)}
+                        </TableCell>
+                        <TableCell>
+                          {e.esInfo.User.parroquia.parroquia}
+                        </TableCell>
+                        <TableCell>{e.esInfo.career.name}</TableCell>
+                        <TableCell>{e.esInfo.institution.name}</TableCell>
+                        <TableCell>{e.application.dependencia.name}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )
+          )}
+        </GridMain>
+      </ContainerWeb>
     </>
   );
 }
