@@ -1,5 +1,22 @@
-import axios from "axios";
+
 import { FaMoneyCheckAlt } from "react-icons/fa";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { cedulaSchema, cedulaSearch } from "@/validations/cedula.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { Trash2 } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Oval } from "react-loader-spinner";
 
 interface Internship {
   id: number;
@@ -113,6 +130,17 @@ const ofertsStatus = [
   },
 ];
 
+type estudSearch = {
+  cedula: string;
+  names: string;
+  lastnames: string;
+  esInfo: {
+    career: {
+      name: string;
+    };
+  };
+};
+
 export default function InternShipCardReceived({
   internship,
   getApplication,
@@ -120,6 +148,16 @@ export default function InternShipCardReceived({
   internship: Internship | undefined;
   getApplication: () => void;
 }) {
+  const [estSearch, setEstSearch] = useState<estudSearch>();
+  const [loading, setLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<cedulaSearch>({
+    resolver: zodResolver(cedulaSchema),
+    mode: "onChange",
+  });
   const updateStatus = async (status: string, id: number) => {
     try {
       const res = await axios.post(`/api/dependencia/apply/myapply/received`, {
@@ -133,6 +171,25 @@ export default function InternShipCardReceived({
       } else {
         console.error("error:", error);
       }
+    }
+  };
+
+  const handleSearch = async (data: cedulaSearch) => {
+    try {
+      setLoading(true);
+      setEstSearch(undefined);
+      const res = await axios.get(`/api/alcaldia/apply/myapply/addEst`, {
+        params: { cedula: data.cedula },
+      });
+      setEstSearch(res.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data?.error);
+      } else {
+        console.error("error:", error);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -157,6 +214,47 @@ export default function InternShipCardReceived({
 
     return edad.toString() + " años";
   }
+  const handleAcc = async () => {
+    try {
+      setLoading(true);
+      if (!estSearch || !internship) {
+        return;
+      }
+      const res = await axios.post(`/api/alcaldia/apply/myapply/addEst`, {
+        cedula: estSearch?.cedula,
+        id: internship?.id,
+      });
+      res.data.message && alert(res.data.message);
+      getApplication();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data?.error);
+      } else {
+        console.error("error:", error);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleBorrar = async (cedula: string) => {
+    try {
+      setLoading(true);
+      const res = await axios.delete(`/api/alcaldia/apply/myapply/addEst`, {
+        data: { cedula, id: internship?.id },
+      });
+      res.data.message && alert(res.data.message);
+      getApplication();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data?.error);
+      } else {
+        console.error("error:", error);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -266,6 +364,104 @@ export default function InternShipCardReceived({
               </div>
             </div>
           </div>
+          
+          
+          {/* //! BUCADOR DE ESTUDIANTE PARA AGREGARLO A UNA OFERTA  */}
+            <div
+                className="bg-white flex flex-col my-2 p-2 border-2 border-gray-300 rounded-lg 
+                    h-autotext-lg justify-center mb-8 w-[90%] mx-auto text-sm md:text-base lg:text-lg"
+              >
+            <h3 className="font-bold text-gray-800 mb-4 text-xl text-center underline md:text-2xl lg:text-3xl">
+              AGREGAR ESTUDIANTE
+            </h3>
+            <div className="flex space-x-2 py-4 my-2 p-2">
+              <div className="flex flex-col items-center gap-2">
+                <Input
+                  {...register("cedula")}
+                  name="cedula"
+                  placeholder="Cedula"
+                  type={"text"}
+                />
+                {errors.cedula && (
+                  <p className="text-red-500 text-xs">
+                    {errors.cedula.message}
+                  </p>
+                )}
+              </div>
+              <Button
+                className="inline-flex items-center justify-center rounded-md px-6 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={handleSubmit(handleSearch)}
+              >
+                BUSCAR
+              </Button>
+            </div>
+            {loading && (
+              <div className="flex justify-center items-center flex-col mt-10">
+                <Oval
+                  color="#000000"
+                  secondaryColor="#FFFFFF"
+                  height={50}
+                  width={50}
+                  strokeWidth={5}
+                />
+                <br />
+                <span>Espere por favor...</span>
+              </div>
+            )}
+            <ul className="space-y-2">
+              {estSearch && (
+                <li className="flex justify-between items-center p-2 bg-gray-100 rounded">
+                  <span>{estSearch.cedula}</span>
+                  <span>{`${estSearch.names} ${estSearch.lastnames}`}</span>
+                  <span>{estSearch.esInfo.career.name}</span>
+                  <button
+                    className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={() => handleAcc()}
+                  >
+                    Añadir
+                  </button>
+                </li>
+              )}
+            </ul>
+
+
+            
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Nombre</TableHead>
+                  <TableHead>Cédula</TableHead>
+                  <TableHead>Carrera</TableHead>
+                  <TableHead>Acciones</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {internship.apply.map(
+                  (apply, index) =>
+                    apply.status === "aceptado" && (
+                      <TableRow key={index}>
+                        <TableCell>
+                          {apply.User.names} {apply.User.lastnames}
+                        </TableCell>
+                        <TableCell>{apply.User.cedula}</TableCell>
+                        <TableCell>{apply.User.esInfo.career.name}</TableCell>
+                        <TableCell>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => handleBorrar(apply.User.cedula)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    )
+                )}
+              </TableBody>
+            </Table>
+          </div>
+
+
 
           <div className="flex flex-col items-center gap-1">
             <h3 className="font-bold text-gray-800 mb-4 text-xl underline md:text-2xl lg:text-3xl">
