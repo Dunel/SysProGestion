@@ -33,7 +33,7 @@ export default function TitleH1({ title }) {
         className={`mb-2 transition-all duration-1000 absolute font-bold text-gray-900 py-4 m-2 text-3xl md:text-4xl lg:text-5xl`} // Transición de 1000ms
         style={{
           top: topPosition,
-          transform: 'translateY(-80%)'
+          transform: 'translateY(-50%)'
         }}
       >
         {title}
