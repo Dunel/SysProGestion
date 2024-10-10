@@ -65,7 +65,7 @@ export default function Bienvenida() {
                 
                 <p className="h-auto text-green-700 mb-2 text-justify">
                   Las Dependencias Autorizadas por el rol <i>"Alcaldía",</i> pueden <strong> publicar y actualizar 
-                  sus ofertas vacantes</strong> de pasantías y servicios comunitarios, las cuales deben ser descritivas. 
+                  sus ofertas vacantes</strong> de pasantías y servicios comunitarios, las cuales deben ser descriptivas. 
                   El responsable del perfil debe elegir al <i>"Estudiante"</i> cuyo perfil, habilidades y domicilio 
                   se ajuste más a la vacante.
                 </p>
