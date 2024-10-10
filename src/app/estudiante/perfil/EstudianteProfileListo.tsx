@@ -189,22 +189,85 @@ export default function EstudianteProfileListo({
                 </strong>
                 {session.user.dataProfile.address}
               </p>
+              
               <p className="text-gray-600 md:text-1x1">
-                
-                <strong>🗓️ Fecha de nacimientosss:</strong>{" "}
+                <strong>🗓️ Fecha de nacimientos:</strong>{" "}
                {new Date(session.user.dataProfile.birthdate).toLocaleDateString('en-GB')}
               </p>
 
-              
-              <p className="text-gray-600 md:text-1x1">
+              <div className="flex flex-row gap-10">
+              <p className="ext-gray-600 md:text-1x1">
                 <strong>✔️Edad:</strong>{" "}
                 {session.user.dataProfile.birthdate &&
                   calcularEdad(session.user.dataProfile.birthdate)}
               </p>
+              <p className="text-gray-600 md:text-1x1">
+                <strong>🚻Género:</strong>{" "}
+                {session.user.dataProfile.gender === 'M' ? 'Hombre' : 'Mujer'}
+              </p>
+              </div>
+              
             </div>
       </div>
 
+      <div className="w-[100%] flex m-2 p-2 flex flex-col sm:flex-row sm:space-x-4">
 
+          <div className="w-[33%]">
+          <p className="text-gray-600 md:text-1x1">
+            <strong>🗳️Votante:</strong>{" "}
+          </p>
+          <p>
+            {session.user.dataProfile.cneRegister === false ? 'No Vota' : 'Si Vota'}
+          </p>
+        </div>
+        {
+          session.user.dataProfile.cneRegister &&
+          <>
+            <div className="w-[33%]">
+              <p className="text-gray-600 md:text-1x1">
+                <strong>🏫Centro de Votación:</strong>{" "}
+              </p>
+              <p>
+                {session.user.dataProfile.cneCentroName}
+              </p>
+            </div>
+            <div className="w-[33%]">
+              <p className="text-gray-600 md:text-1x1">
+                <strong>📍Parroquia de votación:</strong>{" "}
+              </p>
+              <p>
+                {session.user.dataProfile.cneParroquia}
+              </p>
+            </div>
+          </>
+           
+        }
+
+    </div>
+
+    {
+       session.user.dataProfile.bankAccount &&
+       <div  className="w-[100%] flex m-2 p-2 flex flex-col sm:flex-row sm:space-x-4">
+        <div className="w-[50%]">
+              <p className="text-gray-600 md:text-1x1">
+                <strong>💵Banco:</strong>{" "}
+              </p>
+              <p>
+                {session.user.dataProfile.bankName}
+              </p>
+            </div>
+            <div className="w-[50%]">
+              <p className="text-gray-600 md:text-1x1">
+                <strong>🔢Número de cuenta:</strong>{" "}
+              </p>
+              <p>
+                {session.user.dataProfile.bankAccount}
+              </p>
+            </div>
+      </div>
+    }
+
+    
 
           {/* //!caja de PERFIL PROFESIONAL hasta CV */}
           <div>

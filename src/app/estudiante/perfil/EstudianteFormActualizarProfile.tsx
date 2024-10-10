@@ -379,16 +379,16 @@ export default function EstudianteProfileForm({
           </LabelInputContainer>
 
           <LabelInputContainer className="mb-8">
-            <Label htmlFor="gender">Genero *</Label>
+            <Label htmlFor="gender">Género *</Label>
             <div className="relative">
               <Input
                 id="gender"
                 type="text"
-                value={watch("gender")}
+                value={watch('gender') === 'M' ? 'Hombre' : 'Mujer'}
                 onClick={() => setGenderIsOpen(!genderIsOpen)}
                 readOnly
                 className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
-                placeholder="Selecciona un Genero"
+                placeholder="Selecciona tu Género"
               />
               {genderIsOpen && (
                 <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
@@ -401,7 +401,7 @@ export default function EstudianteProfileForm({
                       }}
                       className="p-2 hover:bg-gray-100 cursor-pointer"
                     >
-                      {e.name}
+                      {e.name === 'M' ? 'Hombre' : 'Mujer'}
                     </div>
                   ))}
                 </div>

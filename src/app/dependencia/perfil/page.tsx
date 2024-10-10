@@ -49,7 +49,7 @@ export default function EstudianteInfoForm() {
       />
 
       {session?.user.profile === false && (
-        <div className="w-[90%] m-2 mx-auto">
+        <div className="w-[98%] m-2 mx-auto">
           <DependenciaProfileForm
             onToggleForm={toggleFormVisibility}
             titleForm={"DATOS DE TU PERFIL"}
@@ -66,7 +66,7 @@ export default function EstudianteInfoForm() {
           className={`${
             isFormVisible
               ? "grid grid-cols-1 mx-8 lg:grid-cols-[60%_40%] gap-2"
-              : "flex justify-center w-[80%] mx-auto bg-white"
+              : "flex justify-center w-[95%] mx-auto bg-white"
           }`}
         >
           {

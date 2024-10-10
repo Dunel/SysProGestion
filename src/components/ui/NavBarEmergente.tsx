@@ -343,7 +343,7 @@ const NavBarEmergente: React.FC = () => {
           {session && (
             <li>
               <button 
-                className={`w-full text-left m-0 p-0 ${isCompact ? 'p-4' : 'p-6'} opacidadHover`}
+                className={`w-full text-left m-0 p-0 ${isCompact ? 'p-0' : 'p-4'} opacidadHover`}
                 onClick={() => signOut()}
               >
                 <NavItem 

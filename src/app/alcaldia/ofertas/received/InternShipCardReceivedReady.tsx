@@ -473,7 +473,7 @@ export default function InternShipCardReceived({
             {internship.apply.map((apply, index) => (
               <div
                 key={index}
-                className="bg-white shadow-[0px_0px_10px_rgba(0,0,0,0.5)] flex flex-col w-full my-2 p-2 border-2 border-gray-300 rounded-lg 
+                className="w-[100%] bg-white shadow-[0px_0px_10px_rgba(0,0,0,0.5)] flex flex-col w-full my-2 p-2 border-2 border-gray-300 rounded-lg 
                 h-autotext-lg text-sm md:text-base lg:text-lg"
               >
                 <h2

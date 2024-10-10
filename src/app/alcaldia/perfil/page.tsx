@@ -5,7 +5,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import Skeleton from "@/components/ui/SkeletonComponent";
 import AlcaldiaProfileForm from "@/app/alcaldia/perfil/AlcaldiaFormProfile";
-import AlcaldiaProfile from "@/app/alcaldia/perfil/AlcaldiaProfile";
+import AlcaldiaProfile from "@/app/alcaldia/perfil/AlcaldiaProfileListo";
 
 export default function AlcaldiaInfoForm() {
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -63,7 +63,7 @@ export default function AlcaldiaInfoForm() {
           className={`${
             isFormVisible
               ? "grid grid-cols-1 mx-8 lg:grid-cols-[60%_40%] gap-2"
-              : "flex justify-center w-[80%] mx-auto bg-white"
+              : "flex justify-center w-[95%] mx-auto bg-white"
           }`}
         >
           {<AlcaldiaProfile

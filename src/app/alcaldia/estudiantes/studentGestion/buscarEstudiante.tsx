@@ -230,6 +230,30 @@ export default function SearchStudents({
                   </div>
 
                 </div>
+                
+                {/* //! DATOS BANCARIOS DE ESTUDIANTE */}
+                {/* {
+                  user.dataProfile.bankAccount &&
+                  <div  className="w-[100%] flex m-2 p-2 flex flex-col sm:flex-row sm:space-x-4">
+                    <div className="w-[50%]">
+                          <p className="text-gray-600 md:text-1x1">
+                            <strong>💵Banco:</strong>{" "}
+                          </p>
+                          <p>
+                            {session.user.dataProfile.bankName}
+                          </p>
+                        </div>
+                        <div className="w-[50%]">
+                          <p className="text-gray-600 md:text-1x1">
+                            <strong>🔢Número de cuenta:</strong>{" "}
+                          </p>
+                          <p>
+                            {session.user.dataProfile.bankAccount}
+                          </p>
+                        </div>
+                  </div>
+                } */}
+
                 {/* //!info academica */}
                 <div>
                   <h2 className="font-bold text-gray-700 mb-1 text-center text-lg md:xl lg:text-2xl">

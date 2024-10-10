@@ -87,7 +87,7 @@ export default function EstudianteInfoForm() {
           className={`${
             isFormVisible
               ? "grid grid-cols-1 mx-8 lg:grid-cols-[60%_40%] gap-2"
-              : "flex justify-center w-[80%] mx-auto bg-white"
+              : "flex justify-center w-[95%] mx-auto bg-white"
           }`}
         >
           <EstudianteProfileListo
