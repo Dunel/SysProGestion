@@ -25,7 +25,7 @@ export default function RootLayout({
           <NavBarProvider>
             <NavBar />
             <NavBarEmergente />
-            <div className="flex-grow h-[80%]">
+            <div className="flex-grow h-[80%] w-[100%]">
               {children}
             </div>
           </NavBarProvider>

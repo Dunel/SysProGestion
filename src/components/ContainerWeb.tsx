@@ -6,7 +6,7 @@ import { ReactNode } from "react";
 
 const ContainerWeb = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="container mx-auto px-4 md:px-8 lg:px-20 py-8">
+    <div className="container w-[99%] mx-auto px-2 py-8">
       {children}
     </div>
   );

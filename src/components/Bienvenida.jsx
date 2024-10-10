@@ -7,9 +7,8 @@ import TitleH1 from "@/components/Title-h1";
 export default function Bienvenida() {
 
   return (
-    <div className='space-y-4 m-10'>
+    <div className='space-y-4 m-2'>
 
-      <TitleH1 title="BIENVENIDO A LA GESTIÓN DE PASANTÍAS Y SERVICIOS COMUNITARIOS" />
 
       <motion.div
               initial={{ opacity: 0.0, y: 40 }}
@@ -19,11 +18,11 @@ export default function Bienvenida() {
                 duration: 0.8,
                 ease: "easeInOut",
               }}
-
               className="relative flex flex-col gap-4 items-center justify-center px-4 space-y-6"
-            >
+      >
 
       <div className='w-full mx-auto p-2 m-2'>
+              <TitleH1 title="BIENVENIDO A LA GESTIÓN DE PASANTÍAS Y SERVICIOS COMUNITARIOS" />
             
             <p className="text-gray-700 text-justify leading-12 mt-24 text-2xl md:text-3xl lg:text-3xl">
               Esta aplicación web está diseñada para facilitar la gestión de los procesos de pasantías y servicios comunitarios

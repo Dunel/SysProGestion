@@ -159,14 +159,16 @@ export default function Navbar() {
         <>
           <div className="mx-auto px-2 sm:px-6 lg:px-8">
             <div className="relative flex h-16 items-center justify-between">
-              <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+
+          {/* //! ICON PRINCIPAL HAMBURGUEZA Y CIERRE */}
+              <div className="z-50 absolute inset-y-0 left-0 flex items-center sm:hidden">
                 <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                   <span className="absolute -inset-0.5" />
                   <span className="sr-only">Abrir menu Principal</span>
                   {open ? (
-                    <XMarkIcon className="z-50 block h-6 w-6" aria-hidden="true" />
+                    <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
                   ) : (
-                    <Bars3Icon className="z-50 block h-6 w-6" aria-hidden="true" />
+                    <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
                   )}
                 </Disclosure.Button>
               </div>
@@ -238,7 +240,7 @@ export default function Navbar() {
           </div>
 
       {/* Mobile menu */}
-          <Disclosure.Panel className="sm:hidden">
+          <Disclosure.Panel className="z-50 sm:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2">
               {navigation.map((item) => (
                 <Disclosure.Button

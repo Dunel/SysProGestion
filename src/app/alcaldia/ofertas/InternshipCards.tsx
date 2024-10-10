@@ -64,7 +64,7 @@ export default function InternshipCards({
   const InternshipCard: React.FC<{ internship: Internship}> = ({
     internship,
   }) => (
-    <div className="flex flex-col justify-center bg-white mb-8 p-4 w-[90%] mx-auto my-1 shadow-md text-base text-justify rounded-lg md:p-8 lg:text-lg">
+    <div className="flex flex-col justify-center my-4 p-4 w-[98%] mx-auto shadow-md text-base text-justify rounded-lg lg:text-lg">
       {/* //!codigo & num students que han apply  */}
       <div className="flex flex-col lg:flex-row text-sm lg:gap-2">
         <span className="flex mr-2 text-red-500">
@@ -248,7 +248,7 @@ export default function InternshipCards({
   
  return (
     <>
-      <div className="relative z-20 mx-auto py-2 rounded shadow w-[90%]">
+      <div className="relative z-20 mx-auto py-2 rounded shadow w-[99%]">
         {internships.map((internship) => (
           <InternshipCard key={internship.id} internship={internship} />
         ))}
