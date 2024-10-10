@@ -164,7 +164,7 @@ export default function Navbar() {
                   <span className="absolute -inset-0.5" />
                   <span className="sr-only">Abrir menu Principal</span>
                   {open ? (
-                    <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                    <XMarkIcon className="z-50 block h-6 w-6" aria-hidden="true" />
                   ) : (
                     <Bars3Icon className="z-50 block h-6 w-6" aria-hidden="true" />
                   )}
