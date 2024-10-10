@@ -2,7 +2,7 @@
 import ContainerWeb from "@/components/ContainerWeb";
 import GridMain from "@/components/GridMain";
 import Header from "@/components/Header";
-import { Skeleton } from "@mui/material";
+import Skeleton from "@/components/ui/SkeletonComponent";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
