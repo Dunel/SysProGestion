@@ -24,7 +24,7 @@ export default function Bienvenida() {
       <div className='w-full mx-auto p-2 m-2'>
               <TitleH1 title="BIENVENIDO A LA GESTIÓN DE PASANTÍAS Y SERVICIOS COMUNITARIOS" />
             
-            <p className="text-gray-700 text-justify leading-12 mt-24 text-2xl md:text-3xl lg:text-3xl">
+            <p className="text-gray-700 text-justify leading-12 mt-20 pt-10 text-2xl md:text-3xl lg:text-3xl">
               Esta aplicación web está diseñada para facilitar la gestión de los procesos de pasantías y servicios comunitarios
               en la Gerencia de Asuntos Universitarios de la Alcaldía. Aquí podrás encontrar información sobre las vacantes
               disponibles y cómo aplicar a ellas.

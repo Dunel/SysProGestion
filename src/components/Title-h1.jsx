@@ -30,10 +30,10 @@ export default function TitleH1({ title }) {
   return (
     <div className='flex items-center justify-center text-center m-2'>
       <h1
-        className={`transition-all duration-1000 absolute font-bold text-gray-900 py-4 m-2 text-3xl md:text-4xl lg:text-5xl`} // Transición de 1000ms
+        className={`mb-2 transition-all duration-1000 absolute font-bold text-gray-900 py-4 m-2 text-3xl md:text-4xl lg:text-5xl`} // Transición de 1000ms
         style={{
           top: topPosition,
-          transform: 'translateY(-100%)'
+          transform: 'translateY(-80%)'
         }}
       >
         {title}
