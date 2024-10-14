@@ -64,7 +64,7 @@ export default function InternshipCards({
   const InternshipCard: React.FC<{ internship: Internship}> = ({
     internship,
   }) => (
-    <div className="flex flex-col justify-center my-4 p-4 w-[98%] mx-auto shadow-md text-base text-justify rounded-lg lg:text-lg">
+    <div className="bg-white flex flex-col justify-center my-4 p-4 w-[98%] mx-auto shadow-md text-base text-justify rounded-lg lg:text-lg">
       {/* //!codigo & num students que han apply  */}
       <div className="flex flex-col lg:flex-row text-sm lg:gap-2">
         <span className="flex mr-2 text-red-500">
