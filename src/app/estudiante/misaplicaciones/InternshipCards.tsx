@@ -133,7 +133,14 @@ export default function InternshipCards({
 
       {internship.apply[0].status === "aceptado" && (
             <div className="text-red-500 bg-red-100 w-[100%] text-justify">
-             <p className="p-2"> 🎉¡Felicidades! Has sido Aceptado en esta oferta. Ponte en contacto con la <b>Dirección de Educación y Asuntos Universitarios de la Alcaldía</b>, para retirar el <b>Oficio de tu Postulación</b> dirigido a la Dependencia, y así comenzar tu proceso.🎉</p>
+             <p className="p-2"> 🎉¡Felicidades! has sido aceptado en esta oferta. Dirgite a la  
+              <b> Dirección de Educación y Asuntos Universitarios de la Alcaldía</b>, para retirar el  
+              <b> Oficio de tu Postulación</b> que debes llevar a <b>{internship.dependencia.name}, 
+                </b> y así comenzar tu proceso de {internship.type === "pasantia"
+                  ? "Pasantias"
+                  : internship.type === "servicio"
+                  ? "Servicio Cominitario"
+                  : ""}, cuyo lapso ha comenzado🎉</p>
             </div>
           )}
 

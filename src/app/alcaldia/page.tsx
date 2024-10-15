@@ -1,6 +1,6 @@
 "use client";
 import ContainerWeb from "@/components/ContainerWeb";
-import Header from "@/components/Header";
+import Header from "@/components/HeaderLucide";
 import axios from "axios";
 import { use, useEffect, useState } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
@@ -117,7 +117,23 @@ export default function Page() {
 
   return (
     <>
-      <Header title={"Bienvenidos"} subtitle={"Estadísticas de estudiantes"} />
+      <Header title="Métricas de Pasantías y Servicio Comunitario">
+        <p>
+          Bienvenido al panel de métricas de pasantías y servicios comunitarios. Esta herramienta proporciona una <span className="font-semibold">Visión Integral del Progreso y Participación de la Población del Rol Estudiante</span> registrada en el sistema. Esta herramienta te permitirá:
+        </p>
+        <ul className="list-disc list-inside mt-2 space-y-1">
+          <li>Segmnetar la cantidad de estudiantes involucrados en pasantías y servicio comunitario.</li>
+          <li>Identificar facilmente los estudiantes en estatus <i>"Pendiente",</i> para su pronta respuesta.</li>
+          <li>Identificar facilmente los estudiantes en estatus <i>"Activos y terminados",</i> para su seguimiento y archivo, respectivamente.</li>
+          <li>Analiza la distribución por estados de cada proceso.</li>
+          <li>Identifica tendencias y áreas de oportunidad para mejorar la participación estudiantil.</li>
+          <li>Evalúa el impacto de estos programas en la comunidad y el desarrollo profesional de los estudiantes, dado el numero de procesos activos.</li>
+          <li>Utiliza datos en tiempo real para tomar decisiones informadas y ajustar políticas educativas.</li>
+        </ul>
+        <p className="mt-3">
+          Estas métricas son esenciales para optimizar la gestión de programas educativos y fortalecer la conexión entre la educación superior y las necesidades de nuestra comunidad.
+        </p>
+      </Header>
       <ContainerWeb>
         <div className="grid gap-6 md:grid-cols-3 mb-6">
           <div className="bg-white p-4 rounded-lg shadow">

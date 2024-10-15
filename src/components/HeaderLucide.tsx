@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState } from "react";
-import { Info } from 'lucide-react';
+import {FaExclamationCircle} from 'react-icons/fa'
 import { useNavBar } from '@/context/NavBarContext';
 import { useSession } from "next-auth/react";
 
@@ -62,7 +62,7 @@ export default function InformativeHeader({ title, children }: InformativeHeader
         {!isSticky && (
           <div className="bg-white border-l-4 border-yellow-500 p-4 rounded-r-lg shadow-md">
             <div className="flex items-center mb-2">
-              <Info className="text-yellow-500 mr-2" size={24} />
+              <FaExclamationCircle className="text-yellow-500 mr-2" size={24} />
               <h2 className="text-lg font-semibold text-gray-800">Información Importante</h2>
             </div>
             <div className="text-gray-700 leading-relaxed">

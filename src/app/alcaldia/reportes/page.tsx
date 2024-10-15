@@ -385,7 +385,7 @@ export default function ReportGenerator() {
       {/* <Header title={"REPORTES"} subtitle={"..."} /> */}
       <Header title="Sistema de generación de Reportes">
         <p className="mt-3 text-gray-700">
-        Aquí podrás realizar consultas avanzadas y generar <span className="font-semibold">Reportes Detallados sobre la Población del Rol Estudiantil</span> registrada en el sistema. Estas herramientas te permitirán:
+        Aquí podrás realizar consultas avanzadas y generar <span className="font-semibold">Reportes Detallados de la Población del Rol Estudiante</span> registrada en el sistema. Esta herramienta te permitirá:
         </p>
         <ul className="list-disc list-inside mt-2 space-y-1">
           <li>Filtrar estudiantes por diversos criterios como edad, género, institución educativa, carrera y más.</li>

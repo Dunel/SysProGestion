@@ -1,5 +1,5 @@
 "use client";
-import Header from "@/components/Header";
+import Header from "@/components/HeaderLucide";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -36,16 +36,38 @@ export default function AlcaldiaInfoForm() {
 
   return (
     <>
-      <Header
-        title={
-          !session?.user.dataProfile ? "Registrando tu Perfil" : "Mi Perfil"
-        }
-        subtitle={
-          !session?.user.profile
-            ? "Este es tu formulario de registro. Por favor, sigue las indicaciones de las casillas y completa tu información personal y profesional."
-            : "Este es tu perfil personal, el cual podrás actualizar mediante el formulario que se abre al presionar el botón 'Actualizar Perfil'. Es muy fácil, solo sigue las indicaciones de las casillas y actualiza tu información personal y profesional que ha cambiado."
-        }
-      />
+      <Header title="MI PERFIL">
+        {!session?.user.profile ? (
+          <>
+            <p>
+              Bienvenido al formulario de registro de tu perfil. Por favor, sigue cuidadosamente las indicaciones para completar tu información personal y profesional.
+            </p>
+            <ul className="list-disc list-inside mt-2 space-y-1">
+              <li>Proporciona información precisa y actualizada.</li>
+              <li>Asegúrate de llenar todos los campos obligatorios.</li>
+              <li>Verifica la información antes de enviar el formulario.</li>
+              <li>Si tienes dudas, consulta la sección de ayuda o contacta al soporte.</li>
+            </ul>
+            <p className="mt-3">
+              Completar tu perfil es esencial para acceder a todos los servicios y oportunidades que el sistema ofrece. ¡Comencemos!
+            </p>
+          </>
+        ) : (
+          <>
+            <p>
+              Este es tu perfil personal, el cual podrás actualizar mediante el formulario que se abre al presionar el botón inferior <span className="inline-block bg-gray-300 text-black font-semibold py-1 px-1 rounded cursor-pointer hover:bg-gray-400 transition duration-200">Actualizar Perfil</span>
+            </p>
+            <ul className="list-disc list-inside mt-2 space-y-1">
+              <li>Revisa tu información actual y asegúrate de que esté al día.</li>
+              <li>Actualiza cualquier dato que haya cambiado recientemente.</li>
+            </ul>
+            <p className="mt-3">
+              Recuerda que mantener tu perfil actualizado es crucial para una comunicación efectiva con el resto de usuarios del sistema.
+            </p>
+          </>
+        )}
+      </Header>
+      
 
       {session?.user.profile === false && (
         <div className="w-[80%] m-4 p-4 mx-auto">

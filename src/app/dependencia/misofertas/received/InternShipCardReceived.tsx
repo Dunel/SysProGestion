@@ -1,5 +1,6 @@
 import axios from "axios";
 import { FaMoneyCheckAlt } from "react-icons/fa";
+import InternshipCards from "../InternshipCards";
 
 interface Internship {
   id: number;
@@ -88,7 +89,7 @@ const ofertsStatus = [
   { key: "inactive", name: "Inactiva⚠️", color: "yellow" },
   {
     key: "aceptado",
-    name: "El estudiante ha Aceptado esta oferta🎉 Contactalo y comiencen el proceso.",
+    name: `🎉El estudiante ha Aceptado esta oferta🎉 Puedes contactarlo para comenzar el proceso. Ahora el estudiante debe dirigirse a la Dirección de Educación y Asuntos Universitarios de la Alcaldía, para retirar el Oficio de su postulación, y entregártelo. El lapso del proceso de este estudiante ha comenzado.`,
     color: "green",
   },
   {
