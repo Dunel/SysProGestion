@@ -89,6 +89,8 @@ type FiltroEstudiantes = {
   edad?: number;
   edadMin?: number;
   edadMax?: number;
+  gender: "M" | "F" | "";
+  vote: boolean | null;
 };
 
 export default function ReportGenerator() {
@@ -109,6 +111,12 @@ export default function ReportGenerator() {
   const [edadEspecifica, setEdadEspecifica] = useState("");
   const [edadRangoInicio, setEdadRangoInicio] = useState("");
   const [edadRangoFin, setEdadRangoFin] = useState("");
+  const [gender, setGender] = useState<"M" | "F" | "">("");
+  const [genderOpen, setGenderOpen] = useState(false);
+  const [month, setMonth] = useState<number | null>(null);
+  const [monthOpen, setMonthOpen] = useState(false);
+  const [vote, setVote] = useState<boolean | null>(null);
+  const [voteOpen, setVoteOpen] = useState(false);
   const [report, setReport] = useState<Students[]>([]);
   const [notFound, setNotFound] = useState(null as boolean | null);
 
@@ -121,10 +129,33 @@ export default function ReportGenerator() {
       edad: edadTipo === "especifica" ? Number(edadEspecifica) : undefined,
       edadMin: edadTipo === "rango" ? Number(edadRangoInicio) : undefined,
       edadMax: edadTipo === "rango" ? Number(edadRangoFin) : undefined,
+      gender,
+      vote,
     });
     setNotFound(filteredStudents.length > 0);
     setReport(filteredStudents);
   };
+
+  const arrayMonths = [
+    { id: 1, name: "Enero" },
+    { id: 2, name: "Febrero" },
+    { id: 3, name: "Marzo" },
+    { id: 4, name: "Abril" },
+    { id: 5, name: "Mayo" },
+    { id: 6, name: "Junio" },
+    { id: 7, name: "Julio" },
+    { id: 8, name: "Agosto" },
+    { id: 9, name: "Septiembre" },
+    { id: 10, name: "Octubre" },
+    { id: 11, name: "Noviembre" },
+    { id: 12, name: "Diciembre" },
+  ];
+
+  function filtrarPorMes(student: Students, mesBuscado: number) {
+    const fecha = new Date(student.date);
+    const mes = fecha.getMonth() + 1;
+    return mes === mesBuscado;
+  }
 
   function filtrarEstudiantes(
     estudiantes: Students[],
@@ -132,6 +163,14 @@ export default function ReportGenerator() {
   ): Students[] {
     return estudiantes.filter((estudiante) => {
       const edad = calcularEdad(estudiante.esInfo.User.birthdate);
+
+      const cumpleVote = filtro.vote !== null ? estudiante.esInfo.cneRegister === filtro.vote : true;
+
+      const cumpleMes = month ? filtrarPorMes(estudiante, month) : true;
+
+      const cumpleGener = filtro.gender
+        ? estudiante.esInfo.gender === filtro.gender
+        : true;
 
       const cumpleCarrera = filtro.carrera
         ? estudiante.esInfo.career.name.toLowerCase() ===
@@ -169,7 +208,10 @@ export default function ReportGenerator() {
         cumpleParroquia &&
         cumpleEdad &&
         cumpleEdadMin &&
-        cumpleEdadMax
+        cumpleEdadMax &&
+        cumpleGener &&
+        cumpleMes &&
+        cumpleVote
       );
     });
   }
@@ -298,6 +340,46 @@ export default function ReportGenerator() {
         <GridMain>
           <GridContainer>
             <div className="space-y-2">
+              <Label htmlFor="month">Mes</Label>
+              <Input
+                id="month"
+                type="text"
+                value={
+                  month ? arrayMonths.find((e) => e.id === month)?.name : ""
+                }
+                onClick={() => setMonthOpen(!monthOpen)}
+                readOnly
+                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                placeholder="Selecciona un Mes"
+              />
+              {monthOpen && (
+                <div className="fixed z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                  <div
+                    onClick={() => {
+                      setMonth(null);
+                      setMonthOpen(false);
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    {"- Selecciona un Mes -"}
+                  </div>
+                  {arrayMonths.map((e, index) => (
+                    <div
+                      key={index}
+                      onClick={() => {
+                        setMonth(e.id);
+                        setMonthOpen(false);
+                      }}
+                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {e.name}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="parroquia">Parroquia</Label>
               <Input
                 id="parroquia"
@@ -412,6 +494,56 @@ export default function ReportGenerator() {
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="gender">Genero</Label>
+              <Input
+                id="gender"
+                type="text"
+                value={
+                  gender === "M"
+                    ? "Masculino"
+                    : gender === "F"
+                    ? "Femenino"
+                    : ""
+                }
+                onClick={() => setGenderOpen(!genderOpen)}
+                readOnly
+                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                placeholder="Selecciona un Genero"
+              />
+              {genderOpen && (
+                <div className="fixed z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                  <div
+                    onClick={() => {
+                      setGender("");
+                      setGenderOpen(false);
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    {"- Selecciona un Genero -"}
+                  </div>
+                  <div
+                    onClick={() => {
+                      setGender("M");
+                      setGenderOpen(false);
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    Masculino
+                  </div>
+                  <div
+                    onClick={() => {
+                      setGender("F");
+                      setGenderOpen(false);
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    Femenino
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="dependencia">Dependencia</Label>
               <Input
                 id="dependencia"
@@ -501,6 +633,51 @@ export default function ReportGenerator() {
                 </div>
               )}
             </div>
+
+            <div className="mt-4 space-y-2">
+              <Label htmlFor="vote">Vota?</Label>
+              <Input
+                id="vote"
+                type="text"
+                value={vote === true ? "Si" : vote === false ? "No" : ""}
+                onClick={() => setVoteOpen(!voteOpen)}
+                readOnly
+                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                placeholder="Selecciona una opción"
+              />
+              {voteOpen && (
+                <div className="fixed z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                  <div
+                    onClick={() => {
+                      setVote(null);
+                      setVoteOpen(false);
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    {"- Selecciona una opción -"}
+                  </div>
+                  <div
+                    onClick={() => {
+                      setVote(true);
+                      setVoteOpen(false);
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    Si
+                  </div>
+                  <div
+                    onClick={() => {
+                      setVote(false);
+                      setVoteOpen(false);
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    No
+                  </div>
+                </div>
+              )}
+            </div>
+
             <Button
               onClick={handleGenerateReport}
               className="w-full mt-6 bg-black text-white p-6"
@@ -540,6 +717,7 @@ export default function ReportGenerator() {
                       <TableHead>Carrera</TableHead>
                       <TableHead>Institucion</TableHead>
                       <TableHead>Dependencia</TableHead>
+                      <TableHead>Fecha de Actividad</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -566,6 +744,9 @@ export default function ReportGenerator() {
                         <TableCell>{e.esInfo.career.name}</TableCell>
                         <TableCell>{e.esInfo.institution.name}</TableCell>
                         <TableCell>{e.application.dependencia.name}</TableCell>
+                        <TableCell>
+                          {new Date(e.date).toLocaleDateString()}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

@@ -192,6 +192,7 @@ export async function getStudents(req: NextRequest) {
         application:{
           select:{
             tutor: true,
+            type: true,
             date: true,
             dependencia:{
               select:{
