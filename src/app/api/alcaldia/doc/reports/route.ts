@@ -91,16 +91,19 @@ export async function POST(req: NextRequest) {
         row.getCell(14).value = student.esInfo.bankAccount; // Número de cuenta bancaria
         row.getCell(15).value = student.esInfo.bankName; // Nombre del banco
         row.getCell(16).value = ""; // observación
-        row.getCell(17).value = student.application.dependencia.name; // Campo 1
-        row.getCell(18).value = student.esInfo.cneRegister ? "Si" : "No"; // vota? 2
-        row.getCell(19).value = student.esInfo.cneCentroName; // centro de votacion 3
-        row.getCell(20).value = student.esInfo.cneParroquia; // parroquia centro de votacion 4
+        row.getCell(17).value = student.application.dependencia.name; // Dependencia
+        row.getCell(18).value = new Date(student.date).toLocaleDateString(); // Fecha de registro de pasantia o servicio comunitario
+        row.getCell(19).value = student.esInfo.cneRegister ? "Si" : "No"; // vota? 2
+        row.getCell(20).value = student.esInfo.cneCentroName; // centro de votacion 3
+        row.getCell(21).value = student.esInfo.cneParroquia; // parroquia centro de votacion 4
         row.commit();
       }
     });
 
     const headerRow = 7;
-    const columnCount = 20;
+    const columnCount = 21;
+
+    worksheet.autoFilter = 'A7:U7';
 
     const headersRow = worksheet.getRow(headerRow);
     const headers =
