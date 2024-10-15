@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import GridContainer from "@/components/GridContainer";
-import Header from "@/components/Header";
+import Header from "@/components/HeaderLucide";
 import GridMain from "@/components/GridMain";
 import ContainerWeb from "@/components/ContainerWeb";
 import axios from "axios";
@@ -119,6 +119,8 @@ export default function ReportGenerator() {
   const [voteOpen, setVoteOpen] = useState(false);
   const [report, setReport] = useState<Students[]>([]);
   const [notFound, setNotFound] = useState(null as boolean | null);
+
+  const [showClearButton, setShowClearButton] = useState(false);
 
   const handleGenerateReport = () => {
     const filteredStudents = filtrarEstudiantes(students, {
@@ -332,367 +334,465 @@ export default function ReportGenerator() {
     getInstitucion();
     getDependencias();
   }, []);
+  
+  const clearAllInputs = () => {
+    setCarrera("");
+    setInstitucion("");
+    setParroquia("");
+    setDependencia("");
+    setEdadTipo("nofiltrar");
+    setEdadEspecifica("");
+    setEdadRangoInicio("");
+    setEdadRangoFin("");
+    setGender("");
+    setMonth(null);
+    setVote(null);
+    
+    // Close all dropdowns
+    setCareersOpen(false);
+    setInstitutionsOpen(false);
+    setparroquiasOpen(false);
+    setDependenciasOpen(false);
+    setGenderOpen(false);
+    setMonthOpen(false);
+    setVoteOpen(false);
+
+    // Reset the report and notFound state
+    setReport([]);
+    setNotFound(null);
+  };
+
+
+  useEffect(() => {
+    const hasValue = 
+      carrera !== "" ||
+      institucion !== "" ||
+      parroquia !== "" ||
+      dependencia !== "" ||
+      edadTipo !== "nofiltrar" ||
+      edadEspecifica !== "" ||
+      edadRangoInicio !== "" ||
+      edadRangoFin !== "" ||
+      gender !== "" ||
+      month !== null ||
+      vote !== null;
+
+    setShowClearButton(hasValue);
+  }, [carrera, institucion, parroquia, dependencia, edadTipo, edadEspecifica, edadRangoInicio, edadRangoFin, gender, month, vote]);
 
   return (
     <>
-      <Header title={"REPORTES"} subtitle={"..."} />
+      {/* <Header title={"REPORTES"} subtitle={"..."} /> */}
+      <Header title="Sistema de generación de Reportes">
+        <p className="mt-3 text-gray-700">
+        Aquí podrás realizar consultas avanzadas y generar <span className="font-semibold">Reportes Detallados sobre la Población del Rol Estudiantil</span> registrada en el sistema. Estas herramientas te permitirán:
+        </p>
+        <ul className="list-disc list-inside mt-2 space-y-1">
+          <li>Filtrar estudiantes por diversos criterios como edad, género, institución educativa, carrera y más.</li>
+          <li>Generar reportes personalizados en formato Excel y visualizaciones en tablas web.</li>
+          <li>Obtener información crucial para la toma de decisiones en la gestión de la alcaldía.</li>
+          <li>Analizar tendencias y patrones en la población estudiantil del municipio.</li>
+          <li>Facilitar la planificación de programas y políticas educativas locales.</li>
+        </ul>
+        <p className="mt-3 text-gray-700">
+        Utiliza los filtros disponibles para afinar tus búsquedas y obtener datos precisos que respalden las iniciativas y proyectos de la alcaldía en el ámbito educativo.
+      </p>
+        </Header> 
+
       <ContainerWeb>
         <GridMain>
           <GridContainer>
-            <div className="space-y-2">
-              <Label htmlFor="month">Mes</Label>
-              <Input
-                id="month"
-                type="text"
-                value={
-                  month ? arrayMonths.find((e) => e.id === month)?.name : ""
-                }
-                onClick={() => setMonthOpen(!monthOpen)}
-                readOnly
-                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
-                placeholder="Selecciona un Mes"
-              />
-              {monthOpen && (
-                <div className="fixed z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
-                  <div
-                    onClick={() => {
-                      setMonth(null);
-                      setMonthOpen(false);
-                    }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
-                  >
-                    {"- Selecciona un Mes -"}
-                  </div>
-                  {arrayMonths.map((e, index) => (
-                    <div
-                      key={index}
-                      onClick={() => {
-                        setMonth(e.id);
-                        setMonthOpen(false);
-                      }}
-                      className="p-2 hover:bg-gray-100 cursor-pointer"
-                    >
-                      {e.name}
-                    </div>
-                  ))}
-                </div>
-              )}
+
+
+
+            <div className="w-full flex flex-col md:flex-row"> 
+            {/* INPUT MES */}
+                        <div className="space-y-2 flex-1 p-4">
+                          <Label htmlFor="month" className="text-xl text-gray-600 md:text-lg lg:text-2xl">Mes</Label>
+                          <Input
+                            id="month"
+                            type="text"
+                            value={
+                              month ? arrayMonths.find((e) => e.id === month)?.name : ""
+                            }
+                            onClick={() => setMonthOpen(!monthOpen)}
+                            readOnly
+                            className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                            placeholder="Selecciona un Mes"
+                          />
+                          {monthOpen && (
+                            <div className="z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                              <div
+                                onClick={() => {
+                                  setMonth(null);
+                                  setMonthOpen(false);
+                                }}
+                                className="p-2 hover:bg-gray-100 cursor-pointer"
+                              >
+                                {"- Selecciona un Mes -"}
+                              </div>
+                              {arrayMonths.map((e, index) => (
+                                <div
+                                  key={index}
+                                  onClick={() => {
+                                    setMonth(e.id);
+                                    setMonthOpen(false);
+                                  }}
+                                  className="p-2 hover:bg-gray-100 cursor-pointer"
+                                >
+                                  {e.name}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+
+            {/* INPUT PARROQUIA */}
+                        <div className="space-y-2 flex-1 p-4">
+                          <Label htmlFor="parroquia" className="text-xl text-gray-600 md:text-lg lg:text-2xl">Parroquia</Label>
+                          <Input
+                            id="parroquia"
+                            type="text"
+                            value={parroquia}
+                            onClick={() => setparroquiasOpen(!parroquiasOpen)}
+                            readOnly
+                            className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                            placeholder="Selecciona una Parroquia"
+                          />
+                          {parroquiasOpen && (
+                            <div className="z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                              <div
+                                onClick={() => {
+                                  setParroquia("");
+                                  setparroquiasOpen(false);
+                                }}
+                                className="p-2 hover:bg-gray-100 cursor-pointer"
+                              >
+                                {"- Selecciona una Parroquia -"}
+                              </div>
+                              {parroquias.map((e, index) => (
+                                <div
+                                  key={index}
+                                  onClick={() => {
+                                    setParroquia(e.parroquia);
+                                    setparroquiasOpen(false);
+                                  }}
+                                  className="p-2 hover:bg-gray-100 cursor-pointer"
+                                >
+                                  {e.parroquia}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="parroquia">Parroquia</Label>
-              <Input
-                id="parroquia"
-                type="text"
-                value={parroquia}
-                onClick={() => setparroquiasOpen(!parroquiasOpen)}
-                readOnly
-                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
-                placeholder="Selecciona una Parroquia"
-              />
-              {parroquiasOpen && (
-                <div className="fixed z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
-                  <div
-                    onClick={() => {
-                      setParroquia("");
-                      setparroquiasOpen(false);
-                    }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
-                  >
-                    {"- Selecciona una Parroquia -"}
-                  </div>
-                  {parroquias.map((e, index) => (
-                    <div
-                      key={index}
-                      onClick={() => {
-                        setParroquia(e.parroquia);
-                        setparroquiasOpen(false);
-                      }}
-                      className="p-2 hover:bg-gray-100 cursor-pointer"
-                    >
-                      {e.parroquia}
-                    </div>
-                  ))}
-                </div>
-              )}
+            <div className="flex flex-col md:flex-row">
+            {/* INPUT CARRERA */}
+                        <div className="space-y-2 flex-1 p-4">
+                          <Label htmlFor="carrera" className="text-xl text-gray-600 md:text-lg lg:text-2xl">Carrera o  Mención</Label>
+                          <Input
+                            id="career"
+                            type="text"
+                            value={carrera}
+                            onClick={() => setCareersOpen(!careersOpen)}
+                            readOnly
+                            className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                            placeholder="Selecciona una Carrera"
+                          />
+                          {careersOpen && (
+                            <div className="z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                              <div
+                                onClick={() => {
+                                  setCarrera("");
+                                  setCareersOpen(false);
+                                }}
+                                className="p-2 hover:bg-gray-100 cursor-pointer"
+                              >
+                                {"- Selecciona una Carrera -"}
+                              </div>
+                              {careers.map((e, index) => (
+                                <div
+                                  key={index}
+                                  onClick={() => {
+                                    setCarrera(e.name);
+                                    setCareersOpen(false);
+                                  }}
+                                  className="p-2 hover:bg-gray-100 cursor-pointer"
+                                >
+                                  {e.name}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+
+            {/* INPUT INSTITUCIONES EDU */}
+                        <div className="space-y-2 flex-1 p-4">
+                          <Label htmlFor="institucion" className="text-xl text-gray-600 md:text-lg lg:text-2xl">Institución Educativa</Label>
+                          <Input
+                            id="institucion"
+                            type="text"
+                            value={institucion}
+                            onClick={() => setInstitutionsOpen(!institutionsOpen)}
+                            readOnly
+                            className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                            placeholder="Selecciona una Institución"
+                          />
+                          {institutionsOpen && (
+                            <div className="z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                              <div
+                                onClick={() => {
+                                  setInstitucion("");
+                                  setInstitutionsOpen(false);
+                                }}
+                                className="p-2 hover:bg-gray-100 cursor-pointer"
+                              >
+                                {"- Selecciona una Institución -"}
+                              </div>
+                              {institutions.map((e, index) => (
+                                <div
+                                  key={index}
+                                  onClick={() => {
+                                    setInstitucion(e.name);
+                                    setInstitutionsOpen(false);
+                                  }}
+                                  className="p-2 hover:bg-gray-100 cursor-pointer"
+                                >
+                                  {e.name}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="carrera">Carrera</Label>
-              <Input
-                id="career"
-                type="text"
-                value={carrera}
-                onClick={() => setCareersOpen(!careersOpen)}
-                readOnly
-                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
-                placeholder="Selecciona una Carrera"
-              />
-              {careersOpen && (
-                <div className="fixed z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
-                  <div
-                    onClick={() => {
-                      setCarrera("");
-                      setCareersOpen(false);
-                    }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
-                  >
-                    {"- Selecciona una Carrera -"}
-                  </div>
-                  {careers.map((e, index) => (
-                    <div
-                      key={index}
-                      onClick={() => {
-                        setCarrera(e.name);
-                        setCareersOpen(false);
-                      }}
-                      className="p-2 hover:bg-gray-100 cursor-pointer"
-                    >
-                      {e.name}
-                    </div>
-                  ))}
-                </div>
-              )}
+            <div className="flex flex-col md:flex-row">
+            {/* INPUT GENERO */}
+                        <div className="space-y-2 flex-1 p-4">
+                          <Label htmlFor="gender" className="text-xl text-gray-600 md:text-lg lg:text-2xl">Género</Label>
+                          <Input
+                            id="gender"
+                            type="text"
+                            value={
+                              gender === "M"
+                                ? "Masculino"
+                                : gender === "F"
+                                ? "Femenino"
+                                : ""
+                            }
+                            onClick={() => setGenderOpen(!genderOpen)}
+                            readOnly
+                            className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                            placeholder="Selecciona un Género"
+                          />
+                          {genderOpen && (
+                            <div className="z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                              <div
+                                onClick={() => {
+                                  setGender("");
+                                  setGenderOpen(false);
+                                }}
+                                className="p-2 hover:bg-gray-100 cursor-pointer"
+                              >
+                                {"- Selecciona un Genero -"}
+                              </div>
+                              <div
+                                onClick={() => {
+                                  setGender("M");
+                                  setGenderOpen(false);
+                                }}
+                                className="p-2 hover:bg-gray-100 cursor-pointer"
+                              >
+                                Masculino
+                              </div>
+                              <div
+                                onClick={() => {
+                                  setGender("F");
+                                  setGenderOpen(false);
+                                }}
+                                className="p-2 hover:bg-gray-100 cursor-pointer"
+                              >
+                                Femenino
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+            {/* INPUT DEPENDENCIA */}
+                        <div className="space-y-2 flex-1 p-4">
+                          <Label htmlFor="dependencia" className="text-xl text-gray-600 md:text-lg lg:text-2xl">Dependencia de Alcaldía</Label>
+                          <Input
+                            id="dependencia"
+                            type="text"
+                            value={dependencia}
+                            onClick={() => setDependenciasOpen(!dependenciasOpen)}
+                            readOnly
+                            className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                            placeholder="Selecciona una Dependencia"
+                          />
+                          {dependenciasOpen && (
+                            <div className="z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                              <div
+                                onClick={() => {
+                                  setDependencia("");
+                                  setDependenciasOpen(false);
+                                }}
+                                className="p-2 hover:bg-gray-100 cursor-pointer"
+                              >
+                                {"- Selecciona una Dependencia -"}
+                              </div>
+                              {dependencias.map((e, index) => (
+                                <div
+                                  key={index}
+                                  onClick={() => {
+                                    setDependencia(e.name);
+                                    setDependenciasOpen(false);
+                                  }}
+                                  className="p-2 hover:bg-gray-100 cursor-pointer"
+                                >
+                                  {e.name}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+
+
+            
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="institucion">Institución</Label>
-              <Input
-                id="institucion"
-                type="text"
-                value={institucion}
-                onClick={() => setInstitutionsOpen(!institutionsOpen)}
-                readOnly
-                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
-                placeholder="Selecciona una Institución"
-              />
-              {institutionsOpen && (
-                <div className="fixed z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
-                  <div
-                    onClick={() => {
-                      setInstitucion("");
-                      setInstitutionsOpen(false);
-                    }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
-                  >
-                    {"- Selecciona una Institución -"}
-                  </div>
-                  {institutions.map((e, index) => (
-                    <div
-                      key={index}
-                      onClick={() => {
-                        setInstitucion(e.name);
-                        setInstitutionsOpen(false);
-                      }}
-                      className="p-2 hover:bg-gray-100 cursor-pointer"
-                    >
-                      {e.name}
-                    </div>
-                  ))}
-                </div>
-              )}
+
+            <div className="w-full flex flex-col md:flex-row"> 
+
+            {/* INPUT EDAD */}
+                        <div className="mt-4 space-y-2 flex-1 p-4">
+                          <Label className="text-xl text-gray-600 md:text-lg lg:text-2xl" >Edad</Label>
+                          <RadioGroup
+                            value={edadTipo}
+                            onValueChange={setEdadTipo}
+                            className="flex space-x-4"
+                          >
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="nofiltrar" id="nofiltrar" />
+                              <Label htmlFor="nofiltrar">No filtrar por edad</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="especifica" id="especifica" />
+                              <Label htmlFor="especifica">Edad específica</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="rango" id="rango" />
+                              <Label htmlFor="rango">Rango de edad</Label>
+                            </div>
+                          </RadioGroup>
+
+                          {edadTipo === "especifica" && (
+                            <Input
+                              id="edadEspecifica"
+                              type="number"
+                              value={edadEspecifica}
+                              onChange={(e) => setEdadEspecifica(e.target.value)}
+                              className="w-full"
+                              placeholder="Edad"
+                            />
+                          )}
+                          {edadTipo === "rango" && (
+                            <div className="grid grid-cols-2 gap-2">
+                              <Input
+                                id="edadRangoInicio"
+                                type="number"
+                                value={edadRangoInicio}
+                                onChange={(e) => setEdadRangoInicio(e.target.value)}
+                                className="w-full"
+                                placeholder="Min"
+                              />
+                              <Input
+                                id="edadRangoFin"
+                                type="number"
+                                value={edadRangoFin}
+                                onChange={(e) => setEdadRangoFin(e.target.value)}
+                                className="w-full"
+                                placeholder="Max"
+                              />
+                            </div>
+                          )}
+                        </div>
+
+            {/* INPUT VOTANTES */}
+                        <div className="mt-4 space-y-2 flex-1 p-4">
+                          <Label htmlFor="vote" className="text-xl text-gray-600 md:text-lg lg:text-2xl">Votantes</Label>
+                          <Input
+                            id="vote"
+                            type="text"
+                            value={vote === true ? "Si" : vote === false ? "No" : ""}
+                            onClick={() => setVoteOpen(!voteOpen)}
+                            readOnly
+                            className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                            placeholder="Selecciona una opción"
+                          />
+                          {voteOpen && (
+                            <div className="z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                              <div
+                                onClick={() => {
+                                  setVote(null);
+                                  setVoteOpen(false);
+                                }}
+                                className="p-2 hover:bg-gray-100 cursor-pointer"
+                              >
+                                {"- Selecciona una opción -"}
+                              </div>
+                              <div
+                                onClick={() => {
+                                  setVote(true);
+                                  setVoteOpen(false);
+                                }}
+                                className="p-2 hover:bg-gray-100 cursor-pointer"
+                              >
+                                Si
+                              </div>
+                              <div
+                                onClick={() => {
+                                  setVote(false);
+                                  setVoteOpen(false);
+                                }}
+                                className="p-2 hover:bg-gray-100 cursor-pointer"
+                              >
+                                No
+                              </div>
+                            </div>
+                          )}
+                        </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="gender">Genero</Label>
-              <Input
-                id="gender"
-                type="text"
-                value={
-                  gender === "M"
-                    ? "Masculino"
-                    : gender === "F"
-                    ? "Femenino"
-                    : ""
-                }
-                onClick={() => setGenderOpen(!genderOpen)}
-                readOnly
-                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
-                placeholder="Selecciona un Genero"
-              />
-              {genderOpen && (
-                <div className="fixed z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
-                  <div
-                    onClick={() => {
-                      setGender("");
-                      setGenderOpen(false);
-                    }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
-                  >
-                    {"- Selecciona un Genero -"}
-                  </div>
-                  <div
-                    onClick={() => {
-                      setGender("M");
-                      setGenderOpen(false);
-                    }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
-                  >
-                    Masculino
-                  </div>
-                  <div
-                    onClick={() => {
-                      setGender("F");
-                      setGenderOpen(false);
-                    }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
-                  >
-                    Femenino
-                  </div>
-                </div>
-              )}
+          {showClearButton && (
+            <div className="flex justify-center mt-6">
+              <Button onClick={clearAllInputs}   className="w-full mt-6 bg-gray-500 text-white p-6 md:w-[70%]">
+                LIMPIAR FILTROS Y TABLA
+              </Button>
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="dependencia">Dependencia</Label>
-              <Input
-                id="dependencia"
-                type="text"
-                value={dependencia}
-                onClick={() => setDependenciasOpen(!dependenciasOpen)}
-                readOnly
-                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
-                placeholder="Selecciona una Dependencia"
-              />
-              {dependenciasOpen && (
-                <div className="fixed z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
-                  <div
-                    onClick={() => {
-                      setDependencia("");
-                      setDependenciasOpen(false);
-                    }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
-                  >
-                    {"- Selecciona una Dependencia -"}
-                  </div>
-                  {dependencias.map((e, index) => (
-                    <div
-                      key={index}
-                      onClick={() => {
-                        setDependencia(e.name);
-                        setDependenciasOpen(false);
-                      }}
-                      className="p-2 hover:bg-gray-100 cursor-pointer"
-                    >
-                      {e.name}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className="mt-4 space-y-2">
-              <Label>Edad</Label>
-              <RadioGroup
-                value={edadTipo}
-                onValueChange={setEdadTipo}
-                className="flex space-x-4"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="nofiltrar" id="nofiltrar" />
-                  <Label htmlFor="nofiltrar">No filtrar por edad</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="especifica" id="especifica" />
-                  <Label htmlFor="especifica">Edad específica</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="rango" id="rango" />
-                  <Label htmlFor="rango">Rango de edad</Label>
-                </div>
-              </RadioGroup>
-
-              {edadTipo === "especifica" && (
-                <Input
-                  id="edadEspecifica"
-                  type="number"
-                  value={edadEspecifica}
-                  onChange={(e) => setEdadEspecifica(e.target.value)}
-                  className="w-full"
-                  placeholder="Edad"
-                />
-              )}
-              {edadTipo === "rango" && (
-                <div className="grid grid-cols-2 gap-2">
-                  <Input
-                    id="edadRangoInicio"
-                    type="number"
-                    value={edadRangoInicio}
-                    onChange={(e) => setEdadRangoInicio(e.target.value)}
-                    className="w-full"
-                    placeholder="Min"
-                  />
-                  <Input
-                    id="edadRangoFin"
-                    type="number"
-                    value={edadRangoFin}
-                    onChange={(e) => setEdadRangoFin(e.target.value)}
-                    className="w-full"
-                    placeholder="Max"
-                  />
-                </div>
-              )}
-            </div>
-
-            <div className="mt-4 space-y-2">
-              <Label htmlFor="vote">Vota?</Label>
-              <Input
-                id="vote"
-                type="text"
-                value={vote === true ? "Si" : vote === false ? "No" : ""}
-                onClick={() => setVoteOpen(!voteOpen)}
-                readOnly
-                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
-                placeholder="Selecciona una opción"
-              />
-              {voteOpen && (
-                <div className="fixed z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
-                  <div
-                    onClick={() => {
-                      setVote(null);
-                      setVoteOpen(false);
-                    }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
-                  >
-                    {"- Selecciona una opción -"}
-                  </div>
-                  <div
-                    onClick={() => {
-                      setVote(true);
-                      setVoteOpen(false);
-                    }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
-                  >
-                    Si
-                  </div>
-                  <div
-                    onClick={() => {
-                      setVote(false);
-                      setVoteOpen(false);
-                    }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
-                  >
-                    No
-                  </div>
-                </div>
-              )}
-            </div>
-
+          )}
+          <div className="flex justify-center mt-6">
             <Button
               onClick={handleGenerateReport}
-              className="w-full mt-6 bg-black text-white p-6"
+              className="w-full mt-4 bg-black text-white p-6 md:w-[70%]"
             >
               GENERAR REPORTE
             </Button>
+            </div>
+
             {report.length > 0 && (
+            <div className="flex justify-center mt-6">
               <Button
                 onClick={() => {
                   handleDownloadReport(report);
                 }}
-                className="w-full mt-6 bg-green-800 text-white p-6"
+                className="w-full mt-4 bg-green-800 text-white p-6 md:w-[70%]"
               >
                 DESCARGAR REPORTE FORMATO EXCEL
               </Button>
+              </div>
             )}
           </GridContainer>
 
