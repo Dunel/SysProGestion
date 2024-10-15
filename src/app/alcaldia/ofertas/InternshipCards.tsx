@@ -3,9 +3,11 @@ import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { Oval } from "react-loader-spinner";
+
 interface Internship {
   handleDeleteApply: Function;
   handleOficio: Function;
+  handleCloseApp: Function;
   dependencia: {
     name: string;
     User: {
@@ -225,7 +227,12 @@ export default function InternshipCards({
           Descargar Oficio
         </button>
         }
-          
+        <button
+          onClick={() => internship.handleCloseApp(internship.id)}
+          className="w-[100%] p-2 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
+        >
+          cerrar Oferta
+        </button>
       </div>
 
       {internship.loading && ( // Muestra el loader si está cargando

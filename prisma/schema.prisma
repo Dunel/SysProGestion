@@ -140,6 +140,7 @@ model application {
 enum status {
   active
   inactive
+  closed
 }
 
 model apply {

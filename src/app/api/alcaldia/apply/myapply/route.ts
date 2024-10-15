@@ -1,4 +1,4 @@
-import { deleteApplicationAlcaldia, getMyAppAlcaldia } from "@/controllers/application.controller";
+import { closedAppAlcaldia, deleteApplicationAlcaldia, getMyAppAlcaldia } from "@/controllers/application.controller";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -9,7 +9,6 @@ export async function DELETE(req: NextRequest) {
   return await deleteApplicationAlcaldia(req);
 }
 
-/*
-export async function POST(req: NextRequest) {
-  return await createAppDepend(req);
-}*/
+export async function PUT(req: NextRequest) {
+  return await closedAppAlcaldia(req);
+}

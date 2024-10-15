@@ -164,7 +164,10 @@ export default function ReportGenerator() {
     return estudiantes.filter((estudiante) => {
       const edad = calcularEdad(estudiante.esInfo.User.birthdate);
 
-      const cumpleVote = filtro.vote !== null ? estudiante.esInfo.cneRegister === filtro.vote : true;
+      const cumpleVote =
+        filtro.vote !== null
+          ? estudiante.esInfo.cneRegister === filtro.vote
+          : true;
 
       const cumpleMes = month ? filtrarPorMes(estudiante, month) : true;
 
@@ -582,6 +585,50 @@ export default function ReportGenerator() {
             </div>
 
             <div className="mt-4 space-y-2">
+              <Label htmlFor="vote">Vota?</Label>
+              <Input
+                id="vote"
+                type="text"
+                value={vote === true ? "Si" : vote === false ? "No" : ""}
+                onClick={() => setVoteOpen(!voteOpen)}
+                readOnly
+                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                placeholder="Selecciona una opción"
+              />
+              {voteOpen && (
+                <div className="fixed z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                  <div
+                    onClick={() => {
+                      setVote(null);
+                      setVoteOpen(false);
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    {"- Selecciona una opción -"}
+                  </div>
+                  <div
+                    onClick={() => {
+                      setVote(true);
+                      setVoteOpen(false);
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    Si
+                  </div>
+                  <div
+                    onClick={() => {
+                      setVote(false);
+                      setVoteOpen(false);
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    No
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-4 space-y-2">
               <Label>Edad</Label>
               <RadioGroup
                 value={edadTipo}
@@ -630,50 +677,6 @@ export default function ReportGenerator() {
                     className="w-full"
                     placeholder="Max"
                   />
-                </div>
-              )}
-            </div>
-
-            <div className="mt-4 space-y-2">
-              <Label htmlFor="vote">Vota?</Label>
-              <Input
-                id="vote"
-                type="text"
-                value={vote === true ? "Si" : vote === false ? "No" : ""}
-                onClick={() => setVoteOpen(!voteOpen)}
-                readOnly
-                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
-                placeholder="Selecciona una opción"
-              />
-              {voteOpen && (
-                <div className="fixed z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
-                  <div
-                    onClick={() => {
-                      setVote(null);
-                      setVoteOpen(false);
-                    }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
-                  >
-                    {"- Selecciona una opción -"}
-                  </div>
-                  <div
-                    onClick={() => {
-                      setVote(true);
-                      setVoteOpen(false);
-                    }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
-                  >
-                    Si
-                  </div>
-                  <div
-                    onClick={() => {
-                      setVote(false);
-                      setVoteOpen(false);
-                    }}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
-                  >
-                    No
-                  </div>
                 </div>
               )}
             </div>

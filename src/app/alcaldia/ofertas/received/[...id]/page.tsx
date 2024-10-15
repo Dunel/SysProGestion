@@ -54,6 +54,8 @@ interface Internship {
           skills: string[];
           description: string;
           curriculum: string;
+          bankName: string;
+          bankAccount: string;
         };
       };
     }

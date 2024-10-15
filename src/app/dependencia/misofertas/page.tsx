@@ -89,6 +89,23 @@ export default function Page() {
     }
   };
 
+  const handleCloseApp = async (id: number) => {
+    try {
+      setSpanRetirar(true);
+      const res = await axios.put("/api/dependencia/apply/myapply", { id });
+      console.log(res.data);
+      getApplications();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error lanzado:", error.response?.data.error);
+      } else {
+        console.error("error:", error);
+      }
+    } finally {
+      setSpanRetirar(false);
+    }
+  }
+
   useEffect(() => {
     getApplications();
   }, []);
@@ -116,6 +133,7 @@ export default function Page() {
               internships={applications.map((internship) => ({
                 ...internship,
                 handleDeleteApply: confirmDelete,
+                handleCloseStatus: () => handleCloseApp(internship.id),
               }))}
             />
           ) : null}

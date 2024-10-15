@@ -1,4 +1,4 @@
-import { deleteApplicationDepend, getMyApplicationDepend, createAppDepend } from "@/controllers/application.controller";
+import { deleteApplicationDepend, getMyApplicationDepend, createAppDepend, closedAppDependencia } from "@/controllers/application.controller";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -11,4 +11,8 @@ export async function DELETE(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   return await createAppDepend(req);
+}
+
+export async function PUT(req: NextRequest) {
+  return await closedAppDependencia(req);
 }
