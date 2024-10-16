@@ -119,7 +119,7 @@ export default function Page() {
     <>
       <Header title="Métricas de Pasantías y Servicio Comunitario">
         <p>
-          Bienvenido al panel de métricas de pasantías y servicios comunitarios. Esta herramienta proporciona una <span className="font-semibold">Visión Integral del Progreso y Participación de la Población del Rol Estudiante</span> registrada en el sistema. Esta herramienta te permitirá:
+          Bienvenidos al panel de métricas de pasantías y servicios comunitarios. Esta herramienta proporciona una <span className="font-semibold">Visión Integral del Progreso y Participación de la Población del Rol Estudiante</span> registrada en el sistema. Esta herramienta te permitirá:
         </p>
         <ul className="list-disc list-inside mt-2 space-y-1">
           <li>Segmnetar la cantidad de estudiantes involucrados en pasantías y servicio comunitario.</li>
