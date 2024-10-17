@@ -259,11 +259,17 @@
 //   );
 // }
 
+
+
+
+
 import { FaMoneyCheckAlt } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Oval } from "react-loader-spinner";
 import { FaEllipsisV } from 'react-icons/fa'; // Asegúrate de instalar react-icons
+
+
 
 interface Internship {
   handleDeleteApply: Function;
@@ -333,6 +339,24 @@ const InternshipCard: React.FC<{ internship: Internship }> = ({
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     };
+    
+
+    const menuRef = useRef<HTMLDivElement>(null); // Crear un ref para el menú
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setMenuOpen(false); // Cerrar el menú si se hace clic fuera
+            }
+        };
+
+        // Agregar el listener
+        document.addEventListener("mousedown", handleClickOutside);
+
+        // Limpiar el listener al desmontar
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     return (
         <div className="bg-white flex flex-col justify-center my-4 p-4 w-[98%] mx-auto shadow-md text-base text-justify rounded-lg lg:text-lg md:p-10">
@@ -377,10 +401,8 @@ const InternshipCard: React.FC<{ internship: Internship }> = ({
                   </div>
 
 
-
-
-                  {/* BOTONETA */}
-                  <div className="ml-auto p-2">
+    {/* BOTONETA */}
+    <div className="ml-auto p-2" ref={menuRef}> {/* Asignar ref aquí */}
                     {/* Menú de opciones (hamburguesa vertical) */}
                     <div className="relative">
                         {/* Botón del menú */}
@@ -393,7 +415,7 @@ const InternshipCard: React.FC<{ internship: Internship }> = ({
 
                         {/* Menú desplegable */}
                         {menuOpen && (
-                            <div className="absolute right-0 mt-2 w-[200px] bg-white border rounded shadow-lg z-10">
+                            <div className="absolute right-0 mt-2 w-[30vw] bg-white border rounded shadow-lg z-10">
                                 <ul className="flex flex-col">
                                     <li>
                                         <button
@@ -451,6 +473,8 @@ const InternshipCard: React.FC<{ internship: Internship }> = ({
                         )}
                     </div>
                   </div>
+
+            
             </div>
 
 
