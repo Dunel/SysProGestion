@@ -2,7 +2,7 @@
 import ContainerWeb from "@/components/ContainerWeb";
 import GridContainer from "@/components/GridContainer";
 import GridMain from "@/components/GridMain";
-import Header from "@/components/Header";
+import Header from "@/components/HeaderLucide";
 import Skeleton from "@/components/ui/SkeletonComponent";
 import { useEffect, useState } from "react";
 import InternshipCards from "@/app/alcaldia/ofertas/InternshipCards";
@@ -144,13 +144,25 @@ export default function Page() {
 
   return (
     <>
-      <Header 
-        title={"TODAS LAS OFERTAS DE VACANTES"} 
-        subtitle={`Aquí puedes visualizar, actualizar y eliminar todas las ofertas a vacantes de Pasantías 
-          y Servicio Comunitario que han sido creadas. Igualmente, podrás gestionarlas, agregando, 
-          aceptando o eliminando estudiantes a las ofertas. Finalmente, podrás descargar los oficios de asignación 
-          de pasantes y prestadores de servicio comunitario a la Dependencia, una vez que el o los estudiantes 
-          hayan sido aceptados.`} />
+      <Header title="TODAS LAS OFERTAS DE VACANTES">
+          <p>
+            Aquí puedes visualizar, actualizar y eliminar todas las ofertas a vacantes de Pasantías 
+            y Servicio Comunitario que han sido creadas. Esta herramienta te permite:
+          </p>
+          <ul className="list-disc list-inside mt-2 space-y-1">
+            <li>Gestionar ofertas existentes, incluyendo su actualización y eliminación.</li>
+            <li>Agregar nuevos estudiantes a las ofertas disponibles.</li>
+            <li>Aceptar estudiantes para las vacantes ofrecidas.</li>
+            <li>Eliminar estudiantes de las ofertas cuando sea necesario.</li>
+            <li>Descargar oficios de asignación para pasantes y prestadores de servicio comunitario.</li>
+          </ul>
+          <p className="mt-3">
+            Esta plataforma centraliza la gestión de ofertas, facilitando la asignación eficiente de estudiantes 
+            a las Dependencias correspondientes. <span className="font-semibold">Los Oficios de Asignación estarán disponibles para 
+            descarga en un documento de tipo <i>Word</i> una vez que el estudiante hayan aceptado su aprobacion en la respectiva oferta</span>.
+          </p>
+      </Header>
+
       <ContainerWeb>
         <GridMain>
           {squeleton ? (

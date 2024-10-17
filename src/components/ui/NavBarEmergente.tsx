@@ -1,87 +1,3 @@
-// // "use client"
-// // import React, { useState, useEffect } from 'react';
-// // import { FaTimes, FaHome, FaAddressCard, FaClipboardList, FaClipboardCheck, FaMailBulk, FaExpeditedssl } from 'react-icons/fa';
-// // import Link from 'next/link';
-// // import { useNavBar } from '@/context/NavBarContext';
-// // import { signOut, useSession } from "next-auth/react";
-
-
-// // const NavBarEmergente: React.FC = () => {
-// //   const [isHovered, setIsHovered] = useState(false);
-// //   const { isOpen, toggleNavBar } = useNavBar();
-
-// //   useEffect(() => {
-// //     const handleEscape = (event: KeyboardEvent) => {
-// //       if (event.key === 'Escape') {
-// //         toggleNavBar();
-// //       }
-// //     };
-
-// //     document.addEventListener('keydown', handleEscape);
-// //     return () => {
-// //       document.removeEventListener('keydown', handleEscape);
-// //     };
-// //   }, [toggleNavBar]);
-
-// //   if (!isOpen) return null;
-
-// //   return (
-// //     <div
-// //       className={`fixed top-[8vh] left-0 h-full opacidad text-white transition-all duration-300 ease-in-out z-50 ${
-// //         isHovered ? 'w-64' : 'w-16'
-// //       } overflow-hidden`}
-// //       onMouseEnter={() => setIsHovered(true)}
-// //       onMouseLeave={() => setIsHovered(false)}
-// //     >
-// //       <button
-// //         onClick={toggleNavBar}
-// //         className="absolute top-4 left-4 text-white hover:text-red-300"
-// //       >
-// //         <FaTimes size={24}/>
-// //       </button>
-// //       <nav className="pt-16">
-// //         <ul className="space-y-4">
-// //           <NavItem icon={<FaHome size={20} />} text="Principal" href="/estudiante" isHovered={isHovered} />
-// //           <NavItem icon={<FaAddressCard size={20} />} text="Perfil" href="/estudiante/perfil" isHovered={isHovered} />
-// //           <NavItem icon={<FaClipboardList size={20} />} text="Ofertas de Vacante" href="/estudiante/ofertas" isHovered={isHovered} />
-// //           <NavItem icon={<FaClipboardCheck size={20} />} text="Mis Aplicaciones" href="/estudiante/misaplicaciones" isHovered={isHovered} />
-// //           <NavItem icon={<FaMailBulk  size={20} />} text="Notificaciones" href="/estudiante/notificaciones" isHovered={isHovered} />
-// //           <button 
-// //             className='hover:opacity-100 hover:w-[100%]'
-// //             onClick={() => signOut()}
-// //           >
-// //           <NavItem icon={<FaExpeditedssl size={20} />} text="cerrar sesión"  href="/" isHovered={isHovered} />
-// //           </button>
-          
-         
-// //         </ul>
-// //       </nav>
-// //     </div>
-// //   );
-// // };
-
-// // interface NavItemProps {
-// //   icon: React.ReactNode;
-// //   text: string;
-// //   href: string;
-// //   isHovered: boolean;
-// // }
-
-// // const NavItem: React.FC<NavItemProps> = ({ icon, text, href, isHovered }) => (
-// //   <li>
-// //     <Link href={href} className="flex items-center p-4 opacidadHover">
-// //       <span className="mr-4">{icon}</span>
-// //       <span className={`transition-all duration-300 ${isHovered ? 'opacity-100 w-auto' : 'opacity-0 w-0'} overflow-hidden whitespace-nowrap`}>
-// //         {text}
-// //       </span>
-// //     </Link>
-// //   </li>
-// // );
-
-// // export default NavBarEmergente;
-
-
-
 // "use client";
 // import React, { useState, useEffect } from 'react';
 // import { FaTimes, FaHome, FaAddressCard, FaClipboardList, FaClipboardCheck, FaMailBulk, FaExpeditedssl, FaBuilding, FaUsers, FaUniversity } from 'react-icons/fa';
@@ -215,7 +131,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { FaTimes, FaHome, FaAddressCard, FaClipboardList, FaClipboardCheck, FaMailBulk, FaExpeditedssl, FaBuilding, FaUsers, FaUniversity } from 'react-icons/fa'
+import { FaTimes, FaHome, FaAddressCard, FaClipboardList, FaClipboardCheck, FaMailBulk, FaExpeditedssl, FaBuilding, FaUsers, FaUniversity, FaRegFilePowerpoint, FaChartBar } from 'react-icons/fa'
 import Link from 'next/link'
 import { useNavBar } from '@/context/NavBarContext'
 import { signOut, useSession } from "next-auth/react"
@@ -232,7 +148,7 @@ const NavItem: React.FC<NavItemProps> = ({ icon, text, href, isHovered, isCompac
   <li>
     <Link href={href} className={`flex items-center ${isCompact ? 'p-4' : 'p-6'} opacidadHover`}>
       <span className={isCompact ? 'mr-2' : 'mr-4'}>{icon}</span>
-      <span className={`transition-all duration-300 ${isHovered ? 'opacity-100 w-auto' : 'opacity-0 w-0'} overflow-hidden whitespace-nowrap ${isCompact ? 'text-sm' : ''}`}>
+      <span className={`transition-all ${isHovered ? 'opacity-100 w-auto' : 'opacity-0 w-0'} overflow-hidden whitespace-nowrap ${isCompact ? 'text-sm' : ''}`}>
         {text}
       </span>
     </Link>
@@ -273,7 +189,8 @@ const NavBarEmergente: React.FC = () => {
       ])
     } else if (isAlcaldia) {
       setNavigation([
-        { icon: <FaHome size={isCompact ? 18 : 20} />, text: "Principal", href: "/alcaldia", ...baseProps },
+        { icon: <FaChartBar size={isCompact ? 18 : 20} />, text: "Metricas", href: "/alcaldia", ...baseProps },
+        { icon: <FaRegFilePowerpoint size={isCompact ? 18 : 20} />, text: "Reportes", href: "/alcaldia/reportes", ...baseProps },
         { icon: <FaAddressCard size={isCompact ? 18 : 20} />, text: "Perfil", href: "/alcaldia/perfil", ...baseProps },
         { icon: <FaClipboardList size={isCompact ? 18 : 20} />, text: "Ofertas", href: "/alcaldia/ofertas", ...baseProps },
         { icon: <FaMailBulk size={isCompact ? 18 : 20} />, text: "Notificaciones", href: "/alcaldia/notificaciones", ...baseProps },
@@ -316,7 +233,7 @@ const NavBarEmergente: React.FC = () => {
 
   return (
     <div
-      className={`fixed top-[8vh] left-0 h-full opacidad text-white transition-all duration-300 ease-in-out z-50 ${
+      className={`fixed top-[4vh] left-0 h-full opacidad text-white transition-all ease-in-out z-50 ${
         isHovered ? (isCompact ? 'w-56' : 'w-64') : 'w-16'
       } overflow-hidden`}
       onMouseEnter={() => setIsHovered(true)}
@@ -324,11 +241,11 @@ const NavBarEmergente: React.FC = () => {
     >
       <button
         onClick={toggleNavBar}
-        className="absolute top-4 left-4 text-white hover:text-red-300"
+        className="absolute top-1 right-4 text-white hover:text-red-300"
       >
         <FaTimes size={24}/>
       </button>
-      <nav className={`pt-16 ${isCompact ? 'space-y-6' : 'space-y-8'}`}>
+      <nav className={`pt-4 ${isCompact ? 'space-y-2' : 'space-y-4'}`}>
         <ul>
           {navigation.map((item) => (
             <NavItem 
@@ -343,7 +260,7 @@ const NavBarEmergente: React.FC = () => {
           {session && (
             <li>
               <button 
-                className={`w-full text-left m-0 p-0 ${isCompact ? 'p-0' : 'p-4'} opacidadHover`}
+                className={`w-full text-left m-0 p-0 ${isCompact ? 'p-0' : 'p-0'} opacidadHover`}
                 onClick={() => signOut()}
               >
                 <NavItem 

@@ -1,6 +1,6 @@
 "use client";
 import GridContainer from "@/components/GridContainer";
-import Header from "@/components/Header";
+import Header from "@/components/HeaderLucide";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import NotificationsCard from "./NotificacionsCard";
@@ -42,12 +42,12 @@ export default function Page() {
 
   return (
     <>
-      <Header
-        title={"NOTIFICACIONES"}
-        subtitle={
-          "Aquí podrás visualizar todas las acciones más importantes relacionadas con los procesos de Pasantías y Servicios Comunitarios gestionados por el sistema. ¡Mantente informado!"
-        }
-      />
+      <Header title="MI PERFIL">
+        <p>
+          {"Aquí podrás visualizar todas las acciones más importantes relacionadas con los procesos de Pasantías y Servicios Comunitarios gestionados por el sistema. ¡Mantente informado!"}
+        </p>
+      </Header>
+    
       <ContainerWeb>
         <GridMain>
           <GridContainer>

@@ -127,7 +127,8 @@ export default function Navbar() {
       ])
     } else if (session?.user.role === "alcaldia") {
       setNavigation([
-        { name: "PRINCIPAL", href: "/alcaldia", current: false },
+        { name: "MÉTRICAS", href: "/alcaldia", current: false },
+        { name: "REPORTES", href: "/alcaldia/reportes", current: false },
         { name: "MI PERFIL", href: "/alcaldia/perfil", current: false },
         { name: "OFERTAS", href: "/alcaldia/ofertas", current: false },
         { name: "NOTIFICACIONES", href: "/alcaldia/notificaciones", current: false },
