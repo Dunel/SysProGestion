@@ -91,6 +91,23 @@ export default function Page() {
     }
   };
 
+  const handleCloseApp = async (id: number) => {
+    try {
+      setSpanRetirar(true);
+      const res = await axios.put("/api/alcaldia/apply/myapply", { id });
+      console.log(res.data);
+      getApplications();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error lanzado:", error.response?.data.error);
+      } else {
+        console.error("error:", error);
+      }
+    } finally {
+      setSpanRetirar(false);
+    }
+  }
+
   const [loading, setLoading] = useState(false);
   const handleOficio = async (id: number) => {
     try {
@@ -169,6 +186,7 @@ export default function Page() {
                   ...internship,
                   handleDeleteApply: confirmDelete,
                   handleOficio,
+                  handleCloseApp: () => handleCloseApp(internship.id),
                   loading:loading
                 }))}
               />

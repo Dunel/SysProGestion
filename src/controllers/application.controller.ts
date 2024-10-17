@@ -15,6 +15,11 @@ export async function getApplication(req: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
     const applications = await prisma.application.findMany({
+      where: {
+        NOT:{
+          status: "closed"
+        }
+      },
       select: {
         id: true,
         title: true,
@@ -107,11 +112,18 @@ export async function apply(req: NextRequest) {
             userCedula: token.cedula,
           },
         },
+        status: true,
       },
     });
     if (!application || application?.apply?.length > 0) {
       return NextResponse.json(
         { error: "Ya has aplicado a esta oferta o no existe" },
+        { status: 400 }
+      );
+    }
+    if(application.status === "closed"){
+      return NextResponse.json(
+        { error: "La oferta ya está cerrada" },
         { status: 400 }
       );
     }
@@ -406,6 +418,12 @@ export async function deleteApplicationDepend(req: NextRequest) {
         { status: 400 }
       );
     }
+    if (application.status === "closed") {
+      return NextResponse.json(
+        { error: "No puedes eliminar una oferta cerrada" },
+        { status: 400 }
+      );
+    }
 
     await prisma.application.delete({
       where: {
@@ -443,6 +461,9 @@ export async function getApplicationById(req: NextRequest) {
         dependencia: {
           userCedula: token.cedula,
         },
+        NOT:{
+          status: "closed"
+        }
       },
       select: {
         id: true,
@@ -511,6 +532,13 @@ export async function updateApplicationById(req: NextRequest) {
         { status: 404 }
       );
     }
+    if(application.status === "closed"){
+      return NextResponse.json(
+        { error: "No puedes actualizar una oferta cerrada" },
+        { status: 400 }
+      );
+    }
+
     await prisma.application.update({
       where: {
         id,
@@ -673,6 +701,8 @@ export async function getApplicationDepend(req: NextRequest) {
                     interests: true,
                     description: true,
                     curriculum: true,
+                    bankName: true,
+                    bankAccount: true,
                   },
                 },
               },
@@ -771,7 +801,116 @@ export async function updateApplyDepend(req: NextRequest) {
   }
 }
 
+export async function closedAppDependencia(req: NextRequest) {
+  try {
+    const { id } = await req.json();
+    const result = idApplySchema.shape.idApplication.parse(id);
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const application = await prisma.application.findFirst({
+      where: {
+        id: result,
+        dependencia: {
+          userCedula: token.cedula,
+        },
+      },
+    });
+    if (!application) {
+      return NextResponse.json(
+        { error: "No tienes permisos para cerrar esta oferta" },
+        { status: 400 }
+      );
+    }
+    const foundActives = await prisma.apply.findMany({
+      where: {
+        applicationId: result,
+        status: "pendiente",
+      },
+    });
+    if (foundActives.length > 0) {
+      return NextResponse.json(
+        { error: "Existen postulaciones pendientes" },
+        { status: 400 }
+      );
+    }
+
+    await prisma.application.update({
+      where: {
+        id: result,
+        NOT: {
+          status: "closed",
+        },
+      },
+      data: {
+        status: "closed",
+      },
+    });
+    return NextResponse.json({ message: "Ofertas cerradas" }, { status: 200 });
+  } catch (error) {
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
 ////////ALCALDIA
+export async function closedAppAlcaldia(req: NextRequest) {
+  try {
+    const { id } = await req.json();
+    const result = idApplySchema.shape.idApplication.parse(id);
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const application = await prisma.application.findFirst({
+      where: {
+        id: result,
+      },
+    });
+    if (!application) {
+      return NextResponse.json(
+        { error: "La aplicación no encontrada." },
+        { status: 404 }
+      );
+    }
+    const foundActives = await prisma.apply.findMany({
+      where: {
+        applicationId: result,
+        status: "pendiente",
+      },
+    });
+    if (foundActives.length > 0) {
+      return NextResponse.json(
+        { error: "Existen postulaciones pendientes" },
+        { status: 400 }
+      );
+    }
+
+    await prisma.application.update({
+      where: {
+        id: result,
+        NOT: {
+          status: "closed",
+        },
+      },
+      data: {
+        status: "closed",
+      },
+    });
+    return NextResponse.json({ message: "Ofertas cerradas" }, { status: 200 });
+  } catch (error) {
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
 export async function acceptApplyStudent(req: NextRequest) {
   try {
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
@@ -886,9 +1025,6 @@ export async function getMyAppAlcaldia(req: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
     const applications = await prisma.application.findMany({
-      where: {
-        OR: [{ status: "active" }, { status: "inactive" }],
-      },
       orderBy: {
         date: "desc",
       },
@@ -914,13 +1050,13 @@ export async function getMyAppAlcaldia(req: NextRequest) {
             },
           },
         },
-        _count:{
-          select:{
-            applicationApproved:true,
-            apply: true
+        _count: {
+          select: {
+            applicationApproved: true,
+            apply: true,
           },
-        }
-      }
+        },
+      },
     });
     return NextResponse.json({ applications }, { status: 200 });
   } catch (error) {
@@ -1052,6 +1188,8 @@ export async function getAppAlcaldia(req: NextRequest) {
                     interests: true,
                     description: true,
                     curriculum: true,
+                    bankName: true,
+                    bankAccount: true,
                   },
                 },
               },
@@ -1206,7 +1344,13 @@ export async function deleteApplicationAlcaldia(req: NextRequest) {
     });
     if (!application) {
       return NextResponse.json(
-        { error: "No tienes permisos para eliminar esta oferta" },
+        { error: "No se encontró la oferta" },
+        { status: 404 }
+      );
+    }
+    if (application.status === "closed") {
+      return NextResponse.json(
+        { error: "No puedes eliminar una oferta cerrada" },
         { status: 400 }
       );
     }
@@ -1261,6 +1405,14 @@ export async function updateAppAlcaldiaById(req: NextRequest) {
         { status: 404 }
       );
     }
+
+    if(application.status === "closed"){
+      return NextResponse.json(
+        { error: "No puedes actualizar una oferta cerrada" },
+        { status: 400 }
+      );
+    }
+
     await prisma.application.update({
       where: {
         id,

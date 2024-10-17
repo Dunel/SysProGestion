@@ -48,6 +48,8 @@ interface Internship {
           skills: string[];
           description: string;
           curriculum: string;
+          bankName: string;
+          bankAccount: string;
         };
       };
     }
@@ -410,6 +412,17 @@ export default function InternShipCardReceived({
                       >
                         Ver Curriculum
                       </a>
+                      <h4 className="text-lg font-medium text-gray-700 mb-1">
+                        Datos Bancarios 🏦
+                      </h4>
+                      <p>
+                        <span className="font-semibold">Banco:</span>{" "}
+                        {apply.User.esInfo.bankName}
+                      </p>
+                      <p>
+                        <span className="font-semibold">Número de cuenta:</span>{" "}
+                        {apply.User.esInfo.bankAccount}
+                      </p>
                     </div>
                   </div>
                 </div>

@@ -4,6 +4,7 @@ import { FaMoneyCheckAlt } from "react-icons/fa";
 
 interface Internship {
   handleDeleteApply: Function;
+  handleCloseStatus: Function;
   dependencia: {
     name: string;
     User: {
@@ -209,6 +210,12 @@ export default function InternshipCards({
           className="w-[100%] p-4 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[80%]"
         >
           ELIMINAR OFERTA
+        </button>
+        <button
+          onClick={() => internship.handleCloseStatus(internship.id)}
+          className="w-[100%] p-4 m-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[80%]"
+        >
+          Cerrar Oferta
         </button>
       </div>
     </div>

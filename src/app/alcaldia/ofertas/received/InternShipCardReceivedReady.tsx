@@ -1,4 +1,3 @@
-
 import { FaMoneyCheckAlt } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -64,6 +63,8 @@ interface Internship {
           skills: string[];
           description: string;
           curriculum: string;
+          bankName: string;
+          bankAccount: string;
         };
       };
     }
@@ -260,13 +261,12 @@ export default function InternShipCardReceived({
     <>
       {internship ? (
         <div className="flex flex-col justify-center mb-8 w-[90%] mx-auto text-sm md:text-base lg:text-lg">
-         
           <div className="flex flex-col items-start md:items-end">
             <span className="flex p-1 text-red-500">
               Codigo de Oferta de Vacante: {"P-2024-000" + internship.id}
             </span>
             {/* //!internship.pay  */}
-            {internship.pay  && (
+            {internship.pay && (
               <span className="flex gap-2 mr-2 text-base font-bold text-green-500">
                 {`Esta vacante ofrece incentivos`}
                 <FaMoneyCheckAlt style={{ color: "green" }} size={30} />
@@ -298,7 +298,6 @@ export default function InternShipCardReceived({
                   </p>
 
                   <p className="text-gray-500">📍{internship.location}</p>
-                  
 
                   <div className="flex flex-col my-1 gap-2 sm:flex-row">
                     <div className="w-[50%]">
@@ -330,15 +329,15 @@ export default function InternShipCardReceived({
                         }
                       </p>
                     </div>
-                    
-                  </div>
-                  
-                  <div className="text-gray-600">
-                    <p> <b>Tutor Industrial o Responsable:</b>{' '}
-                    {internship.tutor ? internship.tutor : "No asignado"}
-                    </p>
                   </div>
 
+                  <div className="text-gray-600">
+                    <p>
+                      {" "}
+                      <b>Tutor Industrial o Responsable:</b>{" "}
+                      {internship.tutor ? internship.tutor : "No asignado"}
+                    </p>
+                  </div>
                 </div>
               </div>
 
@@ -364,13 +363,12 @@ export default function InternShipCardReceived({
               </div>
             </div>
           </div>
-          
-          
+
           {/* //! BUCADOR DE ESTUDIANTE PARA AGREGARLO A UNA OFERTA  */}
-            <div
-                className="bg-white flex flex-col my-2 p-2 border-2 border-gray-300 rounded-lg 
+          <div
+            className="bg-white flex flex-col my-2 p-2 border-2 border-gray-300 rounded-lg 
                     h-autotext-lg justify-center mb-8 w-[90%] mx-auto text-sm md:text-base lg:text-lg"
-              >
+          >
             <h3 className="font-bold text-gray-800 mb-4 text-xl text-center underline md:text-2xl lg:text-3xl">
               AGREGAR ESTUDIANTE
             </h3>
@@ -424,8 +422,6 @@ export default function InternShipCardReceived({
               )}
             </ul>
 
-
-            
             <Table>
               <TableHeader>
                 <TableRow>
@@ -460,8 +456,6 @@ export default function InternShipCardReceived({
               </TableBody>
             </Table>
           </div>
-
-
 
           <div className="flex flex-col items-center gap-1">
             <h3 className="font-bold text-gray-800 mb-4 text-xl underline md:text-2xl lg:text-3xl">
@@ -580,6 +574,17 @@ export default function InternShipCardReceived({
                       >
                         Ver Curriculum
                       </a>
+                      <h4 className="text-lg font-medium text-gray-700 mb-1">
+                        Datos Bancarios 🏦
+                      </h4>
+                      <p>
+                        <span className="font-semibold">Banco:</span>{" "}
+                        {apply.User.esInfo.bankName}
+                      </p>
+                      <p>
+                        <span className="font-semibold">Cuenta:</span>{" "}
+                        {apply.User.esInfo.bankAccount}
+                      </p>
                     </div>
                   </div>
                 </div>

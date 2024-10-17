@@ -274,6 +274,7 @@ import { FaEllipsisV } from 'react-icons/fa'; // Asegúrate de instalar react-ic
 interface Internship {
   handleDeleteApply: Function;
   handleOficio: Function;
+  handleCloseApp: Function;
   dependencia: {
     name: string;
     User: {

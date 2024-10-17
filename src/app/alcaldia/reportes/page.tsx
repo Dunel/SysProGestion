@@ -166,7 +166,10 @@ export default function ReportGenerator() {
     return estudiantes.filter((estudiante) => {
       const edad = calcularEdad(estudiante.esInfo.User.birthdate);
 
-      const cumpleVote = filtro.vote !== null ? estudiante.esInfo.cneRegister === filtro.vote : true;
+      const cumpleVote =
+        filtro.vote !== null
+          ? estudiante.esInfo.cneRegister === filtro.vote
+          : true;
 
       const cumpleMes = month ? filtrarPorMes(estudiante, month) : true;
 
