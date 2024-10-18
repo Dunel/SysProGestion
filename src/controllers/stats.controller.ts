@@ -76,6 +76,11 @@ export async function getStatsDepend(req: NextRequest) {
             },
           },
         },
+        application:{
+          select:{
+            title: true,
+          }
+        }
       },
       take: 5,
     });
@@ -130,13 +135,8 @@ export async function getStatsAlcaldia(req: NextRequest) {
         status: "pendiente",
       },
     });
-    /*const pendingList = await prisma.apply.findMany({
+    const pendingList = await prisma.apply.findMany({
       where: {
-        application: {
-          dependencia: {
-            userCedula: token.cedula,
-          },
-        },
         status: "pendiente",
       },
       select: {
@@ -155,16 +155,26 @@ export async function getStatsAlcaldia(req: NextRequest) {
             },
           },
         },
+        application: {
+          select: {
+            title: true,
+            dependencia: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
       },
       take: 5,
-    });*/
+    });
 
     const stats = {
       processing,
       internshipsCompleted,
       serviceCompleted,
       pending,
-      //pendingList,
+      pendingList,
     };
 
     return NextResponse.json(stats, { status: 200 });
@@ -190,19 +200,19 @@ export async function getStudents(req: NextRequest) {
       select: {
         date: true,
         dateEnd: true,
-        application:{
-          select:{
+        application: {
+          select: {
             tutor: true,
             type: true,
             date: true,
-            dependencia:{
-              select:{
+            dependencia: {
+              select: {
                 name: true,
-              }
-            }
-          }
+              },
+            },
+          },
         },
-        esInfo:{
+        esInfo: {
           select: {
             gender: true,
             bankName: true,
@@ -210,10 +220,10 @@ export async function getStudents(req: NextRequest) {
             cneRegister: true,
             cneCentroName: true,
             cneParroquia: true,
-            institution:{
+            institution: {
               select: {
                 name: true,
-              }
+              },
             },
             career: {
               select: {
@@ -221,7 +231,7 @@ export async function getStudents(req: NextRequest) {
               },
             },
             address: true,
-            User:{
+            User: {
               select: {
                 names: true,
                 lastnames: true,
@@ -229,25 +239,25 @@ export async function getStudents(req: NextRequest) {
                 mail: true,
                 birthdate: true,
                 phone: true,
-                estado:{
-                  select:{
-                    estado: true
-                  }
+                estado: {
+                  select: {
+                    estado: true,
+                  },
                 },
-                municipio:{
-                  select:{
-                    municipio: true
-                  }
+                municipio: {
+                  select: {
+                    municipio: true,
+                  },
                 },
-                parroquia:{
-                  select:{
-                    parroquia: true
-                  }
+                parroquia: {
+                  select: {
+                    parroquia: true,
+                  },
                 },
-              }
-            }
-          }
-        }
+              },
+            },
+          },
+        },
       },
     });
 

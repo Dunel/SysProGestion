@@ -19,6 +19,7 @@ type Application = {
   status: string;
   pay: boolean;
   tutor: string;
+  apply: [];
   _count: {
     apply: number;
   };

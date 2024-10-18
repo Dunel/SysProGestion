@@ -208,19 +208,16 @@ export default function InternShipCardReceived({
                   <div className="flex flex-col my-1 gap-2 sm:flex-row">
                     <div className="w-[50%]">
                       <span className="font-medium text-gray-700 mb-2">
-                        Estado de la Solicitud:
+                        Estado de la Oferta:
                       </span>
-                      <p
-                        className={`text-${
-                          ofertsStatus.find((e) => e.key === internship.status)
-                            ?.color
-                        }-500 font-extrabold p-2`}
-                      >
-                        {
-                          ofertsStatus.find((e) => e.key === internship.status)
-                            ?.name
-                        }
-                      </p>
+                      <p className={`font-bold ${internship.status === "active" ? 'text-green-500' : internship.status === "inactive" ? 'text-yellow-500': 'text-red-500' }`}>
+                            {internship.status === "active" 
+                            ? "Activa ✅" 
+                            : internship.status === "closed"
+                              ? "Cerrada 🚫"
+                              :"Inactiva ⚠️"
+                          }
+                        </p>
                     </div>
 
                     <div className="w-[50%]">

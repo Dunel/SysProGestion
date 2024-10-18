@@ -23,6 +23,9 @@ type pendingList = {
       };
     };
   };
+  application: {
+    title: string;
+  };
 };
 
 type data = {
@@ -220,6 +223,9 @@ export default function Page() {
                   <th className="text-left text-sm font-medium text-gray-500">
                     Carrera
                   </th>
+                  <th className="text-left text-sm font-medium text-gray-500">
+                    Título
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -229,6 +235,7 @@ export default function Page() {
                       {student.User.names} {student.User.lastnames}
                     </td>
                     <td className="py-2">{student.User.esInfo.career.name}</td>
+                    <td className="py-2">{student.application.title}</td>
                   </tr>
                 ))}
               </tbody>

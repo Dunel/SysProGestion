@@ -373,6 +373,11 @@ export async function getMyApplicationDepend(req: NextRequest) {
             },
           },
         },
+        apply: {
+          where:{
+            status: "pendiente"
+          }
+        },
         _count: {
           select: {
             apply: true,
@@ -1066,10 +1071,19 @@ export async function getMyAppAlcaldia(req: NextRequest) {
             },
           },
         },
+        apply:{
+          where:{
+            status: "pendiente"
+          },
+          select:{
+            status: true
+          }
+        },
         _count: {
           select: {
             applicationApproved: true,
             apply: true,
+            
           },
         },
       },
