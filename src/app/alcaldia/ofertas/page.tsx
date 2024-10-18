@@ -9,6 +9,8 @@ import InternshipCards from "@/app/alcaldia/ofertas/InternshipCards";
 import axios from "axios";
 import Modal from "@/components/Modal";
 import { Oval } from "react-loader-spinner";
+import { number } from "zod";
+import { tree } from "next/dist/build/templates/app-page";
 
 type Application = {
   id: number;
@@ -41,10 +43,18 @@ export default function Page() {
   const [spanRetirar, setSpanRetirar] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const [codeOferta, setCodeOferta] = useState(0);
+  const [flagClose, setFlagClose] = useState(false);
+
   const [applicationToDelete, setApplicationToDelete] = useState<{
     id: number;
     code: string;
   } | null>(null);
+  
+  const [offerToClose, setOfferToClose] = useState<{
+    id: number;
+    code: string;
+  } | null>(null);
+
 
   const handleDeleteApply = async () => {
     if (applicationToDelete) {
@@ -73,6 +83,16 @@ export default function Page() {
     setApplicationToDelete({ id, code });
     setCodeOferta(id);
     setModalOpen(true);
+    setFlagClose(false)
+  };
+
+  const [statusClose, setStatusClose] = useState(0)
+
+  const confirmClose = (id: number, code: string) => {
+    setOfferToClose({ id, code });
+    setStatusClose(id);
+    setModalOpen(true);
+    setFlagClose(true)
   };
 
   const getApplications = async () => {
@@ -106,6 +126,8 @@ export default function Page() {
       }
     } finally {
       setSpanRetirar(false);
+      setModalOpen(false);
+      setOfferToClose(null);
     }
   }
 
@@ -185,10 +207,12 @@ export default function Page() {
               <InternshipCards
                 internships={applications.map((internship) => ({
                   ...internship,
-                  handleDeleteApply: confirmDelete,
                   handleOficio,
+                  handleDeleteApply: confirmDelete,
                   handleCloseApp: () => handleCloseApp(internship.id),
-                  loading:loading
+                 // handleCloseStatus: () => handleCloseApp(internship.id),
+                  handleCloseStatus: confirmClose,
+                  loading:loading,
                 }))}
               />
 
@@ -196,12 +220,20 @@ export default function Page() {
             
 
           <Modal
-            info={`¿Estás seguro de que deseas ELIMINAR la oferta ID: ${applicationToDelete?.code}`}
+            info=
+              {`¿Estás seguro de que deseas 
+                ${flagClose 
+                  ? 'CERRAR la oferta ID: '+offerToClose?.code+'? Si la cierras, quedará registrada con ese estatus en la Base de Datos, no podrás eliminarla, actualizarla ni recibir más aplicaciones de estudiantes.' 
+                  : 'ELIMINAR la oferta ID: '+applicationToDelete?.code+'? Si la eliminas, se borrará de Base de Datos, y también se eliminarán las aplicaciones que los estudiantes hayan hecho sobre esta.'  }
+              `}
+
             isLoading={spanRetirar}
             isOpen={isModalOpen}
             onClose={() => setModalOpen(false)}
-            onConfirm={handleDeleteApply}
+            onConfirm={handleDeleteApply || handleCloseApp}
+            titleBtn={flagClose ? 'CERRAR' : 'ELIMINAR' }
           />
+
         </GridMain>
       </ContainerWeb>
     </>

@@ -242,6 +242,7 @@ import { FaEllipsisV } from "react-icons/fa";
 interface Internship {
   handleDeleteApply: Function;
   handleCloseStatus: Function;
+  
   dependencia: {
     name: string;
     User: {
@@ -435,17 +436,34 @@ export default function InternshipCards({
                           </button>
                         </li>
 
-                        {/* //TODO:BANDERA PARA MOSTRAR OPCION CERRAR} */}
-                        <li>
-                          <button
-                            onClick={() =>
-                              internship.handleCloseStatus(internship.id)
-                            }
-                            className="w-full text-left p-2 hover:bg-gray-100 text-red-600"
-                          >
-                            Cerrar Oferta
-                          </button>
-                        </li>
+                        { (!(internship.apply.length > 0) && !(internship._count.applicationApproved === 0))
+                
+                            &&
+                            
+                            <li>
+                              <button
+                                onClick={() => 
+                                  //internship.handleDeleteApply()
+                                  internship.handleCloseStatus(
+                                    internship.id, 
+                                    internship.type.substring(0, 3).toUpperCase() +
+                                    "-" +
+                                    new Date(internship.date).getFullYear() +
+                                    "-" +
+                                    internship.dependencia.name
+                                      .substring(0, 3)
+                                      .toUpperCase() +
+                                    "-000" +
+                                    internship.id
+                                  )
+                                  //TODO: ESTABLECER <MODAL QUE PREGUNTE SI ESTA SEGURO DE QUERER CERRAR ESTA OFERTA
+                                }
+                                className="w-full text-left p-2 hover:bg-gray-100 text-red-600"
+                              >
+                                Cerrar Oferta
+                              </button>
+                            </li> 
+                        }
                       </>
                     )}
                   </ul>
@@ -486,7 +504,7 @@ export default function InternshipCards({
         </div>
 
         {/* //! INFO */}
-        <div className="m-1 p-1 word-wrap overflow-wrap h-[60%] md:w-[80%]">
+        <div className="m-1 p-1 word-wrap overflow-wrap h-[60%] md:w-[95%]">
           <div className="flex flex-col my-2 gap-2 md:flex-row">
             <div className="w-[100%] md:w-[100%]">
               <span className="text-lg font-medium text-gray-700 mb-2">
@@ -558,6 +576,21 @@ export default function InternshipCards({
             </div>
             {'esta es la bandera length > 0 = no puedes cerrar: '}{internship.apply.length}
           </div>
+
+          {(((internship.apply.length > 0)  || (internship._count.applicationApproved === 0)) && !(internship.status === 'closed') )
+          &&
+              // {internship.apply.length > 0 &&
+              <>
+              <p>
+                Para poder cambiar el estado de esta oferta a <span className="font-bold italic text-red-500"> "Cerrada"</span>,  
+                la misma debió recibir al menos una aplicación de Estudiantes. Además, debes haber resuelto todas  
+                las aplicaciones que los Estudiantes hayan hecho en esta oferta. Así que debes 
+                <span className="font-bold italic"> Aprobarlas, Rechazarlas</span> o, si están 
+                pendientes por aceptación de Estudiantes, <span className="font-bold italic"> Esperar </span> 
+                a que todos los Estudiantes hayan respondido antes de poder cerrarla.
+              </p>
+              </>
+              }
         </div>
       </div>
     );

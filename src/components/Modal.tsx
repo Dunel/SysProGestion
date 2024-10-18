@@ -2,14 +2,15 @@
 import React from 'react';
 
 interface ModalProps {
-    info:string
+  info:string
   isOpen: boolean;
   isLoading: boolean;
   onClose: () => void;
   onConfirm: () => void;
+  titleBtn?: string | null; // Cambiado para permitir null
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, isLoading, info }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, isLoading, info, titleBtn }) => {
   if (!isOpen) return null;
   return (
     <>
@@ -17,21 +18,21 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm, isLoading, in
         <div className='z-30 flex flex-col justify-center items-center my-2 p-2' style={{...modalStyles.overlay, position: 'fixed' as const}}>
             
             <div className='m-2 flex flex-col justify-center items-center text-justify' style={modalStyles.modal}>
-                    <h2 className='font-bold text-xl'>{info}?</h2>
+                    <h2 className='font-bold text-xl'>{info}</h2>
                 
                 {!isLoading 
                 ?
                     <div className=' m-2 w-[100%] flex flex-col justify-center items-center'>
                         <button 
                             className="w-[80%] p-4 m-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
-                            onClick={onConfirm}>SI, ELIMINAR</button>
+                            onClick={onConfirm}>SI, {titleBtn ? titleBtn : 'ELIMINAR'}</button>
                             {/* onClick={onConfirm}>Sí, retirar</button> */}
                         <button 
                             className="w-[80%] p-4 m-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded transition duration-300 md:w-[50%]"
                             onClick={onClose}>NO, CANCELAR</button>
                     </div>
                
-                : <span className='m-10 text-center font-extrabold text-red-500'><i>ELIMINANDO OFERTA...</i></span>
+                : <span className='m-10 text-center font-extrabold text-red-500'><i>EJECUTANDO ACCIÓN...</i></span>
                 }
             </div>
 
