@@ -722,6 +722,7 @@ import {
 } from "@/validations/institution.schema";
 import Modal from '@/components/ui/ConfirmationModal';
 
+
 interface Estados {
   id: number;
   estado: string;
@@ -768,6 +769,7 @@ export default function ListInstituciones() {
   const [parroquias, setParroquias] = useState<Parroquias[]>([]);
   const [parroquiasOpen, setparroquiasOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [instName, setInstName] = useState('');
   const [institutionToDelete, setInstitutionToDelete] = useState<number | null>(null);
   const {
     register,
@@ -1340,7 +1342,13 @@ export default function ListInstituciones() {
                     <Button
                       variant="outline"
                       size="icon"
-                      onClick={() => insttt.id && handleBorrar(insttt.id)}
+                      onClick={ ()=>{
+                        if(insttt.id) {
+                          handleBorrar(insttt.id)
+                          setInstName(insttt.name);
+                        }
+
+                      }}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -1369,7 +1377,7 @@ export default function ListInstituciones() {
         onClose={() => setIsModalOpen(false)}
         onConfirm={confirmDelete}
         title="Confirmar eliminación"
-        message={`¿Está seguro de que desea eliminar esta institución?`}
+        message={`¿Está seguro de que desea eliminar la institución ${instName}?`}
       />
     </>
   );

@@ -137,9 +137,10 @@ export default function Navbar() {
         { name: "PREREGISTROS", href: "/alcaldia/preregister", current: false },
         { name: "CARRERAS", href: "/alcaldia/career", current: false },
       ])
+    
     } else if (session?.user.role === "dependencia") {
       setNavigation([
-        { name: "PRINCIPAL", href: "/dependencia", current: false },
+        { name: "MÉTRICAS", href: "/dependencia", current: false },
         { name: "MI PERFIL", href: "/dependencia/perfil", current: false },
         { name: "MIS OFERTAS", href: "/dependencia/misofertas", current: false },
         { name: "CREAR OFERTA", href: "/dependencia/misofertas/crearoferta", current: false },
@@ -169,7 +170,7 @@ export default function Navbar() {
                   {open ? (
                     <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
                   ) : (
-                    <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                    <Bars3Icon className="block h-6 w-6" aria-hidden="true"/>
                   )}
                 </Disclosure.Button>
               </div>

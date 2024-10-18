@@ -200,7 +200,7 @@ const NavBarEmergente: React.FC = () => {
       ])
     } else if (session?.user.role === "dependencia") {
       setNavigation([
-        { icon: <FaHome size={20} />, text: "Principal", href: "/dependencia", ...baseProps },
+        { icon: <FaChartBar size={isCompact ? 18 : 20} />, text: "Metricas", href: "/dependencia", ...baseProps },
         { icon: <FaAddressCard size={20} />, text: "Perfil", href: "/dependencia/perfil", ...baseProps },
         { icon: <FaClipboardList size={20} />, text: "Mis Ofertas", href: "/dependencia/misofertas", ...baseProps },
         { icon: <FaClipboardCheck size={20} />, text: "Crear Oferta", href: "/dependencia/misofertas/crearoferta", ...baseProps },
@@ -233,19 +233,20 @@ const NavBarEmergente: React.FC = () => {
 
   return (
     <div
-      className={`fixed top-[4vh] left-0 h-full opacidad text-white transition-all ease-in-out z-50 ${
-        isHovered ? (isCompact ? 'w-56' : 'w-64') : 'w-16'
-      } overflow-hidden`}
+      className={`fixed left-0 h-full opacidad text-white transition-all ease-in-out z-50 
+        ${isHovered ? (isCompact ? 'w-56' : 'w-64') : 'w-16'} 
+        ${isAlcaldia ? 'top-[2vh]' : 'top-[8vh]'}
+        overflow-hidden`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <button
         onClick={toggleNavBar}
-        className="absolute top-1 right-4 text-white hover:text-red-300"
+        className={`absolute right-4 text-white hover:text-red-300  ${isAlcaldia ? 'top-1' : 'top-5'}`}
       >
         <FaTimes size={24}/>
       </button>
-      <nav className={`pt-4 ${isCompact ? 'space-y-2' : 'space-y-4'}`}>
+      <nav className={`${isAlcaldia ? 'pt-4' : 'pt-12'} ${isCompact ? 'space-y-2' : 'space-y-4'}`}>
         <ul>
           {navigation.map((item) => (
             <NavItem 
