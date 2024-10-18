@@ -189,6 +189,7 @@ export async function getStudents(req: NextRequest) {
       },
       select: {
         date: true,
+        dateEnd: true,
         application:{
           select:{
             tutor: true,

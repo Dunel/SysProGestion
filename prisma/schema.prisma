@@ -207,6 +207,7 @@ model applicationApproved {
   applicationId Int
   status        statusAproved @default(enproceso)
   date          DateTime      @default(now())
+  dateEnd       DateTime?
   updatedAt     DateTime      @updatedAt
   application   application   @relation(fields: [applicationId], references: [id], onDelete: Cascade)
   esInfo        estudentInfo  @relation(fields: [userCedula], references: [userCedula], onDelete: Cascade)

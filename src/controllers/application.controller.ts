@@ -16,9 +16,9 @@ export async function getApplication(req: NextRequest) {
     }
     const applications = await prisma.application.findMany({
       where: {
-        NOT:{
-          status: "closed"
-        }
+        NOT: {
+          status: "closed",
+        },
       },
       select: {
         id: true,
@@ -121,7 +121,7 @@ export async function apply(req: NextRequest) {
         { status: 400 }
       );
     }
-    if(application.status === "closed"){
+    if (application.status === "closed") {
       return NextResponse.json(
         { error: "La oferta ya está cerrada" },
         { status: 400 }
@@ -461,9 +461,9 @@ export async function getApplicationById(req: NextRequest) {
         dependencia: {
           userCedula: token.cedula,
         },
-        NOT:{
-          status: "closed"
-        }
+        NOT: {
+          status: "closed",
+        },
       },
       select: {
         id: true,
@@ -532,7 +532,7 @@ export async function updateApplicationById(req: NextRequest) {
         { status: 404 }
       );
     }
-    if(application.status === "closed"){
+    if (application.status === "closed") {
       return NextResponse.json(
         { error: "No puedes actualizar una oferta cerrada" },
         { status: 400 }
@@ -857,61 +857,7 @@ export async function closedAppDependencia(req: NextRequest) {
   }
 }
 
-////////ALCALDIA
-export async function closedAppAlcaldia(req: NextRequest) {
-  try {
-    const { id } = await req.json();
-    const result = idApplySchema.shape.idApplication.parse(id);
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-    if (!token) {
-      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
-    }
-    const application = await prisma.application.findFirst({
-      where: {
-        id: result,
-      },
-    });
-    if (!application) {
-      return NextResponse.json(
-        { error: "La aplicación no encontrada." },
-        { status: 404 }
-      );
-    }
-    const foundActives = await prisma.apply.findMany({
-      where: {
-        applicationId: result,
-        status: "pendiente",
-      },
-    });
-    if (foundActives.length > 0) {
-      return NextResponse.json(
-        { error: "Existen postulaciones pendientes" },
-        { status: 400 }
-      );
-    }
-
-    await prisma.application.update({
-      where: {
-        id: result,
-        NOT: {
-          status: "closed",
-        },
-      },
-      data: {
-        status: "closed",
-      },
-    });
-    return NextResponse.json({ message: "Ofertas cerradas" }, { status: 200 });
-  } catch (error) {
-    console.error("Error: ", (error as Error).message);
-    return NextResponse.json(
-      { error: "Error en el servidor." },
-      { status: 500 }
-    );
-  }
-}
-
-export async function acceptApplyStudent(req: NextRequest) {
+export async function acceptApplyStudent(req: NextRequest) {//estudiante aceptando
   try {
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
     if (!token) {
@@ -929,8 +875,20 @@ export async function acceptApplyStudent(req: NextRequest) {
           id: idApplication,
         },
       },
+      select: {
+        User: {
+          select: {
+            esInfo: {
+              select: {
+                dateStart: true,
+                dateEnd: true,
+              },
+            },
+          },
+        },
+      },
     });
-    if (!apply) {
+    if (!apply || !apply.User.esInfo) {
       return NextResponse.json(
         { error: "No se encontró la postulación" },
         { status: 404 }
@@ -986,6 +944,10 @@ export async function acceptApplyStudent(req: NextRequest) {
 
     await prisma.applicationApproved.create({
       data: {
+        dateEnd: fechaFinalGptWhatever(
+          apply.User.esInfo.dateStart,
+          apply.User.esInfo.dateEnd
+        ),
         application: {
           connect: {
             id: idApplication,
@@ -1010,6 +972,60 @@ export async function acceptApplyStudent(req: NextRequest) {
         { status: 400 }
       );
     }
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
+////////ALCALDIA
+export async function closedAppAlcaldia(req: NextRequest) {
+  try {
+    const { id } = await req.json();
+    const result = idApplySchema.shape.idApplication.parse(id);
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const application = await prisma.application.findFirst({
+      where: {
+        id: result,
+      },
+    });
+    if (!application) {
+      return NextResponse.json(
+        { error: "La aplicación no encontrada." },
+        { status: 404 }
+      );
+    }
+    const foundActives = await prisma.apply.findMany({
+      where: {
+        applicationId: result,
+        status: "pendiente",
+      },
+    });
+    if (foundActives.length > 0) {
+      return NextResponse.json(
+        { error: "Existen postulaciones pendientes" },
+        { status: 400 }
+      );
+    }
+
+    await prisma.application.update({
+      where: {
+        id: result,
+        NOT: {
+          status: "closed",
+        },
+      },
+      data: {
+        status: "closed",
+      },
+    });
+    return NextResponse.json({ message: "Ofertas cerradas" }, { status: 200 });
+  } catch (error) {
     console.error("Error: ", (error as Error).message);
     return NextResponse.json(
       { error: "Error en el servidor." },
@@ -1228,8 +1244,22 @@ export async function updateApplyAlcaldia(req: NextRequest) {
         id: idApply,
         status: "pendiente",
       },
+      select: {
+        applicationId: true,
+        userCedula: true,
+        User: {
+          select: {
+            esInfo: {
+              select: {
+                dateStart: true,
+                dateEnd: true,
+              },
+            },
+          },
+        },
+      },
     });
-    if (!apply) {
+    if (!apply || !apply.User.esInfo) {
       return NextResponse.json(
         { error: "No se encontró la postulación" },
         { status: 404 }
@@ -1297,6 +1327,10 @@ export async function updateApplyAlcaldia(req: NextRequest) {
 
     await prisma.applicationApproved.create({
       data: {
+        dateEnd: fechaFinalGptWhatever(
+          apply.User.esInfo.dateStart,
+          apply.User.esInfo.dateEnd
+        ),
         application: {
           connect: {
             id: apply.applicationId,
@@ -1406,7 +1440,7 @@ export async function updateAppAlcaldiaById(req: NextRequest) {
       );
     }
 
-    if(application.status === "closed"){
+    if (application.status === "closed") {
       return NextResponse.json(
         { error: "No puedes actualizar una oferta cerrada" },
         { status: 400 }
@@ -1452,3 +1486,26 @@ export async function updateAppAlcaldiaById(req: NextRequest) {
     );
   }
 }
+
+// funcion kk para calcular la fecha final
+const fechaFinalGptWhatever = (
+  dateStart: Date | null,
+  dateEnd: Date | null
+) => {
+  const start = dateStart ? new Date(dateStart) : new Date();
+  const end = dateEnd ? new Date(dateEnd) : new Date();
+
+  const diffInMs = end.getTime() - start.getTime();
+
+  const weeks = diffInMs / (1000 * 60 * 60 * 24 * 7);
+
+  const totalWeeks = weeks + 2;
+
+  const today = new Date();
+
+  const finalDate = new Date(
+    today.getTime() + totalWeeks * 7 * 24 * 60 * 60 * 1000
+  );
+
+  return finalDate;
+};

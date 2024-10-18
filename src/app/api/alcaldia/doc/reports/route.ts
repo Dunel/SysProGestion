@@ -4,6 +4,7 @@ import path from "path";
 
 type Students = {
   date: string;
+  dateEnd: string;
   application: {
     tutor: string;
     dependencia: {
@@ -93,15 +94,16 @@ export async function POST(req: NextRequest) {
         row.getCell(16).value = ""; // observación
         row.getCell(17).value = student.application.dependencia.name; // Dependencia
         row.getCell(18).value = new Date(student.date).toLocaleDateString(); // Fecha de registro de pasantia o servicio comunitario
-        row.getCell(19).value = student.esInfo.cneRegister ? "Si" : "No"; // vota? 2
-        row.getCell(20).value = student.esInfo.cneCentroName; // centro de votacion 3
-        row.getCell(21).value = student.esInfo.cneParroquia; // parroquia centro de votacion 4
+        row.getCell(19).value = student.dateEnd ? new Date(student.dateEnd).toLocaleDateString() : ""; // Fecha de culminación de pasantia o servicio comunitario
+        row.getCell(20).value = student.esInfo.cneRegister ? "Si" : "No"; // vota? 2
+        row.getCell(21).value = student.esInfo.cneCentroName; // centro de votacion 3
+        row.getCell(22).value = student.esInfo.cneParroquia; // parroquia centro de votacion 4
         row.commit();
       }
     });
 
     const headerRow = 7;
-    const columnCount = 21;
+    const columnCount = 22;
 
     worksheet.autoFilter = 'A7:U7';
 

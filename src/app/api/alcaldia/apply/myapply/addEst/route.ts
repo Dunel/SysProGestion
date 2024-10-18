@@ -68,6 +68,28 @@ export async function GET(req: NextRequest) {
   }
 }
 
+const fechaFinalGptWhatever = (
+  dateStart: Date | null,
+  dateEnd: Date | null
+) => {
+  const start = dateStart ? new Date(dateStart) : new Date();
+  const end = dateEnd ? new Date(dateEnd) : new Date();
+
+  const diffInMs = end.getTime() - start.getTime();
+
+  const weeks = diffInMs / (1000 * 60 * 60 * 24 * 7);
+
+  const totalWeeks = weeks + 2;
+
+  const today = new Date();
+
+  const finalDate = new Date(
+    today.getTime() + totalWeeks * 7 * 24 * 60 * 60 * 1000
+  );
+
+  return finalDate;
+};
+
 export async function POST(req: NextRequest) {
   try {
     const { id, cedula } = await req.json();
@@ -78,8 +100,16 @@ export async function POST(req: NextRequest) {
         cedula: result.cedula,
         role: "estudiante",
       },
+      select: {
+        esInfo: {
+          select: {
+            dateEnd: true,
+            dateStart: true,
+          },
+        },
+      },
     });
-    if (!userFound) {
+    if (!userFound || !userFound.esInfo) {
       return NextResponse.json(
         { error: "Usuario no encontrado." },
         { status: 404 }
@@ -158,6 +188,10 @@ export async function POST(req: NextRequest) {
 
     await prisma.applicationApproved.create({
       data: {
+        dateEnd: fechaFinalGptWhatever(
+          userFound.esInfo.dateStart,
+          userFound.esInfo.dateEnd
+        ),
         application: {
           connect: {
             id: idApp,

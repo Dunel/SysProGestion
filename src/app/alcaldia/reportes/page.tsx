@@ -20,6 +20,7 @@ import {
 
 type Students = {
   date: string;
+  dateEnd: string;
   application: {
     tutor: string;
     dependencia: {
