@@ -329,7 +329,7 @@ export default function InternshipCards({
     }, []);
 
     return (
-      <div className="bg-white flex flex-col justify-center mb-8 p-4 w-[98%] mx-auto shadow-md text-base text-justify rounded-lg md:p-8 lg:text-lg md:p-10">
+      <div className="bg-white flex flex-col justify-center mb-8 p-4 w-[98%] mx-auto shadow-md text-base text-justify rounded-lg md:p-8 lg:text-lg">
         {/* BOTONERA + CODE + STUDENTS + PAY */}
         <div className="w-[100%] flex flex-row gap-2 text-sm">
           {/* CODE + STUDENTS + PAY  */}

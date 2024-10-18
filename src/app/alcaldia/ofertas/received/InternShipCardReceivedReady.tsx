@@ -16,6 +16,7 @@ import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Oval } from "react-loader-spinner";
+import Modal from '@/components/ui/ConfirmationModal';
 
 interface Internship {
   id: number;
@@ -159,6 +160,35 @@ export default function InternShipCardReceived({
     resolver: zodResolver(cedulaSchema),
     mode: "onChange",
   });
+ 
+
+  function calcularEdad(fechaNacimiento: string | Date): string {
+    // Convertir a objeto Date si es necesario
+    const fechaNacimientoDate =
+      typeof fechaNacimiento === "string"
+        ? new Date(fechaNacimiento)
+        : fechaNacimiento;
+
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - fechaNacimientoDate.getFullYear();
+    const mes = hoy.getMonth() - fechaNacimientoDate.getMonth();
+
+    // Ajustar la edad si el mes o el día actual es anterior al de nacimiento
+    if (
+      mes < 0 ||
+      (mes === 0 && hoy.getDate() < fechaNacimientoDate.getDate())
+    ) {
+      edad--;
+    }
+
+    return edad.toString() + " años";
+  }
+
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [studentToDelete, setStudentToDelete] = useState<string | null>(null);
+ 
+
   const updateStatus = async (status: string, id: number) => {
     try {
       const res = await axios.post(`/api/alcaldia/apply/myapply/received`, {
@@ -194,27 +224,6 @@ export default function InternShipCardReceived({
     }
   };
 
-  function calcularEdad(fechaNacimiento: string | Date): string {
-    // Convertir a objeto Date si es necesario
-    const fechaNacimientoDate =
-      typeof fechaNacimiento === "string"
-        ? new Date(fechaNacimiento)
-        : fechaNacimiento;
-
-    const hoy = new Date();
-    let edad = hoy.getFullYear() - fechaNacimientoDate.getFullYear();
-    const mes = hoy.getMonth() - fechaNacimientoDate.getMonth();
-
-    // Ajustar la edad si el mes o el día actual es anterior al de nacimiento
-    if (
-      mes < 0 ||
-      (mes === 0 && hoy.getDate() < fechaNacimientoDate.getDate())
-    ) {
-      edad--;
-    }
-
-    return edad.toString() + " años";
-  }
   const handleAcc = async () => {
     try {
       setLoading(true);
@@ -238,11 +247,18 @@ export default function InternShipCardReceived({
     }
   };
 
-  const handleBorrar = async (cedula: string) => {
+  const handleBorrar = (cedula: string) => {
+    setStudentToDelete(cedula);
+    setIsModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!studentToDelete) return;
+
     try {
       setLoading(true);
       const res = await axios.delete(`/api/alcaldia/apply/myapply/addEst`, {
-        data: { cedula, id: internship?.id },
+        data: { cedula: studentToDelete, id: internship?.id },
       });
       res.data.message && alert(res.data.message);
       getApplication();
@@ -254,9 +270,10 @@ export default function InternShipCardReceived({
       }
     } finally {
       setLoading(false);
+      setIsModalOpen(false);
+      setStudentToDelete(null);
     }
   };
-
   return (
     <>
       {internship ? (
@@ -443,8 +460,8 @@ export default function InternShipCardReceived({
                               variant="outline"
                               size="icon"
                               onClick={() => 
-                                handleBorrar(apply.User.cedula)
                                 //TODO: agrega aca un componente modal que pregunte si esta seguro de eliminar la aprobacion a esta oferta del estudiante cedula No. ...
+                                handleBorrar(apply.User.cedula)
                               }
                             >
                               <Trash2 className="h-4 w-4" />
@@ -637,6 +654,13 @@ export default function InternShipCardReceived({
       ) : (
         "No existe la oferta"
       )}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={confirmDelete}
+        message={`¿Está seguro de eliminar la aprobación a esta oferta del estudiante con cédula No. ${studentToDelete || ''}`}
+        title="Confirmar eliminación"
+      />
     </>
   );
 }
