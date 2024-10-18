@@ -582,12 +582,13 @@ export default function InternshipCards({
               // {internship.apply.length > 0 &&
               <>
               <p>
-                Para poder cambiar el estado de esta oferta a <span className="font-bold italic text-red-500"> "Cerrada"</span>,  
-                la misma debió recibir al menos una aplicación de Estudiantes. Además, debes haber resuelto todas  
-                las aplicaciones que los Estudiantes hayan hecho en esta oferta. Así que debes 
-                <span className="font-bold italic"> Aprobarlas, Rechazarlas</span> o, si están 
-                pendientes por aceptación de Estudiantes, <span className="font-bold italic"> Esperar </span> 
-                a que todos los Estudiantes hayan respondido antes de poder cerrarla.
+              Para poder cambiar el estado de esta oferta a <span className="font-bold italic text-red-500"> "Cerrada"</span>,  
+              al menos un estudiante debe haber iniciado (con aceptación del estudiante) o culminado el proceso de 
+              pasantías o servicio comunitario. Además, debes haber gestionado todas las solicitudes que los 
+              estudiantes hayan hecho para esta oferta. Es decir, debes 
+              <span className="font-bold italic"> Aprobarlas, Rechazarlas</span> o si están 
+              pendientes de aceptación por parte de los estudiantes, esperar a que todos respondan antes de 
+              poder cerrarla.
               </p>
               </>
               }
