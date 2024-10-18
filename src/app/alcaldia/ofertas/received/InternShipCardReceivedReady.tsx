@@ -658,7 +658,8 @@ export default function InternShipCardReceived({
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onConfirm={confirmDelete}
-        studentCedula={studentToDelete || ''}
+        message={`¿Está seguro de eliminar la aprobación a esta oferta del estudiante con cédula No. ${studentToDelete || ''}`}
+        title="Confirmar eliminación"
       />
     </>
   );
