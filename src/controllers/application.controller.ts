@@ -381,6 +381,7 @@ export async function getMyApplicationDepend(req: NextRequest) {
         _count: {
           select: {
             apply: true,
+            applicationApproved: true,
           },
         },
       },
