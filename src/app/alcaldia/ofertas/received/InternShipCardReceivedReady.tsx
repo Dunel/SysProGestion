@@ -302,19 +302,16 @@ export default function InternShipCardReceived({
                   <div className="flex flex-col my-1 gap-2 sm:flex-row">
                     <div className="w-[50%]">
                       <span className="font-medium text-gray-700 mb-2">
-                        Estado de la Solicitud:
+                        Estado de la Oferta:
                       </span>
-                      <p
-                        className={`text-${
-                          ofertsStatus.find((e) => e.key === internship.status)
-                            ?.color
-                        }-500 font-extrabold p-2`}
-                      >
-                        {
-                          ofertsStatus.find((e) => e.key === internship.status)
-                            ?.name
-                        }
-                      </p>
+                      <p className={`font-bold ${internship.status === "active" ? 'text-green-500' : internship.status === "inactive" ? 'text-yellow-500': 'text-red-500' }`}>
+                            {internship.status === "active" 
+                            ? "Activa ✅" 
+                            : internship.status === "closed"
+                              ? "Cerrada 🚫"
+                              :"Inactiva ⚠️"
+                          }
+                        </p>
                     </div>
 
                     <div className="w-[50%]">
@@ -366,96 +363,102 @@ export default function InternShipCardReceived({
 
           {/* //! BUCADOR DE ESTUDIANTE PARA AGREGARLO A UNA OFERTA  */}
           <div
-            className="bg-white flex flex-col my-2 p-2 border-2 border-gray-300 rounded-lg 
-                    h-autotext-lg justify-center mb-8 w-[90%] mx-auto text-sm md:text-base lg:text-lg"
-          >
-            <h3 className="font-bold text-gray-800 mb-4 text-xl text-center underline md:text-2xl lg:text-3xl">
-              AGREGAR ESTUDIANTE
-            </h3>
-            <div className="flex space-x-2 py-4 my-2 p-2">
-              <div className="flex flex-col items-center gap-2">
-                <Input
-                  {...register("cedula")}
-                  name="cedula"
-                  placeholder="Cedula"
-                  type={"text"}
-                />
-                {errors.cedula && (
-                  <p className="text-red-500 text-xs">
-                    {errors.cedula.message}
-                  </p>
-                )}
+              className="bg-white flex flex-col my-2 p-2 border-2 border-gray-300 rounded-lg 
+                      h-autotext-lg justify-center mb-8 w-[90%] mx-auto text-sm md:text-base lg:text-lg"
+            >
+              <h3 className="font-bold text-gray-800 mb-4 text-xl text-center underline md:text-2xl lg:text-3xl">
+                AGREGAR ESTUDIANTE
+              </h3>
+              <div className="flex space-x-2 py-4 my-2 p-2">
+                <div className="flex flex-col items-center gap-2">
+                  <Input
+                    {...register("cedula")}
+                    name="cedula"
+                    placeholder="Cedula"
+                    type={"text"}
+                  />
+                  {errors.cedula && (
+                    <p className="text-red-500 text-xs">
+                      {errors.cedula.message}
+                    </p>
+                  )}
+                </div>
+                <Button
+                  className="inline-flex items-center justify-center rounded-md px-6 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  onClick={handleSubmit(handleSearch)}
+                >
+                  BUSCAR
+                </Button>
               </div>
-              <Button
-                className="inline-flex items-center justify-center rounded-md px-6 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                onClick={handleSubmit(handleSearch)}
-              >
-                BUSCAR
-              </Button>
-            </div>
-            {loading && (
-              <div className="flex justify-center items-center flex-col mt-10">
-                <Oval
-                  color="#000000"
-                  secondaryColor="#FFFFFF"
-                  height={50}
-                  width={50}
-                  strokeWidth={5}
-                />
-                <br />
-                <span>Espere por favor...</span>
-              </div>
-            )}
-            <ul className="space-y-2">
-              {estSearch && (
-                <li className="flex justify-between items-center p-2 bg-gray-100 rounded">
-                  <span>{estSearch.cedula}</span>
-                  <span>{`${estSearch.names} ${estSearch.lastnames}`}</span>
-                  <span>{estSearch.esInfo.career.name}</span>
-                  <button
-                    className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                    onClick={() => handleAcc()}
-                  >
-                    Añadir
-                  </button>
-                </li>
+              {loading && (
+                <div className="flex justify-center items-center flex-col mt-10">
+                  <Oval
+                    color="#000000"
+                    secondaryColor="#FFFFFF"
+                    height={50}
+                    width={50}
+                    strokeWidth={5}
+                  />
+                  <br />
+                  <span>Espere por favor...</span>
+                </div>
               )}
-            </ul>
-
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Nombre</TableHead>
-                  <TableHead>Cédula</TableHead>
-                  <TableHead>Carrera</TableHead>
-                  <TableHead>Acciones</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {internship.apply.map(
-                  (apply, index) =>
-                    apply.status === "aceptado" && (
-                      <TableRow key={index}>
-                        <TableCell>
-                          {apply.User.names} {apply.User.lastnames}
-                        </TableCell>
-                        <TableCell>{apply.User.cedula}</TableCell>
-                        <TableCell>{apply.User.esInfo.career.name}</TableCell>
-                        <TableCell>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() => handleBorrar(apply.User.cedula)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    )
+              <ul className="space-y-2">
+                {estSearch && (
+                  <li className="flex justify-between items-center p-2 bg-gray-100 rounded">
+                    <span>{estSearch.cedula}</span>
+                    <span>{`${estSearch.names} ${estSearch.lastnames}`}</span>
+                    <span>{estSearch.esInfo.career.name}</span>
+                    <button
+                      className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                      onClick={() => handleAcc()}
+                    >
+                      Añadir
+                    </button>
+                  </li>
                 )}
-              </TableBody>
-            </Table>
+              </ul>
+
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Nombre</TableHead>
+                    <TableHead>Cédula</TableHead>
+                    <TableHead>Carrera</TableHead>
+                    <TableHead>Acciones</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {internship.apply.map(
+                    (apply, index) =>
+                      apply.status === "aceptado" && (
+                        <TableRow key={index}>
+                          <TableCell>
+                            {apply.User.names} {apply.User.lastnames}
+                          </TableCell>
+                          <TableCell>{apply.User.cedula}</TableCell>
+                          <TableCell>{apply.User.esInfo.career.name}</TableCell>
+                          <TableCell>
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              onClick={() => 
+                                handleBorrar(apply.User.cedula)
+                                //TODO: agrega aca un componente modal que pregunte si esta seguro de eliminar la aprobacion a esta oferta del estudiante cedula No. ...
+                              }
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      )
+                  )}
+                </TableBody>
+              </Table>
           </div>
+
+
+
 
           <div className="flex flex-col items-center gap-1">
             <h3 className="font-bold text-gray-800 mb-4 text-xl underline md:text-2xl lg:text-3xl">

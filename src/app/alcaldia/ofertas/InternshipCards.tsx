@@ -402,78 +402,96 @@ const InternshipCard: React.FC<{ internship: Internship }> = ({
                   </div>
 
 
-    {/* BOTONETA */}
-    <div className="ml-auto p-2" ref={menuRef}> {/* Asignar ref aquí */}
-                    {/* Menú de opciones (hamburguesa vertical) */}
-                    <div className="relative">
-                        {/* Botón del menú */}
-                        <button
-                            onClick={toggleMenu}
-                            className="flex items-center justify-center w-10 h-10 bg-gray-200 rounded-full hover:bg-gray-300 focus:outline-none"
-                        >
-                            <FaEllipsisV className="text-gray-700" />
-                        </button>
+                    {/* BOTONETA */}
+                    <div className="ml-auto p-2" ref={menuRef}> {/* Asignar ref aquí */}
+                            {/* Menú de opciones (hamburguesa vertical) */}
+                            <div className="relative">
+                                {/* Botón del menú */}
+                                <button
+                                    onClick={toggleMenu}
+                                    className="flex items-center justify-center w-10 h-10 bg-gray-200 rounded-full hover:bg-gray-300 focus:outline-none"
+                                >
+                                    <FaEllipsisV className="text-gray-700" />
+                                </button>
 
-                        {/* Menú desplegable */}
-                        {menuOpen && (
-                            <div className="absolute right-0 mt-2 w-[30vw] bg-white border rounded shadow-lg z-10">
-                                <ul className="flex flex-col">
-                                    <li>
-                                        <button
-                                            onClick={() => {
-                                                router.push("./ofertas/modificar/" + internship.id);
-                                                setMenuOpen(false);
-                                            }}
-                                            className="w-full text-left p-2 hover:bg-gray-100"
-                                        >
-                                            Modificar Oferta
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button
-                                            onClick={() => {
-                                                router.push("./ofertas/received/" + internship.id);
-                                                setMenuOpen(false);
-                                            }}
-                                            className="w-full text-left p-2 hover:bg-gray-100"
-                                        >
-                                            Solicitudes Recibidas y Añadir o retirar Estudiante
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button
-                                            onClick={() => {
-                                                internship.handleDeleteApply(
-                                                    internship.id,
-                                                    (internship.type).substring(0, 3).toUpperCase() + "-" +
-                                                    new Date(internship.date).getFullYear() + "-" +
-                                                    (internship.dependencia.name).substring(0, 3).toUpperCase() + "-000" + internship.id
-                                                );
-                                                setMenuOpen(false);
-                                            }}
-                                            className="w-full text-left p-2 hover:bg-gray-100 text-red-600"
-                                        >
-                                            Eliminar Oferta
-                                        </button>
-                                    </li>
-                                    {internship._count.applicationApproved !== 0 && (
-                                        <li>
-                                            <button
-                                                onClick={() => {
-                                                    internship.handleOficio(internship.id);
+                            {/* Menú desplegable */}
+                                {menuOpen && (
+                                    <div className="absolute right-0 mt-2 w-[30vw] bg-white border rounded shadow-lg z-10">
+                                        <ul className="flex flex-col">
+                                            <li>
+                                                <button
+                                                    onClick={() => {
+                                                    router.push("./ofertas/received/" + internship.id);
                                                     setMenuOpen(false);
-                                                }}
-                                                className="w-full text-left p-2 hover:bg-gray-100 text-yellow-600"
-                                            >
-                                                Descargar Oficio
-                                            </button>
-                                        </li>
-                                    )}
-                                </ul>
-                            </div>
-                        )}
+                                                    }}
+                                                    className="w-full text-left p-2 hover:bg-gray-100"
+                                                    >
+                                                    Solicitudes Recibidas y Añadir o retirar Estudiante
+                                                </button>
+                                            </li> 
+                                                    
+                                        {
+                                            !(internship.status === "closed") && 
+                                                <>
+                                                    <li>
+                                                        <button
+                                                            onClick={() => {
+                                                                router.push("./ofertas/modificar/" + internship.id);
+                                                                setMenuOpen(false);
+                                                            }}
+                                                            className="w-full text-left p-2 hover:bg-gray-100"
+                                                        >
+                                                            Modificar Oferta
+                                                        </button>
+                                                    </li>
+                                                
+                                                    <li>
+                                                        <button
+                                                            onClick={() => {
+                                                                internship.handleDeleteApply(
+                                                                    internship.id,
+                                                                    (internship.type).substring(0, 3).toUpperCase() + "-" +
+                                                                    new Date(internship.date).getFullYear() + "-" +
+                                                                    (internship.dependencia.name).substring(0, 3).toUpperCase() + "-000" + internship.id
+                                                                );
+                                                                setMenuOpen(false);
+                                                            }}
+                                                            className="w-full text-left p-2 hover:bg-gray-100 text-red-600"
+                                                        >
+                                                            Eliminar Oferta
+                                                        </button>
+                                                    </li>
+                                                    
+                                                    {internship._count.applicationApproved !== 0 && (
+                                                        <li>
+                                                            <button
+                                                                onClick={() => {
+                                                                    internship.handleOficio(internship.id);
+                                                                    setMenuOpen(false);
+                                                                }}
+                                                                className="w-full text-left p-2 hover:bg-gray-100 text-yellow-600"
+                                                            >
+                                                                Descargar Oficio
+                                                            </button>
+                                                        </li>
+                                                    )}
+                                                    {/* //TODO:BANDERA PARA MOSTRAR OPCION CERRAR} */}
+                                                        <li>
+                                                            <button
+                                                            //   onClick={() => internship.handleCloseStatus(internship.id)}
+                                                            className="w-full text-left p-2 hover:bg-gray-100 text-red-600"
+                                                            >
+                                                                Cerrar Oferta
+                                                            </button>
+                                                        </li>
+                                                </>
+                                        }
+                                                    
+                                                </ul>
+                                            </div>
+                                        )}
+                                    </div>
                     </div>
-                  </div>
 
             
             </div>
@@ -518,9 +536,14 @@ const InternshipCard: React.FC<{ internship: Internship }> = ({
                             <span className="text-lg font-medium text-gray-700 mb-2">
                                 Estado de la Oferta:
                             </span>
-                            <p className={`font-bold ${internship.status === "active" ? 'text-green-500' : 'text-yellow-500'}`}>
-                                {internship.status === "active" ? "Activa ✅" : "Inactiva ⚠️"}
-                            </p>
+                            <p className={`font-bold ${internship.status === "active" ? 'text-green-500' : internship.status === "inactive" ? 'text-yellow-500': 'text-red-500' }`}>
+                            {internship.status === "active" 
+                            ? "Activa ✅" 
+                            : internship.status === "closed"
+                              ? "Cerrada 🚫"
+                              :"Inactiva ⚠️"
+                          }
+                        </p>
                         </div>
                         <div className="w-[100%] md:w-[100%]">
                             <span className="text-lg font-medium text-gray-700 mb-2">
