@@ -28,6 +28,7 @@ type Application = {
       image: string;
     };
   };
+  apply:[]
   _count: {
     apply: number;
     applicationApproved: number;
