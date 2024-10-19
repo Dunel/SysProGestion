@@ -246,16 +246,22 @@ model parroquia {
 }
 
 model institution {
-  id              Int            @id @default(autoincrement())
+  id              Int             @id @default(autoincrement())
   institutionCode String?
   name            String
+  type            typeInstitution @default(universitaria)
   parroquiaId     Int
   municipioId     Int
   estadoId        Int
-  parroquia       parroquia      @relation(fields: [parroquiaId], references: [id])
-  municipio       municipio      @relation(fields: [municipioId], references: [id])
-  estado          estado         @relation(fields: [estadoId], references: [id])
+  parroquia       parroquia       @relation(fields: [parroquiaId], references: [id])
+  municipio       municipio       @relation(fields: [municipioId], references: [id])
+  estado          estado          @relation(fields: [estadoId], references: [id])
   estudentInfo    estudentInfo[]
+}
+
+enum typeInstitution {
+  universitaria
+  tecnica
 }
 
 model career {

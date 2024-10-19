@@ -374,9 +374,9 @@ export async function getMyApplicationDepend(req: NextRequest) {
           },
         },
         apply: {
-          where:{
-            status: "pendiente"
-          }
+          where: {
+            status: "pendiente",
+          },
         },
         _count: {
           select: {
@@ -822,8 +822,15 @@ export async function closedAppDependencia(req: NextRequest) {
           userCedula: token.cedula,
         },
       },
+      include: {
+        _count: {
+          select: {
+            applicationApproved: true,
+          },
+        },
+      },
     });
-    if (!application) {
+    if (!application || application._count.applicationApproved === 0) {
       return NextResponse.json(
         { error: "No tienes permisos para cerrar esta oferta" },
         { status: 400 }
@@ -863,7 +870,8 @@ export async function closedAppDependencia(req: NextRequest) {
   }
 }
 
-export async function acceptApplyStudent(req: NextRequest) {//estudiante aceptando
+export async function acceptApplyStudent(req: NextRequest) {
+  //estudiante aceptando
   try {
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
     if (!token) {
@@ -999,11 +1007,18 @@ export async function closedAppAlcaldia(req: NextRequest) {
       where: {
         id: result,
       },
+      include: {
+        _count: {
+          select: {
+            applicationApproved: true,
+          },
+        },
+      },
     });
-    if (!application) {
+    if (!application || application._count.applicationApproved === 0) {
       return NextResponse.json(
-        { error: "La aplicación no encontrada." },
-        { status: 404 }
+        { error: "Aplicación no encontrada." },
+        { status: application?._count.applicationApproved === 0 ? 400 : 404 }
       );
     }
     const foundActives = await prisma.apply.findMany({
@@ -1072,19 +1087,18 @@ export async function getMyAppAlcaldia(req: NextRequest) {
             },
           },
         },
-        apply:{
-          where:{
-            status: "pendiente"
+        apply: {
+          where: {
+            status: "pendiente",
           },
-          select:{
-            status: true
-          }
+          select: {
+            status: true,
+          },
         },
         _count: {
           select: {
             applicationApproved: true,
             apply: true,
-            
           },
         },
       },
