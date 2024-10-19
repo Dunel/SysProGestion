@@ -30,7 +30,12 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
       municipioId,
       parroquiaId,
       birthdate,
-      gender
+      gender,
+      bankName,
+      bankAccount,
+      cneRegister,
+      cneCentroName,
+      cneParroquia
     } = await req.json();
 
     const result = profileSchema.parse({
@@ -49,7 +54,12 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
       municipioId,
       parroquiaId,
       birthdate,
-      gender
+      gender,
+      bankName,
+      bankAccount,
+      cneRegister,
+      cneCentroName,
+      cneParroquia
     });
     const cedula = token.cedula;
 
@@ -64,7 +74,12 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
         address: result.address,
         dateStart: result.dateStart,
         dateEnd: result.dateEnd,
-        gender: result.gender
+        gender: result.gender,
+        bankName: result.bankName,
+        bankAccount: result.bankAccount,
+        cneRegister: result.cneRegister,
+        cneCentroName: result.cneCentroName,
+        cneParroquia: result.cneParroquia
       },
       create: {
         userCedula: cedula,
@@ -76,7 +91,12 @@ export async function ProfileEstudentUpdate(req: NextRequest) {
         address: result.address,
         dateStart: result.dateStart,
         dateEnd: result.dateEnd,
-        gender: result.gender
+        gender: result.gender,
+        bankName: result.bankName,
+        bankAccount: result.bankAccount,
+        cneRegister: result.cneRegister,
+        cneCentroName: result.cneCentroName,
+        cneParroquia: result.cneParroquia
       },
     });
 
