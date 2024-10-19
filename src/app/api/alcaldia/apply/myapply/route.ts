@@ -12,3 +12,5 @@ export async function DELETE(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   return await closedAppAlcaldia(req);
 }
+
+//export async function POST(req: NextRequest) {

@@ -3,17 +3,22 @@ import ContainerWeb from "@/components/ContainerWeb";
 import GridContainer from "@/components/GridContainer";
 import GridMain from "@/components/GridMain";
 import Header from "@/components/Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  ApplyFormCreate,
-  applyCreateSchema,
+  ApplyFormCreateAlcaldia,
+  applyCreateAlcaldiaSchema,
 } from "@/validations/application.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+
+type Dependencia = {
+  id: number;
+  name: string;
+};
 
 export default function Page() {
   const [selectedType, setSelectedType] = useState<string | undefined>();
@@ -21,14 +26,16 @@ export default function Page() {
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
+  const [dependencias, setDependencias] = useState<Dependencia[]>([]);
+  const [dependenciasOpen, setDependenciasOpen] = useState(false);
   const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<ApplyFormCreate>({
-    resolver: zodResolver(applyCreateSchema),
+  } = useForm<ApplyFormCreateAlcaldia>({
+    resolver: zodResolver(applyCreateAlcaldiaSchema),
     mode: "onChange",
   });
 
@@ -78,22 +85,22 @@ export default function Page() {
     { key: "inactive", name: "Inactiva" },
   ];
 
-  const onSubmit = (data: ApplyFormCreate) => {
+  const onSubmit = (data: ApplyFormCreateAlcaldia) => {
     const formData = {
       ...data,
       skills: selectedSkills,
     };
-    const validate = applyCreateSchema.safeParse(formData);
+    const validate = applyCreateAlcaldiaSchema.safeParse(formData);
     if (!validate.success) {
       console.error(validate.error);
       return;
     }
-    createOfert(formData as ApplyFormCreate);
+    createOfert(formData as ApplyFormCreateAlcaldia);
   };
 
-  const createOfert = async (data: ApplyFormCreate) => {
+  const createOfert = async (data: ApplyFormCreateAlcaldia) => {
     try {
-      const res = await axios.post("/api/dependencia/apply/myapply", {
+      const res = await axios.post("/api/alcaldia/apply/myapply", {
         ...data,
       });
       router.push("./");
@@ -107,6 +114,23 @@ export default function Page() {
     }
   };
 
+  const getDependencias = async () => {
+    try {
+      const res = await axios.get("/api/alcaldia/dependencias");
+      setDependencias(res.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error lanzado:", error.response?.data.error);
+      } else {
+        console.error("error:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getDependencias();
+  }, []);
+
   return (
     <>
       <Header title={"CREAR OFERTA"} subtitle={""} />
@@ -118,6 +142,47 @@ export default function Page() {
                 onSubmit={handleSubmit(onSubmit)}
                 className="form-student-info"
               >
+                <div className="mt-2">
+                    <Label
+                      htmlFor="dependencia"
+                      className="text-xl text-gray-600 md:text-lg lg:text-2xl"
+                    >
+                      Dependencia de Alcaldía
+                    </Label>
+                    <Input
+                      id="dependencia"
+                      type="text"
+                      onClick={() => setDependenciasOpen(!dependenciasOpen)}
+                      readOnly
+                      className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                      placeholder="Selecciona una Dependencia"
+                    />
+                    {dependenciasOpen && (
+                      <div className="z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                        <div
+                          onClick={() => {
+                            setValue("idDependence", 0);
+                            setDependenciasOpen(false);
+                          }}
+                          className="p-2 hover:bg-gray-100 cursor-pointer"
+                        >
+                          {"- Selecciona una Dependencia -"}
+                        </div>
+                        {dependencias.map((e, index) => (
+                          <div
+                            key={index}
+                            onClick={() => {
+                              setValue("idDependence", e.id);
+                              setDependenciasOpen(false);
+                            }}
+                            className="p-2 hover:bg-gray-100 cursor-pointer"
+                          >
+                            {e.name}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                </div>
                 <div className="mt-2">
                   <Label>Titulo descriptivo de la oferta de vacante</Label>
                   <Input
