@@ -9,6 +9,8 @@ import Header from "@/components/HeaderLucide";
 import GridMain from "@/components/GridMain";
 import ContainerWeb from "@/components/ContainerWeb";
 import axios from "axios";
+import { Oval } from "react-loader-spinner";
+
 import {
   Table,
   TableBody,
@@ -125,6 +127,7 @@ export default function ReportGenerator() {
   const [notFound, setNotFound] = useState(null as boolean | null);
 
   const [showClearButton, setShowClearButton] = useState(false);
+  const [loading, setLoading ] = useState(false);
 
   const handleGenerateReport = () => {
     const filteredStudents = filtrarEstudiantes(students, {
@@ -277,6 +280,7 @@ export default function ReportGenerator() {
 
   const getEstudiantes = async () => {
     try {
+      setLoading(true); // Start loading
       const res = await axios.get("/api/alcaldia/stats/students");
       setStudents(res.data);
     } catch (error) {
@@ -285,11 +289,14 @@ export default function ReportGenerator() {
       } else {
         console.error("error:", error);
       }
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
   const getCareer = async () => {
     try {
+      setLoading(true); // Start loading
       const res = await axios.get("/api/alcaldia/career");
       setCareers(res.data);
     } catch (error) {
@@ -298,11 +305,14 @@ export default function ReportGenerator() {
       } else {
         console.error("error:", error);
       }
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
   const getInstitucion = async () => {
     try {
+      setLoading(true); // Start loading
       const res = await axios.get("/api/alcaldia/institutions");
       setInstitutions(res.data);
     } catch (error) {
@@ -311,11 +321,14 @@ export default function ReportGenerator() {
       } else {
         console.error("error:", error);
       }
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
   const getParroquias = async () => {
     try {
+      setLoading(true); // Start loading
       const res = await axios.get("/api/venezuela/parroquias?municipioId=454");
       setParroquias(res.data);
     } catch (error) {
@@ -324,11 +337,14 @@ export default function ReportGenerator() {
       } else {
         console.error("error:", error);
       }
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
   const getDependencias = async () => {
     try {
+      setLoading(true); // Start loading
       const res = await axios.get("/api/alcaldia/dependencias");
       setDependencias(res.data);
     } catch (error) {
@@ -337,19 +353,21 @@ export default function ReportGenerator() {
       } else {
         console.error("error:", error);
       }
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
   const isInstitucionSelected = !!institucion;
 
   useEffect(() => {
-    // aqui el true del loader
+    setLoading(true); // Start loading
     getEstudiantes();
     getParroquias();
     getCareer();
     getInstitucion();
     getDependencias();
-    // aqui el false del loader
+    // No need to set loading to false here, as it's handled in each fetch function
   }, []);
 
   const clearAllInputs = () => {
@@ -863,6 +881,22 @@ export default function ReportGenerator() {
               </div>
             </div>
 
+            { loading 
+            &&
+              <div className="flex justify-center items-center flex-col mt-4">
+              <Oval
+                color="#000000"
+                secondaryColor="#FFFFFF" // Color de fondo blanco
+                height={50}
+                width={50}
+                strokeWidth={5}
+              />
+              <br />
+              <span>Por favor, espere unos segundos que se cargue la data antes de filtarla...</span>
+            </div>
+            }
+    
+
             {showClearButton && (
               <div className="flex justify-center mt-6">
                 <Button
@@ -873,7 +907,9 @@ export default function ReportGenerator() {
                 </Button>
               </div>
             )}
+
             <div className="flex justify-center mt-6">
+
               <Button
                 onClick={handleGenerateReport}
                 className="w-full mt-4 bg-black text-white p-6 md:w-[70%]"
@@ -894,66 +930,75 @@ export default function ReportGenerator() {
                 </Button>
               </div>
             )}
-          </GridContainer>
 
-          {notFound === false ? (
-            <>NO EXISTEN REGISTRO CON ESE CRITERIO DE BUSQUEDA</>
-          ) : (
-            notFound && (
-              <div className="bg-white">
-                <h1 className="text-xl text-center font-extrabold my-6 md:text-3xl">
-                  REPORTE GENERADO
-                </h1>
-                <Table>
-                  <TableHeader>
-                    <TableRow className="bg-black text-white">
-                      <TableHead>No.</TableHead>
-                      <TableHead>Cedula</TableHead>
-                      <TableHead>Nombres</TableHead>
-                      <TableHead>Apellidos</TableHead>
-                      <TableHead>Genero</TableHead>
-                      <TableHead>Edad</TableHead>
-                      <TableHead>Parroquia</TableHead>
-                      <TableHead>Carrera</TableHead>
-                      <TableHead>Institucion</TableHead>
-                      <TableHead>Dependencia</TableHead>
-                      <TableHead>Fecha de Actividad</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {report.map((e, index) => (
-                      <TableRow
-                        key={index}
-                        className={`text-xs ${
-                          index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                        }`}
-                      >
-                        <TableCell>{index + 1}</TableCell>
-                        <TableCell>{e.esInfo.User.cedula}</TableCell>
-                        <TableCell>{e.esInfo.User.names}</TableCell>
-                        <TableCell>{e.esInfo.User.lastnames}</TableCell>
-                        <TableCell>
-                          {e.esInfo.gender === "M" ? "Hombre" : "Mujer"}
-                        </TableCell>
-                        <TableCell>
-                          {calcularEdad(e.esInfo.User.birthdate)}
-                        </TableCell>
-                        <TableCell>
-                          {e.esInfo.User.parroquia.parroquia}
-                        </TableCell>
-                        <TableCell>{e.esInfo.career.name}</TableCell>
-                        <TableCell>{e.esInfo.institution.name}</TableCell>
-                        <TableCell>{e.application.dependencia.name}</TableCell>
-                        <TableCell>
-                          {new Date(e.date).toLocaleDateString()}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            )
-          )}
+
+          </GridContainer>
+       
+
+          {notFound === false 
+            ? (
+              <div className="flex text-2xl justify-center items-center text-center mx-auto my-4 font-bold">
+                <p>
+                  NO EXISTEN REGISTRO CON ESE CRITERIO DE BUSQUEDA
+                </p>
+                </div>
+              ) : (
+                notFound && (
+                  <div className="bg-white">
+                    <h1 className="text-xl text-center font-extrabold my-6 md:text-3xl">
+                      REPORTE GENERADO
+                    </h1>
+                    <Table>
+                      <TableHeader>
+                        <TableRow className="bg-black text-white">
+                          <TableHead>No.</TableHead>
+                          <TableHead>Cedula</TableHead>
+                          <TableHead>Nombres</TableHead>
+                          <TableHead>Apellidos</TableHead>
+                          <TableHead>Genero</TableHead>
+                          <TableHead>Edad</TableHead>
+                          <TableHead>Parroquia</TableHead>
+                          <TableHead>Carrera</TableHead>
+                          <TableHead>Institucion</TableHead>
+                          <TableHead>Dependencia</TableHead>
+                          <TableHead>Fecha de Actividad</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {report.map((e, index) => (
+                          <TableRow
+                            key={index}
+                            className={`text-xs ${
+                              index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                            }`}
+                          >
+                            <TableCell>{index + 1}</TableCell>
+                            <TableCell>{e.esInfo.User.cedula}</TableCell>
+                            <TableCell>{e.esInfo.User.names}</TableCell>
+                            <TableCell>{e.esInfo.User.lastnames}</TableCell>
+                            <TableCell>
+                              {e.esInfo.gender === "M" ? "Hombre" : "Mujer"}
+                            </TableCell>
+                            <TableCell>
+                              {calcularEdad(e.esInfo.User.birthdate)}
+                            </TableCell>
+                            <TableCell>
+                              {e.esInfo.User.parroquia.parroquia}
+                            </TableCell>
+                            <TableCell>{e.esInfo.career.name}</TableCell>
+                            <TableCell>{e.esInfo.institution.name}</TableCell>
+                            <TableCell>{e.application.dependencia.name}</TableCell>
+                            <TableCell>
+                              {new Date(e.date).toLocaleDateString()}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )
+              )
+            }
         </GridMain>
       </ContainerWeb>
     </>
