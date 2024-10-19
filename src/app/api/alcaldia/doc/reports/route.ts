@@ -20,6 +20,7 @@ type Students = {
     cneParroquia: string;
     institution: {
       name: string;
+      type: string;
     };
     career: {
       name: string;
@@ -77,35 +78,43 @@ export async function POST(req: NextRequest) {
         row.getCell(1).value = index + 1; // No.
         row.getCell(2).value = student.esInfo.User.parroquia.parroquia; // Parroquia
         row.getCell(3).value = student.esInfo.institution.name; // Institución
+        row.getCell(4).value =
+          student.esInfo.institution.type === "universitaria"
+            ? "Universitaria"
+            : "Técnica"; // tipo de institucion
         row.getCell(
-          4
+          5
         ).value = `${student.esInfo.User.names} ${student.esInfo.User.lastnames}`; // Nombres y apellidos
-        row.getCell(5).value = student.esInfo.User.cedula; // Cédula
-        row.getCell(6).value = student.esInfo.career.name; // Carrera
-        row.getCell(7).value = calcularEdad(student.esInfo.User.birthdate); // Edad
-        row.getCell(8).value = student.esInfo.address; // Dirección
-        row.getCell(9).value = student.esInfo.User.mail; // Correo
-        row.getCell(10).value = student.esInfo.User.phone; // Teléfono
-        row.getCell(11).value = new Date(student.esInfo.User.birthdate).toLocaleDateString(); // Fecha de nacimiento
-        row.getCell(12).value = student.application.tutor; // Tutor
-        row.getCell(13).value = student.esInfo.gender; // Sexo
-        row.getCell(14).value = student.esInfo.bankAccount; // Número de cuenta bancaria
-        row.getCell(15).value = student.esInfo.bankName; // Nombre del banco
-        row.getCell(16).value = ""; // observación
-        row.getCell(17).value = student.application.dependencia.name; // Dependencia
-        row.getCell(18).value = new Date(student.date).toLocaleDateString(); // Fecha de registro de pasantia o servicio comunitario
-        row.getCell(19).value = student.dateEnd ? new Date(student.dateEnd).toLocaleDateString() : ""; // Fecha de culminación de pasantia o servicio comunitario
-        row.getCell(20).value = student.esInfo.cneRegister ? "Si" : "No"; // vota? 2
-        row.getCell(21).value = student.esInfo.cneCentroName; // centro de votacion 3
-        row.getCell(22).value = student.esInfo.cneParroquia; // parroquia centro de votacion 4
+        row.getCell(6).value = student.esInfo.User.cedula; // Cédula
+        row.getCell(7).value = student.esInfo.career.name; // Carrera
+        row.getCell(8).value = calcularEdad(student.esInfo.User.birthdate); // Edad
+        row.getCell(9).value = student.esInfo.address; // Dirección
+        row.getCell(10).value = student.esInfo.User.mail; // Correo
+        row.getCell(11).value = student.esInfo.User.phone; // Teléfono
+        row.getCell(12).value = new Date(
+          student.esInfo.User.birthdate
+        ).toLocaleDateString(); // Fecha de nacimiento
+        row.getCell(13).value = student.application.tutor; // Tutor
+        row.getCell(14).value = student.esInfo.gender; // Sexo
+        row.getCell(15).value = student.esInfo.bankAccount; // Número de cuenta bancaria
+        row.getCell(16).value = student.esInfo.bankName; // Nombre del banco
+        row.getCell(17).value = ""; // observación
+        row.getCell(18).value = student.application.dependencia.name; // Dependencia
+        row.getCell(19).value = new Date(student.date).toLocaleDateString(); // Fecha de registro de pasantia o servicio comunitario
+        row.getCell(20).value = student.dateEnd
+          ? new Date(student.dateEnd).toLocaleDateString()
+          : ""; // Fecha de culminación de pasantia o servicio comunitario
+        row.getCell(21).value = student.esInfo.cneRegister ? "Si" : "No"; // vota? 2
+        row.getCell(22).value = student.esInfo.cneCentroName; // centro de votacion 3
+        row.getCell(23).value = student.esInfo.cneParroquia; // parroquia centro de votacion 4
         row.commit();
       }
     });
 
     const headerRow = 7;
-    const columnCount = 22;
+    const columnCount = 24;
 
-    worksheet.autoFilter = 'A7:U7';
+    worksheet.autoFilter = "A7:W7";
 
     const headersRow = worksheet.getRow(headerRow);
     const headers =

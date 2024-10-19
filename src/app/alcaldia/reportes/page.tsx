@@ -17,7 +17,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
 
 type Students = {
   date: string;
@@ -37,6 +36,7 @@ type Students = {
     cneParroquia: string;
     institution: {
       name: string;
+      type: string;
     };
     career: {
       name: string;
@@ -93,6 +93,7 @@ type FiltroEstudiantes = {
   edadMax?: number;
   gender: "M" | "F" | "";
   vote: boolean | null;
+  typeInstitucion?: string;
 };
 
 export default function ReportGenerator() {
@@ -101,6 +102,8 @@ export default function ReportGenerator() {
   const [careersOpen, setCareersOpen] = useState(false);
   const [institutions, setInstitutions] = useState<Institutions[]>([]);
   const [institutionsOpen, setInstitutionsOpen] = useState(false);
+  const [typeInstitucion, setTypeInstitucion] = useState("");
+  const [typeIntitucionOpen, setTypeInstitucionOpen] = useState(false);
   const [parroquias, setParroquias] = useState<Parroquia[]>([]);
   const [parroquiasOpen, setparroquiasOpen] = useState(false);
   const [dependencias, setDependencias] = useState<Dependencia[]>([]);
@@ -134,25 +137,11 @@ export default function ReportGenerator() {
       edadMax: edadTipo === "rango" ? Number(edadRangoFin) : undefined,
       gender,
       vote,
+      typeInstitucion
     });
     setNotFound(filteredStudents.length > 0);
     setReport(filteredStudents);
   };
-
-  const arrayMonths = [
-    { id: 1, name: "Enero" },
-    { id: 2, name: "Febrero" },
-    { id: 3, name: "Marzo" },
-    { id: 4, name: "Abril" },
-    { id: 5, name: "Mayo" },
-    { id: 6, name: "Junio" },
-    { id: 7, name: "Julio" },
-    { id: 8, name: "Agosto" },
-    { id: 9, name: "Septiembre" },
-    { id: 10, name: "Octubre" },
-    { id: 11, name: "Noviembre" },
-    { id: 12, name: "Diciembre" },
-  ];
 
   function filtrarEstudiantesPorMes(
     student: Students,
@@ -173,12 +162,6 @@ export default function ReportGenerator() {
       (añoFinal > age || (añoFinal === age && mesFinal >= mes));
 
     return estaEnRango;
-  }
-
-  function filtrarPorMes(student: Students, mesBuscado: number) {
-    const fecha = new Date(student.date);
-    const mes = fecha.getMonth() + 1;
-    return mes === mesBuscado;
   }
 
   function filtrarEstudiantes(
@@ -211,6 +194,10 @@ export default function ReportGenerator() {
           filtro.institucion.toLowerCase()
         : true;
 
+      const cumpleTypeInstitucion = filtro.typeInstitucion
+        ? estudiante.esInfo.institution.type === filtro.typeInstitucion
+        : true;
+
       const cumpleDependencia = filtro.dependencia
         ? estudiante.application.dependencia.name.toLowerCase() ===
           filtro.dependencia.toLowerCase()
@@ -240,7 +227,8 @@ export default function ReportGenerator() {
         cumpleEdadMax &&
         cumpleGener &&
         cumpleMes &&
-        cumpleVote
+        cumpleVote &&
+        cumpleTypeInstitucion
       );
     });
   }
@@ -617,6 +605,53 @@ export default function ReportGenerator() {
                 )}
               </div>
             </div>
+
+            <div className="space-y-2 flex-1 p-4">
+                <Label
+                  htmlFor="institucion"
+                  className="text-xl text-gray-600 md:text-lg lg:text-2xl"
+                >Tipo de institución</Label>
+                <Input
+                  id="typeInstitution"
+                  type="text"
+                  value={typeInstitucion === "universitaria" ? "Universitaria" : typeInstitucion === "tecnica" ? "Técnica" : "" }
+                  onClick={() => setTypeInstitucionOpen(!typeIntitucionOpen)}
+                  readOnly
+                  className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                  placeholder="Selecciona un tipo de institución"
+                />
+                {typeIntitucionOpen && (
+                  <div className="z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                    <div
+                      onClick={() => {
+                        setTypeInstitucion("");
+                        setTypeInstitucionOpen(false);
+                      }}
+                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {"- Selecciona un tipo de institución -"}
+                    </div>
+                    <div
+                      onClick={() => {
+                        setTypeInstitucion("universitaria");
+                        setTypeInstitucionOpen(false);
+                      }}
+                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      Universitaria
+                    </div>
+                    <div
+                      onClick={() => {
+                        setTypeInstitucion("tecnica");
+                        setTypeInstitucionOpen(false);
+                      }}
+                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      Técnica
+                    </div>
+                  </div>
+                )}
+              </div>
 
             <div className="flex flex-col md:flex-row">
               {/* INPUT GENERO */}
