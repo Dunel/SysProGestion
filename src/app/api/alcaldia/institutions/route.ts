@@ -6,12 +6,7 @@ import { ZodError } from "zod";
 export async function GET(req: NextRequest) {
   try {
     const insttt = await prisma.institution.findMany({
-      select: {
-        id: true,
-        name: true,
-        parroquiaId: true,
-        municipioId: true,
-        estadoId: true,
+      include: {
         estado: {
           select: {
             estado: true,
@@ -38,30 +33,27 @@ export async function GET(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
-    const { name, estadoId, municipioId, parroquiaId, id } = await req.json();
+    const { name, estadoId, municipioId, parroquiaId, id, type } = await req.json();
     const result = fullInstituSchema.parse({
       name,
       estadoId,
       municipioId,
       parroquiaId,
       id,
+      type
     });
     const inst = await prisma.institution.update({
       where: {
         id: result.id,
       },
       data: {
-        name,
-        estadoId,
-        municipioId,
-        parroquiaId,
+        name: result.name,
+        estadoId: result.estadoId,
+        municipioId: result.municipioId,
+        parroquiaId: result.parroquiaId,
+        type: result.type
       },
-      select: {
-        id: true,
-        name: true,
-        parroquiaId: true,
-        municipioId: true,
-        estadoId: true,
+      include:{
         estado: {
           select: {
             estado: true,
@@ -77,7 +69,7 @@ export async function PUT(req: NextRequest) {
             parroquia: true,
           },
         },
-      },
+      }
     });
     return NextResponse.json(inst, { status: 201 });
   } catch (error) {
@@ -98,12 +90,13 @@ export async function PUT(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, estadoId, municipioId, parroquiaId } = await req.json();
+    const { name, estadoId, municipioId, parroquiaId, type } = await req.json();
     const result = fullInstituSchema.parse({
       name,
       estadoId,
       municipioId,
       parroquiaId,
+      type
     });
     const inst = await prisma.institution.create({
       data: {
@@ -111,13 +104,9 @@ export async function POST(req: NextRequest) {
         estadoId: result.estadoId,
         municipioId: result.municipioId,
         parroquiaId: result.parroquiaId,
+        type: result.type
       },
-      select: {
-        id: true,
-        name: true,
-        parroquiaId: true,
-        municipioId: true,
-        estadoId: true,
+      include: {
         estado: {
           select: {
             estado: true,

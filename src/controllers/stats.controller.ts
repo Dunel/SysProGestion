@@ -223,6 +223,7 @@ export async function getStudents(req: NextRequest) {
             institution: {
               select: {
                 name: true,
+                type: true,
               },
             },
             career: {

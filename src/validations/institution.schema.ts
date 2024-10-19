@@ -9,6 +9,8 @@ export const instituSchema = z.object({
     .max(200, {
       message: "El nombre de la institucion debe tener maximo 200 caracteres",
     }),
+  type: z
+    .enum(["universitaria", "tecnica"], { message: "Tipo de institucion no valido" }),
   estadoId: z
     .string()
     .min(1)
