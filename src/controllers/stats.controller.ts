@@ -16,7 +16,9 @@ export async function getStatsDepend(req: NextRequest) {
             userCedula: token.cedula,
           },
         },
-        status: "enproceso",
+        dateEnd: {
+          gte: new Date(),
+        },
       },
     });
     const internshipsCompleted = await prisma.applicationApproved.count({
@@ -27,7 +29,9 @@ export async function getStatsDepend(req: NextRequest) {
             userCedula: token.cedula,
           },
         },
-        status: "completada",
+        dateEnd: {
+          lt: new Date(),
+        },
       },
     });
     const serviceCompleted = await prisma.applicationApproved.count({
@@ -38,7 +42,9 @@ export async function getStatsDepend(req: NextRequest) {
             userCedula: token.cedula,
           },
         },
-        status: "completada",
+        dateEnd: {
+          lt: new Date(),
+        },
       },
     });
     const pending = await prisma.apply.count({
@@ -76,11 +82,11 @@ export async function getStatsDepend(req: NextRequest) {
             },
           },
         },
-        application:{
-          select:{
+        application: {
+          select: {
             title: true,
-          }
-        }
+          },
+        },
       },
       take: 5,
     });
@@ -111,7 +117,9 @@ export async function getStatsAlcaldia(req: NextRequest) {
     }
     const processing = await prisma.applicationApproved.count({
       where: {
-        status: "enproceso",
+        dateEnd: {
+          gte: new Date(),
+        },
       },
     });
     const internshipsCompleted = await prisma.applicationApproved.count({
@@ -119,7 +127,9 @@ export async function getStatsAlcaldia(req: NextRequest) {
         application: {
           type: "pasantia",
         },
-        status: "completada",
+        dateEnd: {
+          lt: new Date(),
+        },
       },
     });
     const serviceCompleted = await prisma.applicationApproved.count({
@@ -127,7 +137,9 @@ export async function getStatsAlcaldia(req: NextRequest) {
         application: {
           type: "servicio",
         },
-        status: "completada",
+        dateEnd: {
+          lt: new Date(),
+        },
       },
     });
     const pending = await prisma.apply.count({
