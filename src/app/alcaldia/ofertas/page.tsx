@@ -8,9 +8,6 @@ import { useEffect, useState } from "react";
 import InternshipCards from "@/app/alcaldia/ofertas/InternshipCards";
 import axios from "axios";
 import Modal from "@/components/Modal";
-import { Oval } from "react-loader-spinner";
-import { number } from "zod";
-import { tree } from "next/dist/build/templates/app-page";
 
 type Application = {
   id: number;
@@ -30,11 +27,11 @@ type Application = {
       image: string;
     };
   };
-  apply:[]
+  apply: [];
   _count: {
     apply: number;
     applicationApproved: number;
-  }
+  };
 };
 
 export default function Page() {
@@ -42,28 +39,24 @@ export default function Page() {
   const [squeleton, setSqueleton] = useState(true);
   const [spanRetirar, setSpanRetirar] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [codeOferta, setCodeOferta] = useState(0);
-  const [flagClose, setFlagClose] = useState(false);
+  const [textModal, setTextModal] = useState("");
 
   const [applicationToDelete, setApplicationToDelete] = useState<{
     id: number;
     code: string;
   } | null>(null);
-  
+
   const [offerToClose, setOfferToClose] = useState<{
     id: number;
     code: string;
   } | null>(null);
-
 
   const handleCloseStatus = async () => {
     if (offerToClose) {
       const { id } = offerToClose;
       try {
         setSpanRetirar(true);
-        const res = await axios.put("/api/alcaldia/apply/close", {
-          data: { id },
-        });
+        const res = await axios.put("/api/alcaldia/apply/myapply", { id });
         getApplications();
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -77,8 +70,7 @@ export default function Page() {
         setOfferToClose(null);
       }
     }
-  }
-
+  };
 
   const handleDeleteApply = async () => {
     if (applicationToDelete) {
@@ -105,18 +97,14 @@ export default function Page() {
 
   const confirmDelete = (id: number, code: string) => {
     setApplicationToDelete({ id, code });
-    setCodeOferta(id);
+    setTextModal(`¿Estás seguro de que deseas ELIMINAR la oferta ID: ${code}`);
     setModalOpen(true);
-    setFlagClose(false)
   };
-
-  const [statusClose, setStatusClose] = useState(0)
 
   const confirmClose = (id: number, code: string) => {
     setOfferToClose({ id, code });
-    setStatusClose(id);
+    setTextModal(`¿Estás seguro de que deseas CERRAR la oferta ID: ${code}`);
     setModalOpen(true);
-    setFlagClose(true)
   };
 
   const getApplications = async () => {
@@ -135,25 +123,6 @@ export default function Page() {
       setSqueleton(false);
     }
   };
-
-  const handleCloseApp = async (id: number) => {
-    try {
-      setSpanRetirar(true);
-      const res = await axios.put("/api/alcaldia/apply/myapply", { id });
-      console.log(res.data);
-      getApplications();
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log("error lanzado:", error.response?.data.error);
-      } else {
-        console.error("error:", error);
-      }
-    } finally {
-      setSpanRetirar(false);
-      setModalOpen(false);
-      setOfferToClose(null);
-    }
-  }
 
   const [loading, setLoading] = useState(false);
   const handleOficio = async (id: number) => {
@@ -180,8 +149,8 @@ export default function Page() {
       } else {
         console.error("error:", error);
       }
-    }finally {
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -192,22 +161,35 @@ export default function Page() {
   return (
     <>
       <Header title="TODAS LAS OFERTAS DE VACANTES">
-          <p>
-            Aquí puedes visualizar, actualizar y eliminar todas las ofertas a vacantes de Pasantías 
-            y Servicio Comunitario que han sido creadas. Esta herramienta te permite:
-          </p>
-          <ul className="list-disc list-inside mt-2 space-y-1">
-            <li>Gestionar ofertas existentes, incluyendo su actualización y eliminación.</li>
-            <li>Agregar nuevos estudiantes a las ofertas disponibles.</li>
-            <li>Aceptar estudiantes para las vacantes ofrecidas.</li>
-            <li>Eliminar estudiantes de las ofertas cuando sea necesario.</li>
-            <li>Descargar oficios de asignación para pasantes y prestadores de servicio comunitario.</li>
-          </ul>
-          <p className="mt-3">
-            Esta plataforma centraliza la gestión de ofertas, facilitando la asignación eficiente de estudiantes 
-            a las Dependencias correspondientes. <span className="font-semibold">Los Oficios de Asignación estarán disponibles para 
-            descarga en un documento de tipo <i>Word</i> una vez que el estudiante hayan aceptado su aprobacion en la respectiva oferta</span>.
-          </p>
+        <p>
+          Aquí puedes visualizar, actualizar y eliminar todas las ofertas a
+          vacantes de Pasantías y Servicio Comunitario que han sido creadas.
+          Esta herramienta te permite:
+        </p>
+        <ul className="list-disc list-inside mt-2 space-y-1">
+          <li>
+            Gestionar ofertas existentes, incluyendo su actualización y
+            eliminación.
+          </li>
+          <li>Agregar nuevos estudiantes a las ofertas disponibles.</li>
+          <li>Aceptar estudiantes para las vacantes ofrecidas.</li>
+          <li>Eliminar estudiantes de las ofertas cuando sea necesario.</li>
+          <li>
+            Descargar oficios de asignación para pasantes y prestadores de
+            servicio comunitario.
+          </li>
+        </ul>
+        <p className="mt-3">
+          Esta plataforma centraliza la gestión de ofertas, facilitando la
+          asignación eficiente de estudiantes a las Dependencias
+          correspondientes.{" "}
+          <span className="font-semibold">
+            Los Oficios de Asignación estarán disponibles para descarga en un
+            documento de tipo <i>Word</i> una vez que el estudiante hayan
+            aceptado su aprobacion en la respectiva oferta
+          </span>
+          .
+        </p>
       </Header>
 
       <ContainerWeb>
@@ -227,30 +209,26 @@ export default function Page() {
               </p>
             </GridContainer>
           ) : applications && applications.length > 0 ? (
- 
-              <InternshipCards
-                internships={applications.map((internship) => ({
-                  ...internship,
-                  handleOficio,
-                  handleDeleteApply: confirmDelete,
-                  handleCloseApp: () => handleCloseApp(internship.id),
-                 handleCloseStatus: () => handleCloseApp(internship.id),
-                  loading:loading,
-                }))}
-              />
-
+            <InternshipCards
+              internships={applications.map((internship) => ({
+                ...internship,
+                handleOficio,
+                handleDeleteApply: confirmDelete,
+                handleCloseStatus: confirmClose,
+                loading: loading,
+              }))}
+            />
           ) : null}
-            
 
-            <Modal
-            info={`¿Estás seguro de que deseas ELIMINAR la oferta ID: ${applicationToDelete?.code}`}
+          <Modal
+            info={textModal}
             isLoading={spanRetirar}
             isOpen={isModalOpen}
             onClose={() => setModalOpen(false)}
-            onConfirm={handleDeleteApply}
+            onConfirm={
+              applicationToDelete ? handleDeleteApply : handleCloseStatus
+            }
           />
-
-
         </GridMain>
       </ContainerWeb>
     </>

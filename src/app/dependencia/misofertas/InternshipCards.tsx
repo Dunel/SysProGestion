@@ -242,7 +242,6 @@ import { FaEllipsisV } from "react-icons/fa";
 interface Internship {
   handleDeleteApply: Function;
   handleCloseStatus: Function;
-  
   dependencia: {
     name: string;
     User: {

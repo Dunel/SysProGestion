@@ -37,7 +37,12 @@ export default function Page() {
   const [spanRetirar, setSpanRetirar] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const [codeOferta, setCodeOferta] = useState(0);
+  const [textModal, setTextModal] = useState("");
   const [applicationToDelete, setApplicationToDelete] = useState<{
+    id: number;
+    code: string;
+  } | null>(null);
+  const [offerToClose, setOfferToClose] = useState<{
     id: number;
     code: string;
   } | null>(null);
@@ -50,7 +55,6 @@ export default function Page() {
         const res = await axios.delete("/api/dependencia/apply/myapply", {
           data: { id },
         });
-        console.log(res.data);
         getApplications();
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -68,7 +72,13 @@ export default function Page() {
 
   const confirmDelete = (id: number, code: string) => {
     setApplicationToDelete({ id, code });
-    setCodeOferta(id);
+    setTextModal(`¿Estás seguro de que deseas ELIMINAR la oferta ID: ${code}`);
+    setModalOpen(true);
+  };
+
+  const confirmClose = (id: number, code: string) => {
+    setOfferToClose({ id, code });
+    setTextModal(`¿Estás seguro de que deseas CERRAR la oferta ID: ${code}`);
     setModalOpen(true);
   };
 
@@ -90,22 +100,26 @@ export default function Page() {
     }
   };
 
-  const handleCloseApp = async (id: number) => {
-    try {
-      setSpanRetirar(true);
-      const res = await axios.put("/api/dependencia/apply/myapply", { id });
-      console.log(res.data);
-      getApplications();
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log("error lanzado:", error.response?.data.error);
-      } else {
-        console.error("error:", error);
+  const handleCloseStatus = async () => {
+    if (offerToClose) {
+      const { id } = offerToClose;
+      try {
+        setSpanRetirar(true);
+        const res = await axios.put("/api/dependencia/apply/myapply", { id });
+        getApplications();
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.log("error lanzado:", error.response?.data.error);
+        } else {
+          console.error("error:", error);
+        }
+      } finally {
+        setSpanRetirar(false);
+        setModalOpen(false);
+        setOfferToClose(null);
       }
-    } finally {
-      setSpanRetirar(false);
     }
-  }
+  };
 
   useEffect(() => {
     getApplications();
@@ -113,41 +127,42 @@ export default function Page() {
 
   return (
     <>
-      <Header title={"MIS OFERTAS DE VACANTES"} 
-      subtitle={"Aquí puedes visualizar todas las ofertas a vacantes de Pasantías y Servicio Comunitario que has creado."} />
-     
-          {squeleton ? (
-       
-              <Skeleton />
-          ) : applications && applications.length === 0 ? (
-            <GridContainer>
-              <p className="m-2 p-2 text-center text-red-500">
-                No tienes aplicaciones a Oferta de Vacante.
-              </p>
-              <p className="m-2 p-2 text-center">
-                Entra a tu menú de navegación y haz clic en la opción{" "}
-                <i>“Oferta de Vacantes”, </i> y ¡Aplica ya!
-              </p>
-            </GridContainer>
-          ) : applications && applications.length > 0 ? (
-            <InternshipCards
-              internships={applications.map((internship) => ({
-                ...internship,
-                handleDeleteApply: confirmDelete,
-                handleCloseStatus: () => handleCloseApp(internship.id),
-              }))}
-            />
-          ) : null}
+      <Header
+        title={"MIS OFERTAS DE VACANTES"}
+        subtitle={
+          "Aquí puedes visualizar todas las ofertas a vacantes de Pasantías y Servicio Comunitario que has creado."
+        }
+      />
 
-          <Modal
-            info={`¿Estás seguro de que deseas ELIMINAR la oferta ID: ${applicationToDelete?.code}`}
-            isLoading={spanRetirar}
-            isOpen={isModalOpen}
-            onClose={() => setModalOpen(false)}
-            onConfirm={handleDeleteApply}
-          />
+      {squeleton ? (
+        <Skeleton />
+      ) : applications && applications.length === 0 ? (
+        <GridContainer>
+          <p className="m-2 p-2 text-center text-red-500">
+            No tienes aplicaciones a Oferta de Vacante.
+          </p>
+          <p className="m-2 p-2 text-center">
+            Entra a tu menú de navegación y haz clic en la opción{" "}
+            <i>“Oferta de Vacantes”, </i> y ¡Aplica ya!
+          </p>
+        </GridContainer>
+      ) : applications && applications.length > 0 ? (
+        <InternshipCards
+          internships={applications.map((internship) => ({
+            ...internship,
+            handleDeleteApply: confirmDelete,
+            handleCloseStatus: confirmClose,
+          }))}
+        />
+      ) : null}
 
-   
+      <Modal
+        info={textModal}
+        isLoading={spanRetirar}
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        onConfirm={applicationToDelete ? handleDeleteApply : handleCloseStatus}
+      />
     </>
   );
 }

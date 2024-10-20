@@ -439,7 +439,10 @@ export async function deleteApplicationDepend(req: NextRequest) {
       },
     });
 
-    createLog(token.cedula,  `Oferta Eliminada: ${application.title} con ID: #${application.id}`);
+    createLog(
+      token.cedula,
+      `Oferta Eliminada: ${application.title} con ID: #${application.id}`
+    );
     return NextResponse.json({ message: "Oferta eliminada" }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -571,7 +574,10 @@ export async function updateApplicationById(req: NextRequest) {
       },
     });
 
-    createLog(token.cedula,  `Oferta Actualizada: ${appupdate.title} con ID: #${appupdate.id}`);
+    createLog(
+      token.cedula,
+      `Oferta Actualizada: ${appupdate.title} con ID: #${appupdate.id}`
+    );
     return NextResponse.json(
       { message: "Oferta actualizada" },
       { status: 200 }
@@ -624,7 +630,10 @@ export async function createAppDepend(req: NextRequest) {
       },
     });
 
-    createLog(token.cedula,  `Oferta Creada: ${application.title} con ID: #${application.id}`);
+    createLog(
+      token.cedula,
+      `Oferta Creada: ${application.title} con ID: #${application.id}`
+    );
     return NextResponse.json({ message: "Oferta creada" }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -760,6 +769,14 @@ export async function updateApplyDepend(req: NextRequest) {
           },
         },
       },
+      include:{
+        User: {
+          select: {
+            names: true,
+            lastnames: true,
+          },
+        },
+      }
     });
     if (!apply) {
       return NextResponse.json(
@@ -795,6 +812,13 @@ export async function updateApplyDepend(req: NextRequest) {
         },
       },
     });
+
+    createLog(
+      token.cedula,
+      `Estudiante ${statusApply === "aprobado" ? "Aprobado" : "Rechazado"}: ${
+        apply.User.names
+      } ${apply.User.lastnames} con ID: #${apply.userCedula}`
+    );
 
     return NextResponse.json(
       { message: "Postulacion actualizada" },
@@ -868,8 +892,11 @@ export async function closedAppDependencia(req: NextRequest) {
         status: "closed",
       },
     });
-    
-    createLog(token.cedula,  `Oferta Cerrada: ${application.title} con ID: #${application.id}`);
+
+    createLog(
+      token.cedula,
+      `Oferta Cerrada: ${application.title} con ID: #${application.id}`
+    );
     return NextResponse.json({ message: "Ofertas cerradas" }, { status: 200 });
   } catch (error) {
     console.error("Error: ", (error as Error).message);
@@ -1056,7 +1083,10 @@ export async function closedAppAlcaldia(req: NextRequest) {
       },
     });
 
-    createLog(token.cedula,  `Oferta cerrada: ${application.title} con ID: #${application.id}`);
+    createLog(
+      token.cedula,
+      `Oferta cerrada: ${application.title} con ID: #${application.id}`
+    );
 
     return NextResponse.json({ message: "Ofertas cerradas" }, { status: 200 });
   } catch (error) {
@@ -1291,6 +1321,8 @@ export async function updateApplyAlcaldia(req: NextRequest) {
         userCedula: true,
         User: {
           select: {
+            names: true,
+            lastnames: true,
             esInfo: {
               select: {
                 dateStart: true,
@@ -1321,71 +1353,101 @@ export async function updateApplyAlcaldia(req: NextRequest) {
       );
     }
 
-    await prisma.apply.updateMany({
-      where: {
-        AND: [
-          {
-            userCedula: apply.userCedula,
-          },
-          {
-            NOT: {
-              id: idApply,
+    if (statusApply === "aprobado") {
+      await prisma.apply.updateMany({
+        where: {
+          AND: [
+            {
+              userCedula: apply.userCedula,
             },
-          },
-          {
-            NOT: {
-              status: "rechazado",
+            {
+              NOT: {
+                id: idApply,
+              },
             },
-          },
-        ],
-      },
-      data: {
-        status: "declinado",
-      },
-    });
+            {
+              NOT: {
+                status: "rechazado",
+              },
+            },
+          ],
+        },
+        data: {
+          status: "declinado",
+        },
+      });
 
-    await prisma.apply.update({
-      where: {
-        id: idApply,
-      },
-      data: {
-        status: "aceptado",
-        application: {
-          update: {
-            notification: {
-              create: {
-                action: "accept",
-                User: {
-                  connect: {
-                    cedula: apply.userCedula,
+      await prisma.apply.update({
+        where: {
+          id: idApply,
+        },
+        data: {
+          status: "aceptado",
+          application: {
+            update: {
+              notification: {
+                create: {
+                  action: "accept",
+                  User: {
+                    connect: {
+                      cedula: apply.userCedula,
+                    },
                   },
                 },
               },
             },
           },
         },
-      },
-    });
+      });
 
-    await prisma.applicationApproved.create({
-      data: {
-        dateEnd: fechaFinalGptWhatever(
-          apply.User.esInfo.dateStart,
-          apply.User.esInfo.dateEnd
-        ),
-        application: {
-          connect: {
-            id: apply.applicationId,
+      await prisma.applicationApproved.create({
+        data: {
+          dateEnd: fechaFinalGptWhatever(
+            apply.User.esInfo.dateStart,
+            apply.User.esInfo.dateEnd
+          ),
+          application: {
+            connect: {
+              id: apply.applicationId,
+            },
+          },
+          esInfo: {
+            connect: {
+              userCedula: apply.userCedula,
+            },
           },
         },
-        esInfo: {
-          connect: {
-            userCedula: apply.userCedula,
+      });
+    } else {
+      await prisma.apply.update({
+        where: {
+          id: idApply,
+        },
+        data: {
+          status: "rechazado",
+          application: {
+            update: {
+              notification: {
+                create: {
+                  action: "reject",
+                  User: {
+                    connect: {
+                      cedula: apply.userCedula,
+                    },
+                  },
+                },
+              },
+            },
           },
         },
-      },
-    });
-
+      });
+    }
+    createLog(
+      token.cedula,
+      `Estudiante ${statusApply === "aprobado" ? "Aceptado" : "Rechazado"}: ${
+        apply.User.names
+      } ${apply.User.lastnames} con ID: #${apply.userCedula}`
+    );
     return NextResponse.json(
       { message: "Postulacion actualizada" },
       { status: 200 }
@@ -1437,7 +1499,10 @@ export async function deleteApplicationAlcaldia(req: NextRequest) {
       },
     });
 
-    createLog(token.cedula,  `Oferta Eliminada: ${application.title} con ID: #${application.id}`);
+    createLog(
+      token.cedula,
+      `Oferta Eliminada: ${application.title} con ID: #${application.id}`
+    );
 
     return NextResponse.json({ message: "Oferta eliminada" }, { status: 200 });
   } catch (error) {
@@ -1514,7 +1579,10 @@ export async function updateAppAlcaldiaById(req: NextRequest) {
       },
     });
 
-    createLog(token.cedula,  `Oferta Actualizada: ${application.title} con ID: #${application.id}`);
+    createLog(
+      token.cedula,
+      `Oferta Actualizada: ${application.title} con ID: #${application.id}`
+    );
     return NextResponse.json(
       { message: "Oferta actualizada" },
       { status: 200 }
@@ -1576,7 +1644,10 @@ export async function createAppAlcaldia(req: NextRequest) {
       },
     });
 
-    createLog(token.cedula,  `Oferta Creada: ${newApp.title} con ID: #${newApp.id}`);
+    createLog(
+      token.cedula,
+      `Oferta Creada: ${newApp.title} con ID: #${newApp.id}`
+    );
     return NextResponse.json({ message: "Oferta creada" }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {

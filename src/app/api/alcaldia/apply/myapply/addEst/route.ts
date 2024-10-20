@@ -1,6 +1,8 @@
+import { createLog } from "@/controllers/logs.controller";
 import prisma from "@/db";
 import { idApplySchema } from "@/validations/application.schema";
 import { cedulaSchema } from "@/validations/cedula.schema";
+import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 
@@ -92,6 +94,13 @@ const fechaFinalGptWhatever = (
 
 export async function POST(req: NextRequest) {
   try {
+    const token = await getToken({ req, secret: process.env.SECRET });
+    if (!token) {
+      return NextResponse.json(
+        { error: "No autorizado." },
+        { status: 401 }
+      );
+    }
     const { id, cedula } = await req.json();
     const result = cedulaSchema.parse({ cedula });
     const idApp = idApplySchema.shape.idApplication.parse(id);
@@ -101,6 +110,8 @@ export async function POST(req: NextRequest) {
         role: "estudiante",
       },
       select: {
+        names: true,
+        lastnames: true,
         esInfo: {
           select: {
             dateEnd: true,
@@ -205,6 +216,13 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    createLog(
+      token.cedula,
+      `Estudiante Agregado a oferta: ${
+        userFound.names
+      } ${userFound.lastnames} con ID: #${result.cedula}`
+    );
+
     return NextResponse.json(
       { message: "Estudiante agregado correctamente!" },
       { status: 200 }
@@ -227,6 +245,13 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
+    const token = await getToken({ req, secret: process.env.SECRET });
+    if (!token) {
+      return NextResponse.json(
+        { error: "No autorizado." },
+        { status: 401 }
+      );
+    }
     const { id, cedula } = await req.json();
     const result = cedulaSchema.parse({ cedula });
     const idApp = idApplySchema.shape.idApplication.parse(id);
@@ -274,6 +299,13 @@ export async function DELETE(req: NextRequest) {
         id: acceptFound.id,
       },
     });
+
+    createLog(
+      token.cedula,
+      `Estudiante Eliminado de oferta: ${
+        userFound.names
+      } ${userFound.lastnames} con ID: #${result.cedula}`
+    );
 
     return NextResponse.json(
       { message: "Estudiante eliminado correctamente!" },
