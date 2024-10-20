@@ -11,10 +11,9 @@ export default function Page() {
 
   return (
     <>
-      <Header title={"Bienvenidos"} subtitle={""} />
+      <Header title={"Bienvenido"} subtitle={""} />
       <ContainerWeb>
         <GridMain>
-          <h2 className="text-center">ESTO DEBERIA SER INICIO</h2>
           <ViewHome/>
         </GridMain>
       </ContainerWeb>

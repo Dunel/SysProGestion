@@ -56,6 +56,30 @@ export default function Page() {
   } | null>(null);
 
 
+  const handleCloseStatus = async () => {
+    if (offerToClose) {
+      const { id } = offerToClose;
+      try {
+        setSpanRetirar(true);
+        const res = await axios.put("/api/alcaldia/apply/close", {
+          data: { id },
+        });
+        getApplications();
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.log("error lanzado:", error.response?.data.error);
+        } else {
+          console.error("error:", error);
+        }
+      } finally {
+        setSpanRetirar(false);
+        setModalOpen(false);
+        setOfferToClose(null);
+      }
+    }
+  }
+
+
   const handleDeleteApply = async () => {
     if (applicationToDelete) {
       const { id } = applicationToDelete;
@@ -210,8 +234,7 @@ export default function Page() {
                   handleOficio,
                   handleDeleteApply: confirmDelete,
                   handleCloseApp: () => handleCloseApp(internship.id),
-                 // handleCloseStatus: () => handleCloseApp(internship.id),
-                  handleCloseStatus: confirmClose,
+                 handleCloseStatus: () => handleCloseApp(internship.id),
                   loading:loading,
                 }))}
               />
@@ -219,20 +242,14 @@ export default function Page() {
           ) : null}
             
 
-          <Modal
-            info=
-              {`¿Estás seguro de que deseas 
-                ${flagClose 
-                  ? 'CERRAR la oferta ID: '+offerToClose?.code+'? Si la cierras, quedará registrada con ese estatus en la Base de Datos, no podrás eliminarla, actualizarla ni recibir más aplicaciones de estudiantes.' 
-                  : 'ELIMINAR la oferta ID: '+applicationToDelete?.code+'? Si la eliminas, se borrará de Base de Datos, y también se eliminarán las aplicaciones que los estudiantes hayan hecho sobre esta.'  }
-              `}
-
+            <Modal
+            info={`¿Estás seguro de que deseas ELIMINAR la oferta ID: ${applicationToDelete?.code}`}
             isLoading={spanRetirar}
             isOpen={isModalOpen}
             onClose={() => setModalOpen(false)}
-            onConfirm={handleDeleteApply || handleCloseApp}
-            titleBtn={flagClose ? 'CERRAR' : 'ELIMINAR' }
+            onConfirm={handleDeleteApply}
           />
+
 
         </GridMain>
       </ContainerWeb>

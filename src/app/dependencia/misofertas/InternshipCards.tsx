@@ -544,7 +544,7 @@ export default function InternshipCards({
               <span className="text-lg font-medium text-gray-700 mb-2">
                 {internship.type === "pasantia"
                   ? "Tutor Industrial:"
-                  : "Responsable"}
+                  : "Responsable del Serv. Comunitario"}
               </span>
               <p>
                 {internship.tutor?.length > 0
@@ -574,7 +574,6 @@ export default function InternshipCards({
               </h4>
               <p>{internship.description}</p>
             </div>
-            {'esta es la bandera length > 0 = no puedes cerrar: '}{internship.apply.length}
           </div>
 
           {(((internship.apply.length > 0)  || (internship._count.applicationApproved === 0)) && !(internship.status === 'closed') )
