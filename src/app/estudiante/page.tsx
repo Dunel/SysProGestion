@@ -11,7 +11,7 @@ export default function Page() {
 
   return (
     <>
-      <Header title={"Bienvenido"} subtitle={""} />
+      <Header title={"ROADMAP DE PASANTÍAS Y SERVICIOS COMUNITARIOS"} subtitle={""} />
       <ContainerWeb>
         <GridMain>
           <ViewHome/>

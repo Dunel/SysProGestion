@@ -497,7 +497,7 @@ const stations: Station[] = [
     id: 3, 
     label: 'Mira ofertas', 
     title: 'Descubre oportunidades', 
-    description: 'Explora una amplia gama de ofertas de pasantías y servicios comunitarios. Utiliza los filtros para encontrar las opciones que mejor se adapten a tus intereses y habilidades.',
+    description: 'Explora una amplia gama de ofertas de pasantías y servicios comunitarios. Busca las opciones que mejor se adapten a tus intereses, habilidades y localidad.',
     gifSrc: '/homeEstudent/tres.gif' 
   },
   { 
@@ -559,34 +559,17 @@ const HomeRoadmap: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-        <h2 className="text-2xl font-bold mb-6 text-center text-indigo-800">Roadmap de Pasantías y Servicios Comunitarios</h2>
-      {/* Roadmap Section */}
-      <div className="w-full md:w-2/5 p-4 mb-8 md:mb-0">
-        <div className="md:hidden mb-6 overflow-x-auto">
-          <div className="flex space-x-4 p-2">
-            {stations.map((station) => (
-              <button
-                key={station.id}
-                onClick={() => handleStationClick(station)}
-                className={`flex-shrink-0 w-12 h-12 rounded-full border-2 flex items-center justify-center ${
-                  selectedStation.id === station.id
-                    ? 'bg-indigo-600 border-indigo-700 text-white'
-                    : 'bg-white border-indigo-300 text-indigo-600'
-                }`}
-              >
-                {station.id}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="hidden md:block relative">
-          <div className="absolute left-4 top-0 bottom-0 w-1 bg-indigo-300"></div>
-          {stations.map((station, index) => (
-            <div key={station.id} className="mb-8 flex items-center">
+    <>
+        <div className="flex min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+          {/* Roadmap Section */}
+          <div className="w-2/5 p-4 overflow-y-auto">
+        <div className="relative">
+          <div className="absolute left-3 top-5 bottom-5 w-1 bg-indigo-300"></div>
+          {stations.map((station) => (
+            <div key={station.id} className="mb-4 flex items-center">
               <button
                 onClick={() => handleStationClick(station)}
-                className={`relative z-10 w-8 h-8 rounded-full border-2 ${
+                className={`relative z-10 w-6 h-6 rounded-full border-2 ${
                   selectedStation.id === station.id
                     ? 'bg-indigo-600 border-indigo-700 text-white'
                     : 'bg-white border-indigo-300 text-indigo-600'
@@ -594,37 +577,36 @@ const HomeRoadmap: React.FC = () => {
               >
                 <span className="text-xs font-semibold">{station.id}</span>
               </button>
-              <div className="ml-4 flex-grow">
-                <h3 className="text-lg font-semibold text-indigo-700">{station.label}</h3>
-                <p className="text-sm text-gray-600">{station.title}</p>
+              <div className="ml-3 flex-grow">
+                <h3 className="text-sm font-semibold text-indigo-700">{station.label}</h3>
+                <p className="text-xs text-gray-600">{station.title}</p>
               </div>
-              {(station.id === 5 || station.id === 6) && (
-                <div className="absolute left-4 ml-4 h-16 w-16 border-t-2 border-r-2 border-indigo-300 rounded-tr-xl"></div>
-              )}
             </div>
           ))}
         </div>
       </div>
 
-     {/* GIF and Description Section */}
-       <div className="w-[60%] p-6 m-6 flex flex-col items-center justify-start bg-white rounded-lg shadow-xl">
-         <div className="w-full max-w-2xl">
-           <h2 className="text-3xl font-bold mb-6 text-center text-indigo-800">{selectedStation.label}</h2>
-           <div className="relative w-full h-0 pb-[56.25%] rounded-lg overflow-hidden shadow-lg mb-6">
-             <Image
-               src={selectedStation.gifSrc}
-               alt={`Ilustración de ${selectedStation.label}`}
-               layout="fill"
-              objectFit="cover"
-              className="rounded-lg"
-            />
+        {/* GIF and Description Section */}
+          <div className="sticky top-20 w-[60%] h-[70%] p-4 m-2 flex flex-col items-start justify-start bg-white rounded-lg shadow-xl">
+              <h2 className="text-3xl font-bold mb-6 text-center text-indigo-800">{selectedStation.label}</h2>
+            
+            <div className="w-full max-w-2xl">
+              <div className="w-[50%] relative mx-auto pb-[50.05%] rounded-lg overflow-hidden shadow-lg mb-6 md:w-[70%]">
+                <Image
+                  src={selectedStation.gifSrc}
+                  alt={`Ilustración de ${selectedStation.label}`}
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-lg"
+                />
+              </div>
+              <p className="text-xs text-gray-700 text-justify md:text-lg">{selectedStation.description}</p>
+            </div>
+
           </div>
-          <p className="text-xl text-center text-gray-700">{selectedStation.description}</p>
+
         </div>
-
-      </div>
-
-    </div>
+    </>
   )
 }
 
