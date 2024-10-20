@@ -27,9 +27,9 @@ export async function getLogs(req: NextRequest) {
 }
 
 export async function createLog(
+  userCedula: number,
   username: string,
   description: string,
-  userCedula: number
 ) {
   try {
     const log = await prisma.logs.create({

@@ -8,6 +8,7 @@ import {
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
+import { createLog } from "./logs.controller";
 
 export async function getApplication(req: NextRequest) {
   try {
@@ -1046,6 +1047,9 @@ export async function closedAppAlcaldia(req: NextRequest) {
         status: "closed",
       },
     });
+
+    createLog(token.cedula, `${token.dataProfile.names}`, "Oferta cerrada");
+
     return NextResponse.json({ message: "Ofertas cerradas" }, { status: 200 });
   } catch (error) {
     console.error("Error: ", (error as Error).message);
