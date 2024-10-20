@@ -1,4 +1,9 @@
-import { closedAppAlcaldia, deleteApplicationAlcaldia, getMyAppAlcaldia } from "@/controllers/application.controller";
+import {
+  closedAppAlcaldia,
+  createAppAlcaldia,
+  deleteApplicationAlcaldia,
+  getMyAppAlcaldia,
+} from "@/controllers/application.controller";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -13,4 +18,6 @@ export async function PUT(req: NextRequest) {
   return await closedAppAlcaldia(req);
 }
 
-//export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest) {
+  return await createAppAlcaldia(req);
+}

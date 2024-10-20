@@ -34,6 +34,7 @@ export default function Page() {
     handleSubmit,
     formState: { errors },
     setValue,
+    watch,
   } = useForm<ApplyFormCreateAlcaldia>({
     resolver: zodResolver(applyCreateAlcaldiaSchema),
     mode: "onChange",
@@ -103,8 +104,7 @@ export default function Page() {
       const res = await axios.post("/api/alcaldia/apply/myapply", {
         ...data,
       });
-      router.push("./");
-      console.log("data: ", res.data);
+      router.push("/alcaldia/ofertas");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error lanzado:", error.response?.data);
@@ -143,45 +143,49 @@ export default function Page() {
                 className="form-student-info"
               >
                 <div className="mt-2">
-                    <Label
-                      htmlFor="dependencia"
-                      className="text-xl text-gray-600 md:text-lg lg:text-2xl"
-                    >
-                      Dependencia de Alcaldía
-                    </Label>
-                    <Input
-                      id="dependencia"
-                      type="text"
-                      onClick={() => setDependenciasOpen(!dependenciasOpen)}
-                      readOnly
-                      className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
-                      placeholder="Selecciona una Dependencia"
-                    />
-                    {dependenciasOpen && (
-                      <div className="z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                  <Label
+                    htmlFor="dependencia"
+                    className="text-xl text-gray-600 md:text-lg lg:text-2xl"
+                  >
+                    Dependencia de Alcaldía
+                  </Label>
+                  <Input
+                    id="dependencia"
+                    type="text"
+                    value={
+                      dependencias.find((e) => e.id === watch("idDependence"))
+                        ?.name || ""
+                    }
+                    onClick={() => setDependenciasOpen(!dependenciasOpen)}
+                    readOnly
+                    className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                    placeholder="Selecciona una Dependencia"
+                  />
+                  {dependenciasOpen && (
+                    <div className="z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                      <div
+                        onClick={() => {
+                          setValue("idDependence", 0);
+                          setDependenciasOpen(false);
+                        }}
+                        className="p-2 hover:bg-gray-100 cursor-pointer"
+                      >
+                        {"- Selecciona una Dependencia -"}
+                      </div>
+                      {dependencias.map((e, index) => (
                         <div
+                          key={index}
                           onClick={() => {
-                            setValue("idDependence", 0);
+                            setValue("idDependence", e.id);
                             setDependenciasOpen(false);
                           }}
                           className="p-2 hover:bg-gray-100 cursor-pointer"
                         >
-                          {"- Selecciona una Dependencia -"}
+                          {e.name}
                         </div>
-                        {dependencias.map((e, index) => (
-                          <div
-                            key={index}
-                            onClick={() => {
-                              setValue("idDependence", e.id);
-                              setDependenciasOpen(false);
-                            }}
-                            className="p-2 hover:bg-gray-100 cursor-pointer"
-                          >
-                            {e.name}
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <div className="mt-2">
                   <Label>Titulo descriptivo de la oferta de vacante</Label>

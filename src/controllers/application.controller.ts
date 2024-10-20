@@ -1,5 +1,6 @@
 import prisma from "@/db";
 import {
+  applyCreateAlcaldiaSchema,
   applyCreateSchema,
   applyUpdateSchema,
   idApplySchema,
@@ -1501,6 +1502,63 @@ export async function updateAppAlcaldiaById(req: NextRequest) {
       { message: "Oferta actualizada" },
       { status: 200 }
     );
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function createAppAlcaldia(req: NextRequest) {
+  try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const result = applyCreateAlcaldiaSchema.parse(await req.json());
+    const {
+      title,
+      description,
+      location,
+      type,
+      skills,
+      status,
+      pay,
+      tutor,
+      idDependence,
+    } = result;
+    await prisma.application.create({
+      data: {
+        title,
+        description,
+        location,
+        type,
+        skills,
+        status,
+        pay,
+        tutor,
+        dependencia: {
+          connect: {
+            id: idDependence,
+          },
+        },
+        notification: {
+          create: {
+            action: "create",
+            userCedula: token.cedula,
+          },
+        },
+      },
+    });
+    return NextResponse.json({ message: "Oferta creada" }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(

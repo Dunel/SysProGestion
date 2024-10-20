@@ -54,6 +54,7 @@ model User {
   parroquia    parroquia?        @relation(fields: [parroquiaId], references: [id])
   alcaldiaInfo alcaldiaInfo?
   recovery     recoveryPassword?
+  logs         logs[]
 }
 
 enum Skills {
@@ -295,4 +296,14 @@ model recoveryPassword {
   week      Int      @default(1)
   updatedAt DateTime @updatedAt
   User      User     @relation(fields: [email], references: [mail], onDelete: Cascade)
+}
+
+model logs {
+  id          Int      @id @default(autoincrement())
+  description String
+  date        DateTime @default(now())
+  username    String
+  userCedula  Int
+  createdAt   DateTime @default(now())
+  User        User     @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
 }
