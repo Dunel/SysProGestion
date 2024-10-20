@@ -1,5 +1,6 @@
 import prisma from "@/db";
 import {
+  applyCreateAlcaldiaSchema,
   applyCreateSchema,
   applyUpdateSchema,
   idApplySchema,
@@ -7,6 +8,7 @@ import {
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
+import { createLog } from "./logs.controller";
 
 export async function getApplication(req: NextRequest) {
   try {
@@ -436,6 +438,8 @@ export async function deleteApplicationDepend(req: NextRequest) {
         id: result,
       },
     });
+
+    createLog(token.cedula,  `Oferta Eliminada: ${application.title} con ID: #${application.id}`);
     return NextResponse.json({ message: "Oferta eliminada" }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -545,7 +549,7 @@ export async function updateApplicationById(req: NextRequest) {
       );
     }
 
-    await prisma.application.update({
+    const appupdate = await prisma.application.update({
       where: {
         id,
       },
@@ -566,6 +570,8 @@ export async function updateApplicationById(req: NextRequest) {
         },
       },
     });
+
+    createLog(token.cedula,  `Oferta Actualizada: ${appupdate.title} con ID: #${appupdate.id}`);
     return NextResponse.json(
       { message: "Oferta actualizada" },
       { status: 200 }
@@ -594,7 +600,7 @@ export async function createAppDepend(req: NextRequest) {
     const result = applyCreateSchema.parse(await req.json());
     const { title, description, location, type, skills, status, pay, tutor } =
       result;
-    await prisma.application.create({
+    const application = await prisma.application.create({
       data: {
         title,
         description,
@@ -617,6 +623,8 @@ export async function createAppDepend(req: NextRequest) {
         },
       },
     });
+
+    createLog(token.cedula,  `Oferta Creada: ${application.title} con ID: #${application.id}`);
     return NextResponse.json({ message: "Oferta creada" }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -860,6 +868,8 @@ export async function closedAppDependencia(req: NextRequest) {
         status: "closed",
       },
     });
+    
+    createLog(token.cedula,  `Oferta Cerrada: ${application.title} con ID: #${application.id}`);
     return NextResponse.json({ message: "Ofertas cerradas" }, { status: 200 });
   } catch (error) {
     console.error("Error: ", (error as Error).message);
@@ -1045,6 +1055,9 @@ export async function closedAppAlcaldia(req: NextRequest) {
         status: "closed",
       },
     });
+
+    createLog(token.cedula,  `Oferta cerrada: ${application.title} con ID: #${application.id}`);
+
     return NextResponse.json({ message: "Ofertas cerradas" }, { status: 200 });
   } catch (error) {
     console.error("Error: ", (error as Error).message);
@@ -1423,6 +1436,9 @@ export async function deleteApplicationAlcaldia(req: NextRequest) {
         id: result,
       },
     });
+
+    createLog(token.cedula,  `Oferta Eliminada: ${application.title} con ID: #${application.id}`);
+
     return NextResponse.json({ message: "Oferta eliminada" }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -1497,10 +1513,71 @@ export async function updateAppAlcaldiaById(req: NextRequest) {
         },
       },
     });
+
+    createLog(token.cedula,  `Oferta Actualizada: ${application.title} con ID: #${application.id}`);
     return NextResponse.json(
       { message: "Oferta actualizada" },
       { status: 200 }
     );
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0].message },
+        { status: 400 }
+      );
+    }
+    console.error("Error: ", (error as Error).message);
+    return NextResponse.json(
+      { error: "Error en el servidor." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function createAppAlcaldia(req: NextRequest) {
+  try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const result = applyCreateAlcaldiaSchema.parse(await req.json());
+    const {
+      title,
+      description,
+      location,
+      type,
+      skills,
+      status,
+      pay,
+      tutor,
+      idDependence,
+    } = result;
+    const newApp = await prisma.application.create({
+      data: {
+        title,
+        description,
+        location,
+        type,
+        skills,
+        status,
+        pay,
+        tutor,
+        dependencia: {
+          connect: {
+            id: idDependence,
+          },
+        },
+        notification: {
+          create: {
+            action: "create",
+            userCedula: token.cedula,
+          },
+        },
+      },
+    });
+
+    createLog(token.cedula,  `Oferta Creada: ${newApp.title} con ID: #${newApp.id}`);
+    return NextResponse.json({ message: "Oferta creada" }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(

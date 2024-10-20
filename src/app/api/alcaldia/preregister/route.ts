@@ -1,14 +1,23 @@
+import { createLog } from "@/controllers/logs.controller";
 import prisma from "@/db";
 import {
   fullSchema,
   idSchema,
   preRegisterSchema,
 } from "@/validations/preregister.schema";
+import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 
 export async function POST(req: NextRequest) {
   try {
+    const token = await getToken({ req, secret: process.env.SECRET });
+    if (!token) {
+      return NextResponse.json(
+        { error: "No tienes permisos para realizar esta acción." },
+        { status: 401 }
+      );
+    }
     const { mail, cedula } = await req.json();
     const result = preRegisterSchema.parse({ mail, cedula });
 
@@ -38,13 +47,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    await prisma.preRegister.create({
+    const preRegister = await prisma.preRegister.create({
       data: {
         mail: result.mail,
         cedula: result.cedula,
       },
     });
 
+    createLog(token.cedula,  `Pre-Registro Creado: ${preRegister.mail} con ID: #${preRegister.id}`);
     return NextResponse.json({ message: "Pre-registro creado con exito." });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -64,6 +74,13 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
+    const token = await getToken({ req, secret: process.env.SECRET });
+    if (!token) {
+      return NextResponse.json(
+        { error: "No tienes permisos para realizar esta acción." },
+        { status: 401 }
+      );
+    }
     const { id } = await req.json();
     const result = idSchema.parse({ id });
     const preRegisterFind = await prisma.preRegister.findFirst({
@@ -84,6 +101,7 @@ export async function DELETE(req: NextRequest) {
       },
     });
 
+    createLog(token.cedula,  `Pre-Registro Eliminado: ${preRegisterFind.mail} con ID: #${preRegisterFind.id}`);
     return NextResponse.json({ message: "Pre-registro eliminado con exito." });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -123,6 +141,13 @@ export async function GET(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
+    const token = await getToken({ req, secret: process.env.SECRET });
+    if (!token) {
+      return NextResponse.json(
+        { error: "No tienes permisos para realizar esta acción." },
+        { status: 401 }
+      );
+    }
     const { mail, id, cedula } = await req.json();
     const result = fullSchema.parse({ mail, id, cedula });
 
@@ -157,7 +182,7 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    await prisma.preRegister.update({
+    const preRegister = await prisma.preRegister.update({
       where: {
         id: result.id,
       },
@@ -167,6 +192,7 @@ export async function PUT(req: NextRequest) {
       },
     });
 
+    createLog(token.cedula,  `Pre-Registro Actualizado: ${preRegister.mail} con ID: #${preRegister.id}`);
     return NextResponse.json(
       {
         message: "Pre-registro actualizado con exito.",
