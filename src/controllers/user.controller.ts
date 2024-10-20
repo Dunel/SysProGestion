@@ -6,6 +6,7 @@ import { ZodError } from "zod";
 import { userSchema } from "@/validations/user.schema";
 import { getToken } from "next-auth/jwt";
 import { profileSchemaEdit } from "@/validations/profile.schema";
+import { createLog } from "./logs.controller";
 
 interface DecodedToken {
   codeId: string;
@@ -358,7 +359,7 @@ export async function updateUser(req: NextRequest) {
       },
     });
 
-    await prisma.user.update({
+    const userUp = await prisma.user.update({
       where: { cedula: result.cedula, role: "estudiante" },
       data: {
         names: result.names,
@@ -373,6 +374,7 @@ export async function updateUser(req: NextRequest) {
       },
     });
 
+    createLog(token.cedula,  `Estudiante Eliminado: ${userUp.names} ${userUp.lastnames} con ID: #${userUp.cedula}`);
     return NextResponse.json(
       { message: "Perfil actualizado" },
       { status: 200 }
@@ -477,7 +479,7 @@ export async function createUserAlcaldia(req: NextRequest) {
       );
     }
 
-    await prisma.user.create({
+    const newUser = await prisma.user.create({
       data: {
         cedula: result.cedula,
         mail: result.mail,
@@ -510,6 +512,7 @@ export async function createUserAlcaldia(req: NextRequest) {
       },
     });
 
+    createLog(token.cedula,  `Estudiante Creado: ${newUser.names} ${newUser.lastnames} con ID: #${newUser.cedula}`);
     return NextResponse.json(
       { message: "Estudiante registrado." },
       { status: 200 }
@@ -557,7 +560,7 @@ export async function deleteUser(req: NextRequest) {
     await prisma.user.delete({
       where: { cedula: result, role: "estudiante" },
     });
-
+    createLog(token.cedula,  `Estudiante Eliminado: ${user.names} ${user.lastnames} con ID: #${user.cedula}`);
     return NextResponse.json("Usuario eliminado.", { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {

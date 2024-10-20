@@ -1,5 +1,11 @@
+import { createLog } from "@/controllers/logs.controller";
 import prisma from "@/db";
-import { careerSchema, fullCareerSchema, idCareerSchema } from "@/validations/career.schema";
+import {
+  careerSchema,
+  fullCareerSchema,
+  idCareerSchema,
+} from "@/validations/career.schema";
+import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 
@@ -15,6 +21,10 @@ export async function GET(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
+    const token = await getToken({ req, secret: process.env.SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+    }
     const { name, short, id } = await req.json();
     const result = fullCareerSchema.parse({
       name,
@@ -48,6 +58,8 @@ export async function PUT(req: NextRequest) {
         short: true,
       },
     });
+
+    createLog(token.cedula,  `Carrera Actualizada: ${career.name} con ID: #${career.id}`);
     return NextResponse.json("Carrera actualizada!", { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -67,6 +79,10 @@ export async function PUT(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
+    const token = await getToken({ req, secret: process.env.SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+    }
     const { name, short } = await req.json();
     const result = careerSchema.parse({
       name,
@@ -84,6 +100,8 @@ export async function POST(req: NextRequest) {
         short: true,
       },
     });
+
+    createLog(token.cedula,  `Carrera Creada: ${career.name} con ID: #${career.id}`);
     return NextResponse.json(career, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -103,6 +121,10 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
+    const token = await getToken({ req, secret: process.env.SECRET });
+    if (!token) {
+      return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+    }
     const { id } = await req.json();
     const result = idCareerSchema.parse({
       id,
@@ -125,6 +147,8 @@ export async function DELETE(req: NextRequest) {
         id: result.id,
       },
     });
+
+    createLog(token.cedula,  `Carrera Actualizada: ${findCareer.name} con ID: #${findCareer.id}`);
     return NextResponse.json("Carrera eliminada!", { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {

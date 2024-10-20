@@ -438,6 +438,8 @@ export async function deleteApplicationDepend(req: NextRequest) {
         id: result,
       },
     });
+
+    createLog(token.cedula,  `Oferta Eliminada: ${application.title} con ID: #${application.id}`);
     return NextResponse.json({ message: "Oferta eliminada" }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -547,7 +549,7 @@ export async function updateApplicationById(req: NextRequest) {
       );
     }
 
-    await prisma.application.update({
+    const appupdate = await prisma.application.update({
       where: {
         id,
       },
@@ -568,6 +570,8 @@ export async function updateApplicationById(req: NextRequest) {
         },
       },
     });
+
+    createLog(token.cedula,  `Oferta Actualizada: ${appupdate.title} con ID: #${appupdate.id}`);
     return NextResponse.json(
       { message: "Oferta actualizada" },
       { status: 200 }
@@ -596,7 +600,7 @@ export async function createAppDepend(req: NextRequest) {
     const result = applyCreateSchema.parse(await req.json());
     const { title, description, location, type, skills, status, pay, tutor } =
       result;
-    await prisma.application.create({
+    const application = await prisma.application.create({
       data: {
         title,
         description,
@@ -619,6 +623,8 @@ export async function createAppDepend(req: NextRequest) {
         },
       },
     });
+
+    createLog(token.cedula,  `Oferta Creada: ${application.title} con ID: #${application.id}`);
     return NextResponse.json({ message: "Oferta creada" }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -862,6 +868,8 @@ export async function closedAppDependencia(req: NextRequest) {
         status: "closed",
       },
     });
+    
+    createLog(token.cedula,  `Oferta Cerrada: ${application.title} con ID: #${application.id}`);
     return NextResponse.json({ message: "Ofertas cerradas" }, { status: 200 });
   } catch (error) {
     console.error("Error: ", (error as Error).message);
@@ -1048,7 +1056,7 @@ export async function closedAppAlcaldia(req: NextRequest) {
       },
     });
 
-    createLog(token.cedula, `${token.dataProfile.names}`, "Oferta cerrada");
+    createLog(token.cedula,  `Oferta cerrada: ${application.title} con ID: #${application.id}`);
 
     return NextResponse.json({ message: "Ofertas cerradas" }, { status: 200 });
   } catch (error) {
@@ -1428,6 +1436,9 @@ export async function deleteApplicationAlcaldia(req: NextRequest) {
         id: result,
       },
     });
+
+    createLog(token.cedula,  `Oferta Eliminada: ${application.title} con ID: #${application.id}`);
+
     return NextResponse.json({ message: "Oferta eliminada" }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -1502,6 +1513,8 @@ export async function updateAppAlcaldiaById(req: NextRequest) {
         },
       },
     });
+
+    createLog(token.cedula,  `Oferta Actualizada: ${application.title} con ID: #${application.id}`);
     return NextResponse.json(
       { message: "Oferta actualizada" },
       { status: 200 }
@@ -1539,7 +1552,7 @@ export async function createAppAlcaldia(req: NextRequest) {
       tutor,
       idDependence,
     } = result;
-    await prisma.application.create({
+    const newApp = await prisma.application.create({
       data: {
         title,
         description,
@@ -1562,6 +1575,8 @@ export async function createAppAlcaldia(req: NextRequest) {
         },
       },
     });
+
+    createLog(token.cedula,  `Oferta Creada: ${newApp.title} con ID: #${newApp.id}`);
     return NextResponse.json({ message: "Oferta creada" }, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {

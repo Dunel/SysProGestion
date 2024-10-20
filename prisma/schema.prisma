@@ -302,7 +302,6 @@ model logs {
   id          Int      @id @default(autoincrement())
   description String
   date        DateTime @default(now())
-  username    String
   userCedula  Int
   createdAt   DateTime @default(now())
   User        User     @relation(fields: [userCedula], references: [cedula], onDelete: Cascade)
