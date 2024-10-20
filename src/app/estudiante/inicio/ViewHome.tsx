@@ -33,16 +33,23 @@ export default function ViewHome() {
   const [characterPos, setCharacterPos] = useState({ x: 100, y: 100 });
   const [gifImage, setGifImage] = useState<HTMLImageElement | null>(null);
   const [roadWidth, setRoadWidth] = useState(window.innerWidth * 0.3);
-
+  
+  
+  
   useEffect(() => {
-    const img = new window.Image();
-    img.src = gifs[currentStation];
-    img.onload = () => {
-      setGifImage(img);
+    if (typeof window !== 'undefined') {
+      const img = new window.Image();
+      // Your code that uses the window object
+      img.src = gifs[currentStation];
+      img.onload = () => {
+        setGifImage(img);
+      }
     };
 
     const handleResize = () => {
-      setRoadWidth(window.innerWidth * 0.3);
+      if (typeof window !== 'undefined') { // {{ edit_1 }}
+        setRoadWidth(window.innerWidth * 0.3);
+      }
     };
 
     window.addEventListener('resize', handleResize);

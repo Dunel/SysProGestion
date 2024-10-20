@@ -24,6 +24,7 @@
     "@types/firebase": "^2.4.32",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
+    "canvas": "^2.11.2",
     "chart.js": "^4.4.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
