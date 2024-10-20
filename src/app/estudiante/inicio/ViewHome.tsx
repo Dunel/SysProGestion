@@ -524,30 +524,30 @@ const stations: Station[] = [
   { 
     id: 6, 
     label: 'Aceptar aprobación', 
-    title: '¡Enhorabuena!', 
-    description: 'Tu solicitud ha sido aprobada. Es el momento de celebrar y prepararte para comenzar tu pasantía o servicio comunitario. Asegúrate de confirmar todos los detalles con la organización.',
-    gifSrc: '/gifs/aceptar.gif' 
+    title: '¡Felicidades!', 
+    description: 'Tu solicitud ha sido aprobada. Ahora debes aceptarla para confirmar tu intención y disponibilidad. Al aceptar, prepararte para retirar el Oficio de Postulación en la alcaldía y comenzar tu pasantía o servicio comunitario en la dependencia.',
+    gifSrc: '/homeEstudent/siete.gif' 
   },
   { 
     id: '6.1', 
     label: 'Declinar aprobación', 
     title: 'Evalúa tus opciones', 
     description: 'Si decides no aceptar una oferta aprobada, comunícalo de manera profesional. Agradece la oportunidad y explica brevemente tus razones. Mantén las puertas abiertas para futuras oportunidades.',
-    gifSrc: '/gifs/declinar-aprobacion.gif' 
+    gifSrc: '/homeEstudent/seis.gif' 
   },
   { 
     id: 7, 
     label: 'En proceso', 
     title: 'Aprovecha al máximo', 
     description: 'Has comenzado tu pasantía o servicio comunitario. Aprovecha cada día para aprender, crecer y contribuir. Mantén una actitud positiva y no dudes en pedir ayuda o aclaración cuando la necesites.',
-    gifSrc: '/gifs/proceso.gif' 
+    gifSrc: '/homeEstudent/ocho.gif' 
   },
   { 
     id: 8, 
     label: 'Proceso finalizado', 
     title: '¡Felicidades!', 
     description: '¡Has completado tu pasantía o servicio comunitario! Reflexiona sobre tu experiencia, agradece a quienes te han apoyado y considera cómo puedes aplicar lo aprendido en tu futura carrera profesional.',
-    gifSrc: '/gifs/finalizado.gif' 
+    gifSrc: '/homeEstudent/nueve1.gif' 
   },
 ]
 
@@ -587,11 +587,11 @@ const HomeRoadmap: React.FC = () => {
       </div>
 
         {/* GIF and Description Section */}
-          <div className="sticky top-20 w-[60%] h-[70%] p-4 m-2 flex flex-col items-start justify-start bg-white rounded-lg shadow-xl">
+          <div className="sticky top-20 w-[60%] h-[70%] p-4 m-2 flex flex-col items-center justify-center bg-white rounded-lg shadow-xl">
               <h2 className="text-3xl font-bold mb-6 text-center text-indigo-800">{selectedStation.label}</h2>
             
             <div className="w-full max-w-2xl">
-              <div className="w-[50%] relative mx-auto pb-[50.05%] rounded-lg overflow-hidden shadow-lg mb-6 md:w-[70%]">
+              <div className="w-[50%] relative mx-auto pb-[45.05%] rounded-lg overflow-hidden shadow-lg mb-6 md:w-[70%]">
                 <Image
                   src={selectedStation.gifSrc}
                   alt={`Ilustración de ${selectedStation.label}`}
