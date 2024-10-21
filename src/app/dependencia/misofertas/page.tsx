@@ -159,8 +159,13 @@ export default function Page() {
       <Modal
         info={textModal}
         isLoading={spanRetirar}
+        titleBtn={applicationToDelete ? "ELIMINAR" : "CERRAR"}
         isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={() => {
+          setApplicationToDelete(null);
+          setOfferToClose(null);
+          setModalOpen(false);
+        }}
         onConfirm={applicationToDelete ? handleDeleteApply : handleCloseStatus}
       />
     </>
