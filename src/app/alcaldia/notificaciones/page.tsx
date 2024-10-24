@@ -42,7 +42,7 @@ export default function Page() {
 
   return (
     <>
-      <Header title="MI PERFIL">
+      <Header title="Notificaciones">
         <p>
           {"Aquí podrás visualizar todas las acciones más importantes relacionadas con los procesos de Pasantías y Servicios Comunitarios gestionados por el sistema. ¡Mantente informado!"}
         </p>
