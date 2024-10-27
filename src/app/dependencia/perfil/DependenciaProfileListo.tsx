@@ -78,7 +78,7 @@ export default function DependenciaProfileListo({
                 className="cursor-pointer">
                   <img
                     className="flex h-40 w-40 rounded-full border-4 border-black-800 object-cover"
-                    src={session?.user?.picture || "/images/no-image.png"}
+                    src={`${session?.user?.picture}?${new Date().getTime()}` || "/images/no-image.png"}
                     alt="Foto del estudiante"
                   />
                   <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">

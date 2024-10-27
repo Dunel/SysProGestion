@@ -75,7 +75,7 @@ export default function AlcaldiaFormEditStudent({
   data,
   searchUser,
   regForm,
-  handleReset
+  handleReset,
 }: EstudianteFormProfileProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -319,8 +319,7 @@ export default function AlcaldiaFormEditStudent({
           {regForm ? " REGISTRAR NUEVO ESTUDIANTE" : "ACTUALIZAR DATOS"}
         </h2>
       </div>
-      
-      
+
       <div className="flex flex-col m-2 my-2 p-2 rounded-lg shadow-lg">
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -491,7 +490,8 @@ export default function AlcaldiaFormEditStudent({
                 placeholder="Selecciona un estado"
               />
               {estadoOpen && (
-                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
+                <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                  {" "}
                   {estados.map((e, index) => (
                     <div
                       key={index}
@@ -533,7 +533,8 @@ export default function AlcaldiaFormEditStudent({
                 placeholder="Selecciona una institución"
               />
               {municipiosOpen && (
-                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
+                <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                  {" "}
                   {municipios.map((e, index) => (
                     <div
                       key={index}
@@ -576,7 +577,8 @@ export default function AlcaldiaFormEditStudent({
                 placeholder="Selecciona una institución"
               />
               {parroquiasOpen && (
-                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
+                <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                  {" "}
                   {parroquias.map((e, index) => (
                     <div
                       key={index}
@@ -634,7 +636,8 @@ export default function AlcaldiaFormEditStudent({
                 placeholder="Selecciona una institución"
               />
               {isUniversityOpen && (
-                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
+                <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                  {" "}
                   {institutions.map((e) => (
                     <div
                       key={e.id}
@@ -674,7 +677,8 @@ export default function AlcaldiaFormEditStudent({
                 placeholder="Selecciona una carrera"
               />
               {isCareerOpen && (
-                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
+                <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                  {" "}
                   {career.map((e) => (
                     <div
                       key={e.id}

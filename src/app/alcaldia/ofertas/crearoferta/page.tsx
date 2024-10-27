@@ -162,8 +162,7 @@ export default function Page() {
                     placeholder="Selecciona una Dependencia"
                   />
                   {dependenciasOpen && (
-                    <div className="z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
-                      <div
+                    <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">                      <div
                         onClick={() => {
                           setValue("idDependence", 0);
                           setDependenciasOpen(false);

@@ -333,7 +333,7 @@ export default function ListInstituciones() {
                     placeholder="Selecciona un tipo de institución"
                   />
                   {typeOpen && (
-                    <div className="fixed z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                    <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
                       {typeInstitu.map((e, index) => (
                         <div
                           key={index}
@@ -374,8 +374,7 @@ export default function ListInstituciones() {
                     placeholder="Selecciona un estado"
                   />
                   {estadoOpen && (
-                    <div className="fixed z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
-                      {estados.map((e, index) => (
+                    <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">                      {estados.map((e, index) => (
                         <div
                           key={index}
                           onClick={() => {
@@ -417,8 +416,7 @@ export default function ListInstituciones() {
                     placeholder="Selecciona una institución"
                   />
                   {municipiosOpen && (
-                    <div className="fixed z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
-                      {municipios.map((e, index) => (
+                    <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">                      {municipios.map((e, index) => (
                         <div
                           key={index}
                           onClick={() => {
@@ -459,8 +457,7 @@ export default function ListInstituciones() {
                     placeholder="Selecciona una institución"
                   />
                   {parroquiasOpen && (
-                    <div className="fixed z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
-                      {parroquias.map((e, index) => (
+                    <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">                      {parroquias.map((e, index) => (
                         <div
                           key={index}
                           onClick={() => {
@@ -544,8 +541,7 @@ export default function ListInstituciones() {
                       placeholder="Selecciona un tipo de institución"
                     />
                     {typeOpen && (
-                      <div className="fixed z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
-                        {typeInstitu.map((e, index) => (
+                      <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">                        {typeInstitu.map((e, index) => (
                           <div
                             key={index}
                             onClick={() => {
@@ -591,8 +587,7 @@ export default function ListInstituciones() {
                       placeholder="Selecciona un estado"
                     />
                     {estadoOpen && (
-                      <div className="fixed z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
-                        {estados.map((e, index) => (
+                      <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">                        {estados.map((e, index) => (
                           <div
                             key={index}
                             onClick={() => {
@@ -638,8 +633,7 @@ export default function ListInstituciones() {
                       placeholder="Selecciona una institución"
                     />
                     {municipiosOpen && (
-                      <div className="fixed z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
-                        {municipios.map((e, index) => (
+                      <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">                        {municipios.map((e, index) => (
                           <div
                             key={index}
                             onClick={() => {
@@ -684,8 +678,7 @@ export default function ListInstituciones() {
                       placeholder="Selecciona una institución"
                     />
                     {parroquiasOpen && (
-                      <div className="fixed z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
-                        {parroquias.map((e, index) => (
+                      <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">                        {parroquias.map((e, index) => (
                           <div
                             key={index}
                             onClick={() => {

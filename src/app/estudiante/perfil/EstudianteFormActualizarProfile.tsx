@@ -476,8 +476,7 @@ export default function EstudianteProfileForm({
                 placeholder="Selecciona una institución"
               />
               {estadoOpen && (
-                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
-                  {estados.map((e, index) => (
+                <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">                  {estados.map((e, index) => (
                     <div
                       key={index}
                       onClick={() => {
@@ -518,8 +517,7 @@ export default function EstudianteProfileForm({
                 placeholder="Selecciona una institución"
               />
               {municipiosOpen && (
-                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
-                  {municipios.map((e, index) => (
+                <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">                  {municipios.map((e, index) => (
                     <div
                       key={index}
                       onClick={() => {
@@ -561,8 +559,7 @@ export default function EstudianteProfileForm({
                 placeholder="Selecciona una institución"
               />
               {parroquiasOpen && (
-                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
-                  {parroquias.map((e, index) => (
+                <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">                  {parroquias.map((e, index) => (
                     <div
                       key={index}
                       onClick={() => {
@@ -626,8 +623,7 @@ export default function EstudianteProfileForm({
                 placeholder="Selecciona una institución"
               />
               {isUniversityOpen && (
-                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
-                  {institutions.map((e) => (
+                <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">                  {institutions.map((e) => (
                     <div
                       key={e.id}
                       onClick={() => {
@@ -667,8 +663,7 @@ export default function EstudianteProfileForm({
                 placeholder="Selecciona una carrera"
               />
               {isCareerOpen && (
-                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
-                  {career.map((e) => (
+                <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">                  {career.map((e) => (
                     <div
                       key={e.id}
                       onClick={() => {
