@@ -127,7 +127,7 @@ export default function ReportGenerator() {
   const [notFound, setNotFound] = useState(null as boolean | null);
 
   const [showClearButton, setShowClearButton] = useState(false);
-  const [loading, setLoading ] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleGenerateReport = () => {
     const filteredStudents = filtrarEstudiantes(students, {
@@ -140,7 +140,7 @@ export default function ReportGenerator() {
       edadMax: edadTipo === "rango" ? Number(edadRangoFin) : undefined,
       gender,
       vote,
-      typeInstitucion
+      typeInstitucion,
     });
     setNotFound(filteredStudents.length > 0);
     setReport(filteredStudents);
@@ -382,8 +382,10 @@ export default function ReportGenerator() {
     setGender("");
     setDateActive(null);
     setVote(null);
+    setTypeInstitucion("");
 
     // Close all dropdowns
+    setTypeInstitucionOpen(false);
     setCareersOpen(false);
     setInstitutionsOpen(false);
     setparroquiasOpen(false);
@@ -408,7 +410,9 @@ export default function ReportGenerator() {
       edadRangoFin !== "" ||
       gender !== "" ||
       dateActive !== null ||
-      vote !== null;
+      vote !== null ||
+      typeInstitucion !== "" ||
+      report.length > 0;
 
     setShowClearButton(hasValue);
   }, [
@@ -423,6 +427,8 @@ export default function ReportGenerator() {
     gender,
     dateActive,
     vote,
+    typeInstitucion,
+    report,
   ]);
 
   return (
@@ -507,7 +513,7 @@ export default function ReportGenerator() {
                   placeholder="Selecciona una Parroquia"
                 />
                 {parroquiasOpen && (
-                  <div className="z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                  <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
                     <div
                       onClick={() => {
                         setParroquia("");
@@ -553,7 +559,8 @@ export default function ReportGenerator() {
                   placeholder="Selecciona una Carrera"
                 />
                 {careersOpen && (
-                  <div className="z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                  <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                    {" "}
                     <div
                       onClick={() => {
                         setCarrera("");
@@ -597,7 +604,8 @@ export default function ReportGenerator() {
                   placeholder="Selecciona una Institución"
                 />
                 {institutionsOpen && (
-                  <div className="z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                  <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                    {" "}
                     <div
                       onClick={() => {
                         setInstitucion("");
@@ -625,51 +633,59 @@ export default function ReportGenerator() {
             </div>
 
             <div className="space-y-2 flex-1 p-4">
-                <Label
-                  htmlFor="institucion"
-                  className="text-xl text-gray-600 md:text-lg lg:text-2xl"
-                >Tipo de institución</Label>
-                <Input
-                  id="typeInstitution"
-                  type="text"
-                  value={typeInstitucion === "universitaria" ? "Universitaria" : typeInstitucion === "tecnica" ? "Técnica" : "" }
-                  onClick={() => setTypeInstitucionOpen(!typeIntitucionOpen)}
-                  readOnly
-                  className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
-                  placeholder="Selecciona un tipo de institución"
-                />
-                {typeIntitucionOpen && (
-                  <div className="z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
-                    <div
-                      onClick={() => {
-                        setTypeInstitucion("");
-                        setTypeInstitucionOpen(false);
-                      }}
-                      className="p-2 hover:bg-gray-100 cursor-pointer"
-                    >
-                      {"- Selecciona un tipo de institución -"}
-                    </div>
-                    <div
-                      onClick={() => {
-                        setTypeInstitucion("universitaria");
-                        setTypeInstitucionOpen(false);
-                      }}
-                      className="p-2 hover:bg-gray-100 cursor-pointer"
-                    >
-                      Universitaria
-                    </div>
-                    <div
-                      onClick={() => {
-                        setTypeInstitucion("tecnica");
-                        setTypeInstitucionOpen(false);
-                      }}
-                      className="p-2 hover:bg-gray-100 cursor-pointer"
-                    >
-                      Técnica
-                    </div>
+              <Label
+                htmlFor="institucion"
+                className="text-xl text-gray-600 md:text-lg lg:text-2xl"
+              >
+                Tipo de institución
+              </Label>
+              <Input
+                id="typeInstitution"
+                type="text"
+                value={
+                  typeInstitucion === "universitaria"
+                    ? "Universitaria"
+                    : typeInstitucion === "tecnica"
+                    ? "Técnica"
+                    : ""
+                }
+                onClick={() => setTypeInstitucionOpen(!typeIntitucionOpen)}
+                readOnly
+                className="bg-white border border-gray-300 rounded-md py-2 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                placeholder="Selecciona un tipo de institución"
+              />
+              {typeIntitucionOpen && (
+                <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">                  {" "}
+                  <div
+                    onClick={() => {
+                      setTypeInstitucion("");
+                      setTypeInstitucionOpen(false);
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    {"- Selecciona un tipo de institución -"}
                   </div>
-                )}
-              </div>
+                  <div
+                    onClick={() => {
+                      setTypeInstitucion("universitaria");
+                      setTypeInstitucionOpen(false);
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    Universitaria
+                  </div>
+                  <div
+                    onClick={() => {
+                      setTypeInstitucion("tecnica");
+                      setTypeInstitucionOpen(false);
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    Técnica
+                  </div>
+                </div>
+              )}
+            </div>
 
             <div className="flex flex-col md:flex-row">
               {/* INPUT GENERO */}
@@ -696,8 +712,7 @@ export default function ReportGenerator() {
                   placeholder="Selecciona un Género"
                 />
                 {genderOpen && (
-                  <div className="z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
-                    <div
+                  <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">                    <div
                       onClick={() => {
                         setGender("");
                         setGenderOpen(false);
@@ -746,8 +761,7 @@ export default function ReportGenerator() {
                   placeholder="Selecciona una Dependencia"
                 />
                 {dependenciasOpen && (
-                  <div className="z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
-                    <div
+                  <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">                    <div
                       onClick={() => {
                         setDependencia("");
                         setDependenciasOpen(false);
@@ -848,8 +862,7 @@ export default function ReportGenerator() {
                   placeholder="Selecciona una opción"
                 />
                 {voteOpen && (
-                  <div className="z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">
-                    <div
+                  <div className="absolute z-20 mt-1 max-h-60 overflow-auto bg-white border border-gray-300 rounded-md shadow-lg">                    <div
                       onClick={() => {
                         setVote(null);
                         setVoteOpen(false);
@@ -881,21 +894,22 @@ export default function ReportGenerator() {
               </div>
             </div>
 
-            { loading 
-            &&
+            {loading && (
               <div className="flex justify-center items-center flex-col mt-4">
-              <Oval
-                color="#000000"
-                secondaryColor="#FFFFFF" // Color de fondo blanco
-                height={50}
-                width={50}
-                strokeWidth={5}
-              />
-              <br />
-              <span>Por favor, espere unos segundos que se cargue la data antes de filtarla...</span>
-            </div>
-            }
-    
+                <Oval
+                  color="#000000"
+                  secondaryColor="#FFFFFF" // Color de fondo blanco
+                  height={50}
+                  width={50}
+                  strokeWidth={5}
+                />
+                <br />
+                <span>
+                  Por favor, espere unos segundos que se cargue la data antes de
+                  filtarla...
+                </span>
+              </div>
+            )}
 
             {showClearButton && (
               <div className="flex justify-center mt-6">
@@ -909,7 +923,6 @@ export default function ReportGenerator() {
             )}
 
             <div className="flex justify-center mt-6">
-
               <Button
                 onClick={handleGenerateReport}
                 className="w-full mt-4 bg-black text-white p-6 md:w-[70%]"
@@ -930,75 +943,68 @@ export default function ReportGenerator() {
                 </Button>
               </div>
             )}
-
-
           </GridContainer>
-       
 
-          {notFound === false 
-            ? (
-              <div className="flex text-2xl justify-center items-center text-center mx-auto my-4 font-bold">
-                <p>
-                  NO EXISTEN REGISTRO CON ESE CRITERIO DE BUSQUEDA
-                </p>
-                </div>
-              ) : (
-                notFound && (
-                  <div className="bg-white">
-                    <h1 className="text-xl text-center font-extrabold my-6 md:text-3xl">
-                      REPORTE GENERADO
-                    </h1>
-                    <Table>
-                      <TableHeader>
-                        <TableRow className="bg-black text-white">
-                          <TableHead>No.</TableHead>
-                          <TableHead>Cedula</TableHead>
-                          <TableHead>Nombres</TableHead>
-                          <TableHead>Apellidos</TableHead>
-                          <TableHead>Genero</TableHead>
-                          <TableHead>Edad</TableHead>
-                          <TableHead>Parroquia</TableHead>
-                          <TableHead>Carrera</TableHead>
-                          <TableHead>Institucion</TableHead>
-                          <TableHead>Dependencia</TableHead>
-                          <TableHead>Fecha de Actividad</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {report.map((e, index) => (
-                          <TableRow
-                            key={index}
-                            className={`text-xs ${
-                              index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                            }`}
-                          >
-                            <TableCell>{index + 1}</TableCell>
-                            <TableCell>{e.esInfo.User.cedula}</TableCell>
-                            <TableCell>{e.esInfo.User.names}</TableCell>
-                            <TableCell>{e.esInfo.User.lastnames}</TableCell>
-                            <TableCell>
-                              {e.esInfo.gender === "M" ? "Hombre" : "Mujer"}
-                            </TableCell>
-                            <TableCell>
-                              {calcularEdad(e.esInfo.User.birthdate)}
-                            </TableCell>
-                            <TableCell>
-                              {e.esInfo.User.parroquia.parroquia}
-                            </TableCell>
-                            <TableCell>{e.esInfo.career.name}</TableCell>
-                            <TableCell>{e.esInfo.institution.name}</TableCell>
-                            <TableCell>{e.application.dependencia.name}</TableCell>
-                            <TableCell>
-                              {new Date(e.date).toLocaleDateString()}
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
-                )
-              )
-            }
+          {notFound === false ? (
+            <div className="flex text-2xl justify-center items-center text-center mx-auto my-4 font-bold">
+              <p>NO EXISTEN REGISTRO CON ESE CRITERIO DE BUSQUEDA</p>
+            </div>
+          ) : (
+            notFound && (
+              <div className="bg-white">
+                <h1 className="text-xl text-center font-extrabold my-6 md:text-3xl">
+                  REPORTE GENERADO
+                </h1>
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-black text-white">
+                      <TableHead>No.</TableHead>
+                      <TableHead>Cedula</TableHead>
+                      <TableHead>Nombres</TableHead>
+                      <TableHead>Apellidos</TableHead>
+                      <TableHead>Genero</TableHead>
+                      <TableHead>Edad</TableHead>
+                      <TableHead>Parroquia</TableHead>
+                      <TableHead>Carrera</TableHead>
+                      <TableHead>Institucion</TableHead>
+                      <TableHead>Dependencia</TableHead>
+                      <TableHead>Fecha de Actividad</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {report.map((e, index) => (
+                      <TableRow
+                        key={index}
+                        className={`text-xs ${
+                          index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                        }`}
+                      >
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>{e.esInfo.User.cedula}</TableCell>
+                        <TableCell>{e.esInfo.User.names}</TableCell>
+                        <TableCell>{e.esInfo.User.lastnames}</TableCell>
+                        <TableCell>
+                          {e.esInfo.gender === "M" ? "Hombre" : "Mujer"}
+                        </TableCell>
+                        <TableCell>
+                          {calcularEdad(e.esInfo.User.birthdate)}
+                        </TableCell>
+                        <TableCell>
+                          {e.esInfo.User.parroquia.parroquia}
+                        </TableCell>
+                        <TableCell>{e.esInfo.career.name}</TableCell>
+                        <TableCell>{e.esInfo.institution.name}</TableCell>
+                        <TableCell>{e.application.dependencia.name}</TableCell>
+                        <TableCell>
+                          {new Date(e.date).toLocaleDateString()}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )
+          )}
         </GridMain>
       </ContainerWeb>
     </>
