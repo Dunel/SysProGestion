@@ -217,8 +217,8 @@ export default function Navbar() {
                   <Link href="/">
                     <img
                       className="h-10 w-auto"
-                      src="/logo.png"
-                      alt="Your Company"
+                      src="/logomaracaibo.png"
+                      alt="Maracaibo"
                     />
                   </Link>
                 </div>
